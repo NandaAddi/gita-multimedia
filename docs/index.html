@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Dokumentasi Riset Skripsi | Eco-Explorer</title>
+  
+  <meta name="description" content="Dokumentasi Lengkap Desain Game, PRD, Roadmap, dan Naskah Riset Skripsi Eco-Explorer SDN Percobaan 2 Malang.">
+  <meta name="author" content="Gito - Teknologi Pendidikan">
+
+  <!-- Google Fonts: Open Sans (Teks mentok di SemiBold 600) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet Murni: Putih, Hitam, & Biru (Tanpa Border Stroke, Tanpa Ikon, Open Sans max 600) -->
+  <link rel="stylesheet" href="docs.css?v=2">
+</head>
+<body>
+
+  <div id="app">
+    <!-- Top Header Bar -->
+    <header class="top-bar">
+      <div style="display: flex; align-items: center;">
+        <span class="brand-title">Dokumentasi Riset Skripsi</span>
+        <span class="brand-subtitle">Eco-Explorer: Penjaga Keseimbangan Sawah</span>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn-header-secondary" onclick="window.print()">Cetak / Simpan PDF</button>
+        <a href="../WEBSITE/phaser.html" class="btn-header">Buka Game Engine</a>
+        <a href="../WEBSITE/index.html" class="btn-header-secondary">Portal Utama</a>
+      </div>
+    </header>
+
+    <!-- 3-Column Workspace -->
+    <div class="workspace">
+      
+      <!-- Panel Kiri: Navigasi Dokumen & Pencarian -->
+      <aside class="sidebar-left">
+        <div class="sidebar-search-box">
+          <input type="text" id="search-input" class="search-input" placeholder="Cari naskah / topik..." autocomplete="off">
+        </div>
+
+        <div class="nav-section-title">Dokumen Skripsi & Game</div>
+        
+        <ul id="doc-list" class="doc-list">
+          <!-- Diisi otomatis oleh docs.js -->
+        </ul>
+      </aside>
+
+      <!-- Panel Tengah: Pembaca Konten Markdown Utama -->
+      <main id="content-area" class="content-area">
+        <div class="content-container">
+          
+          <header class="doc-header">
+            <div id="doc-badge" class="doc-badge">Dokumen</div>
+            <h1 id="doc-title" class="doc-title-main">Memuat Dokumen...</h1>
+            <div id="doc-filename" class="doc-filename">File Sumber: docs/...</div>
+          </header>
+
+          <article id="doc-body" class="markdown-body">
+            <!-- Konten Markdown di-render di sini oleh Marked.js -->
+          </article>
+
+        </div>
+      </main>
+
+      <!-- Panel Kanan: Daftar Isi Halaman (TOC) -->
+      <aside class="sidebar-right">
+        <div class="toc-title">Daftar Isi Bab</div>
+        <ul id="toc-list" class="toc-list">
+          <!-- Diisi otomatis oleh docs.js -->
+        </ul>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- Pustaka Parser Markdown Mandiri (100% Offline) -->
+  <script src="lib/marked.min.js"></script>
+
+  <!-- Bundle Teks Dokumen Base64/JSON Mandiri (100% Bebas CORS file:// Protocol) -->
+  <script src="docs-data.js"></script>
+
+  <!-- Logika Interaktivitas Portal Dokumentasi -->
+  <script src="docs.js"></script>
+
+</body>
+</html>

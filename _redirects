@@ -1,0 +1,3 @@
+# Cloudflare Pages Redirect Rules
+# Redirect root to main research portal
+/    /WEBSITE/index.html    302

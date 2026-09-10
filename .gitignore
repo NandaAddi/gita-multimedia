@@ -1,0 +1,31 @@
+# Python caches & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+env/
+venv/
+
+# Operating System & IDE clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.bak
+*.swp
+.idea/
+.vscode/
+
+# Build & generated documentation outputs
+*.docx
+*.pdf
+scratch/
+
+# Cloudflare Pages, Wrangler, and Node
+.wrangler/
+node_modules/
+dist/
+
+# Large media source files (optional ignore if tracked elsewhere)
+# raw-assets/**/*.psd

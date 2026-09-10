@@ -1,0 +1,571 @@
+/* ==========================================================================
+   WEB DOCUMENTATION PORTAL - PURE WHITE, BLACK, & BLUE THEME
+   STRICT CONSTRAINTS:
+   1. Font: Open Sans
+   2. Font Weight: Mentok di SemiBold (600) saja, tidak boleh lebih (tidak ada 700/800/900/bold)
+   3. No Icons
+   4. No Border Outline / Stroke
+   5. Colors: Only White, Black, and Blue
+   ========================================================================== */
+
+:root {
+  --bg-main: #ffffff;
+  --bg-sidebar: #f8fafc;
+  --bg-active: #eff6ff;
+  --bg-hover: #f1f5f9;
+  --bg-code: #f1f5f9;
+  --bg-table-head: #eff6ff;
+  --bg-table-alt: #f8fafc;
+  
+  --text-main: #000000;
+  --text-muted: #334155;
+  --text-light: #64748b;
+  
+  --blue-primary: #1d4ed8;
+  --blue-dark: #1e40af;
+  --blue-light: #eff6ff;
+  --blue-accent: #2563eb;
+  --blue-badge: #dbeafe;
+  
+  --font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Batasan Ketat Pengguna: Font Weight mentok di SemiBold (600), tidak boleh lebih */
+b, strong, h1, h2, h3, h4, h5, h6, th, dt {
+  font-weight: 600 !important;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
+  font-weight: 400;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   APP CONTAINER LAYOUT
+   ========================================================================== */
+#app {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-main);
+}
+
+/* Top Header Bar */
+header.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 0 24px;
+  background: var(--blue-primary);
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.brand-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.brand-subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  color: #dbeafe;
+  margin-left: 12px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-header {
+  background: #ffffff;
+  color: var(--blue-primary);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.btn-header:hover {
+  background: #dbeafe;
+  color: var(--blue-dark);
+}
+
+.btn-header-secondary {
+  background: transparent;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-header-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* 3-Column Main Workspace */
+.workspace {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   SIDEBAR KIRI: DAFTAR DOKUMEN & SEARCH
+   ========================================================================== */
+aside.sidebar-left {
+  width: 320px;
+  background: var(--bg-sidebar);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.sidebar-search-box {
+  padding: 18px 16px 12px 16px;
+  background: var(--bg-sidebar);
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: #ffffff;
+  color: var(--text-main);
+  font-size: 13.5px;
+  font-weight: 400;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+}
+
+.search-input::placeholder {
+  color: var(--text-light);
+  font-weight: 400;
+}
+
+.search-input:focus {
+  background: var(--blue-light);
+  color: var(--blue-dark);
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text-light);
+  text-transform: uppercase;
+  padding: 12px 16px 6px 16px;
+}
+
+.doc-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 10px 20px 10px;
+  list-style: none;
+}
+
+.doc-item {
+  margin-bottom: 4px;
+}
+
+.doc-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  font-family: var(--font-sans);
+}
+
+.doc-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-main);
+}
+
+.doc-btn.active {
+  background: var(--blue-light);
+  color: var(--blue-primary);
+  font-weight: 600;
+}
+
+.doc-btn-category {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.doc-btn.active .doc-btn-category {
+  color: var(--blue-accent);
+}
+
+.doc-btn-title {
+  display: block;
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 400;
+}
+
+.doc-btn.active .doc-btn-title {
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   AREA TENGAH: KONTEN DOKUMEN UTAMA
+   ========================================================================== */
+main.content-area {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg-main);
+  padding: 40px 60px 80px 60px;
+  scroll-behavior: smooth;
+}
+
+.content-container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* Document Header Banner */
+.doc-header {
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  background: var(--bg-main);
+}
+
+.doc-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--blue-badge);
+  color: var(--blue-primary);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.doc-title-main {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.doc-filename {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-light);
+  font-family: var(--font-mono);
+}
+
+/* Typography Rendering (Marked Markdown Content) */
+.markdown-body {
+  color: var(--text-main);
+  font-size: 16px;
+  line-height: 1.75;
+  font-weight: 400;
+  font-family: var(--font-sans);
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  color: var(--text-main);
+  font-weight: 600;
+  line-height: 1.35;
+  margin-top: 36px;
+  margin-bottom: 16px;
+  scroll-margin-top: 24px;
+  font-family: var(--font-sans);
+}
+
+.markdown-body h1 {
+  font-size: 24px;
+  color: var(--blue-primary);
+  margin-top: 40px;
+}
+
+.markdown-body h2 {
+  font-size: 20px;
+  color: var(--text-main);
+  margin-top: 36px;
+  padding-top: 8px;
+}
+
+.markdown-body h3 {
+  font-size: 17px;
+  color: var(--blue-dark);
+  margin-top: 28px;
+}
+
+.markdown-body h4 {
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.markdown-body p {
+  margin-bottom: 18px;
+  font-weight: 400;
+}
+
+.markdown-body a {
+  color: var(--blue-primary);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.markdown-body a:hover {
+  color: var(--blue-dark);
+}
+
+.markdown-body strong,
+.markdown-body b {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.markdown-body em,
+.markdown-body i {
+  font-style: italic;
+}
+
+.markdown-body hr {
+  height: 2px;
+  background: var(--bg-hover);
+  margin: 36px 0;
+}
+
+/* Lists */
+.markdown-body ul,
+.markdown-body ol {
+  margin-bottom: 20px;
+  padding-left: 28px;
+}
+
+.markdown-body li {
+  margin-bottom: 6px;
+  font-weight: 400;
+}
+
+/* Blockquotes */
+.markdown-body blockquote {
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  padding: 16px 20px;
+  margin: 20px 0;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.markdown-body blockquote p {
+  margin-bottom: 0;
+}
+
+/* Code & Preformatted Text */
+.markdown-body code {
+  background: var(--bg-code);
+  color: var(--blue-primary);
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.markdown-body pre {
+  background: var(--bg-code);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  padding: 16px 20px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 20px 0;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.markdown-body pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Tables (Pure contrast, absolutely no borders) */
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 14px;
+  background: #ffffff;
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: var(--font-sans);
+}
+
+.markdown-body th {
+  background: var(--blue-light);
+  color: var(--blue-primary);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+}
+
+.markdown-body td {
+  padding: 12px 16px;
+  color: var(--text-main);
+  background: #ffffff;
+  font-weight: 400;
+}
+
+.markdown-body tr:nth-child(even) td {
+  background: var(--bg-table-alt);
+}
+
+/* ==========================================================================
+   SIDEBAR KANAN: TABLE OF CONTENTS (TOC)
+   ========================================================================== */
+aside.sidebar-right {
+  width: 260px;
+  background: var(--bg-sidebar);
+  padding: 24px 18px 24px 18px;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text-light);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.toc-list {
+  list-style: none;
+}
+
+.toc-item {
+  margin-bottom: 6px;
+}
+
+.toc-link {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  line-height: 1.35;
+  font-weight: 400;
+  transition: background 0.15s ease, color 0.15s ease;
+  font-family: var(--font-sans);
+}
+
+.toc-link:hover {
+  background: var(--bg-hover);
+  color: var(--text-main);
+}
+
+.toc-link.active {
+  background: var(--blue-light);
+  color: var(--blue-primary);
+  font-weight: 600;
+}
+
+.toc-sub {
+  padding-left: 14px;
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   PRINT VIEW
+   ========================================================================== */
+@media print {
+  header.top-bar,
+  aside.sidebar-left,
+  aside.sidebar-right {
+    display: none !important;
+  }
+
+  .workspace {
+    height: auto !important;
+  }
+
+  main.content-area {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .content-container {
+    max-width: 100% !important;
+  }
+}
+
+/* Responsive for tablets */
+@media (max-width: 1100px) {
+  aside.sidebar-right {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .workspace {
+    flex-direction: column;
+  }
+  aside.sidebar-left {
+    width: 100%;
+    height: 200px;
+  }
+  main.content-area {
+    padding: 24px;
+  }
+}

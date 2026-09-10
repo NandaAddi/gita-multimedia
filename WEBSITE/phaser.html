@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Eco-Explorer: Penjaga Keseimbangan Sawah (Phaser 3 Game Engine) | SDN Percobaan 2 Malang</title>
+  
+  <meta name="description" content="Aplikasi Game Simulasi Keseimbangan Ekosistem Sawah 16-Bit Retro RPG untuk Layar Sentuh IFP SDN Percobaan 2 Malang.">
+  <meta name="author" content="Gito - Teknologi Pendidikan">
+
+  <!-- PWA Web App Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #022c22;
+      overflow: hidden;
+      font-family: 'Fredoka', 'Nunito', sans-serif;
+      touch-action: none;
+    }
+
+    #game-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #021a14;
+    }
+
+    canvas {
+      display: block;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Wadah Kanvas Phaser 3 (16:9 Scale to Fit) -->
+  <div id="game-container"></div>
+
+  <!-- 1. Pustaka Phaser 3 Mandiri (100% Offline) -->
+  <script src="lib/phaser.min.js"></script>
+
+  <!-- 2. Audio Engine & Synthesizer -->
+  <script src="js/audio.js?v=3"></script>
+
+  <!-- 3. Base64 Assets Data & Voice-Over (100% Bebas CORS file:// Protocol) -->
+  <script src="js/assets-data.js?v=3"></script>
+  <script src="js/vo-data.js?v=3"></script>
+
+  <!-- 4. Modul Scene Permainan -->
+  <script src="js/phaser-game/scenes/BootScene.js?v=4"></script>
+  <script src="js/phaser-game/scenes/TitleScene.js?v=5"></script>
+  <script src="js/phaser-game/scenes/TutorialScene.js?v=4"></script>
+  <script src="js/phaser-game/scenes/TeamSelectScene.js?v=4"></script>
+  <script src="js/phaser-game/scenes/MissionMenuScene.js?v=4"></script>
+  <script src="js/phaser-game/scenes/SimulationScene.js?v=4"></script>
+  <script src="js/phaser-game/scenes/QuizScene.js?v=4"></script>
+  <script src="js/phaser-game/scenes/VictoryScene.js?v=4"></script>
+
+  <!-- 5. File Inisialisasi Game Engine -->
+  <script src="js/phaser-game/main.js?v=3"></script>
+
+  <script>
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    function toggleMute() {
+      if (window.soundEngine) {
+        const isMuted = window.soundEngine.toggleMute();
+        document.getElementById('btn-sound').innerText = isMuted ? '🔇 Bisu' : '🔊 Suara';
+      }
+    }
+
+    // Registrasi PWA Service Worker (Aktif pada protokol HTTP/HTTPS)
+    if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('[PWA] Service Worker aktif:', reg.scope))
+          .catch(err => console.log('[PWA] Registrasi SW:', err));
+      });
+    }
+  </script>
+</body>
+</html>

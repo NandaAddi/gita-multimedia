@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Riset & Game Engine: Eco-Explorer | SDN Percobaan 2 Malang</title>
+
+  <meta name="description"
+    content="Portal Multimedia Interaktif Berbasis Simulasi pada Materi Keseimbangan Ekosistem Sawah untuk Siswa Kelas V SDN Percobaan 2 Malang.">
+  <meta name="author" content="Gito - Teknologi Pendidikan">
+
+  <!-- Google Fonts: Open Sans (Teks mentok di SemiBold 600) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-blue-light: #eff6ff;
+      --bg-blue-hover: #dbeafe;
+      --bg-tag: #eff6ff;
+
+      --text-main: #000000;
+      --text-muted: #334155;
+      --text-light: #64748b;
+
+      --blue-primary: #1d4ed8;
+      --blue-dark: #1e40af;
+      --blue-accent: #2563eb;
+
+      --font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Batasan Ketat Pengguna: Font Weight mentok di SemiBold (600), tidak boleh lebih */
+    b,
+    strong,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    th,
+    dt {
+      font-weight: 600 !important;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--bg-page);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.65;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Navigation Bar */
+    nav.navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      padding: 0 32px;
+      background: var(--blue-primary);
+      color: #ffffff;
+    }
+
+    .nav-brand {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+      text-transform: uppercase;
+    }
+
+    .nav-brand-sub {
+      font-size: 13px;
+      font-weight: 400;
+      color: #dbeafe;
+      margin-left: 10px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .nav-btn-primary {
+      background: #ffffff;
+      color: var(--blue-primary);
+    }
+
+    .nav-btn-primary:hover {
+      background: #dbeafe;
+      color: var(--blue-dark);
+    }
+
+    .nav-btn-secondary {
+      background: transparent;
+      color: #ffffff;
+    }
+
+    .nav-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 48px 24px 80px 24px;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .badge-research {
+      display: inline-block;
+      background: var(--bg-blue-light);
+      color: var(--blue-primary);
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--text-muted);
+      max-width: 820px;
+      margin: 0 auto 32px auto;
+      line-height: 1.6;
+    }
+
+    /* Hero Action Buttons */
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action-primary {
+      display: inline-block;
+      background: var(--blue-primary);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 32px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.15s ease;
+    }
+
+    .btn-action-primary:hover {
+      background: var(--blue-dark);
+    }
+
+    .btn-action-secondary {
+      display: inline-block;
+      background: var(--bg-blue-light);
+      color: var(--blue-primary);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .btn-action-secondary:hover {
+      background: var(--bg-blue-hover);
+      color: var(--blue-dark);
+    }
+
+    /* Section Heading */
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      padding-top: 16px;
+    }
+
+    /* 3-Column Info Grid */
+    .grid-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .info-card {
+      background: var(--bg-card);
+      padding: 28px;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-tag {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--bg-tag);
+      color: var(--blue-primary);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 8px;
+      border-radius: 3px;
+      margin-bottom: 12px;
+    }
+
+    .info-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      line-height: 1.35;
+    }
+
+    .info-card p {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .info-card ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .info-card li {
+      color: var(--text-muted);
+      font-size: 14px;
+      padding: 5px 0;
+      line-height: 1.5;
+    }
+
+    .info-card li strong {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .card-note {
+      margin-top: auto;
+      padding-top: 14px;
+      font-size: 13px;
+      color: var(--blue-primary);
+      font-weight: 500;
+    }
+
+    /* Full Width Feature Card (Hardware Awareness) */
+    .full-card {
+      background: var(--bg-card);
+      padding: 32px;
+      border-radius: 4px;
+      margin-bottom: 40px;
+    }
+
+    .full-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 14px;
+    }
+
+    .full-card p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .spec-item {
+      background: var(--bg-blue-light);
+      padding: 16px;
+      border-radius: 4px;
+    }
+
+    .spec-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--blue-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .spec-value {
+      font-size: 14px;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding-top: 24px;
+      color: var(--text-light);
+      font-size: 13px;
+    }
+
+    footer p {
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 768px) {
+      nav.navbar {
+        padding: 0 16px;
+        height: auto;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+
+      .hero-title {
+        font-size: 28px;
+      }
+
+      .hero-subtitle {
+        font-size: 16px;
+      }
+
+      .container {
+        padding: 32px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div>
+      <span class="nav-brand">Portal Riset & Game Engine</span>
+      <span class="nav-brand-sub">SDN Percobaan 2 Malang</span>
+    </div>
+    <div class="nav-actions">
+      <a href="../docs/index.html" class="nav-btn nav-btn-secondary">Portal Dokumen Riset</a>
+      <a href="phaser.html" class="nav-btn nav-btn-primary">Buka Game Engine IFP</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Hero Section -->
+    <header class="hero">
+      <div class="badge-research">Penelitian Pengembangan R&D Model Alessi & Trollip (2001)</div>
+      <h1 class="hero-title">Eco-Explorer: Penjaga Keseimbangan Sawah</h1>
+      <p class="hero-subtitle">
+        Pengembangan Multimedia Interaktif Berbasis Simulasi pada Materi Keseimbangan Ekosistem untuk Siswa Kelas V SDN
+        Percobaan 2 Malang
+      </p>
+
+      <div class="hero-actions">
+        <a href="phaser.html" class="btn-action-primary" id="launch-game-btn">
+          Mulai Permainan (Layar Sentuh IFP)
+        </a>
+        <a href="../docs/index.html" class="btn-action-secondary" id="launch-docs-btn">
+          Baca Dokumen Riset & PRD
+        </a>
+      </div>
+    </header>
+
+    <!-- Grid Informasi Utama -->
+    <div class="grid-info">
+
+      <!-- Card 1: Kolaborasi Kelas 5A -->
+      <div class="info-card">
+        <span class="card-tag">Kolaborasi Kelas</span>
+        <h3>Manajemen 25 Siswa di Layar IFP</h3>
+        <p>
+          Simulasi dirancang dengan model partisipasi bergilir (Turn-Based) untuk 5 tim spesialis dengan durasi bermain
+          terukur 6 hingga 8 menit:
+        </p>
+        <ul>
+          <li><strong>Tim Elang:</strong> Konsumen Puncak</li>
+          <li><strong>Tim Ular:</strong> Pengendali Populasi Hama</li>
+          <li><strong>Tim Katak:</strong> Pemangsa Serangga Sawah</li>
+          <li><strong>Tim Padi:</strong> Produsen Pangan Utama</li>
+          <li><strong>Tim Jamur:</strong> Dekomposer Penjaga Hara</li>
+        </ul>
+        <div class="card-note">
+          Siswa di meja bertindak sebagai Co-Pilot yang mengangkat kartu voting strategi.
+        </div>
+      </div>
+
+      <!-- Card 2: 4 Skenario Krisis C2 -->
+      <div class="info-card">
+        <span class="card-tag">Kausalitas C2</span>
+        <h3>4 Skenario Krisis Kaskade Trofik</h3>
+        <p>
+          Menyajikan masalah lingkungan nyata yang menuntut penalaran hubungan sebab-akibat langsung:
+        </p>
+        <ul>
+          <li><strong>Skenario 1:</strong> Dampak perburuan ular terhadap ledakan tikus dan kerusakan rumpun padi.</li>
+          <li><strong>Skenario 2:</strong> Penggunaan pestisida berlebih terhadap kepunahan katak dan degradasi air.
+          </li>
+          <li><strong>Skenario 3:</strong> Kemarau ekstrem dan krisis sistem irigasi sawah.</li>
+          <li><strong>Skenario 4:</strong> Restorasi dekomposer jamur untuk mengembalikan kesuburan tanah.</li>
+        </ul>
+        <div class="card-note">
+          Setiap skenario menuntun siswa dari sekadar menghafal (C1) ke penalaran sistem (C2).
+        </div>
+      </div>
+
+      <!-- Card 3: Mekanika Dekomposer Aktif -->
+      <div class="info-card">
+        <span class="card-tag">Simulasi Nyata</span>
+        <h3>Dekomposer Jamur Aktif</h3>
+        <p>
+          Menghilangkan miskonsepsi dekomposer sebagai teks pasif di buku. Siswa secara aktif memicu proses daur ulang
+          hara:
+        </p>
+        <ul>
+          <li>Menguraikan tumpukan jerami busuk dan bangkai hewan menjadi zat hara alami tanah.</li>
+          <li>Pertumbuhan tanaman padi menjadi subur dan hijau kembali secara dinamis.</li>
+          <li>Animasi spora jamur dan regenerasi metrik kesuburan sawah secara realtime.</li>
+        </ul>
+        <div class="card-note">
+          Memperkuat pemahaman siklus materi tertutup dalam ekosistem sawah tropis.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Spesifikasi Teknis IFP -->
+    <div class="full-card">
+      <span class="card-tag">Spesifikasi Teknis</span>
+      <h3>Perancangan Berorientasi Hardware (Hardware-Aware IFP)</h3>
+      <p>
+        Aplikasi game dan portal riset ini dibangun dengan mematuhi karakteristik ergonomis dan operasional layar sentuh
+        proyektor/IFP di ruang kelas 5A SDN Percobaan 2 Malang:
+      </p>
+
+      <div class="specs-grid">
+        <div class="spec-item">
+          <div class="spec-label">Mode Operasional</div>
+          <div class="spec-value">100% Offline & Bebas CORS (file:// Protocol)</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Target Resolusi</div>
+          <div class="spec-value">1080p Widescreen (Scale-to-Fit Otomatis)</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Ergonomi Sentuh</div>
+          <div class="spec-value">Target Tombol Ramah Jari (Zona Sentuh Bawah)</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Audio & Suara</div>
+          <div class="spec-value">Web Audio Synthesizer & 25 Voice-Over Gita</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>Penelitian Skripsi: Gito — Program Studi Teknologi Pendidikan</p>
+      <p>Subjek Penelitian: Siswa Kelas V-A SDN Percobaan 2 Malang • Kurikulum Merdeka Fase C</p>
+    </footer>
+
+  </div>
+
+</body>
+
+</html>

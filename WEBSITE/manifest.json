@@ -1,0 +1,17 @@
+{
+  "name": "Eco-Explorer: Penjaga Keseimbangan Sawah",
+  "short_name": "Eco-Explorer",
+  "description": "Multimedia Simulasi Sains IPAS Rantai Makanan & Kaskade Trofik untuk Siswa Kelas 5 SDN Percobaan 2 Malang.",
+  "start_url": "./phaser.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#064e3b",
+  "theme_color": "#1d4ed8",
+  "icons": [
+    {
+      "src": "assets/characters/gita_idle.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
