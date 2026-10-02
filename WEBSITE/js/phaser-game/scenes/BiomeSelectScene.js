@@ -23,30 +23,34 @@ class BiomeSelectScene extends Phaser.Scene {
     this.createFloatingSporeFX(width, height);
 
     // 2. Top Header Status Tim Aktif
-    const headerW = 1620;
+    const headerW = 1680;
     const headerH = 96;
     const headerY = 64;
+
+    const headerLeft = width / 2 - headerW / 2;
+    const headerRight = width / 2 + headerW / 2;
 
     const gHead = this.add.graphics();
     // Drop Shadow
     gHead.fillStyle(0x000000, 0.45);
-    gHead.fillRoundedRect(width / 2 - headerW / 2 + 4, headerY - headerH / 2 + 6, headerW, headerH, 18);
+    gHead.fillRoundedRect(headerLeft + 4, headerY - headerH / 2 + 6, headerW, headerH, 18);
 
     // Bingkai Kayu Solid & Panel Zamrud
     gHead.fillStyle(0x1e1b18, 1);
-    gHead.fillRoundedRect(width / 2 - headerW / 2, headerY - headerH / 2, headerW, headerH, 18);
+    gHead.fillRoundedRect(headerLeft, headerY - headerH / 2, headerW, headerH, 18);
     gHead.fillStyle(0x064e3b, 1);
-    gHead.fillRoundedRect(width / 2 - headerW / 2 + 5, headerY - headerH / 2 + 5, headerW - 10, headerH - 10, 14);
+    gHead.fillRoundedRect(headerLeft + 5, headerY - headerH / 2 + 5, headerW - 10, headerH - 10, 14);
     gHead.lineStyle(3, 0xfbbf24, 1);
-    gHead.strokeRoundedRect(width / 2 - headerW / 2 + 5, headerY - headerH / 2 + 5, headerW - 10, headerH - 10, 14);
+    gHead.strokeRoundedRect(headerLeft + 5, headerY - headerH / 2 + 5, headerW - 10, headerH - 10, 14);
 
     // Medallion Lencana Tim (Dengan Secret Trigger Mode Penguji: Ketuk 5x)
+    const badgeX = headerLeft + 52;
     const badgeRim = this.add.graphics();
     badgeRim.fillStyle(0x1c1917, 1);
-    badgeRim.fillCircle(195, headerY, 36);
+    badgeRim.fillCircle(badgeX, headerY, 36);
     badgeRim.lineStyle(2.5, 0xfbbf24, 1);
-    badgeRim.strokeCircle(195, headerY, 36);
-    const badgeImg = this.add.image(195, headerY, activeTeam.badge || 'badge_elang')
+    badgeRim.strokeCircle(badgeX, headerY, 36);
+    const badgeImg = this.add.image(badgeX, headerY, activeTeam.badge || 'badge_elang')
       .setDisplaySize(64, 64)
       .setInteractive({ useHandCursor: true });
 
@@ -73,7 +77,8 @@ class BiomeSelectScene extends Phaser.Scene {
     const totalStars = window.progressManager ? window.progressManager.getTotalStars() : 0;
     const starPillText = `\u2B50 ${totalStars}/24 Bintang`;
 
-    this.add.text(255, headerY - 18, `PETA EKOSISTEM NUSANTARA - GILIRAN: ${activeTeam.name}`, {
+    const titleX = badgeX + 54;
+    this.add.text(titleX, headerY - 18, `PETA EKOSISTEM NUSANTARA - GILIRAN: ${activeTeam.name}`, {
       fontFamily: 'Fredoka, sans-serif',
       fontSize: '24px',
       color: '#fef08a',
@@ -81,34 +86,22 @@ class BiomeSelectScene extends Phaser.Scene {
       shadow: { offsetY: 2, color: '#1c1917', blur: 3, fill: true }
     });
 
-    this.add.text(255, headerY + 16, `Pilih ekosistem terbuka untuk diselidiki! ${starPillText}`, {
+    this.add.text(titleX, headerY + 16, `Pilih ekosistem terbuka untuk diselidiki! ${starPillText}`, {
       fontFamily: 'Nunito, sans-serif',
       fontSize: '19px',
       color: '#a7f3d0',
       fontStyle: 'bold'
     });
 
-    // Tombol Suara Panduan Gita
-    this.createButton3D(width - 520, headerY, 54, 52, '\uD83D\uDD0A', 0x065f46, 0x10b981, () => {
-      if (window.soundEngine) {
-        window.soundEngine.playBeep();
-        window.soundEngine.speakText('Pilih ekosistem yang sudah terbuka untuk diselidiki. Selesaikan ekosistem secara berurutan!');
-      }
-    });
+    // Tata Letak Tombol Kontrol Kanan (Anchor Relatif dari Ujung Kanan Panel - Bebas Tabrakan & Overflow)
+    const innerRight = headerRight - 28; // Jarak aman dari lengkungan sudut emas
+    const btnGap = 16;
+    const btnH = 50;
 
-    // Tombol Ganti Tim
-    this.createButton3D(width - 390, headerY, 180, 52, '\uD83D\uDD04 Ganti Tim', 0x0f172a, 0x334155, () => {
-      if (window.soundEngine) {
-        window.soundEngine.playBeep();
-        window.soundEngine.stopVoice();
-      }
-      this.time.delayedCall(120, () => {
-        this.scene.start('TeamSelectScene');
-      });
-    });
-
-    // Tombol Reset Kelas (untuk Guru - Bebas window.confirm)
-    this.createButton3D(width - 180, headerY, 160, 52, '\uD83D\uDD04 Reset Kelas', 0x475569, 0x64748b, () => {
+    // 1. Tombol Reset Kelas (Paling Kanan)
+    const wReset = 155;
+    const xReset = innerRight - wReset / 2;
+    this.createButton3D(xReset, headerY, wReset, btnH, '⚙️ Reset Kelas', 0x475569, 0x64748b, () => {
       if (window.soundEngine) window.soundEngine.playBeep();
       this.showConfirmModal(
         '⚠️ KONFIRMASI RESET KELAS',
@@ -120,6 +113,29 @@ class BiomeSelectScene extends Phaser.Scene {
           this.scene.restart();
         }
       );
+    });
+
+    // 2. Tombol Ganti Tim (Tengah)
+    const wTeam = 155;
+    const xTeam = (xReset - wReset / 2) - btnGap - wTeam / 2;
+    this.createButton3D(xTeam, headerY, wTeam, btnH, '👥 Ganti Tim', 0x0f172a, 0x334155, () => {
+      if (window.soundEngine) {
+        window.soundEngine.playBeep();
+        window.soundEngine.stopVoice();
+      }
+      this.time.delayedCall(120, () => {
+        this.scene.start('TeamSelectScene');
+      });
+    });
+
+    // 3. Tombol Suara Panduan Gita (Kiri Tombol Kontrol)
+    const wAudio = 52;
+    const xAudio = (xTeam - wTeam / 2) - btnGap - wAudio / 2;
+    this.createButton3D(xAudio, headerY, wAudio, btnH, '\uD83D\uDD0A', 0x065f46, 0x10b981, () => {
+      if (window.soundEngine) {
+        window.soundEngine.playBeep();
+        window.soundEngine.speakText('Pilih ekosistem yang sudah terbuka untuk diselidiki. Selesaikan ekosistem secara berurutan!');
+      }
     });
 
     // 3. Konfigurasi 4 Ekosistem Nusantara (dari ECOSYSTEMS_DATA, urutan tetap)
@@ -433,7 +449,7 @@ class BiomeSelectScene extends Phaser.Scene {
 
     const txt = this.add.text(0, 0, label, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: label.length > 3 ? '19px' : '24px',
+      fontSize: label.length > 3 ? '18px' : '22px',
       color: '#ffffff',
       fontStyle: 'bold',
       shadow: { offsetY: 2, color: '#000000', blur: 2, fill: true }
