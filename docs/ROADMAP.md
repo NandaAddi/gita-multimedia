@@ -68,24 +68,31 @@ Penelitian ini menggunakan model **Alessi & Trollip (2001)** yang dirancang khus
 ### BULAN 3: FASE PENGEMBANGAN & UJI COBA (PEKAN 8 – 12)
 
 #### Pekan 8: Pembuatan Media & Logika Simulasi Phaser 3
-* **Kegiatan:** Merakit media interaktif Phaser 3: memprogram logika rantai makanan, simulasi kaskade trofik, integrasi prinsip Mayer, Piaget (audio predasi chomp), Vygotsky (Scaffolding digital MKO tombol 💡), dan CSCL (Modal voting Co-Pilot 15 detik).
+* **Kegiatan:** Merakit media interaktif Phaser 3: memprogram logika rantai makanan, simulasi kaskade trofik, integrasi prinsip Mayer, Piaget (audio predasi chomp), Vygotsky (Scaffolding digital MKO tombol 💡), dan CSCL (Modal voting Penasihat Meja 15 detik).
 * **Target Output:** File proyek media simulasi yang sudah berfungsi dengan baik dan 100% offline-ready via base64 data URIs.
 * **Koordinasi:** Melaporkan progres tampilan dan cara kerja simulasi ke Dosen Pembimbing.
 
-#### Pekan 9: Redesain UI Homescreen, Buku Panduan & Prototipe Media Alpha
-* **Kegiatan:** Redesain UI Homescreen sesuai standar grafis IFP 1080p, integrasi penuh aset pixel art kustom (Gita masker/hijab retro, 8 organisme sawah, 4 ikon misi, dan 5 lencana tim), standarisasi `setDisplaySize()` adaptif di `SimulationScene.js`, regenerasi pipeline `assets-data.js` Base64 (zero CORS offline), serta pengujian mandiri (*self-test*) via browser subagent.
-* **Target Output:** Prototipe Media Versi Alpha (file HTML5 mandiri di `phaser.html` lengkap dengan seluruh aset kustom pixel art, 25 track vokal studio Gita di `vo-data.js` serta alur penugasan misi spesialis Model Kooperatif Jigsaw), LKPD Detektif Sawah, Dokumen PRD Final, `DOKUMEN_AUDIT_VOICE_OVER.md`, serta Repositori Git & Konfigurasi Cloudflare Pages (`_redirects`, `_headers`).
-* **Koordinasi:** Menyerahkan draf instrumen validasi dan menetapkan nama Dosen Ahli Materi & Ahli Media.
+#### Pekan 9–10: Produksi Penuh 63 Aset Visual Vektor Modern, Arsitektur 4 Bioma & Sistem 3 Bintang (Alpha Final)
+* **Kegiatan:** 
+  1. Mengolah dan mengoptimasi seluruh 63 aset citra hasil generator AI dari `D:\SKRIPSI GITA\ASSET-BARU` (karakter Gita, organisme sawah, organisme 4 bioma, lencana, ikon krisis, kamus kata, kartu voting CSCL).
+  2. Mengembangkan arsitektur **4 Ekosistem Nusantara (Sawah, Hutan Tropis, Sungai Air Tawar, Laut Terumbu Karang)** dengan **8 Misi** (Misi 1: Faktor Ulah Alam & Misi 2: Faktor Ulah Manusia).
+  3. Mengimplementasikan **Sistem Gamifikasi 3 Bintang** (1: Stabilitas $\ge 75\%$, 2: Lulus Kuis C2, 3: Menjawab Benar di Percobaan Pertama) dengan total 24 Bintang.
+  4. Menerapkan **Progression Lock**: Misi 2 terkunci hingga Misi 1 + Kuis selesai; Bioma berikutnya terkunci hingga bioma sebelumnya tuntas.
+  5. Menambahkan modul scene baru `BiomeSelectScene.js`, peremajaan UI Arcade Hero Roster pada `TeamSelectScene.js`, dan refaktor `MissionMenuScene.js`, `SimulationScene.js`, `QuizScene.js`, serta `VictoryScene.js` menjadi data-driven dengan `ecosystems-data.js` dan `ProgressManager.js` (persistent LocalStorage).
+  6. Refaktor & penataan ergonomis antarmuka `SimulationScene.js`: Arsitektur *Two-Row Centered Health Meter Pod* di $X = 960$ (meniadakan 100% tumpang tindih teks status dan bar), perataan 4 kolom simetris pada kuadran bawah ($390 \times 138$ px, sela 70 px, margin 75 px, *zero border clipping*), penambahan kontrol suara `🔊` dan layar penuh `⛶` di bilah atas, plakat header `👧 GITA`, serta widget checklist terminal.
+* **Target Output:** Master Media Simulasi Alpha Final (`WEBSITE/phaser.html`) dengan 4 Ekosistem Nusantara, 8 Misi lengkap kuis C2, sistem 3 bintang, dan 100% visual vector modern bebas CORS.
+* **Koordinasi:** Menyerahkan produk media simulasi Alpha siap uji coba kepada Dosen Pembimbing untuk persiapan validasi ahli materi dan media.
 
-#### Pekan 10: Validasi Ahli Materi & Ahli Media (Alpha Testing)
-* **Kegiatan:** Menguji kelayakan media kepada 1 Dosen Ahli Materi IPAS (akurasi konsep ekosistem) dan 1 Dosen Ahli Media (kualitas tampilan & kemudahan navigasi).
-* **Target Output:** Lembar Angket Validasi Terisi dan Berita Acara Uji Ahli beserta saran revisi.
-* **Koordinasi:** Mendampingi para ahli saat mengeksplorasi media simulasi.
-
-#### Pekan 11: Perbaikan Media (Versi Beta) & Gladi Bersih di IFP Sekolah
-* **Kegiatan:** Memperbaiki media sesuai masukan validator ahli, menyiapkan modul ajar/RPP, dan mencoba langsung file media di perangkat IFP kelas 5A SDN Percobaan 2 Malang.
-* **Target Output:** Media Simulasi Versi Beta (siap uji coba) dan hasil tes teknis layar sentuh IFP.
-* **Koordinasi:** Koordinasi teknis pelaksanaan pembelajaran bersama Guru Kelas 5A.
+#### Pekan 11: Penguatan Pedagogis, Fitur Penguji, & Gladi Bersih IFP Sekolah (Versi Beta)
+* **Kegiatan:** 
+  1. Mengimplementasikan mesin simulasi kaskade trofik multi-bioma dinamis 3-detik untuk 4 Bioma (Sawah, Hutan, Sungai, Laut) beserta resolusi desinkronisasi aksi intervensi.
+  2. Membangun fitur *Mode Penguji / Dosen* (`unlockAllForExaminer`) via 5-tap gesture rahasia pada lencana tim dan modal sentuh in-engine IFP (meniadakan 100% dialog browser `window.confirm`).
+  3. Mengembangkan diagram alur kausalitas visual C2 (4-node interactive chain) pada debriefing `QuizScene.js` untuk memperkuat pemahaman relasional sesuai Teori Mayer & Piaget.
+  4. Menyelaraskan padanan peran tim lintas bioma pada `TeamSelectScene.js` dan sinkronisasi rekomendasi kartu voting CSCL Penasihat Meja kontekstual.
+  5. Memodernisasi antarmuka portal riset landing page `WEBSITE/index.html` dengan desain Emerald Glassmorphism dan tautan instan pembaca dokumen offline `docs/docs.js`.
+  6. Mengembangkan automated headless test suites (`test_simulation_logic.js` & `test_progress_manager.js`) dan uji coba gladi bersih di layar sentuh IFP SDN Percobaan 2 Malang.
+* **Target Output:** Master Media Versi Beta tervalidasi 100%, portal riset modern, dokumen akademik tersinkronisasi, dan hasil tes teknis IFP.
+* **Koordinasi:** Koordinasi teknis pelaksanaan pembelajaran bersama Guru Kelas 5A dan persiapan instrumen uji coba lapangan.
 
 #### Pekan 12: Uji Coba Lapangan dengan 25 Siswa (Beta Testing) - [MILESTONE 2]
 * **Kegiatan:** Melaksanakan pembelajaran di kelas 5A menggunakan media simulasi di IFP, membagi kelompok belajar, serta membagikan angket respon bergambar ke siswa dan guru.

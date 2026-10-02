@@ -326,24 +326,24 @@ git commit -m "feat(portal): modernize research landing portal with 4-biome visu
 - Consumes: Seluruh update fitur di Task 1, 2, 3, dan 4.
 - Produces: Dokumen akademik yang 100% mutakhir dan sinkron menyambut validasi ahli dan ujian skripsi.
 
-- [ ] **Step 1: Perbarui `docs/PRD_GAME_SKRIPSI.md`**
+- [x] **Step 1: Perbarui `docs/PRD_GAME_SKRIPSI.md`**
   - Catat implementasi simulasi kaskade multi-bioma dinamis pada Bagian 4 & 5.
   - Tambahkan dokumentasi fitur *Mode Penguji / Dosen* pada Bagian 3 (Spesifikasi IFP).
   - Tambahkan dokumentasi diagram visual kausalitas C2 pada Bagian 2.2 (Teori Mayer & Piaget).
 
-- [ ] **Step 2: Perbarui `docs/ROADMAP.md`**
+- [x] **Step 2: Perbarui `docs/ROADMAP.md`**
   - Perbarui progres Pekan 10–11: Implementasi multi-bioma simulation cascade, visual causal debriefing C2, dan kesiapan gladi bersih IFP.
 
-- [ ] **Step 3: Perbarui `docs/LKPD_DETEKTIF_SAWAH.md`**
-  - Selaraskan instruksi peran Penasihat Meja dengan kartu voting 3 warna yang kontekstual.
+- [x] **Step 3: Perbarui `docs/LKPD_DETEKTIF_SAWAH.md`**
+  - Selaraskan instruksi peran Penasihat Meja dengan kartu voting 3 warna yang kontekstual dan diagram C2.
 
-- [ ] **Step 4: Perbarui `docs/SKRIPSI.md`**
+- [x] **Step 4: Perbarui `docs/SKRIPSI.md`**
   - Perkaya pembahasan Bab 2 & 4 mengenai efektivitas diagram kausalitas C2 visual dan peran kolaboratif CSCL.
 
-- [ ] **Step 5: Commit perubahan Task 5**
+- [x] **Step 5: Commit perubahan Task 5**
 
 ```bash
-git add docs/PRD_GAME_SKRIPSI.md docs/ROADMAP.md docs/LKPD_DETEKTIF_SAWAH.md docs/SKRIPSI.md
+git add docs/PRD_GAME_SKRIPSI.md docs/ROADMAP.md docs/LKPD_DETEKTIF_SAWAH.md docs/SKRIPSI.md docs/docs-data.js docs/superpowers/plans/2026-10-02-eco-explorer-comprehensive-enhancement.md
 git commit -m "docs(skripsi): sync companion academic documents with multi-biome enhancements"
 ```
 
