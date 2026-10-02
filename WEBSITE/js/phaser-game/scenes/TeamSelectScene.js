@@ -183,20 +183,20 @@ class TeamSelectScene extends Phaser.Scene {
     gHead.strokeRoundedRect(headerLeft + 7, headerY - headerH / 2 + 7, headerW - 14, headerH - 14, 12);
 
     // --- A. Tombol Menu Utama di Kiri (Anchor Aman dari Margin Kiri Panel) ---
-    const innerLeft = headerLeft + 28;
-    const wMenu = 160;
+    const innerLeft = headerLeft + 20;
+    const wMenu = 190;
     const xMenu = innerLeft + wMenu / 2;
     this.createPillButton({
       x: xMenu,
       y: headerY,
       w: wMenu,
-      h: 46,
+      h: 52,
       baseColor: 0x0a353c,
       shadowColor: 0x021a14,
       borderColor: 0x38bdf8,
       text: '◀ MENU UTAMA',
       textColor: '#ffffff',
-      fontSize: '15px',
+      fontSize: '24px',
       onClick: () => {
         if (window.soundEngine) window.soundEngine.playBeep();
         this.scene.start('TitleScene');
@@ -204,8 +204,8 @@ class TeamSelectScene extends Phaser.Scene {
     });
 
     // --- B. Avatar & Balon Bicara Gita ---
-    const avatarR = 26;
-    const gitaX = xMenu + wMenu / 2 + 20 + avatarR;
+    const avatarR = 28;
+    const gitaX = xMenu + wMenu / 2 + 16 + avatarR;
 
     const avatarBg = this.add.circle(gitaX, headerY, avatarR, 0x021a14, 1);
     avatarBg.setStrokeStyle(2, 0xf59e0b);
@@ -215,7 +215,7 @@ class TeamSelectScene extends Phaser.Scene {
     const avatarMask = circleMaskGfx.createGeometryMask();
 
     const gitaImg = this.add.image(gitaX, headerY + 14, 'gita_talk');
-    gitaImg.setDisplaySize(92, 92);
+    gitaImg.setDisplaySize(96, 96);
     gitaImg.setMask(avatarMask);
 
     this.tweens.add({
@@ -227,46 +227,46 @@ class TeamSelectScene extends Phaser.Scene {
       ease: 'Sine.easeInOut'
     });
 
-    // Kotak dialog ringkas Gita (Tinggi proporsional & padding vertikal presisi)
-    const speechW = 420;
-    const speechH = 56;
+    // Kotak dialog ringkas Gita
+    const speechW = 460;
+    const speechH = 64;
     const speechX = gitaX + avatarR + 12 + speechW / 2;
 
     const speechGfx = this.add.graphics();
     speechGfx.fillStyle(0x022c22, 0.95);
-    speechGfx.fillRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 14);
+    speechGfx.fillRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 16);
     speechGfx.lineStyle(1.5, 0x10b981, 0.9);
-    speechGfx.strokeRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 14);
+    speechGfx.strokeRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 16);
 
     const textLeftX = speechX - speechW / 2 + 16;
-    this.add.text(textLeftX, headerY - 12, '🔍 GITA (PANDUAN SISWA):', {
+    this.add.text(textLeftX, headerY - 14, '🔍 GITA (PANDUAN SISWA):', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '13px',
+      fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0, 0.5);
 
-    this.add.text(textLeftX, headerY + 11, 'Pilih pahlawan timmu untuk mulai!', {
+    this.add.text(textLeftX, headerY + 14, 'Pilih pahlawan timmu untuk mulai!', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '16px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0, 0.5);
 
     // Tombol Dengarkan Gita
-    const wListen = 140;
+    const wListen = 170;
     const xListen = speechX + speechW / 2 + 14 + wListen / 2;
     this.createPillButton({
       x: xListen,
       y: headerY,
       w: wListen,
-      h: 46,
+      h: 52,
       baseColor: 0x0284c7,
       shadowColor: 0x0369a1,
       borderColor: 0x38bdf8,
       text: '🔊 DENGARKAN',
       textColor: '#ffffff',
-      fontSize: '14px',
+      fontSize: '24px',
       onClick: () => {
         if (window.soundEngine) {
           window.soundEngine.playBeep();
@@ -275,24 +275,24 @@ class TeamSelectScene extends Phaser.Scene {
       }
     });
 
-    // --- D. Kontrol Kanan Atas (Suara & Fullscreen) - Di-anchor dari Margin Kanan Panel ---
-    const innerRight = headerRight - 28;
+    // --- D. Kontrol Kanan Atas (Suara & Fullscreen) ---
+    const innerRight = headerRight - 20;
     const ctrlGap = 12;
 
     // Tombol Fullscreen (Paling Kanan)
-    const wFullscreen = 135;
+    const wFullscreen = 150;
     const xFullscreen = innerRight - wFullscreen / 2;
     this.createPillButton({
       x: xFullscreen,
       y: headerY,
       w: wFullscreen,
-      h: 46,
+      h: 52,
       baseColor: 0x0a353c,
       shadowColor: 0x021a14,
       borderColor: 0x38bdf8,
-      text: '⛶ Layar Penuh',
+      text: '⛶ Layar',
       textColor: '#ffffff',
-      fontSize: '14px',
+      fontSize: '24px',
       onClick: () => {
         if (window.soundEngine) window.soundEngine.playBeep();
         if (this.scale.isFullscreen) {
@@ -304,20 +304,20 @@ class TeamSelectScene extends Phaser.Scene {
     });
 
     // Tombol Suara
-    const wAudio = 110;
+    const wAudio = 125;
     const xAudio = (xFullscreen - wFullscreen / 2) - ctrlGap - wAudio / 2;
     const isMutedInit = window.soundEngine ? window.soundEngine.muted : false;
     const audioBtn = this.createPillButton({
       x: xAudio,
       y: headerY,
       w: wAudio,
-      h: 46,
+      h: 52,
       baseColor: 0x0a353c,
       shadowColor: 0x021a14,
       borderColor: 0x38bdf8,
       text: isMutedInit ? '🔇 Bisu' : '🔊 Suara',
       textColor: '#ffffff',
-      fontSize: '14px',
+      fontSize: '24px',
       onClick: () => {
         if (window.soundEngine) {
           const isMuted = window.soundEngine.toggleMute();
@@ -327,22 +327,22 @@ class TeamSelectScene extends Phaser.Scene {
       }
     });
 
-    // --- C. Plakat Judul Tengah Gagah (Tepat di Pusat Ruang antara Tombol Dengarkan & Tombol Suara) ---
+    // --- C. Plakat Judul Tengah Gagah ---
     const leftBoundTitle = xListen + wListen / 2;
     const rightBoundTitle = xAudio - wAudio / 2;
     const titleX = (leftBoundTitle + rightBoundTitle) / 2;
 
-    this.add.text(titleX, headerY - 13, '🏆 PILIH TIM DETEKTIF SAWAH 🌾', {
+    this.add.text(titleX, headerY - 14, '🏆 PILIH TIM DETEKTIF SAWAH 🌾', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '24px',
+      fontSize: '28px',
       color: '#fef08a',
       fontStyle: 'bold',
       shadow: { offsetY: 2, color: '#000000', blur: 4, fill: true }
     }).setOrigin(0.5);
 
-    this.add.text(titleX, headerY + 16, '🎮 Wakil kelompok, maju dan sentuh pahlawan timmu!', {
+    this.add.text(titleX, headerY + 16, '🎮 Wakil kelompok maju dan sentuh pahlawan timmu!', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '15px',
+      fontSize: '24px',
       color: '#e2e8f0',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -406,14 +406,14 @@ class TeamSelectScene extends Phaser.Scene {
       if (classSession.completedMissions[t.missionId]) {
         const doneGfx = this.add.graphics();
         doneGfx.fillStyle(0x166534, 1);
-        doneGfx.fillRoundedRect(-cardW / 2 + 14, -cardH / 2 + 12, 114, 28, 14);
+        doneGfx.fillRoundedRect(-cardW / 2 + 14, -cardH / 2 + 10, 134, 34, 17);
         doneGfx.fillStyle(0x22c55e, 1);
-        doneGfx.fillRoundedRect(-cardW / 2 + 14, -cardH / 2 + 10, 114, 26, 13);
+        doneGfx.fillRoundedRect(-cardW / 2 + 14, -cardH / 2 + 8, 134, 32, 16);
         container.add(doneGfx);
 
-        const doneText = this.add.text(-cardW / 2 + 71, -cardH / 2 + 23, '⭐ SELESAI', {
+        const doneText = this.add.text(-cardW / 2 + 81, -cardH / 2 + 24, '⭐ SELESAI', {
           fontFamily: 'Fredoka, sans-serif',
-          fontSize: '14px',
+          fontSize: '24px',
           color: '#ffffff',
           fontStyle: 'bold'
         }).setOrigin(0.5);
@@ -434,14 +434,14 @@ class TeamSelectScene extends Phaser.Scene {
       // --- D. IDENTITAS TIM (Nama & Motto) ---
       const tagBg = this.add.graphics();
       tagBg.fillStyle(0x021a14, 0.7);
-      tagBg.fillRoundedRect(-cardW / 2 + 14, -cardH / 2 + 16, 185, 24, 6);
+      tagBg.fillRoundedRect(-cardW / 2 + 14, -cardH / 2 + 14, 205, 34, 8);
       tagBg.lineStyle(1, t.accentColor, 0.6);
-      tagBg.strokeRoundedRect(-cardW / 2 + 14, -cardH / 2 + 16, 185, 24, 6);
+      tagBg.strokeRoundedRect(-cardW / 2 + 14, -cardH / 2 + 14, 205, 34, 8);
       container.add(tagBg);
 
-      const tagText = this.add.text(-cardW / 2 + 20, -cardH / 2 + 21, t.roleTag, {
+      const tagText = this.add.text(-cardW / 2 + 22, -cardH / 2 + 19, t.roleTag, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '13px',
+        fontSize: '24px',
         color: '#fef08a',
         fontStyle: 'bold'
       });
@@ -449,23 +449,23 @@ class TeamSelectScene extends Phaser.Scene {
 
       const nameText = this.add.text(0, -cardH / 2 + 82, t.name, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '30px',
+        fontSize: '34px',
         color: '#ffffff',
         fontStyle: 'bold',
         shadow: { offsetY: 2, color: '#000000', blur: 5, fill: true }
       }).setOrigin(0.5);
       container.add(nameText);
 
-      const mottoText = this.add.text(0, -cardH / 2 + 116, `"${t.motto}"`, {
+      const mottoText = this.add.text(0, -cardH / 2 + 118, `"${t.motto}"`, {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '17px',
+        fontSize: '24px',
         color: '#fde68a',
         fontStyle: 'bold'
       }).setOrigin(0.5);
       container.add(mottoText);
 
       // --- E. PANGGUNG MASKOT HEWAN BESAR (Hero Mascot Showcase) ---
-      const mascotCenterY = -cardH / 2 + 285;
+      const mascotCenterY = -cardH / 2 + 282;
 
       // Radial Aura tim di belakang hewan
       const auraCircle = this.add.circle(0, mascotCenterY, 98, t.auraColor, 0.22);
@@ -493,40 +493,40 @@ class TeamSelectScene extends Phaser.Scene {
 
       // --- F. KAPSUL PERAN EKOLOGIS & SPESIALIS MISI ---
       // 1. Kapsul Peran
-      const roleY = -cardH / 2 + 448;
+      const roleY = -cardH / 2 + 440;
       const roleGfx = this.add.graphics();
       roleGfx.fillStyle(0x021a14, 0.88);
-      roleGfx.fillRoundedRect(-141, roleY - 24, 282, 48, 14);
+      roleGfx.fillRoundedRect(-146, roleY - 30, 292, 60, 14);
       roleGfx.lineStyle(1.5, t.accentColor, 0.9);
-      roleGfx.strokeRoundedRect(-141, roleY - 24, 282, 48, 14);
+      roleGfx.strokeRoundedRect(-146, roleY - 30, 292, 60, 14);
       container.add(roleGfx);
 
-      const roleText = this.add.text(0, roleY - 9, t.role, {
+      const roleText = this.add.text(0, roleY - 12, t.role, {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '16px',
+        fontSize: '24px',
         color: '#ffffff',
         fontStyle: 'bold'
       }).setOrigin(0.5);
 
-      const subRoleText = this.add.text(0, roleY + 11, t.biomeRole || '', {
+      const subRoleText = this.add.text(0, roleY + 14, t.biomeRole || '', {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '11px',
+        fontSize: '24px',
         color: '#fef08a'
       }).setOrigin(0.5);
       container.add([roleText, subRoleText]);
 
       // 2. Kapsul Misi
-      const missionY = -cardH / 2 + 510;
+      const missionY = -cardH / 2 + 515;
       const missionGfx = this.add.graphics();
       missionGfx.fillStyle(0x082f49, 0.88);
-      missionGfx.fillRoundedRect(-141, missionY - 22, 282, 44, 12);
+      missionGfx.fillRoundedRect(-146, missionY - 26, 292, 52, 14);
       missionGfx.lineStyle(1.5, 0x38bdf8, 0.85);
-      missionGfx.strokeRoundedRect(-141, missionY - 22, 282, 44, 12);
+      missionGfx.strokeRoundedRect(-146, missionY - 26, 292, 52, 14);
       container.add(missionGfx);
 
       const missionText = this.add.text(0, missionY, t.missionLabel, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '17px',
+        fontSize: '24px',
         color: '#7dd3fc',
         fontStyle: 'bold'
       }).setOrigin(0.5);
@@ -561,7 +561,7 @@ class TeamSelectScene extends Phaser.Scene {
 
       const btnText = this.add.text(0, 0, '👉 PILIH TIM INI!', {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '23px',
+        fontSize: '28px',
         color: '#ffffff',
         fontStyle: 'bold',
         shadow: { offsetY: 2, color: '#78350f', blur: 3, fill: true }
@@ -697,15 +697,15 @@ class TeamSelectScene extends Phaser.Scene {
    * Footer Tips Guru Seiras Homepage
    */
   createTeacherTipBar(width, height) {
-    const footerW = 1420;
-    const footerH = 48;
-    const footerY = height - 30;
+    const footerW = 1580;
+    const footerH = 56;
+    const footerY = height - 32;
 
     const footerGfx = this.add.graphics();
     footerGfx.fillStyle(0x064e3b, 0.95);
-    footerGfx.fillRoundedRect(width / 2 - footerW / 2, footerY - footerH / 2, footerW, footerH, 24);
+    footerGfx.fillRoundedRect(width / 2 - footerW / 2, footerY - footerH / 2, footerW, footerH, 28);
     footerGfx.lineStyle(2, 0x10b981, 1);
-    footerGfx.strokeRoundedRect(width / 2 - footerW / 2, footerY - footerH / 2, footerW, footerH, 24);
+    footerGfx.strokeRoundedRect(width / 2 - footerW / 2, footerY - footerH / 2, footerW, footerH, 28);
 
     this.add.text(
       width / 2,
@@ -713,7 +713,7 @@ class TeamSelectScene extends Phaser.Scene {
       '💡 Tips Guru: Tiap kelompok maju sekitar 7 menit. Siswa di meja kelas berperan aktif sebagai Penasihat Meja!',
       {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '17px',
+        fontSize: '24px',
         color: '#fef08a',
         fontStyle: 'bold'
       }

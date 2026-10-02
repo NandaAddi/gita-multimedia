@@ -124,9 +124,9 @@ class BiomeSelectScene extends Phaser.Scene {
     this.createBottomDock(width);
 
     // 6. Sub-Panduan Bawah Layar Sentuh IFP
-    this.add.text(width / 2, height - 26, '💡 Sentuh panah ◀ ▶, geser layar (swipe), atau ketuk kartu di bawah untuk memilih ekosistem', {
+    this.add.text(width / 2, height - 28, '💡 Sentuh panah ◀ ▶, geser layar (swipe), atau ketuk kartu di bawah untuk memilih ekosistem', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '18px',
+      fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold',
       shadow: { offsetY: 2, color: '#000000', blur: 3, fill: true }
@@ -222,7 +222,7 @@ class BiomeSelectScene extends Phaser.Scene {
     const titleX = badgeX + 54;
     this.add.text(titleX, headerY - 18, `PETA EKOSISTEM NUSANTARA - GILIRAN: ${activeTeam.name}`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '24px',
+      fontSize: '28px',
       color: '#fef08a',
       fontStyle: 'bold',
       shadow: { offsetY: 2, color: '#1c1917', blur: 3, fill: true }
@@ -230,7 +230,7 @@ class BiomeSelectScene extends Phaser.Scene {
 
     this.add.text(titleX, headerY + 16, `Pilih panggung ekosistem untuk diselidiki! ${starPillText}`, {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '19px',
+      fontSize: '24px',
       color: '#a7f3d0',
       fontStyle: 'bold'
     });
@@ -437,17 +437,17 @@ class BiomeSelectScene extends Phaser.Scene {
 
     // Teks Judul & Tagline Ekosistem
     const titleLeftX = medalX + 78;
-    const titleTxt = this.add.text(titleLeftX, medalY - 24, `${biome.icon} ${ecoData.name.toUpperCase()}`, {
+    const titleTxt = this.add.text(titleLeftX, medalY - 26, `${biome.icon} ${ecoData.name.toUpperCase()}`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '32px',
+      fontSize: '34px',
       color: isUnlocked ? '#ffffff' : '#94a3b8',
       fontStyle: 'bold',
       shadow: { offsetY: 2, color: '#000000', blur: 3, fill: true }
     });
 
-    const tagTxt = this.add.text(titleLeftX, medalY + 18, biome.tagline, {
+    const tagTxt = this.add.text(titleLeftX, medalY + 20, biome.tagline, {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '20px',
+      fontSize: '24px',
       color: isUnlocked ? '#fef08a' : '#64748b',
       fontStyle: 'bold'
     });
@@ -457,16 +457,16 @@ class BiomeSelectScene extends Phaser.Scene {
     const starStatusX = plaqueW / 2 - 40;
     const starGfx = this.add.graphics();
     starGfx.fillStyle(isUnlocked ? 0x022c22 : 0x1e293b, 0.95);
-    starGfx.fillRoundedRect(starStatusX - 250, medalY - 24, 250, 48, 14);
+    starGfx.fillRoundedRect(starStatusX - 270, medalY - 26, 270, 52, 16);
     starGfx.lineStyle(2, isUnlocked ? 0x10b981 : 0x64748b, 1);
-    starGfx.strokeRoundedRect(starStatusX - 250, medalY - 24, 250, 48, 14);
+    starGfx.strokeRoundedRect(starStatusX - 270, medalY - 26, 270, 52, 16);
     this.stageContainer.add(starGfx);
 
     const starLabel = isUnlocked ? `⭐ ${stars}/6 BINTANG` : '🔒 TERKUNCI';
     const starColor = isUnlocked ? '#fef08a' : '#f87171';
-    const starTxt = this.add.text(starStatusX - 125, medalY, starLabel, {
+    const starTxt = this.add.text(starStatusX - 135, medalY, starLabel, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '19px',
+      fontSize: '24px',
       color: starColor,
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -480,10 +480,11 @@ class BiomeSelectScene extends Phaser.Scene {
 
     const storyTxt = this.add.text(0, -68, isUnlocked ? ecoData.desc : 'Ekosistem ini masih terkunci! Tuntaskan seluruh misi dan teka-teki kausalitas pada bioma sebelumnya untuk membuka ekspedisi ini.', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '18px',
+      fontSize: '24px',
       color: isUnlocked ? '#e2e8f0' : '#94a3b8',
       align: 'center',
-      wordWrap: { width: plaqueW - 120 }
+      wordWrap: { width: plaqueW - 120 },
+      lineSpacing: 6
     }).setOrigin(0.5);
     this.stageContainer.add(storyTxt);
 
@@ -493,9 +494,9 @@ class BiomeSelectScene extends Phaser.Scene {
 
     // --- D. PREVIEW 2 KARTU MISI KRISIS C2 (Side-by-Side) ---
     const missions = ecoData.missions || [];
-    const missionCardsY = 115;
+    const missionCardsY = 120;
     const cardW = 670;
-    const cardH = 118;
+    const cardH = 138;
 
     // Kartu Misi 1 (Faktor Ulah Alam)
     this.renderMiniMissionCard(-360, missionCardsY, cardW, cardH, missions[0], isUnlocked, 1);
@@ -505,18 +506,18 @@ class BiomeSelectScene extends Phaser.Scene {
     this.renderMiniMissionCard(360, missionCardsY, cardW, cardH, missions[1], isM2Unlocked, 2);
 
     // --- E. TOMBOL AKSI UTAMA DI BAWAH PLAKAT ---
-    const btnY = 225;
+    const btnY = 228;
     if (isUnlocked) {
-      const btnW = 540;
-      const btnH = 62;
+      const btnW = 560;
+      const btnH = 64;
       const btnExplore = this.createButton3D(0, btnY, btnW, btnH, '🚀 SELIDIKI EKOSISTEM INI 🔍', 0x065f46, 0x10b981, () => {
         this.selectBiome(biome);
       });
       this.stageContainer.add(btnExplore);
     } else {
       const prevName = this.getPreviousBiomeName(biome.prevId);
-      const btnW = 680;
-      const btnH = 60;
+      const btnW = 720;
+      const btnH = 64;
       const btnLocked = this.createButton3D(0, btnY, btnW, btnH, `🔒 Selesaikan Ekosistem ${prevName} untuk Membuka!`, 0x1e293b, 0x334155, () => {
         if (window.soundEngine) {
           window.soundEngine.playWarning ? window.soundEngine.playWarning() : window.soundEngine.playBeep();
@@ -545,31 +546,31 @@ class BiomeSelectScene extends Phaser.Scene {
     const orgs = biome.organisms || [];
     if (orgs.length === 0) return;
 
-    const labelTxt = this.add.text(-plaqueW / 2 + 45, y, '🐾 JARING MAKANAN BIOMA:', {
+    const labelTxt = this.add.text(-plaqueW / 2 + 45, y, '🐾 JARING TROFIK:', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '13px',
+      fontSize: '24px',
       color: '#fbbf24',
       fontStyle: 'bold'
     }).setOrigin(0, 0.5);
     this.stageContainer.add(labelTxt);
 
-    const startX = -plaqueW / 2 + 270;
-    const pillW = 165;
-    const pillH = 34;
+    const startX = -plaqueW / 2 + 280;
+    const pillW = 175;
+    const pillH = 42;
 
     orgs.forEach((org, idx) => {
-      const px = startX + idx * (pillW + 32);
+      const px = startX + idx * (pillW + 34);
       const pillGfx = this.add.graphics();
       pillGfx.fillStyle(isUnlocked ? 0x021a14 : 0x1e293b, 0.9);
-      pillGfx.fillRoundedRect(px - pillW / 2, y - pillH / 2, pillW, pillH, 10);
+      pillGfx.fillRoundedRect(px - pillW / 2, y - pillH / 2, pillW, pillH, 12);
       pillGfx.lineStyle(1.2, isUnlocked ? 0x10b981 : 0x475569, 0.7);
-      pillGfx.strokeRoundedRect(px - pillW / 2, y - pillH / 2, pillW, pillH, 10);
+      pillGfx.strokeRoundedRect(px - pillW / 2, y - pillH / 2, pillW, pillH, 12);
       this.stageContainer.add(pillGfx);
 
       // Icon & Nama
       const orgTxt = this.add.text(px, y, org.label, {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '13px',
+        fontSize: '24px',
         color: isUnlocked ? '#ffffff' : '#94a3b8',
         fontStyle: 'bold'
       }).setOrigin(0.5);
@@ -577,9 +578,9 @@ class BiomeSelectScene extends Phaser.Scene {
 
       // Panah Kausalitas Antar Organisme
       if (idx < orgs.length - 1) {
-        const arrowTxt = this.add.text(px + pillW / 2 + 16, y, '➔', {
+        const arrowTxt = this.add.text(px + pillW / 2 + 17, y, '➔', {
           fontFamily: 'Fredoka, sans-serif',
-          fontSize: '16px',
+          fontSize: '24px',
           color: isUnlocked ? '#fbbf24' : '#475569',
           fontStyle: 'bold'
         }).setOrigin(0.5);
@@ -605,16 +606,16 @@ class BiomeSelectScene extends Phaser.Scene {
 
     // Tag Kategori
     const tagColor = num === 1 ? '#fbbf24' : '#fb7185';
-    const tagTxt = this.add.text(x - w / 2 + 16, y - h / 2 + 14, `${num === 1 ? '☀️ FAKTOR ALAM' : '⚠️ FAKTOR MANUSIA'} • ${mission.title}`, {
+    const tagTxt = this.add.text(x - w / 2 + 16, y - h / 2 + 16, `${num === 1 ? '☀️ FAKTOR ALAM' : '⚠️ FAKTOR MANUSIA'} • ${mission.title}`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '15px',
+      fontSize: '24px',
       color: isMissionUnlocked ? tagColor : '#94a3b8',
       fontStyle: 'bold'
     });
 
-    const descTxt = this.add.text(x - w / 2 + 16, y - h / 2 + 42, isMissionUnlocked ? mission.headline : 'Selesaikan Misi 1 terlebih dahulu untuk membuka investigasi ini.', {
+    const descTxt = this.add.text(x - w / 2 + 16, y - h / 2 + 50, isMissionUnlocked ? mission.headline : 'Selesaikan Misi 1 terlebih dahulu untuk membuka investigasi ini.', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '14px',
+      fontSize: '24px',
       color: isMissionUnlocked ? '#e2e8f0' : '#64748b',
       wordWrap: { width: w - 32 }
     });
@@ -635,9 +636,9 @@ class BiomeSelectScene extends Phaser.Scene {
       statusColor = '#4ade80';
     }
 
-    const statTxt = this.add.text(x - w / 2 + 16, y + h / 2 - 20, statusPill, {
+    const statTxt = this.add.text(x - w / 2 + 16, y + h / 2 - 22, statusPill, {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '13px',
+      fontSize: '24px',
       color: statusColor,
       fontStyle: 'bold'
     });
@@ -676,16 +677,16 @@ class BiomeSelectScene extends Phaser.Scene {
       container.add(miniBadge);
 
       // Teks Nama Bioma
-      const nameTxt = this.add.text(-tileW / 2 + 82, -14, `${b.icon} ${b.shortName}`, {
+      const nameTxt = this.add.text(-tileW / 2 + 82, -18, `${b.icon} ${b.shortName}`, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '18px',
+        fontSize: '24px',
         color: '#ffffff',
         fontStyle: 'bold'
       });
 
-      const starTxt = this.add.text(-tileW / 2 + 84, 12, isUnlocked ? `⭐ ${stars}/6 Bintang` : '🔒 Terkunci', {
+      const starTxt = this.add.text(-tileW / 2 + 84, 16, isUnlocked ? `⭐ ${stars}/6 Bintang` : '🔒 Terkunci', {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: isUnlocked ? '#a7f3d0' : '#f87171',
         fontStyle: 'bold'
       });
@@ -829,7 +830,7 @@ class BiomeSelectScene extends Phaser.Scene {
 
     const txt = this.add.text(0, 0, label, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: label.length > 3 ? '18px' : '22px',
+      fontSize: label.length > 3 ? '24px' : '30px',
       color: '#ffffff',
       fontStyle: 'bold',
       shadow: { offsetY: 2, color: '#000000', blur: 2, fill: true }
@@ -852,11 +853,11 @@ class BiomeSelectScene extends Phaser.Scene {
 
   showExaminerNotice(width, height) {
     const bannerContainer = this.add.container(width / 2, 140).setDepth(300);
-    const bannerBg = this.add.rectangle(0, 0, 940, 64, 0x064e3b, 0.98);
+    const bannerBg = this.add.rectangle(0, 0, 1020, 70, 0x064e3b, 0.98);
     bannerBg.setStrokeStyle(3, 0xfbbf24);
     const bannerTxt = this.add.text(0, 0, '🎓 MODE PENGUJI AKTIF: 4 BIOMA & 8 MISI TERBUKA (24 BINTANG)!', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '22px',
+      fontSize: '26px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -885,25 +886,25 @@ class BiomeSelectScene extends Phaser.Scene {
       .setInteractive();
     modalContainer.add(backdrop);
 
-    const boxW = 860;
-    const boxH = 340;
+    const boxW = 960;
+    const boxH = 380;
     const box = this.add.rectangle(width / 2, height / 2, boxW, boxH, 0x064e3b, 0.98);
     box.setStrokeStyle(4, 0xf59e0b);
     const innerBorder = this.add.rectangle(width / 2, height / 2, boxW - 12, boxH - 12);
     innerBorder.setStrokeStyle(1.5, 0xfef08a, 0.4);
     modalContainer.add([box, innerBorder]);
 
-    const titleText = this.add.text(width / 2, height / 2 - 100, title, {
+    const titleText = this.add.text(width / 2, height / 2 - 110, title, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '28px',
+      fontSize: '34px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
     modalContainer.add(titleText);
 
-    const descText = this.add.text(width / 2, height / 2 - 35, message, {
+    const descText = this.add.text(width / 2, height / 2 - 40, message, {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '19px',
+      fontSize: '24px',
       color: '#e2e8f0',
       fontStyle: 'bold',
       align: 'center',
@@ -912,12 +913,12 @@ class BiomeSelectScene extends Phaser.Scene {
     }).setOrigin(0.5);
     modalContainer.add(descText);
 
-    const btnCancel = this.add.rectangle(width / 2 - 170, height / 2 + 75, 260, 60, 0x047857)
+    const btnCancel = this.add.rectangle(width / 2 - 190, height / 2 + 85, 280, 64, 0x047857)
       .setInteractive({ useHandCursor: true });
     btnCancel.setStrokeStyle(2.5, 0x34d399);
-    const tCancel = this.add.text(width / 2 - 170, height / 2 + 75, '❌ BATAL', {
+    const tCancel = this.add.text(width / 2 - 190, height / 2 + 85, '❌ BATAL', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '20px',
+      fontSize: '26px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -931,12 +932,12 @@ class BiomeSelectScene extends Phaser.Scene {
       });
     });
 
-    const btnYes = this.add.rectangle(width / 2 + 170, height / 2 + 75, 260, 60, 0x991b1b)
+    const btnYes = this.add.rectangle(width / 2 + 190, height / 2 + 85, 280, 64, 0x991b1b)
       .setInteractive({ useHandCursor: true });
     btnYes.setStrokeStyle(2.5, 0xf87171);
-    const tYes = this.add.text(width / 2 + 170, height / 2 + 75, '✅ YA, RESET', {
+    const tYes = this.add.text(width / 2 + 190, height / 2 + 85, '✅ YA, RESET', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '20px',
+      fontSize: '26px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
