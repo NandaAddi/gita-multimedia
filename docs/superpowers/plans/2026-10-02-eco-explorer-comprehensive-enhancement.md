@@ -241,7 +241,7 @@ git commit -m "feat(progression): add examiner unlock mode and in-engine IFP tou
 - Consumes: `activeMission.quiz.explanation`, `activeTeam`, `activeEcosystemId`
 - Produces: Kartu diagram kausalitas visual C2 di `QuizScene`, subtitle peran universal di `TeamSelectScene`.
 
-- [ ] **Step 1: Tambahkan kartu visual skema sebab-akibat C2 di `QuizScene.js`**
+- [x] **Step 1: Tambahkan kartu visual skema sebab-akibat C2 di `QuizScene.js`**
 
 Ketika siswa menjawab soal C2, selain menampilkan feedback teks, tampilkan baris diagram mini (kotak-kotak organisme dengan panah penghubung `➔` atau `❌`):
 - Contoh Misi Sawah: `[Padi] ➔ [Tikus Merajalela] ➔ [Petani Gagal Panen ❌]`
@@ -249,7 +249,7 @@ Ketika siswa menjawab soal C2, selain menampilkan feedback teks, tampilkan baris
 - Contoh Misi Sungai: `[Eceng Gondok Menutup ❌] ➔ [Oksigen Turun] ➔ [Ikan Mati Lemas]`
 - Contoh Misi Laut: `[Karang Memutih ❌] ➔ [Ikan Karang Hilang] ➔ [Hiu Kesulitan Makan]`
 
-- [ ] **Step 2: Perbarui plakat peran tim di `TeamSelectScene.js`**
+- [x] **Step 2: Perbarui plakat peran tim di `TeamSelectScene.js`**
 
 Tambahkan baris keterangan universal pada setiap kartu tim agar relevan dengan 4 bioma:
 - *Tim Elang:* `👑 Puncak: Elang (Sawah) • Harimau (Hutan) • Bangau (Sungai) • Hiu (Laut)`
@@ -257,19 +257,19 @@ Tambahkan baris keterangan universal pada setiap kartu tim agar relevan dengan 4
 - *Tim Padi:* `🌾 Produsen: Padi (Sawah) • Pohon Rimba (Hutan) • Teratai (Sungai) • Karang (Laut)`
 - *Tim Jamur:* `🍄 Pengurai: Jamur (Sawah & Hutan) • Bakteri (Sungai) • Detritivor (Laut)`
 
-- [ ] **Step 3: Sinkronkan panduan kartu voting Tanya Teman di `SimulationScene.js`**
+- [x] **Step 3: Sinkronkan panduan kartu voting Tanya Teman di `SimulationScene.js`**
 
 Di modal CSCL `triggerCoPilotCallout()`, sesuaikan teks rekomendasi kartu warna:
 - **🟢 Hijau:** Tambah Populasi Pemburu / Pemulih Keseimbangan Bioma.
 - **🟡 Kuning:** Buka Saluran Air / Alirkan Mata Air / Transplantasi.
 - **🔴 Merah:** Bersihkan Racun / Sita Jerat / Angkut Limbah & Sampah Plastik.
 
-- [ ] **Step 4: Verifikasi sintaksis**
+- [x] **Step 4: Verifikasi sintaksis**
 
 Run: `node -c WEBSITE/js/phaser-game/scenes/QuizScene.js WEBSITE/js/phaser-game/scenes/TeamSelectScene.js WEBSITE/js/phaser-game/scenes/SimulationScene.js`  
 Expected: Exit code 0.
 
-- [ ] **Step 5: Commit perubahan Task 3**
+- [x] **Step 5: Commit perubahan Task 3**
 
 ```bash
 git add WEBSITE/js/phaser-game/scenes/QuizScene.js WEBSITE/js/phaser-game/scenes/TeamSelectScene.js WEBSITE/js/phaser-game/scenes/SimulationScene.js

@@ -1947,39 +1947,145 @@ class SimulationScene extends Phaser.Scene {
       }
     });
 
-    // 3 KARTU VOTING SESUAI DENGAN KARTU FISIK LKPD KELAS & ASET VISUAL
-    const votingOptions = [
-      {
-        assetKey: 'card_voting_hijau',
-        color: 0x064e3b,
-        border: 0x22c55e,
-        tag: '🟢 KARTU HIJAU',
-        title: 'TAMBAH PEMANGSA / JAMUR',
-        desc: 'Tambah ular, katak, atau jamur.',
-        actionTarget: this.legacyMissionId === 4 ? 'jamur' : (this.legacyMissionId === 2 ? 'katak' : 'ular'),
-        recText: 'Rekomendasi: Tambah Pemangsa / Jamur'
-      },
-      {
-        assetKey: 'card_voting_kuning',
-        color: 0x78350f,
-        border: 0xf59e0b,
-        tag: '🟡 KARTU KUNING',
-        title: 'ALIRKAN AIR',
-        desc: 'Buka pintu air untuk tanah yang retak dan kering.',
-        actionTarget: 'air',
-        recText: 'Rekomendasi: Alirkan Air ke Sawah'
-      },
-      {
-        assetKey: 'card_voting_merah',
-        color: 0x7f1d1d,
-        border: 0xef4444,
-        tag: '🔴 KARTU MERAH',
-        title: 'KURANGI HAMA & RACUN',
-        desc: 'Kurangi tikus atau bersihkan sisa racun.',
-        actionTarget: this.legacyMissionId === 2 ? 'bersih_racun' : 'tikus_monitor',
-        recText: 'Rekomendasi: Kurangi Hama & Bersihkan Racun'
-      }
-    ];
+    // 3 KARTU VOTING SESUAI DENGAN KARTU FISIK LKPD KELAS & MULTI-BIOMA
+    let votingOptions = [];
+    const eco = this.activeEcosystemId;
+    const mid = this.activeMission ? this.activeMission.id : 'sawah_m1';
+
+    if (eco === 'hutan') {
+      votingOptions = [
+        {
+          assetKey: 'card_voting_hijau',
+          color: 0x064e3b,
+          border: 0x22c55e,
+          tag: '🟢 KARTU HIJAU',
+          title: 'RAWAT HARIMAU & PENGURAI',
+          desc: 'Selamatkan Harimau Sumatera atau bantu jamur serasah.',
+          actionTarget: mid === 'hutan_m2' ? 'rawat_harimau' : 'urai_abu',
+          recText: mid === 'hutan_m2' ? 'Rawat Harimau Sumatera' : 'Bantu Jamur Rimba Mengurai Serasah'
+        },
+        {
+          assetKey: 'card_voting_kuning',
+          color: 0x78350f,
+          border: 0xf59e0b,
+          tag: '🟡 KARTU KUNING',
+          title: 'AIR RIMBA & REBOISASI',
+          desc: 'Alirkan mata air rimba atau tanam tunas pohon.',
+          actionTarget: mid === 'hutan_m1' ? 'air_rimba' : 'tanam_pohon',
+          recText: mid === 'hutan_m1' ? 'Alirkan Mata Air Rimba' : 'Tanam Tunas Pohon Rimba Baru'
+        },
+        {
+          assetKey: 'card_voting_merah',
+          color: 0x7f1d1d,
+          border: 0xef4444,
+          tag: '🔴 KARTU MERAH',
+          title: 'SITA JERAT PEMBURU',
+          desc: 'Amankan rimba dari jerat liar dan deforestasi.',
+          actionTarget: 'sita_jerat',
+          recText: 'Sita Jerat Pemburu Liar'
+        }
+      ];
+    } else if (eco === 'sungai') {
+      votingOptions = [
+        {
+          assetKey: 'card_voting_hijau',
+          color: 0x064e3b,
+          border: 0x22c55e,
+          tag: '🟢 KARTU HIJAU',
+          title: 'TEBAR IKAN & BANGAU',
+          desc: 'Tebar benih ikan tawar atau lindungi bangau.',
+          actionTarget: mid === 'sungai_m2' ? 'rawat_bangau' : 'tebar_ikan',
+          recText: mid === 'sungai_m2' ? 'Lindungi Burung Bangau Sungai' : 'Tebar Benih Ikan Tawar'
+        },
+        {
+          assetKey: 'card_voting_kuning',
+          color: 0x78350f,
+          border: 0xf59e0b,
+          tag: '🟡 KARTU KUNING',
+          title: 'BUKA AIR HULU',
+          desc: 'Alirkan air segar hulu agar oksigen sungai naik.',
+          actionTarget: 'buka_hulu',
+          recText: 'Buka Pintu Air Hulu Sungai'
+        },
+        {
+          assetKey: 'card_voting_merah',
+          color: 0x7f1d1d,
+          border: 0xef4444,
+          tag: '🔴 KARTU MERAH',
+          title: 'BERSIHKAN LIMBAH & GULMA',
+          desc: 'Saring limbah beracun pabrik atau angkat eceng gondok.',
+          actionTarget: mid === 'sungai_m2' ? 'saring_limbah' : 'bersih_gulma',
+          recText: mid === 'sungai_m2' ? 'Saring Limbah Kimia Pabrik' : 'Angkat Tumpukan Eceng Gondok'
+        }
+      ];
+    } else if (eco === 'laut') {
+      votingOptions = [
+        {
+          assetKey: 'card_voting_hijau',
+          color: 0x064e3b,
+          border: 0x22c55e,
+          tag: '🟢 KARTU HIJAU',
+          title: 'TRANSPLANTASI & PENYU',
+          desc: 'Tanam bibit karang sehat atau rawat penyu samudra.',
+          actionTarget: mid === 'laut_m2' ? 'rawat_penyu' : 'tanam_karang',
+          recText: mid === 'laut_m2' ? 'Rawat Penyu Samudra Terjerat' : 'Transplantasi Bibit Karang Sehat'
+        },
+        {
+          assetKey: 'card_voting_kuning',
+          color: 0x78350f,
+          border: 0xf59e0b,
+          tag: '🟡 KARTU KUNING',
+          title: 'PULIHKAN IKAN KARANG',
+          desc: 'Sebar ikan karang dan bantu mikroba pengurai.',
+          actionTarget: mid === 'laut_m1' ? 'sebar_ikan' : 'sita_bom',
+          recText: mid === 'laut_m1' ? 'Pulihkan Kawanan Ikan Karang' : 'Larang Bom Ikan'
+        },
+        {
+          assetKey: 'card_voting_merah',
+          color: 0x7f1d1d,
+          border: 0xef4444,
+          tag: '🔴 KARTU MERAH',
+          title: 'ANGKUT SAMPAH & BOM',
+          desc: 'Bersihkan sampah plastik atau sita bom perusak.',
+          actionTarget: mid === 'laut_m2' ? 'bersih_plastik' : 'sita_bom',
+          recText: 'Angkut Sampah Plastik Samudra'
+        }
+      ];
+    } else {
+      // Default: Bioma Sawah
+      votingOptions = [
+        {
+          assetKey: 'card_voting_hijau',
+          color: 0x064e3b,
+          border: 0x22c55e,
+          tag: '🟢 KARTU HIJAU',
+          title: 'TAMBAH PEMANGSA / JAMUR',
+          desc: 'Tambah ular, katak, atau jamur.',
+          actionTarget: this.legacyMissionId === 4 ? 'jamur' : (this.legacyMissionId === 2 ? 'katak' : 'ular'),
+          recText: 'Tambah Pemangsa / Jamur'
+        },
+        {
+          assetKey: 'card_voting_kuning',
+          color: 0x78350f,
+          border: 0xf59e0b,
+          tag: '🟡 KARTU KUNING',
+          title: 'ALIRKAN AIR',
+          desc: 'Buka pintu air untuk tanah yang retak dan kering.',
+          actionTarget: 'air',
+          recText: 'Alirkan Air ke Sawah'
+        },
+        {
+          assetKey: 'card_voting_merah',
+          color: 0x7f1d1d,
+          border: 0xef4444,
+          tag: '🔴 KARTU MERAH',
+          title: 'KURANGI HAMA & RACUN',
+          desc: 'Kurangi tikus atau bersihkan sisa racun.',
+          actionTarget: this.legacyMissionId === 2 ? 'bersih_racun' : 'tikus_monitor',
+          recText: 'Kurangi Hama & Bersihkan Racun'
+        }
+      ];
+    }
 
     const cardY = height / 2 + 55;
     const cardW = 345;
@@ -2000,13 +2106,13 @@ class SimulationScene extends Phaser.Scene {
       this.guideFullSpeech = `Hasil diskusi kelas memilih ${chosen.tag}! Rekomendasi tindakan: ${chosen.recText}!`;
 
       let voKey = 'vo_sim_vote_green';
-      let voFallback = 'Kartu Hijau menang! Ayo tambahkan hewan pemangsa atau jamur ke sawah!';
+      let voFallback = `Kartu Hijau menang! Rekomendasi: ${chosen.recText}!`;
       if (chosen.tag.includes('KUNING')) {
         voKey = 'vo_sim_vote_yellow';
-        voFallback = 'Kartu Kuning menang! Ayo buka pintu air dan alirkan air ke sawah!';
+        voFallback = `Kartu Kuning menang! Rekomendasi: ${chosen.recText}!`;
       } else if (chosen.tag.includes('MERAH')) {
         voKey = 'vo_sim_vote_red';
-        voFallback = 'Kartu Merah menang! Ayo kurangi tikus dan bersihkan sisa racun!';
+        voFallback = `Kartu Merah menang! Rekomendasi: ${chosen.recText}!`;
       }
 
       if (window.soundEngine) {

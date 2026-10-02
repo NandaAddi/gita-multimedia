@@ -1,7 +1,8 @@
 /**
  * ECO-EXPLORER (PHASER 3) - QUIZ SCENE (RAMAH SISWA KELAS 5 SD)
- * Menggunakan bahasa anak SD yang lugas, hangat, dan seru tanpa istilah akademis/asing.
- * Menguji pemahaman sebab-akibat (C2) dengan stimulus visual kaskade trofik yang konkret.
+ * Data-driven dari activeMission.quiz (ECOSYSTEMS_DATA).
+ * Menguji pemahaman sebab-akibat (C2) dengan stimulus visual rantai makanan.
+ * Melacak firstAttemptCorrect untuk sistem 3 bintang.
  */
 
 class QuizScene extends Phaser.Scene {
@@ -11,298 +12,372 @@ class QuizScene extends Phaser.Scene {
 
   create() {
     const { width, height } = this.scale;
-    const simResult = this.registry.get('simResult') || { 
-      health: 80, 
-      timeLeft: 180, 
+    const simResult = this.registry.get('simResult') || {
+      health: 80,
+      timeLeft: 180,
       team: { name: 'TIM DETEKTIF', color: 0x10b981 },
-      mission: { id: 1, title: 'Misi 1: Serbuan Hama Tikus' }
+      mission: null
     };
 
-    const missionId = (simResult.mission && simResult.mission.id) ? simResult.mission.id : 1;
+    // Get active mission data from registry
+    this.activeMission = this.registry.get('activeMission') || null;
+    this.activeEcosystemId = this.registry.get('activeEcosystem') || 'sawah';
+    this.ecoConfig = (window.ECOSYSTEMS_DATA && window.ECOSYSTEMS_DATA[this.activeEcosystemId]) || null;
+    this.simResult = simResult;
+    this.firstAttemptCorrect = true; // Track if student answered correctly on first try
 
-    // 1. Background Sawah Pixel Art
-    const bg = this.add.image(width / 2, height / 2, 'bg_sawah');
+    // Determine quiz data (data-driven from ECOSYSTEMS_DATA)
+    let quizData = null;
+    if (this.activeMission && this.activeMission.quiz) {
+      quizData = this.activeMission.quiz;
+    }
+
+    // Fallback if no quiz data found
+    if (!quizData) {
+      quizData = {
+        question: 'Mengapa semua makhluk hidup di ekosistem saling membutuhkan?',
+        options: [
+          { text: 'A. Karena setiap makhluk hidup adalah bagian dari rantai makanan yang saling terhubung', correct: true },
+          { text: 'B. Karena semua makhluk hidup memakan tumbuhan yang sama', correct: false },
+          { text: 'C. Karena hewan besar selalu melindungi hewan kecil', correct: false }
+        ],
+        explanation: 'Benar! Rantai makanan menghubungkan semua makhluk hidup. Jika satu bagian terganggu, seluruh ekosistem ikut terpengaruh!'
+      };
+    }
+
+    const ecoName = this.ecoConfig ? this.ecoConfig.name : 'Ekosistem';
+    const ambientColor = this.ecoConfig ? this.ecoConfig.ambientColor : 0x064e3b;
+    const accentColor = this.ecoConfig ? this.ecoConfig.accentColor : 0x10b981;
+
+    // 1. Background
+    const bgKey = this.ecoConfig ? this.ecoConfig.bg : 'bg_sawah';
+    const bg = this.add.image(width / 2, height / 2, bgKey);
     bg.setDisplaySize(width, height);
     bg.setTint(0x334433);
 
-    // 2. Header Ramah Anak
+    // 2. Header
     const header = this.add.rectangle(width / 2, 65, width * 0.94, 85, 0x0f172a, 0.96);
     header.setStrokeStyle(3, 0xfbbf24);
 
-    this.add.text(width / 2, 45, '🔍 BUKU RAHASIA DETEKTIF GITA: TEKA-TEKI SAWAH', {
+    const missionTitle = this.activeMission ? this.activeMission.title : 'Teka-Teki Ekosistem';
+    this.add.text(width / 2, 45, `\uD83D\uDD0D BUKU CATATAN DETEKTIF: ${missionTitle.toUpperCase()}`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '26px',
+      fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
-    this.add.text(width / 2, 80, `Giliran Diskusi: ${simResult.team.name} & Teman-Teman Kelas 5A`, {
+    this.add.text(width / 2, 80, `${ecoName} | Giliran Diskusi: ${simResult.team ? simResult.team.name : 'TIM DETEKTIF'} & Teman-Teman Kelas 5A`, {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '18px',
+      fontSize: '17px',
       color: '#cbd5e1'
     }).setOrigin(0.5);
 
-    // 3. Bank Kasus Bahasa Ramah Anak (Mayer Multimedia & Signaling Principle)
-    const caseBank = {
-      1: {
-        title: 'KASUS 1: MISTERI MELEDAKNYA HAMA TIKUS',
-        question: 'Kasus: Petani membasmi semua ular sawah karena takut. Namun beberapa minggu kemudian, tanaman padi justru rusak dimakan tikus. Mengapa hal ini bisa terjadi?',
-        chain: ['🌾 Padi', '➡️', '🐀 Tikus Meledak', '➡️', '🐍 Ular (Diburu!)', '➡️', '🦅 Elang'],
-        disruptedIndex: 4, // '🐍 Ular (Diburu!)'
-        options: [
-          {
-            key: 'A',
-            icon: '🌾',
-            text: 'A. Tanaman padi mati karena kekurangan aroma tubuh ular di pematang sawah.',
-            isCorrect: false,
-            feedback: '⚠️ Kurang tepat! Ular tidak memberi aroma pupuk, melainkan bertugas memangsa tikus.'
-          },
-          {
-            key: 'B',
-            icon: '🐍',
-            text: 'B. Tikus bertambah sangat banyak karena tidak ada ular yang memangsanya, lalu memakan habis tanaman padi.',
-            isCorrect: true,
-            feedback: '🎉 TEPAT SEKALI! Kalau ular diburu habis, tidak ada yang memangsa tikus. Akibatnya tikus bertambah banyak dan merusak padi!'
-          },
-          {
-            key: 'C',
-            icon: '🦅',
-            text: 'C. Burung elang menjadi marah lalu sengaja merusak batang-batang padi milik petani.',
-            isCorrect: false,
-            feedback: '⚠️ Keliru! Burung elang adalah pemakan daging, bukan pemakan tanaman padi.'
-          }
-        ]
-      },
-      2: {
-        title: 'KASUS 2: BAHAYA RACUN SEMPROTAN KIMIA',
-        question: 'Kasus: Petani menyemprot racun kimia berlebihan hingga katak sawah ikut mati. Seminggu kemudian, daun padi justru habis dimakan serangga hama. Mengapa?',
-        chain: ['🌾 Padi Rusak', '⬅️', '🦗 Serangga Banyak', '⬅️', '🐸 Katak (Mati Racun!)'],
-        disruptedIndex: 4, // '🐸 Katak (Mati Racun!)'
-        options: [
-          {
-            key: 'A',
-            icon: '🐸',
-            text: 'A. Racun kimia membunuh katak yang biasa memangsa serangga, sehingga serangga bebas memakan daun padi.',
-            isCorrect: true,
-            feedback: '🎉 LUAR BIASA! Katak adalah sahabat petani pemangsa serangga. Tanpa katak, serangga perusak akan bebas merusak padi!'
-          },
-          {
-            key: 'B',
-            icon: '🦗',
-            text: 'B. Katak yang mati teracuni berubah wujud menjadi serangga pemakan padi.',
-            isCorrect: false,
-            feedback: '⚠️ Keliru! Katak dan serangga berbeda; katak memangsa serangga, bukan berubah menjadi serangga.'
-          },
-          {
-            key: 'C',
-            icon: '🧪',
-            text: 'C. Racun kimia berubah menjadi makanan enak yang disukai serangga.',
-            isCorrect: false,
-            feedback: '⚠️ Kurang tepat! Racun kimia merusak lingkungan dan membunuh katak sahabat petani.'
-          }
-        ]
-      },
-      3: {
-        title: 'KASUS 3: PETAKA KEMARAU & KELAPARAN',
-        question: 'Kasus: Saat saluran irigasi kering dan tanaman padi layu mati, mengapa burung elang dan ular sawah akhirnya ikut kelaparan?',
-        chain: ['💧 Air Kering (Kemarau)', '➡️', '🌾 Padi Layu', '➡️', '🐀 Tikus Kelaparan', '➡️', '🦅 Pemangsa Kelaparan'],
-        disruptedIndex: 0, // '💧 Air Kering (Kemarau)'
-        options: [
-          {
-            key: 'A',
-            icon: '🏊',
-            text: 'A. Ular dan burung elang membutuhkan air sawah untuk berenang setiap pagi.',
-            isCorrect: false,
-            feedback: '⚠️ Keliru! Ular dan elang adalah hewan darat/udara yang tidak hidup di dalam air sawah.'
-          },
-          {
-            key: 'B',
-            icon: '🌾',
-            text: 'B. Ular dan burung elang sebenarnya hanya suka makan biji padi.',
-            isCorrect: false,
-            feedback: '⚠️ Keliru! Ular dan elang adalah hewan pemakan daging mangsanya, bukan pemakan biji padi.'
-          },
-          {
-            key: 'C',
-            icon: '💧',
-            text: 'C. Padi adalah sumber makanan utama; jika padi mati, hewan pemakan padi mati, dan pemangsa ikut kehabisan mangsa.',
-            isCorrect: true,
-            feedback: '🎉 HEBAT SEKALI! Padi adalah sumber makanan pertama. Jika padi mati, semua hewan di atasnya ikut kelaparan!'
-          }
-        ]
-      },
-      4: {
-        title: 'KASUS 4: RAHASIA JAMUR PENYUBUR TANAH',
-        question: 'Kasus: Mengapa sisa jerami kering yang membusuk harus diurai oleh jamur agar tanah sawah tetap subur?',
-        chain: ['🍂 Jerami Menumpuk', '➡️', '🍄 Jamur Pengurai', '➡️', '✨ Pupuk Alami', '➡️', '🌾 Padi Subur'],
-        disruptedIndex: 0, // '🍂 Jerami Menumpuk'
-        options: [
-          {
-            key: 'A',
-            icon: '😢',
-            text: 'A. Tanaman padi merasa sedih melihat tumpukan jerami temannya yang mengering.',
-            isCorrect: false,
-            feedback: '⚠️ Kurang ilmiah! Tumbuhan tidak memiliki perasaan sedih atau takut seperti manusia.'
-          },
-          {
-            key: 'B',
-            icon: '🍄',
-            text: 'B. Jamur mengubah jerami busuk menjadi pupuk alami tanah yang diserap akar padi agar tumbuh subur.',
-            isCorrect: true,
-            feedback: '🎉 SEMPURNA! Jamur adalah pahlawan pengurai yang mengubah sisa tanaman mati menjadi pupuk penyubur tanah!'
-          },
-          {
-            key: 'C',
-            icon: '🪨',
-            text: 'C. Tumpukan jerami kering akan berubah menjadi batu keras jika tidak dibuang.',
-            isCorrect: false,
-            feedback: '⚠️ Keliru! Jerami adalah bagian tumbuhan yang bisa diurai oleh jamur menjadi pupuk humus.'
-          }
-        ]
-      }
-    };
+    // 3. Kartu Pertanyaan
+    const card = this.add.rectangle(width / 2, 230, width * 0.94, 200, ambientColor, 0.95);
+    card.setStrokeStyle(2.5, accentColor);
 
-    const currentCase = caseBank[missionId] || caseBank[1];
+    // Avatar Gita berpikir
+    const gitaThinkKey = this.textures.exists('gita_think') ? 'gita_think' : 'gita_idle';
+    this.gitaAvatar = this.add.image(width / 2 - width * 0.44 + 50, 230, gitaThinkKey)
+      .setDisplaySize(120, 165);
 
-    // 4. Kartu Wadah Kasus (Header Kasus C2)
-    const card = this.add.rectangle(width / 2, 230, width * 0.94, 210, 0x1e293b, 0.95);
-    card.setStrokeStyle(2, 0x38bdf8);
+    this.tweens.add({
+      targets: this.gitaAvatar,
+      y: 224,
+      duration: 1400,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
 
-    // Judul Kasus
-    this.add.text(width / 2 - width * 0.44, 150, `📜 ${currentCase.title}`, {
+    const textStartX = width / 2 - width * 0.44 + 130;
+
+    // Judul
+    const typeLabel = this.activeMission ? this.activeMission.typeLabel : 'Teka-Teki';
+    this.add.text(textStartX, 150, `\uD83D\uDCDC ${typeLabel}: TEKA-TEKI SEBAB AKIBAT`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '20px',
-      color: '#38bdf8',
+      fontSize: '21px',
+      color: '#fef08a',
       fontStyle: 'bold'
     });
 
-    // Pertanyaan Kasus
-    this.add.text(width / 2 - width * 0.44, 185, currentCase.question, {
+    // Pertanyaan
+    this.add.text(textStartX, 185, quizData.question, {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '21px',
+      fontSize: '20px',
       color: '#ffffff',
       fontStyle: 'bold',
-      wordWrap: { width: width * 0.78 },
+      wordWrap: { width: width * 0.70 },
       lineSpacing: 6
     });
 
-    // Rantai Makanan Visual dengan Signaling Principle (Sorotan Rantai Terganggu)
-    const chainBox = this.add.rectangle(width / 2 - width * 0.44 + 400, 290, 820, 36, 0x0f172a, 0.9);
-    chainBox.setStrokeStyle(1, 0x475569);
-    const chainStr = currentCase.chain.join(' ');
-    const tChain = this.add.text(width / 2 - width * 0.44 + 10, 290, `🔗 ALUR SAWAH:  ${chainStr}`, {
-      fontFamily: 'Fredoka, sans-serif',
-      fontSize: '17px',
-      color: '#fef08a'
-    }).setOrigin(0, 0.5);
-
-    // Efek Pulsing Lembut pada Banner Alur
-    this.tweens.add({
-      targets: chainBox,
-      strokeColor: { from: 0x475569, to: 0xef4444 },
-      duration: 800,
-      yoyo: true,
-      repeat: -1
-    });
-
-    // Tombol Suara Soal (🔊)
-    const btnVoiceQ = this.add.rectangle(width / 2 + width * 0.42, 215, 64, 64, 0x10b981).setInteractive({ useHandCursor: true });
+    // Tombol Suara Soal
+    const btnVoiceQ = this.add.rectangle(width / 2 + width * 0.42, 215, 64, 64, accentColor).setInteractive({ useHandCursor: true });
     btnVoiceQ.setStrokeStyle(2, 0xfef08a);
-    this.add.text(width / 2 + width * 0.42, 215, '🔊', { fontSize: '28px' }).setOrigin(0.5);
+    this.add.text(width / 2 + width * 0.42, 215, '\uD83D\uDD0A', { fontSize: '28px' }).setOrigin(0.5);
 
     btnVoiceQ.on('pointerdown', () => {
       btnVoiceQ.setScale(0.9);
       if (window.soundEngine) {
         window.soundEngine.playBeep();
-        window.soundEngine.playVO('vo_quiz_intro', currentCase.question);
+        window.soundEngine.playVO('vo_quiz_question', quizData.question);
       }
     });
     btnVoiceQ.on('pointerup', () => btnVoiceQ.setScale(1.0));
 
-    // 5. Pilihan Jawaban Ramah Sentuh IFP dengan Ikon Multimedia (Mayer Multimedia Principle)
+    // 4. Pilihan Jawaban
     const optY = 405;
     const optSpacing = 115;
     this.optionButtons = [];
 
-    currentCase.options.forEach((opt, idx) => {
+    quizData.options.forEach((opt, idx) => {
       const oy = optY + (idx * optSpacing);
-      const btn = this.add.rectangle(width / 2, oy, width * 0.94, 98, 0x0f172a, 0.95)
+      const btn = this.add.rectangle(width / 2, oy, width * 0.94, 98, ambientColor, 0.95)
         .setInteractive({ useHandCursor: true })
-        .setStrokeStyle(3, 0x475569);
+        .setStrokeStyle(2.5, accentColor);
 
-      // Badge Ikon Trofik di Kiri (Dual-Coding)
-      const badgeX = width / 2 - width * 0.44 + 30;
-      const iconCircle = this.add.circle(badgeX, oy, 30, 0x1e293b).setStrokeStyle(2, 0x38bdf8);
-      this.add.text(badgeX, oy, opt.icon, { fontSize: '28px' }).setOrigin(0.5);
+      // Huruf Badge
+      const letters = ['A', 'B', 'C'];
+      const badgeX = width / 2 - width * 0.44 + 40;
+      const iconCircle = this.add.circle(badgeX, oy, 30, 0x021a14).setStrokeStyle(2, 0xf59e0b);
+      this.add.text(badgeX, oy, letters[idx], {
+        fontFamily: 'Fredoka, sans-serif',
+        fontSize: '26px',
+        color: '#fef08a',
+        fontStyle: 'bold'
+      }).setOrigin(0.5);
 
-      // Teks Pilihan Jawaban
-      this.add.text(width / 2 - width * 0.44 + 80, oy, opt.text, {
+      // Teks Pilihan
+      this.add.text(width / 2 - width * 0.44 + 90, oy, opt.text, {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '20px',
-        color: '#f8fafc',
+        fontSize: '19px',
+        color: '#ffffff',
         wordWrap: { width: width * 0.81 },
         lineSpacing: 4
       }).setOrigin(0, 0.5);
 
+      btn.on('pointerover', () => {
+        btn.setScale(1.01);
+        btn.setStrokeStyle(3, 0xfef08a);
+      });
+      btn.on('pointerout', () => {
+        btn.setScale(1.0);
+        btn.setStrokeStyle(2.5, accentColor);
+      });
+
       btn.on('pointerdown', () => {
-        this.handleAnswer(opt, btn);
+        this.handleAnswer(opt, btn, quizData);
       });
 
       this.optionButtons.push(btn);
     });
   }
 
-  handleAnswer(opt, btnElement) {
+  handleAnswer(opt, btnElement, quizData) {
     const { width, height } = this.scale;
+    const accentColor = this.ecoConfig ? this.ecoConfig.accentColor : 0x10b981;
 
-    // Nonaktifkan semua tombol agar tidak double klik
+    // Disable all buttons
     this.optionButtons.forEach(b => b.disableInteractive());
 
-    if (opt.isCorrect) {
+    // Tampilkan Diagram Kausalitas Visual C2 (Mayer Multimedia & Spatial Contiguity)
+    const mid = this.activeMission ? this.activeMission.id : 'sawah_m1';
+    if (this.causalDiagram) {
+      this.causalDiagram.destroy();
+    }
+    this.causalDiagram = this.createCausalChainDiagram(width, 745, mid);
+
+    if (opt.correct) {
       if (window.soundEngine) {
         window.soundEngine.playSuccess();
-        window.soundEngine.playVO('vo_quiz_correct', opt.feedback);
+        const explanation = quizData.explanation || 'Jawaban benar! Hebat!';
+        window.soundEngine.playVO('vo_quiz_correct', explanation);
       }
-      btnElement.setFillStyle(0x059669);
-      btnElement.setStrokeStyle(4, 0x34d399);
+      btnElement.setFillStyle(0x065f46);
+      btnElement.setStrokeStyle(4, 0xfef08a);
 
-      const feedbackBox = this.add.rectangle(width / 2, height - 90, width * 0.94, 85, 0x064e3b, 0.98);
-      feedbackBox.setStrokeStyle(3, 0x34d399);
-      this.add.text(width / 2, height - 90, opt.feedback, {
+      // Gita thumbs up
+      if (this.gitaAvatar && this.textures.exists('gita_thumbsup')) {
+        this.gitaAvatar.setTexture('gita_thumbsup');
+        this.tweens.add({
+          targets: this.gitaAvatar,
+          scale: 1.15,
+          duration: 300,
+          yoyo: true,
+          repeat: 2
+        });
+      }
+
+      if (this.feedbackBox) this.feedbackBox.destroy();
+      this.feedbackBox = this.add.container(width / 2, 855).setDepth(22);
+      const fbBg = this.add.rectangle(0, 0, width * 0.94, 72, 0x064e3b, 0.98);
+      fbBg.setStrokeStyle(3, 0xf59e0b);
+      const fbTxt = this.add.text(0, 0, '✅ ' + (quizData.explanation || 'Jawaban benar!'), {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '20px',
+        fontSize: '18px',
         color: '#fef08a',
         wordWrap: { width: width * 0.9 }
       }).setOrigin(0.5);
+      this.feedbackBox.add([fbBg, fbTxt]);
 
-      this.registry.set('quizScore', 100);
+      // Save quiz results to registry for VictoryScene
+      this.registry.set('quizPassed', true);
+      this.registry.set('firstAttemptCorrect', this.firstAttemptCorrect);
 
-      this.time.delayedCall(3000, () => {
+      this.time.delayedCall(3800, () => {
         if (window.soundEngine) window.soundEngine.stopVoice();
         this.scene.start('VictoryScene');
       });
     } else {
-      if (window.soundEngine) window.soundEngine.playWarning();
-      btnElement.setFillStyle(0x991b1b);
+      this.firstAttemptCorrect = false; // Mark that student failed on first attempt
+
+      if (window.soundEngine) {
+        window.soundEngine.playWarning();
+        window.soundEngine.playVO('vo_quiz_wrong', 'Belum tepat, tapi tidak apa-apa! Perhatikan bagan di bawah, lalu coba lagi!');
+      }
+      btnElement.setFillStyle(0x7f1d1d);
       btnElement.setStrokeStyle(4, 0xf87171);
 
       this.cameras.main.shake(250, 0.01);
 
-      const feedbackBox = this.add.rectangle(width / 2, height - 90, width * 0.94, 85, 0x450a0a, 0.98);
-      feedbackBox.setStrokeStyle(3, 0xef4444);
-      this.add.text(width / 2, height - 90, opt.feedback, {
+      if (this.feedbackBox) this.feedbackBox.destroy();
+      this.feedbackBox = this.add.container(width / 2, 855).setDepth(22);
+      const fbBg = this.add.rectangle(0, 0, width * 0.94, 72, 0x450a0a, 0.98);
+      fbBg.setStrokeStyle(3, 0xef4444);
+
+      const wrongFeedback = '❌ Belum tepat. Perhatikan bagan rantai makanan di atas, lalu diskusikan kembali!';
+      const fbTxt = this.add.text(0, 0, wrongFeedback, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '20px',
+        fontSize: '18px',
         color: '#fecaca',
         wordWrap: { width: width * 0.9 }
       }).setOrigin(0.5);
+      this.feedbackBox.add([fbBg, fbTxt]);
 
-      this.registry.set('quizScore', 50);
-
-      this.time.delayedCall(2600, () => {
-        this.scene.start('VictoryScene');
+      // Re-enable other buttons after delay so student can try again
+      this.time.delayedCall(2200, () => {
+        this.optionButtons.forEach(b => {
+          if (b !== btnElement) {
+            b.setInteractive({ useHandCursor: true });
+          }
+        });
       });
     }
+  }
+
+  /**
+   * Diagram Stimulus Rantai Makanan / Kausalitas C2 (Mayer CTML & Piaget Operasional Konkret)
+   */
+  createCausalChainDiagram(width, cardY, mid) {
+    const chainMap = {
+      sawah_m1: [
+        { label: '☀️ Kemarau Panjang', color: 0xd97706 },
+        { label: '🌾 Padi Mengering', color: 0xb45309 },
+        { label: '🐀 Tikus Berkurang', color: 0x475569 },
+        { label: '🐍 Ular & Elang Lapar ❌', color: 0xef4444 }
+      ],
+      sawah_m2: [
+        { label: '🔫 Ular Sawah Diburu', color: 0xef4444 },
+        { label: '🐀 Hama Tikus Melonjak', color: 0xb91c1c },
+        { label: '🌾 Bulir Padi Habis', color: 0xd97706 },
+        { label: '👨‍🌾 Gagal Panen Sawah ❌', color: 0xdc2626 }
+      ],
+      hutan_m1: [
+        { label: '☀️ Kemarau Rimba', color: 0xd97706 },
+        { label: '🌲 Dedaunan Layu', color: 0xb45309 },
+        { label: '🦌 Rusa Kelaparan', color: 0x475569 },
+        { label: '🐅 Harimau Turun ke Warga ❌', color: 0xef4444 }
+      ],
+      hutan_m2: [
+        { label: '🪓 Penebangan Liar', color: 0xef4444 },
+        { label: '🌲 Pohon Rusak & Longsor', color: 0xb91c1c },
+        { label: '🦌 Rusa Kehilangan Rumah', color: 0xd97706 },
+        { label: '🐅 Ekosistem Rimba Runtuh ❌', color: 0xdc2626 }
+      ],
+      sungai_m1: [
+        { label: '🌿 Eceng Gondok Menutup', color: 0x059669 },
+        { label: '☀️ Sinar Udara Terhalang', color: 0x0284c7 },
+        { label: '🫧 Oksigen Air Turun', color: 0xd97706 },
+        { label: '🐟 Ikan Mati Lemas ❌', color: 0xef4444 }
+      ],
+      sungai_m2: [
+        { label: '🧪 Limbah Pabrik Beracun', color: 0x7e22ce },
+        { label: '🐟 Ikan Kecil Beracun', color: 0x9333ea },
+        { label: '🪶 Bangau Memangsa Ikan', color: 0xd97706 },
+        { label: '⚠️ Bioakumulasi Bangau Sakit ❌', color: 0xef4444 }
+      ],
+      laut_m1: [
+        { label: '🌊 Air Laut Memanas', color: 0x0284c7 },
+        { label: '🪸 Karang Memutih Bleaching', color: 0xd97706 },
+        { label: '🐠 Ikan Karang Hilang', color: 0x475569 },
+        { label: '🦈 Rantai Hiu Terputus ❌', color: 0xef4444 }
+      ],
+      laut_m2: [
+        { label: '💣 Bom Ikan & Racun', color: 0xef4444 },
+        { label: '🪸 Terumbu Karang Hancur', color: 0xb91c1c },
+        { label: '🐟 Benih Ikan Musnah', color: 0xd97706 },
+        { label: '🌊 Kerusakan Laut Permanen ❌', color: 0xdc2626 }
+      ]
+    };
+
+    const steps = chainMap[mid] || chainMap['sawah_m1'];
+    const container = this.add.container(width / 2, cardY).setDepth(20);
+
+    // Box Latar Belakang Diagram
+    const bgBox = this.add.rectangle(0, 0, width * 0.94, 88, 0x021a14, 0.94);
+    bgBox.setStrokeStyle(2, 0xf59e0b);
+    container.add(bgBox);
+
+    const titleBadge = this.add.text(-width * 0.44, -30, '🔗 SKEMA SEBAB-AKIBAT RANTAI MAKANAN (C2):', {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: '13px',
+      color: '#fef08a',
+      fontStyle: 'bold'
+    });
+    container.add(titleBadge);
+
+    // Render node pill dan tanda panah
+    const startX = -width * 0.42;
+    const totalW = width * 0.84;
+    const nodeW = Math.floor((totalW - (steps.length - 1) * 32) / steps.length);
+
+    steps.forEach((st, i) => {
+      const nx = startX + (i * (nodeW + 32)) + nodeW / 2;
+      const pill = this.add.rectangle(nx, 10, nodeW, 44, st.color, 0.92);
+      pill.setStrokeStyle(1.5, 0xfef08a, 0.8);
+
+      const pTxt = this.add.text(nx, 10, st.label, {
+        fontFamily: 'Fredoka, sans-serif',
+        fontSize: '14px',
+        color: '#ffffff',
+        fontStyle: 'bold'
+      }).setOrigin(0.5);
+
+      container.add([pill, pTxt]);
+
+      if (i < steps.length - 1) {
+        const arrowX = nx + nodeW / 2 + 16;
+        const arrow = this.add.text(arrowX, 10, '➔', {
+          fontFamily: 'Fredoka, sans-serif',
+          fontSize: '18px',
+          color: '#fbbf24',
+          fontStyle: 'bold'
+        }).setOrigin(0.5);
+        container.add(arrow);
+      }
+    });
+
+    container.setAlpha(0);
+    this.tweens.add({
+      targets: container,
+      alpha: 1,
+      y: cardY - 4,
+      duration: 350,
+      ease: 'Back.easeOut'
+    });
+
+    return container;
   }
 }
 
