@@ -20,7 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const docs = window.DOCS_DATA;
   const docKeys = Object.keys(docs);
-  let activeDocId = localStorage.getItem('eco_explorer_active_doc') || docKeys[0];
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramDoc = urlParams.get('doc') || window.location.hash.replace('#', '');
+  let activeDocId = (paramDoc && docs[paramDoc]) ? paramDoc : (localStorage.getItem('eco_explorer_active_doc') || docKeys[0]);
 
   if (!docs[activeDocId]) {
     activeDocId = docKeys[0];

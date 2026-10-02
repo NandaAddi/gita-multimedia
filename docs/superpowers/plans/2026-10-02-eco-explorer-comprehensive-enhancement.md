@@ -287,7 +287,7 @@ git commit -m "feat(pedagogy): add C2 visual causality diagrams and universal bi
 - Consumes: `assets/environment/*`, `assets/ui/*`, `docs/*`
 - Produces: Antarmuka portal riset modern berstandar estetika tinggi yang memukau penguji.
 
-- [ ] **Step 1: Desain ulang kartu informasi & visual hero di `WEBSITE/index.html`**
+- [x] **Step 1: Desain ulang kartu informasi & visual hero di `WEBSITE/index.html`**
 
 - Hilangkan batasan kaku `border: none !important; box-shadow: none !important;`.
 - Terapkan palet *Emerald & Slate Glassmorphism* yang seirama dengan Phaser game.
@@ -301,14 +301,14 @@ git commit -m "feat(pedagogy): add C2 visual causality diagrams and universal bi
   - `📑 Unduh / Buka Lembar Kerja Siswa (LKPD Detektif Sawah)`
   - `📚 Baca Naskah & Dokumen Desain Produk (PRD)`
 
-- [ ] **Step 2: Verifikasi tampilan dan tautan di browser**
+- [x] **Step 2: Verifikasi tampilan dan tautan di browser**
 
 Pastikan seluruh link lokal mengarah ke file yang valid dan tata letak responsif di desktop maupun layar IFP.
 
-- [ ] **Step 3: Commit perubahan Task 4**
+- [x] **Step 3: Commit perubahan Task 4**
 
 ```bash
-git add WEBSITE/index.html
+git add WEBSITE/index.html docs/docs.js docs/superpowers/plans/2026-10-02-eco-explorer-comprehensive-enhancement.md
 git commit -m "feat(portal): modernize research landing portal with 4-biome visual cards and LKPD quick access"
 ```
 

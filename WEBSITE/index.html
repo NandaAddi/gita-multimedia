@@ -7,34 +7,37 @@
   <title>Portal Riset & Game Engine: Eco-Explorer | SDN Percobaan 2 Malang</title>
 
   <meta name="description"
-    content="Portal Multimedia Interaktif Berbasis Simulasi pada Materi Keseimbangan Ekosistem Sawah untuk Siswa Kelas V SDN Percobaan 2 Malang.">
+    content="Portal Riset & Game Engine Simulasi Interaktif Materi Keseimbangan 4 Ekosistem Nusantara untuk Siswa Kelas V SDN Percobaan 2 Malang.">
   <meta name="author" content="Gito - Teknologi Pendidikan">
 
-  <!-- Google Fonts: Open Sans (Teks mentok di SemiBold 600) -->
+  <!-- Google Web Fonts: Fredoka & Nunito -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap"
     rel="stylesheet">
 
   <style>
     :root {
-      --bg-page: #f8fafc;
-      --bg-card: #ffffff;
-      --bg-blue-light: #eff6ff;
-      --bg-blue-hover: #dbeafe;
-      --bg-tag: #eff6ff;
+      --bg-page: #021a14;
+      --bg-card: rgba(6, 78, 59, 0.55);
+      --bg-card-hover: rgba(6, 78, 59, 0.75);
+      --border-card: rgba(16, 185, 129, 0.28);
+      --border-card-hover: rgba(245, 158, 11, 0.75);
 
-      --text-main: #000000;
-      --text-muted: #334155;
-      --text-light: #64748b;
+      --text-main: #ffffff;
+      --text-muted: #cbd5e1;
+      --text-accent: #fef08a;
+      --text-emerald: #6ee7b7;
 
-      --blue-primary: #1d4ed8;
-      --blue-dark: #1e40af;
-      --blue-accent: #2563eb;
+      --emerald-dark: #022c22;
+      --emerald-primary: #059669;
+      --emerald-accent: #10b981;
+      --amber-gold: #f59e0b;
+      --amber-glow: #fbbf24;
 
-      --font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --font-heading: 'Fredoka', 'Open Sans', sans-serif;
+      --font-body: 'Nunito', sans-serif;
     }
 
     *,
@@ -43,23 +46,6 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      border: none !important;
-      outline: none !important;
-      box-shadow: none !important;
-    }
-
-    /* Batasan Ketat Pengguna: Font Weight mentok di SemiBold (600), tidak boleh lebih */
-    b,
-    strong,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    th,
-    dt {
-      font-weight: 600 !important;
     }
 
     html,
@@ -67,11 +53,14 @@
       width: 100%;
       min-height: 100%;
       background: var(--bg-page);
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(5, 150, 105, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(245, 158, 11, 0.12) 0%, transparent 50%),
+        linear-gradient(180deg, #021a14 0%, #01140f 100%);
       color: var(--text-main);
-      font-family: var(--font-sans);
+      font-family: var(--font-body);
       font-size: 16px;
       line-height: 1.65;
-      font-weight: 400;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -80,190 +69,435 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 64px;
-      padding: 0 32px;
-      background: var(--blue-primary);
-      color: #ffffff;
+      height: 72px;
+      padding: 0 40px;
+      background: rgba(2, 44, 34, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid rgba(16, 185, 129, 0.35);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    .nav-brand {
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      color: #ffffff;
-      text-transform: uppercase;
-    }
-
-    .nav-brand-sub {
-      font-size: 13px;
-      font-weight: 400;
-      color: #dbeafe;
-      margin-left: 10px;
-    }
-
-    .nav-actions {
+    .nav-brand-group {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .nav-btn {
-      display: inline-block;
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.15s ease, color 0.15s ease;
+    .nav-logo-icon {
+      font-size: 26px;
     }
 
-    .nav-btn-primary {
-      background: #ffffff;
-      color: var(--blue-primary);
-    }
-
-    .nav-btn-primary:hover {
-      background: #dbeafe;
-      color: var(--blue-dark);
-    }
-
-    .nav-btn-secondary {
-      background: transparent;
+    .nav-brand {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       color: #ffffff;
     }
 
-    .nav-btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
+    .nav-brand-sub {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-emerald);
+      padding: 2px 8px;
+      background: rgba(16, 185, 129, 0.18);
+      border-radius: 4px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
     }
 
-    /* Main Container */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-btn-primary {
+      background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+      border: 1px solid #34d399;
+    }
+
+    .nav-btn-primary:hover {
+      background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .nav-btn-secondary {
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .nav-btn-secondary:hover {
+      background: rgba(15, 23, 42, 0.9);
+      color: #ffffff;
+      border-color: rgba(254, 240, 138, 0.6);
+      transform: translateY(-2px);
+    }
+
+    /* Container */
     .container {
-      max-width: 1080px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 48px 24px 80px 24px;
+      padding: 56px 24px 96px 24px;
     }
 
     /* Hero Section */
     .hero {
       text-align: center;
-      margin-bottom: 48px;
+      margin-bottom: 56px;
     }
 
     .badge-research {
-      display: inline-block;
-      background: var(--bg-blue-light);
-      color: var(--blue-primary);
-      padding: 6px 14px;
-      border-radius: 4px;
-      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--text-emerald);
+      padding: 6px 16px;
+      border-radius: 24px;
+      font-family: var(--font-heading);
+      font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      margin-bottom: 20px;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      margin-bottom: 24px;
     }
 
     .hero-title {
-      font-size: 36px;
-      font-weight: 600;
-      color: var(--text-main);
-      line-height: 1.25;
-      margin-bottom: 16px;
+      font-family: var(--font-heading);
+      font-size: 46px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 18px;
       letter-spacing: -0.5px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .hero-subtitle {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 400;
       color: var(--text-muted);
-      max-width: 820px;
-      margin: 0 auto 32px auto;
-      line-height: 1.6;
+      max-width: 860px;
+      margin: 0 auto 36px auto;
+      line-height: 1.65;
     }
 
     /* Hero Action Buttons */
     .hero-actions {
       display: flex;
       justify-content: center;
-      gap: 16px;
+      gap: 18px;
       flex-wrap: wrap;
     }
 
     .btn-action-primary {
-      display: inline-block;
-      background: var(--blue-primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(180deg, #10b981 0%, #047857 100%);
       color: #ffffff;
-      font-size: 15px;
-      font-weight: 600;
-      padding: 14px 32px;
-      border-radius: 4px;
+      font-family: var(--font-heading);
+      font-size: 17px;
+      font-weight: 700;
+      padding: 16px 36px;
+      border-radius: 12px;
       text-decoration: none;
-      transition: background 0.15s ease;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      border: 2px solid #34d399;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .btn-action-primary:hover {
-      background: var(--blue-dark);
+      background: linear-gradient(180deg, #34d399 0%, #059669 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(16, 185, 129, 0.6);
     }
 
     .btn-action-secondary {
-      display: inline-block;
-      background: var(--bg-blue-light);
-      color: var(--blue-primary);
-      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.75);
+      color: #fef08a;
+      font-family: var(--font-heading);
+      font-size: 16px;
       font-weight: 600;
-      padding: 14px 28px;
-      border-radius: 4px;
+      padding: 16px 30px;
+      border-radius: 12px;
       text-decoration: none;
-      transition: background 0.15s ease, color 0.15s ease;
+      border: 2px solid rgba(245, 158, 11, 0.6);
+      transition: all 0.2s ease;
     }
 
     .btn-action-secondary:hover {
-      background: var(--bg-blue-hover);
-      color: var(--blue-dark);
+      background: rgba(245, 158, 11, 0.15);
+      border-color: #fbbf24;
+      transform: translateY(-3px);
+    }
+
+    /* Stats Strip */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 56px;
+    }
+
+    .stat-card {
+      background: rgba(6, 78, 59, 0.4);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-icon {
+      font-size: 32px;
+      background: rgba(2, 44, 34, 0.8);
+      width: 54px;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      border: 1px solid rgba(245, 158, 11, 0.5);
+    }
+
+    .stat-num {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
     }
 
     /* Section Heading */
-    .section-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-main);
-      margin-bottom: 20px;
-      padding-top: 16px;
+    .section-header {
+      margin-bottom: 28px;
     }
 
-    /* 3-Column Info Grid */
+    .section-badge {
+      display: inline-block;
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--amber-glow);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+
+    /* 4 Biomes Showcase Grid */
+    .grid-biomes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+
+    .biome-card {
+      background: rgba(6, 78, 59, 0.45);
+      backdrop-filter: blur(8px);
+      border: 2px solid var(--border-card);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .biome-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--border-card-hover);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .biome-thumb-box {
+      width: 100%;
+      height: 140px;
+      position: relative;
+      overflow: hidden;
+      background: #022019;
+    }
+
+    .biome-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .biome-card:hover .biome-thumb {
+      transform: scale(1.08);
+    }
+
+    .biome-badge-medallion {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #021a14;
+      border: 2px solid var(--amber-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
+
+    .biome-badge-medallion img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .biome-content {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .biome-tag {
+      align-self: flex-start;
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .tag-sawah { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .tag-hutan { background: rgba(22, 163, 74, 0.2); color: #86efac; border: 1px solid rgba(22, 163, 74, 0.4); }
+    .tag-sungai { background: rgba(8, 145, 178, 0.2); color: #67e8f9; border: 1px solid rgba(8, 145, 178, 0.4); }
+    .tag-laut { background: rgba(2, 132, 199, 0.2); color: #7dd3fc; border: 1px solid rgba(2, 132, 199, 0.4); }
+
+    .biome-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .biome-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+
+    .mission-list {
+      list-style-type: none;
+      padding: 0;
+      margin-top: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 14px;
+    }
+
+    .mission-item {
+      font-size: 13px;
+      padding: 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #e2e8f0;
+    }
+
+    /* 3-Column Academic Info Grid */
     .grid-info {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 24px;
-      margin-bottom: 40px;
+      margin-bottom: 56px;
     }
 
     .info-card {
       background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 1.5px solid var(--border-card);
       padding: 28px;
-      border-radius: 4px;
+      border-radius: 14px;
       display: flex;
       flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .info-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(245, 158, 11, 0.5);
+      transform: translateY(-4px);
     }
 
     .card-tag {
       display: inline-block;
       align-self: flex-start;
-      background: var(--bg-tag);
-      color: var(--blue-primary);
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--amber-glow);
+      font-family: var(--font-heading);
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      padding: 4px 8px;
-      border-radius: 3px;
-      margin-bottom: 12px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(245, 158, 11, 0.35);
     }
 
     .info-card h3 {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text-main);
+      font-family: var(--font-heading);
+      font-size: 21px;
+      font-weight: 700;
+      color: #ffffff;
       margin-bottom: 12px;
       line-height: 1.35;
     }
@@ -272,7 +506,7 @@
       color: var(--text-muted);
       font-size: 14.5px;
       line-height: 1.6;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .info-card ul {
@@ -284,98 +518,106 @@
     .info-card li {
       color: var(--text-muted);
       font-size: 14px;
-      padding: 5px 0;
+      padding: 6px 0;
       line-height: 1.5;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
     }
 
     .info-card li strong {
-      color: var(--text-main);
-      font-weight: 600;
+      color: #ffffff;
     }
 
     .card-note {
       margin-top: auto;
-      padding-top: 14px;
-      font-size: 13px;
-      color: var(--blue-primary);
-      font-weight: 500;
+      padding-top: 16px;
+      font-size: 13.5px;
+      color: var(--text-emerald);
+      font-weight: 600;
+      border-top: 1px dashed rgba(16, 185, 129, 0.25);
     }
 
     /* Full Width Feature Card (Hardware Awareness) */
     .full-card {
-      background: var(--bg-card);
-      padding: 32px;
-      border-radius: 4px;
-      margin-bottom: 40px;
+      background: rgba(2, 44, 34, 0.7);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(16, 185, 129, 0.35);
+      padding: 36px;
+      border-radius: 16px;
+      margin-bottom: 56px;
     }
 
     .full-card h3 {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-main);
-      margin-bottom: 14px;
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 12px;
     }
 
     .full-card p {
       color: var(--text-muted);
-      font-size: 15px;
+      font-size: 15.5px;
       line-height: 1.65;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
     }
 
     .specs-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
     }
 
     .spec-item {
-      background: var(--bg-blue-light);
-      padding: 16px;
-      border-radius: 4px;
+      background: rgba(6, 78, 59, 0.5);
+      padding: 18px 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(16, 185, 129, 0.25);
     }
 
     .spec-label {
+      font-family: var(--font-heading);
       font-size: 12px;
-      font-weight: 600;
-      color: var(--blue-primary);
+      font-weight: 700;
+      color: var(--amber-glow);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .spec-value {
-      font-size: 14px;
-      color: var(--text-main);
-      font-weight: 500;
+      font-size: 15px;
+      color: #ffffff;
+      font-weight: 600;
     }
 
     /* Footer */
     footer {
       text-align: center;
-      padding-top: 24px;
-      color: var(--text-light);
-      font-size: 13px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      font-size: 14px;
     }
 
     footer p {
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     @media (max-width: 768px) {
       nav.navbar {
         padding: 0 16px;
         height: auto;
-        padding-top: 12px;
-        padding-bottom: 12px;
+        padding-top: 14px;
+        padding-bottom: 14px;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         text-align: center;
       }
 
       .hero-title {
-        font-size: 28px;
+        font-size: 32px;
       }
 
       .hero-subtitle {
@@ -393,13 +635,20 @@
 
   <!-- Top Navigation Bar -->
   <nav class="navbar">
-    <div>
-      <span class="nav-brand">Portal Riset & Game Engine</span>
-      <span class="nav-brand-sub">SDN Percobaan 2 Malang</span>
+    <div class="nav-brand-group">
+      <span class="nav-logo-icon">🌍</span>
+      <div>
+        <span class="nav-brand">ECO-EXPLORER</span>
+        <span class="nav-brand-sub">SDN PERCOBAAN 2 MALANG</span>
+      </div>
     </div>
     <div class="nav-actions">
-      <a href="../docs/index.html" class="nav-btn nav-btn-secondary">Portal Dokumen Riset</a>
-      <a href="phaser.html" class="nav-btn nav-btn-primary">Buka Game Engine IFP</a>
+      <a href="../docs/index.html" class="nav-btn nav-btn-secondary">
+        📚 Portal Riset & PRD
+      </a>
+      <a href="phaser.html" class="nav-btn nav-btn-primary">
+        🕹️ Buka Game IFP
+      </a>
     </div>
   </nav>
 
@@ -407,80 +656,207 @@
 
     <!-- Hero Section -->
     <header class="hero">
-      <div class="badge-research">Penelitian Pengembangan R&D Model Alessi & Trollip (2001)</div>
-      <h1 class="hero-title">Eco-Explorer: Penjaga Keseimbangan Sawah</h1>
+      <div class="badge-research">
+        🔬 R&D Skripsi Teknologi Pendidikan • Model Alessi & Trollip (2001)
+      </div>
+      <h1 class="hero-title">
+        Eco-Explorer: <span>Penjaga Keseimbangan Ekosistem</span>
+      </h1>
       <p class="hero-subtitle">
-        Pengembangan Multimedia Interaktif Berbasis Simulasi pada Materi Keseimbangan Ekosistem untuk Siswa Kelas V SDN
-        Percobaan 2 Malang
+        Multimedia Interaktif Berbasis Simulasi Sains IPAS Fase C pada Materi Hubungan Kausalitas Rantai Makanan 
+        4 Bioma Nusantara untuk Siswa Kelas V SDN Percobaan 2 Malang di Layar Sentuh IFP.
       </p>
 
       <div class="hero-actions">
         <a href="phaser.html" class="btn-action-primary" id="launch-game-btn">
-          Mulai Permainan (Layar Sentuh IFP)
+          🕹️ Mulai Permainan IFP (1080p Fullscreen)
         </a>
-        <a href="../docs/index.html" class="btn-action-secondary" id="launch-docs-btn">
-          Baca Dokumen Riset & PRD
+        <a href="../docs/index.html?doc=lkpd" class="btn-action-secondary" id="launch-lkpd-btn">
+          📑 Buku Catatan Detektif (LKPD Siswa)
+        </a>
+        <a href="../docs/index.html?doc=prd" class="btn-action-secondary" id="launch-docs-btn">
+          📚 Baca Naskah & Dokumen PRD
         </a>
       </div>
     </header>
 
-    <!-- Grid Informasi Utama -->
+    <!-- Stats Strip -->
+    <div class="stats-strip">
+      <div class="stat-card">
+        <div class="stat-icon">🏞️</div>
+        <div>
+          <div class="stat-num">4 Bioma</div>
+          <div class="stat-label">Sawah, Hutan, Sungai, Laut</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔍</div>
+        <div>
+          <div class="stat-num">8 Misi C2</div>
+          <div class="stat-label">Faktor Alam vs Manusia</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div>
+          <div class="stat-num">5 Tim Detektif</div>
+          <div class="stat-label">Model CSCL 25 Siswa Kelas 5A</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div>
+          <div class="stat-num">24 Bintang</div>
+          <div class="stat-label">Sistem Evaluasi Bertingkat</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Biomes Showcase -->
+    <div class="section-header">
+      <span class="section-badge">JELAJAH BIOMA NUSANTARA</span>
+      <h2 class="section-title">4 Ekosistem & 8 Misi Investigasi Sains</h2>
+    </div>
+
+    <div class="grid-biomes">
+
+      <!-- Bioma 1: Sawah -->
+      <div class="biome-card">
+        <div class="biome-thumb-box">
+          <img src="assets/environment/background_sawah.png" alt="Ekosistem Sawah" class="biome-thumb">
+          <div class="biome-badge-medallion">
+            <img src="assets/ui/badges/badge_sawah.png" alt="Lencana Sawah">
+          </div>
+        </div>
+        <div class="biome-content">
+          <span class="biome-tag tag-sawah">Bioma 1 • Ketahanan Pangan</span>
+          <h3 class="biome-title">🌾 Ekosistem Sawah</h3>
+          <p class="biome-desc">Lahan persawahan padi tempat interaksi petani, hama pengerat, dan pemangsa alami.</p>
+          <ul class="mission-list">
+            <li class="mission-item">☀️ <strong>Misi 1:</strong> Kemarau & Saluran Kering</li>
+            <li class="mission-item">🚫 <strong>Misi 2:</strong> Racun Kimia & Buru Ular</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bioma 2: Hutan Tropis -->
+      <div class="biome-card">
+        <div class="biome-thumb-box">
+          <img src="assets/environment/background_hutan.png" alt="Ekosistem Hutan" class="biome-thumb">
+          <div class="biome-badge-medallion">
+            <img src="assets/ui/badges/badge_hutan.png" alt="Lencana Hutan">
+          </div>
+        </div>
+        <div class="biome-content">
+          <span class="biome-tag tag-hutan">Bioma 2 • Paru-Paru Nusantara</span>
+          <h3 class="biome-title">🌲 Hutan Tropis</h3>
+          <p class="biome-desc">Rimba hujan tropis rumah bagi Harimau Sumatera, kawanan rusa, dan kanopi pohon raksasa.</p>
+          <ul class="mission-list">
+            <li class="mission-item">☀️ <strong>Misi 3:</strong> Kemarau & Mata Air Rimba</li>
+            <li class="mission-item">🪓 <strong>Misi 4:</strong> Penebangan Liar & Jerat Harimau</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bioma 3: Sungai Air Tawar -->
+      <div class="biome-card">
+        <div class="biome-thumb-box">
+          <img src="assets/environment/background_danau.png" alt="Ekosistem Sungai" class="biome-thumb">
+          <div class="biome-badge-medallion">
+            <img src="assets/ui/badges/badge_danau.png" alt="Lencana Sungai">
+          </div>
+        </div>
+        <div class="biome-content">
+          <span class="biome-tag tag-sungai">Bioma 3 • Perairan Darat</span>
+          <h3 class="biome-title">🏞️ Sungai Air Tawar</h3>
+          <p class="biome-desc">Aliran air tawar tempat hidup ikan gabus, teratai mekar, keong air, dan burung bangau.</p>
+          <ul class="mission-list">
+            <li class="mission-item">🌿 <strong>Misi 5:</strong> Air Surut & Ledakan Gulma</li>
+            <li class="mission-item">🧪 <strong>Misi 6:</strong> Limbah Pabrik & Sampah Air</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bioma 4: Laut Terumbu Karang -->
+      <div class="biome-card">
+        <div class="biome-thumb-box">
+          <img src="assets/environment/background_laut.png" alt="Ekosistem Laut" class="biome-thumb">
+          <div class="biome-badge-medallion">
+            <img src="assets/ui/badges/badge_laut.png" alt="Lencana Laut">
+          </div>
+        </div>
+        <div class="biome-content">
+          <span class="biome-tag tag-laut">Bioma 4 • Samudra Tropis</span>
+          <h3 class="biome-title">🌊 Laut Terumbu Karang</h3>
+          <p class="biome-desc">Pusat keanekaragaman samudra dengan terumbu karang warna-warni, penyu, dan ikan hiu.</p>
+          <ul class="mission-list">
+            <li class="mission-item">🌊 <strong>Misi 7:</strong> Gelombang Panas & Bleaching</li>
+            <li class="mission-item">💣 <strong>Misi 8:</strong> Bom Sianida & Sampah Plastik</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Grid Informasi Akademik -->
+    <div class="section-header">
+      <span class="section-badge">LANDASAN PENELITIAN & INOVASI</span>
+      <h2 class="section-title">Prinsip Pedagogis & Dinamika Kelas 5A</h2>
+    </div>
+
     <div class="grid-info">
 
       <!-- Card 1: Kolaborasi Kelas 5A -->
       <div class="info-card">
-        <span class="card-tag">Kolaborasi Kelas</span>
+        <span class="card-tag">Model CSCL Kelas</span>
         <h3>Manajemen 25 Siswa di Layar IFP</h3>
         <p>
           Simulasi dirancang dengan model partisipasi bergilir (Turn-Based) untuk 5 tim spesialis dengan durasi bermain
           terukur 6 hingga 8 menit:
         </p>
         <ul>
-          <li><strong>Tim Elang:</strong> Konsumen Puncak</li>
-          <li><strong>Tim Ular:</strong> Pengendali Populasi Hama</li>
-          <li><strong>Tim Katak:</strong> Pemangsa Serangga Sawah</li>
-          <li><strong>Tim Padi:</strong> Produsen Pangan Utama</li>
-          <li><strong>Tim Jamur:</strong> Dekomposer Penjaga Hara</li>
+          <li><strong>Tim Elang:</strong> Konsumen Puncak (Elang • Harimau • Bangau • Hiu)</li>
+          <li><strong>Tim Ular:</strong> Pengendali Populasi Hama (Ular • Rusa • Ikan Tawar)</li>
+          <li><strong>Tim Katak:</strong> Pemangsa Serangga Alami (Katak • Penyu)</li>
+          <li><strong>Tim Padi:</strong> Produsen Pangan Utama (Padi • Pohon • Teratai • Karang)</li>
+          <li><strong>Tim Jamur:</strong> Dekomposer & Hara Alami (Jamur • Bakteri • Detritivor)</li>
         </ul>
         <div class="card-note">
-          Siswa di meja bertindak sebagai Co-Pilot yang mengangkat kartu voting strategi.
+          Teman di meja bertindak sebagai Penasihat Meja yang mengangkat kartu voting fisik (🟢 Hijau, 🟡 Kuning, 🔴 Merah).
         </div>
       </div>
 
-      <!-- Card 2: 4 Skenario Krisis C2 -->
+      <!-- Card 2: 4 Bioma & 8 Misi Krisis C2 -->
       <div class="info-card">
-        <span class="card-tag">Kausalitas C2</span>
-        <h3>4 Skenario Krisis Kaskade Trofik</h3>
+        <span class="card-tag">Kausalitas Relasional C2</span>
+        <h3>Transformasi Pemahaman C1 ke C2</h3>
         <p>
-          Menyajikan masalah lingkungan nyata yang menuntut penalaran hubungan sebab-akibat langsung:
+          Menjembatani kesenjangan siswa yang mudah menghafal definisi (C1), namun kesulitan memahami hubungan kausalitas (C2):
         </p>
         <ul>
-          <li><strong>Skenario 1:</strong> Dampak perburuan ular terhadap ledakan tikus dan kerusakan rumpun padi.</li>
-          <li><strong>Skenario 2:</strong> Penggunaan pestisida berlebih terhadap kepunahan katak dan degradasi air.
-          </li>
-          <li><strong>Skenario 3:</strong> Kemarau ekstrem dan krisis sistem irigasi sawah.</li>
-          <li><strong>Skenario 4:</strong> Restorasi dekomposer jamur untuk mengembalikan kesuburan tanah.</li>
+          <li><strong>Stimulus Visual Konkret:</strong> Diagram alur rantai makanan interaktif saat evaluasi kuis sebab-akibat.</li>
+          <li><strong>Kaskade Trofik Realtime:</strong> Hilangnya predator memicu ledakan hama dan kepunahan produsen secara langsung.</li>
+          <li><strong>Dual-Factor Analysis:</strong> Membedakan krisis akibat Faktor Alam vs Dampak Ulah Manusia.</li>
         </ul>
         <div class="card-note">
-          Setiap skenario menuntun siswa dari sekadar menghafal (C1) ke penalaran sistem (C2).
+          Dilengkapi sistem evaluasi 3 bintang bertahap (Stabilitas Ekosistem, Kuis C2, & Percobaan Pertama).
         </div>
       </div>
 
-      <!-- Card 3: Mekanika Dekomposer Aktif -->
+      <!-- Card 3: Dekomposer Aktif -->
       <div class="info-card">
-        <span class="card-tag">Simulasi Nyata</span>
-        <h3>Dekomposer Jamur Aktif</h3>
+        <span class="card-tag">Materi Konkret</span>
+        <h3>Dekomposer Aktif & Siklus Materi Tertutup</h3>
         <p>
-          Menghilangkan miskonsepsi dekomposer sebagai teks pasif di buku. Siswa secara aktif memicu proses daur ulang
-          hara:
+          Menghilangkan miskonsepsi dekomposer sebagai teks pasif di buku teks sains melalui interaktivitas langsung:
         </p>
         <ul>
-          <li>Menguraikan tumpukan jerami busuk dan bangkai hewan menjadi zat hara alami tanah.</li>
-          <li>Pertumbuhan tanaman padi menjadi subur dan hijau kembali secara dinamis.</li>
-          <li>Animasi spora jamur dan regenerasi metrik kesuburan sawah secara realtime.</li>
+          <li>Menguraikan jerami busuk sawah, serasah kayu hutan, dan detritus perairan menjadi hara alami.</li>
+          <li>Penyuburan tanaman produsen yang memicu lonjakan kesehatan ekosistem secara instan.</li>
+          <li>Visualisasi feedback populasi dan perhitungan status kesehatan ekosistem secara realtime.</li>
         </ul>
         <div class="card-note">
-          Memperkuat pemahaman siklus materi tertutup dalam ekosistem sawah tropis.
+          Memperkuat pemahaman transfer energi dan siklus materi tertutup dalam ekosistem.
         </div>
       </div>
 
@@ -488,37 +864,38 @@
 
     <!-- Spesifikasi Teknis IFP -->
     <div class="full-card">
-      <span class="card-tag">Spesifikasi Teknis</span>
-      <h3>Perancangan Berorientasi Hardware (Hardware-Aware IFP)</h3>
+      <span class="card-tag">Hardware-Aware Design</span>
+      <h3>Perancangan Berorientasi Layar Sentuh IFP (65–86 Inch)</h3>
       <p>
         Aplikasi game dan portal riset ini dibangun dengan mematuhi karakteristik ergonomis dan operasional layar sentuh
-        proyektor/IFP di ruang kelas 5A SDN Percobaan 2 Malang:
+        di ruang kelas 5A SDN Percobaan 2 Malang:
       </p>
 
       <div class="specs-grid">
         <div class="spec-item">
           <div class="spec-label">Mode Operasional</div>
-          <div class="spec-value">100% Offline & Bebas CORS (file:// Protocol)</div>
+          <div class="spec-value">100% Offline & Bebas CORS (file://)</div>
         </div>
         <div class="spec-item">
           <div class="spec-label">Target Resolusi</div>
-          <div class="spec-value">1080p Widescreen (Scale-to-Fit Otomatis)</div>
+          <div class="spec-value">1080p Widescreen (Scale-to-Fit)</div>
         </div>
         <div class="spec-item">
           <div class="spec-label">Ergonomi Sentuh</div>
-          <div class="spec-value">Target Tombol Ramah Jari (Zona Sentuh Bawah)</div>
+          <div class="spec-value">Zona Bawah Ramah Jari Anak SD</div>
         </div>
         <div class="spec-item">
           <div class="spec-label">Audio & Suara</div>
-          <div class="spec-value">Web Audio Synthesizer & 25 Voice-Over Gita</div>
+          <div class="spec-value">Synthesizer & Voice-Over Studio Gita</div>
         </div>
       </div>
     </div>
 
     <!-- Footer -->
     <footer>
-      <p>Penelitian Skripsi: Gito — Program Studi Teknologi Pendidikan</p>
-      <p>Subjek Penelitian: Siswa Kelas V-A SDN Percobaan 2 Malang • Kurikulum Merdeka Fase C</p>
+      <p><strong>Riset & Pengembangan Skripsi:</strong> Gito — Program Studi Teknologi Pendidikan</p>
+      <p><strong>Subjek Penelitian:</strong> 25 Siswa Kelas V-A SDN Percobaan 2 Malang • Kurikulum Merdeka IPAS Fase C</p>
+      <p>Dikembangkan menggunakan Phaser 3 Game Engine & Standar UI Modern 2D Vector</p>
     </footer>
 
   </div>
