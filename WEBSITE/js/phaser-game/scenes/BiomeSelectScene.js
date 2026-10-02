@@ -1,8 +1,11 @@
 /**
- * ECO-EXPLORER (PHASER 3) - BIOME SELECT SCENE (PETA EKOSISTEM NUSANTARA)
- * Layar pemilihan 4 Ekosistem: Sawah, Hutan Tropis, Sungai, dan Laut.
- * Terintegrasi dengan ProgressManager untuk lock/unlock dan bintang.
- * Ramah jari anak kelas 5 SD pada layar IFP (Anti-fat-finger, kontras tinggi).
+ * ECO-EXPLORER (PHASER 3) - BIOME SELECT SCENE
+ * "Full-Screen Stage Showcase" (Character/Stage Select Slider Arcade Style)
+ * - Latar Belakang Panorama 1080p Berganti Dinamis (Crossfade Halus)
+ * - Plakat Pahlawan Panggung Tengah (Hero Stage Plaque) yang Mewah & Megah
+ * - Preview 2 Misi Krisis C2 (Faktor Alam vs Manusia) & Strip Rantai Makanan Bioma
+ * - Navigasi Hibrida: Tombol Panah Raksasa ◀ ▶, Touch Swipe Gesture IFP, & 4 Dock Mini Cards
+ * - Terintegrasi Penuh dengan ProgressManager, Mode Penguji 5-Tap, dan Audio Gita
  */
 
 class BiomeSelectScene extends Phaser.Scene {
@@ -10,19 +13,160 @@ class BiomeSelectScene extends Phaser.Scene {
     super({ key: 'BiomeSelectScene' });
   }
 
+  init() {
+    // Ingat posisi bioma terakhir yang dipilih pemain (default 0: sawah)
+    this.currentIndex = this.registry.get('selectedBiomeIndex') || 0;
+
+    // Master Biome Configuration & Strip Organisme Kunci
+    this.biomes = [
+      {
+        id: 'sawah',
+        icon: '🌾',
+        name: 'Ekosistem Sawah',
+        shortName: 'Sawah',
+        tagline: 'Lahan Pangan & Keseimbangan Petani',
+        badge: 'badge_sawah',
+        bg: 'bg_sawah',
+        ambientColor: 0x064e3b,
+        accentColor: 0x10b981,
+        prevId: null,
+        organisms: [
+          { key: 'padi_subur', label: 'Padi' },
+          { key: 'tikus', label: 'Tikus' },
+          { key: 'katak', label: 'Katak' },
+          { key: 'ular', label: 'Ular' },
+          { key: 'elang', label: 'Elang' },
+          { key: 'jamur', label: 'Jamur' }
+        ]
+      },
+      {
+        id: 'hutan',
+        icon: '🌲',
+        name: 'Ekosistem Hutan Tropis',
+        shortName: 'Hutan Tropis',
+        tagline: 'Rimba Hujan & Paru-Paru Nusantara',
+        badge: 'badge_hutan',
+        bg: 'bg_hutan',
+        ambientColor: 0x14532d,
+        accentColor: 0x16a34a,
+        prevId: 'sawah',
+        organisms: [
+          { key: 'pohon_hutan', label: 'Pohon Rimba' },
+          { key: 'rusa', label: 'Rusa' },
+          { key: 'harimau', label: 'Harimau' },
+          { key: 'jamur_hutan', label: 'Jamur Rimba' }
+        ]
+      },
+      {
+        id: 'sungai',
+        icon: '🏞️',
+        name: 'Ekosistem Sungai Air Tawar',
+        shortName: 'Sungai Air Tawar',
+        tagline: 'Sungai Air Tawar & Sumber Kehidupan',
+        badge: 'badge_danau',
+        bg: 'bg_danau',
+        ambientColor: 0x0c4a6e,
+        accentColor: 0x0284c7,
+        prevId: 'hutan',
+        organisms: [
+          { key: 'teratai', label: 'Teratai' },
+          { key: 'keong', label: 'Keong Air' },
+          { key: 'ikan_gabus', label: 'Ikan Gabus' },
+          { key: 'bangau', label: 'Burung Bangau' }
+        ]
+      },
+      {
+        id: 'laut',
+        icon: '🌊',
+        name: 'Ekosistem Laut Terumbu Karang',
+        shortName: 'Laut Karang',
+        tagline: 'Samudra Tropis & Terumbu Karang',
+        badge: 'badge_laut',
+        bg: 'bg_laut',
+        ambientColor: 0x1e3a8a,
+        accentColor: 0x3b82f6,
+        prevId: 'sungai',
+        organisms: [
+          { key: 'karang', label: 'Terumbu Karang' },
+          { key: 'ikan_kecil', label: 'Ikan Karang' },
+          { key: 'penyu', label: 'Penyu Hijau' },
+          { key: 'hiu', label: 'Hiu Samudra' }
+        ]
+      }
+    ];
+  }
+
   create() {
     const { width, height } = this.scale;
     const activeTeam = this.registry.get('activeTeam') || { name: 'TIM DETEKTIF', color: 0x10b981, badge: 'badge_elang', role: 'Penjaga Keseimbangan' };
 
-    // 1. Background Sawah / Alam Dimmer Modern 2D Vector
-    const bg = this.add.image(width / 2, height / 2, 'bg_sawah');
-    bg.setDisplaySize(width, height);
-    this.add.rectangle(width / 2, height / 2, width, height, 0x021a14, 0.75);
+    // 1. Dual-Layer Background untuk Transisi Crossfade yang Halus
+    const initBiome = this.biomes[this.currentIndex];
+    this.bgBottom = this.add.image(width / 2, height / 2, initBiome.bg || 'bg_sawah').setDisplaySize(width, height);
+    this.bgTop = this.add.image(width / 2, height / 2, initBiome.bg || 'bg_sawah').setDisplaySize(width, height).setAlpha(0);
+
+    // Lapisan Dimmer Atmosferik
+    this.bgDimmer = this.add.rectangle(width / 2, height / 2, width, height, 0x021a14, 0.72);
 
     // Partikel Spora Mengambang Ceria
     this.createFloatingSporeFX(width, height);
 
-    // 2. Top Header Status Tim Aktif
+    // 2. Top Header Status Tim Aktif (Mempertahankan Penataan Bebas Tabrakan)
+    this.createTopHeader(width, activeTeam);
+
+    // 3. Kontainer Panggung Utama (Hero Stage Plaque) di Tengah Layar
+    this.stageContainer = this.add.container(width / 2, 450);
+
+    // 4. Tombol Panah Navigasi Layar Sentuh IFP (◀ dan ▶)
+    this.createNavArrows(width);
+
+    // 5. Bilah Dock Thumbnail Bioma di Bawah Layar
+    this.createBottomDock(width);
+
+    // 6. Sub-Panduan Bawah Layar Sentuh IFP
+    this.add.text(width / 2, height - 26, '💡 Sentuh panah ◀ ▶, geser layar (swipe), atau ketuk kartu di bawah untuk memilih ekosistem', {
+      fontFamily: 'Nunito, sans-serif',
+      fontSize: '18px',
+      color: '#fef08a',
+      fontStyle: 'bold',
+      shadow: { offsetY: 2, color: '#000000', blur: 3, fill: true }
+    }).setOrigin(0.5);
+
+    // 7. Input Keyboard Panah Kiri / Kanan
+    if (this.input.keyboard) {
+      this.input.keyboard.on('keydown-LEFT', () => this.navigateBiome(-1));
+      this.input.keyboard.on('keydown-RIGHT', () => this.navigateBiome(1));
+    }
+
+    // 8. Gesture Swipe Sentuh IFP
+    let touchStartX = 0;
+    let touchStartY = 0;
+    this.input.on('pointerdown', (pointer) => {
+      touchStartX = pointer.x;
+      touchStartY = pointer.y;
+    });
+
+    this.input.on('pointerup', (pointer) => {
+      const deltaX = pointer.x - touchStartX;
+      const deltaY = pointer.y - touchStartY;
+      // Deteksi geser horizontal dominan minimal 60 piksel
+      if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+        if (deltaX < 0) {
+          this.navigateBiome(1); // Swipe kiri -> Bioma berikutnya
+        } else {
+          this.navigateBiome(-1); // Swipe kanan -> Bioma sebelumnya
+        }
+      }
+    });
+
+    // Render tampilan bioma awal
+    this.updateBiomeView(false);
+  }
+
+  /**
+   * Header Status Tim & Navigasi Utama (Bebas Tabrakan & Overflow)
+   */
+  createTopHeader(width, activeTeam) {
     const headerW = 1680;
     const headerH = 96;
     const headerY = 64;
@@ -31,11 +175,9 @@ class BiomeSelectScene extends Phaser.Scene {
     const headerRight = width / 2 + headerW / 2;
 
     const gHead = this.add.graphics();
-    // Drop Shadow
     gHead.fillStyle(0x000000, 0.45);
     gHead.fillRoundedRect(headerLeft + 4, headerY - headerH / 2 + 6, headerW, headerH, 18);
 
-    // Bingkai Kayu Solid & Panel Zamrud
     gHead.fillStyle(0x1e1b18, 1);
     gHead.fillRoundedRect(headerLeft, headerY - headerH / 2, headerW, headerH, 18);
     gHead.fillStyle(0x064e3b, 1);
@@ -50,6 +192,7 @@ class BiomeSelectScene extends Phaser.Scene {
     badgeRim.fillCircle(badgeX, headerY, 36);
     badgeRim.lineStyle(2.5, 0xfbbf24, 1);
     badgeRim.strokeCircle(badgeX, headerY, 36);
+
     const badgeImg = this.add.image(badgeX, headerY, activeTeam.badge || 'badge_elang')
       .setDisplaySize(64, 64)
       .setInteractive({ useHandCursor: true });
@@ -69,11 +212,10 @@ class BiomeSelectScene extends Phaser.Scene {
         secretTapCount = 0;
         if (window.soundEngine) window.soundEngine.playSuccess();
         if (window.progressManager) window.progressManager.unlockAllForExaminer();
-        this.showExaminerNotice(width, height);
+        this.showExaminerNotice(width, this.scale.height);
       }
     });
 
-    // Total Stars Pill
     const totalStars = window.progressManager ? window.progressManager.getTotalStars() : 0;
     const starPillText = `\u2B50 ${totalStars}/24 Bintang`;
 
@@ -86,15 +228,15 @@ class BiomeSelectScene extends Phaser.Scene {
       shadow: { offsetY: 2, color: '#1c1917', blur: 3, fill: true }
     });
 
-    this.add.text(titleX, headerY + 16, `Pilih ekosistem terbuka untuk diselidiki! ${starPillText}`, {
+    this.add.text(titleX, headerY + 16, `Pilih panggung ekosistem untuk diselidiki! ${starPillText}`, {
       fontFamily: 'Nunito, sans-serif',
       fontSize: '19px',
       color: '#a7f3d0',
       fontStyle: 'bold'
     });
 
-    // Tata Letak Tombol Kontrol Kanan (Anchor Relatif dari Ujung Kanan Panel - Bebas Tabrakan & Overflow)
-    const innerRight = headerRight - 28; // Jarak aman dari lengkungan sudut emas
+    // Kontrol Kanan (Anchor Presisi Bebas Overflow)
+    const innerRight = headerRight - 28;
     const btnGap = 16;
     const btnH = 50;
 
@@ -128,269 +270,507 @@ class BiomeSelectScene extends Phaser.Scene {
       });
     });
 
-    // 3. Tombol Suara Panduan Gita (Kiri Tombol Kontrol)
+    // 3. Tombol Suara Panduan Gita (Kiri Kontrol)
     const wAudio = 52;
     const xAudio = (xTeam - wTeam / 2) - btnGap - wAudio / 2;
     this.createButton3D(xAudio, headerY, wAudio, btnH, '\uD83D\uDD0A', 0x065f46, 0x10b981, () => {
       if (window.soundEngine) {
         window.soundEngine.playBeep();
-        window.soundEngine.speakText('Pilih ekosistem yang sudah terbuka untuk diselidiki. Selesaikan ekosistem secara berurutan!');
+        this.playGitaBiomeIntro();
       }
     });
-
-    // 3. Konfigurasi 4 Ekosistem Nusantara (dari ECOSYSTEMS_DATA, urutan tetap)
-    const ecoOrder = ['sawah', 'hutan', 'sungai', 'laut'];
-    const biomeCards = [
-      { id: 'sawah', icon: '\uD83C\uDF3E', tagline: 'Lahan Pangan & Keseimbangan Petani' },
-      { id: 'hutan', icon: '\uD83C\uDF32', tagline: 'Rimba Hujan & Paru-Paru Nusantara' },
-      { id: 'sungai', icon: '\uD83C\uDF0A', tagline: 'Sungai Air Tawar & Sumber Kehidupan' },
-      { id: 'laut', icon: '\uD83D\uDC1F', tagline: 'Samudra Tropis & Terumbu Karang' }
-    ];
-
-    // Grid 2x2 Simetris Lapang & Taktil untuk Layar Sentuh IFP
-    const cardW = 790;
-    const cardH = 360;
-    const positions = [
-      { x: 525, y: 325 },
-      { x: 1395, y: 325 },
-      { x: 525, y: 720 },
-      { x: 1395, y: 720 }
-    ];
-
-    biomeCards.forEach((bc, idx) => {
-      const ecoData = window.ECOSYSTEMS_DATA ? window.ECOSYSTEMS_DATA[bc.id] : null;
-      if (!ecoData) return;
-
-      const isUnlocked = window.progressManager ? window.progressManager.isEcosystemUnlocked(bc.id) : (bc.id === 'sawah');
-      const stars = window.progressManager ? window.progressManager.getEcosystemStars(bc.id) : 0;
-
-      const pos = positions[idx];
-      this.createBiomeCard(pos.x, pos.y, cardW, cardH, {
-        id: bc.id,
-        name: `${bc.icon} ${ecoData.name}`,
-        tagline: bc.tagline,
-        desc: ecoData.desc,
-        badge: ecoData.badge,
-        accentColor: ecoData.accentColor,
-        accentBg: ecoData.ambientColor,
-        bgPreview: ecoData.bg,
-        isUnlocked: isUnlocked,
-        stars: stars,
-        order: ecoData.order
-      });
-    });
-
-    // Sub-panduan bawah layar
-    this.add.text(width / 2, height - 32, '\uD83D\uDCA1 Selesaikan ekosistem secara berurutan: Sawah \u27A1 Hutan Tropis \u27A1 Sungai \u27A1 Laut', {
-      fontFamily: 'Nunito, sans-serif',
-      fontSize: '20px',
-      color: '#fef08a',
-      fontStyle: 'bold',
-      shadow: { offsetY: 2, color: '#000000', blur: 3, fill: true }
-    }).setOrigin(0.5);
   }
 
-  // --- KARTU BIOME INTERAKTIF IFP ---
-  createBiomeCard(x, y, w, h, biome) {
-    const container = this.add.container(x, y);
+  /**
+   * Tombol Panah Navigasi Layar Sentuh IFP (◀ dan ▶)
+   */
+  createNavArrows(width) {
+    const arrowY = 450;
+    const arrowW = 80;
+    const arrowH = 110;
 
-    // Drop Shadow
+    // Tombol Panah Kiri
+    this.btnPrev = this.createButton3D(100, arrowY, arrowW, arrowH, '◀', 0x0f172a, 0x1e293b, () => {
+      this.navigateBiome(-1);
+    });
+
+    // Tombol Panah Kanan
+    this.btnNext = this.createButton3D(width - 100, arrowY, arrowW, arrowH, '▶', 0x0f172a, 0x1e293b, () => {
+      this.navigateBiome(1);
+    });
+  }
+
+  /**
+   * Navigasi Bioma (Geser Indeks)
+   */
+  navigateBiome(dir) {
+    const newIndex = (this.currentIndex + dir + this.biomes.length) % this.biomes.length;
+    this.currentIndex = newIndex;
+    this.registry.set('selectedBiomeIndex', this.currentIndex);
+
+    if (window.soundEngine) {
+      window.soundEngine.playBeep();
+    }
+
+    this.updateBiomeView(true);
+  }
+
+  /**
+   * Perbarui Tampilan Panggung & Dock Sesuai Bioma Aktif
+   */
+  updateBiomeView(animate = true) {
+    const currentBiome = this.biomes[this.currentIndex];
+    const ecoData = window.ECOSYSTEMS_DATA ? window.ECOSYSTEMS_DATA[currentBiome.id] : null;
+    if (!ecoData) return;
+
+    const isUnlocked = window.progressManager ? window.progressManager.isEcosystemUnlocked(currentBiome.id) : (this.currentIndex === 0);
+    const stars = window.progressManager ? window.progressManager.getEcosystemStars(currentBiome.id) : 0;
+
+    // 1. Crossfade Latar Belakang
+    const targetBg = ecoData.bg || currentBiome.bg;
+    this.bgBottom.setTexture(this.bgTop.texture ? this.bgTop.texture.key : targetBg);
+    this.bgTop.setTexture(targetBg).setAlpha(0);
+
+    this.tweens.add({
+      targets: this.bgTop,
+      alpha: 1,
+      duration: 380,
+      ease: 'Cubic.easeOut'
+    });
+
+    this.tweens.add({
+      targets: this.bgDimmer,
+      alpha: isUnlocked ? 0.70 : 0.85,
+      duration: 350
+    });
+
+    // 2. Render Ulang Hero Stage Plaque
+    this.renderHeroStagePlaque(currentBiome, ecoData, isUnlocked, stars, animate);
+
+    // 3. Perbarui Status Highlight pada Bottom Dock
+    this.updateBottomDockHighlight();
+  }
+
+  /**
+   * Render Plakat Pahlawan Utama di Panggung Tengah
+   */
+  renderHeroStagePlaque(biome, ecoData, isUnlocked, stars, animate) {
+    this.stageContainer.removeAll(true);
+
+    const plaqueW = 1480;
+    const plaqueH = 550;
+
+    // Efek Punch Animasi
+    if (animate) {
+      this.stageContainer.setScale(0.96);
+      this.stageContainer.setAlpha(0.6);
+      this.tweens.add({
+        targets: this.stageContainer,
+        scaleX: 1.0,
+        scaleY: 1.0,
+        alpha: 1.0,
+        duration: 260,
+        ease: 'Back.easeOut'
+      });
+    }
+
+    // 1. Drop Shadow Panggung
     const shadow = this.add.graphics();
-    shadow.fillStyle(0x000000, 0.45);
-    shadow.fillRoundedRect(-w / 2 + 5, -h / 2 + 8, w, h, 22);
+    shadow.fillStyle(0x000000, 0.55);
+    shadow.fillRoundedRect(-plaqueW / 2 + 6, -plaqueH / 2 + 10, plaqueW, plaqueH, 26);
+    this.stageContainer.add(shadow);
 
-    // Background Frame Luar
+    // 2. Frame Kayu Solid & Enamel Dasar
     const frame = this.add.graphics();
     frame.fillStyle(0x0a111e, 1);
-    frame.fillRoundedRect(-w / 2, -h / 2, w, h, 22);
+    frame.fillRoundedRect(-plaqueW / 2, -plaqueH / 2, plaqueW, plaqueH, 26);
 
-    // Background Dalam Kartu dengan Warna Aksen
-    if (biome.isUnlocked) {
-      frame.fillStyle(biome.accentBg, 0.95);
-    } else {
-      frame.fillStyle(0x1e293b, 0.85);
-    }
-    frame.fillRoundedRect(-w / 2 + 4, -h / 2 + 4, w - 8, h - 8, 18);
+    const faceColor = isUnlocked ? (ecoData.ambientColor || biome.ambientColor) : 0x0f172a;
+    frame.fillStyle(faceColor, 0.96);
+    frame.fillRoundedRect(-plaqueW / 2 + 5, -plaqueH / 2 + 5, plaqueW - 10, plaqueH - 10, 22);
 
-    if (biome.isUnlocked) {
-      frame.lineStyle(3.5, biome.accentColor, 1);
-    } else {
-      frame.lineStyle(3, 0x475569, 0.7);
-    }
-    frame.strokeRoundedRect(-w / 2 + 4, -h / 2 + 4, w - 8, h - 8, 18);
+    const borderColor = isUnlocked ? (ecoData.accentColor || 0xf59e0b) : 0x475569;
+    frame.lineStyle(3.5, borderColor, 1);
+    frame.strokeRoundedRect(-plaqueW / 2 + 5, -plaqueH / 2 + 5, plaqueW - 10, plaqueH - 10, 22);
 
-    // Medallion Lencana Biome (Kiri Atas)
-    const medalX = -w / 2 + 85;
-    const medalY = -h / 2 + 85;
+    // Hairline Emas Halus
+    frame.lineStyle(1.2, isUnlocked ? 0xfef08a : 0x64748b, 0.45);
+    frame.strokeRoundedRect(-plaqueW / 2 + 9, -plaqueH / 2 + 9, plaqueW - 18, plaqueH - 18, 18);
+    this.stageContainer.add(frame);
 
+    // --- A. HEADER BAR DALAM PLAKAT (Medali & Judul Ekosistem) ---
+    const medalX = -plaqueW / 2 + 95;
+    const medalY = -plaqueH / 2 + 95;
+
+    // Halo Cahaya Radial
     const halo = this.add.graphics();
-    halo.fillStyle(biome.isUnlocked ? biome.accentColor : 0x475569, 0.35);
-    halo.fillCircle(medalX, medalY, 62);
+    halo.fillStyle(isUnlocked ? borderColor : 0x334155, isUnlocked ? 0.35 : 0.15);
+    halo.fillCircle(medalX, medalY, 72);
+    this.stageContainer.add(halo);
 
     const medalRim = this.add.graphics();
     medalRim.fillStyle(0x111827, 1);
-    medalRim.fillCircle(medalX, medalY, 52);
-    medalRim.lineStyle(3, biome.isUnlocked ? 0xfbbf24 : 0x475569, 1);
-    medalRim.strokeCircle(medalX, medalY, 52);
+    medalRim.fillCircle(medalX, medalY, 56);
+    medalRim.lineStyle(3.5, isUnlocked ? 0xfbbf24 : 0x475569, 1);
+    medalRim.strokeCircle(medalX, medalY, 56);
+    this.stageContainer.add(medalRim);
 
-    const badgeImg = this.add.image(medalX, medalY, biome.badge).setDisplaySize(100, 100);
-    if (!biome.isUnlocked) {
+    const badgeImg = this.add.image(medalX, medalY, biome.badge).setDisplaySize(108, 108);
+    if (!isUnlocked) {
       badgeImg.setTint(0x444444);
-      badgeImg.setAlpha(0.5);
+      badgeImg.setAlpha(0.45);
+    }
+    this.stageContainer.add(badgeImg);
+
+    if (!isUnlocked) {
+      const lockOverlay = this.add.text(medalX, medalY, '🔒', { fontSize: '46px' }).setOrigin(0.5);
+      this.stageContainer.add(lockOverlay);
+      this.tweens.add({
+        targets: lockOverlay,
+        scale: { from: 0.9, to: 1.1 },
+        duration: 1000,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut'
+      });
     }
 
-    // Judul & Tagline Ekosistem
-    const titleTxt = this.add.text(-w / 2 + 160, -h / 2 + 42, biome.name, {
+    // Teks Judul & Tagline Ekosistem
+    const titleLeftX = medalX + 78;
+    const titleTxt = this.add.text(titleLeftX, medalY - 24, `${biome.icon} ${ecoData.name.toUpperCase()}`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '28px',
-      color: biome.isUnlocked ? '#ffffff' : '#94a3b8',
+      fontSize: '32px',
+      color: isUnlocked ? '#ffffff' : '#94a3b8',
       fontStyle: 'bold',
       shadow: { offsetY: 2, color: '#000000', blur: 3, fill: true }
     });
 
-    const tagTxt = this.add.text(-w / 2 + 162, -h / 2 + 82, biome.tagline, {
+    const tagTxt = this.add.text(titleLeftX, medalY + 18, biome.tagline, {
       fontFamily: 'Nunito, sans-serif',
       fontSize: '20px',
-      color: biome.isUnlocked ? '#fef08a' : '#64748b',
+      color: isUnlocked ? '#fef08a' : '#64748b',
       fontStyle: 'bold'
     });
+    this.stageContainer.add([titleTxt, tagTxt]);
 
-    // Tablet Deskripsi Kasus
-    const descBox = this.add.graphics();
-    descBox.fillStyle(0x030712, 0.55);
-    descBox.fillRoundedRect(-w / 2 + 25, -h / 2 + 125, w - 50, 90, 14);
-    descBox.lineStyle(1.5, biome.isUnlocked ? 0x334155 : 0x1e293b, 1);
-    descBox.strokeRoundedRect(-w / 2 + 25, -h / 2 + 125, w - 50, 90, 14);
+    // Lencana Status Bintang (Kanan Atas Plakat)
+    const starStatusX = plaqueW / 2 - 40;
+    const starGfx = this.add.graphics();
+    starGfx.fillStyle(isUnlocked ? 0x022c22 : 0x1e293b, 0.95);
+    starGfx.fillRoundedRect(starStatusX - 250, medalY - 24, 250, 48, 14);
+    starGfx.lineStyle(2, isUnlocked ? 0x10b981 : 0x64748b, 1);
+    starGfx.strokeRoundedRect(starStatusX - 250, medalY - 24, 250, 48, 14);
+    this.stageContainer.add(starGfx);
 
-    const descTxt = this.add.text(-w / 2 + 45, -h / 2 + 138, biome.desc, {
-      fontFamily: 'Nunito, sans-serif',
-      fontSize: '17px',
-      color: biome.isUnlocked ? '#e2e8f0' : '#64748b',
-      wordWrap: { width: w - 90 },
-      lineSpacing: 4
-    });
-
-    // Star Rating (Kanan Atas)
-    const starText = biome.isUnlocked ? `\u2B50 ${biome.stars}/6 Bintang` : '\uD83D\uDD12 TERKUNCI';
-    const starColor = biome.isUnlocked ? '#a7f3d0' : '#94a3b8';
-    const casesTxt = this.add.text(w / 2 - 32, -h / 2 + 45, starText, {
+    const starLabel = isUnlocked ? `⭐ ${stars}/6 BINTANG` : '🔒 TERKUNCI';
+    const starColor = isUnlocked ? '#fef08a' : '#f87171';
+    const starTxt = this.add.text(starStatusX - 125, medalY, starLabel, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '20px',
+      fontSize: '19px',
       color: starColor,
       fontStyle: 'bold'
-    }).setOrigin(1, 0);
-
-    // Tombol Aksi Bawah
-    const btnW = w - 50;
-    const btnH = 58;
-    const btnY = h / 2 - 48;
-
-    const btnG = this.add.graphics();
-    btnG.fillStyle(0x000000, 0.4);
-    btnG.fillRoundedRect(-btnW / 2 + 3, btnY - btnH / 2 + 4, btnW, btnH, 14);
-
-    const btnFace = this.add.graphics();
-    const btnTxt = this.add.text(0, btnY, '', {
-      fontFamily: 'Fredoka, sans-serif',
-      fontSize: '22px',
-      color: '#ffffff',
-      fontStyle: 'bold',
-      shadow: { offsetY: 2, color: '#000000', blur: 3, fill: true }
     }).setOrigin(0.5);
+    this.stageContainer.add(starTxt);
 
-    if (biome.isUnlocked) {
-      btnFace.fillStyle(biome.accentColor, 1);
-      btnFace.fillRoundedRect(-btnW / 2, btnY - btnH / 2, btnW, btnH, 14);
-      btnFace.lineStyle(2, 0xfef08a, 1);
-      btnFace.strokeRoundedRect(-btnW / 2, btnY - btnH / 2, btnW, btnH, 14);
-      btnTxt.setText(`SELIDIKI EKOSISTEM \uD83D\uDD0D`);
-    } else {
-      btnFace.fillStyle(0x334155, 0.7);
-      btnFace.fillRoundedRect(-btnW / 2, btnY - btnH / 2, btnW, btnH, 14);
-      btnFace.lineStyle(2, 0x475569, 0.5);
-      btnFace.strokeRoundedRect(-btnW / 2, btnY - btnH / 2, btnW, btnH, 14);
-      btnTxt.setText('\uD83D\uDD12 Tuntaskan ekosistem sebelumnya untuk membuka');
-      btnTxt.setFontSize('18px');
-      btnTxt.setColor('#94a3b8');
-    }
+    // --- B. GARIS PEMISAH & DESKRIPSI NARASI ---
+    const divLine = this.add.graphics();
+    divLine.lineStyle(1.5, isUnlocked ? 0x334155 : 0x1e293b, 0.8);
+    divLine.lineBetween(-plaqueW / 2 + 40, -100, plaqueW / 2 - 40, -100);
+    this.stageContainer.add(divLine);
 
-    // Lock overlay for locked biomes
-    let lockOverlay = null;
-    if (!biome.isUnlocked) {
-      lockOverlay = this.add.graphics();
-      lockOverlay.fillStyle(0x0f172a, 0.45);
-      lockOverlay.fillRoundedRect(-w / 2 + 4, -h / 2 + 4, w - 8, h - 8, 18);
+    const storyTxt = this.add.text(0, -68, isUnlocked ? ecoData.desc : 'Ekosistem ini masih terkunci! Tuntaskan seluruh misi dan teka-teki kausalitas pada bioma sebelumnya untuk membuka ekspedisi ini.', {
+      fontFamily: 'Nunito, sans-serif',
+      fontSize: '18px',
+      color: isUnlocked ? '#e2e8f0' : '#94a3b8',
+      align: 'center',
+      wordWrap: { width: plaqueW - 120 }
+    }).setOrigin(0.5);
+    this.stageContainer.add(storyTxt);
 
-      // Big lock icon center
-      const lockIcon = this.add.text(0, -20, '\uD83D\uDD12', {
-        fontSize: '52px'
-      }).setOrigin(0.5).setAlpha(0.7);
-      container.add(lockIcon);
-    }
+    // --- C. STRIP ORGANISME & RANTAI MAKANAN KHAS BIOMA ---
+    const orgStripY = -8;
+    this.renderOrganismsStrip(biome, orgStripY, plaqueW, isUnlocked);
 
-    // Hit Area Interaktif Seluruh Kartu
-    const hitArea = this.add.rectangle(0, 0, w, h, 0x000000, 0.001)
-      .setInteractive({ useHandCursor: biome.isUnlocked });
+    // --- D. PREVIEW 2 KARTU MISI KRISIS C2 (Side-by-Side) ---
+    const missions = ecoData.missions || [];
+    const missionCardsY = 115;
+    const cardW = 670;
+    const cardH = 118;
 
-    const allElements = [shadow, frame, halo, medalRim, badgeImg, titleTxt, tagTxt, casesTxt, descBox, descTxt, btnG, btnFace, btnTxt];
-    if (lockOverlay) allElements.push(lockOverlay);
-    allElements.push(hitArea);
-    container.add(allElements);
+    // Kartu Misi 1 (Faktor Ulah Alam)
+    this.renderMiniMissionCard(-360, missionCardsY, cardW, cardH, missions[0], isUnlocked, 1);
 
-    if (biome.isUnlocked) {
-      hitArea.on('pointerdown', () => {
-        btnFace.y = 3;
-        btnTxt.y = btnY + 3;
-        if (window.soundEngine) {
-          window.soundEngine.playBeep();
-        }
-      });
+    // Kartu Misi 2 (Faktor Ulah Manusia)
+    const isM2Unlocked = isUnlocked && window.progressManager && window.progressManager.isMissionUnlocked(`${biome.id}_m2`);
+    this.renderMiniMissionCard(360, missionCardsY, cardW, cardH, missions[1], isM2Unlocked, 2);
 
-      hitArea.on('pointerup', () => {
-        btnFace.y = 0;
-        btnTxt.y = btnY;
+    // --- E. TOMBOL AKSI UTAMA DI BAWAH PLAKAT ---
+    const btnY = 225;
+    if (isUnlocked) {
+      const btnW = 540;
+      const btnH = 62;
+      const btnExplore = this.createButton3D(0, btnY, btnW, btnH, '🚀 SELIDIKI EKOSISTEM INI 🔍', 0x065f46, 0x10b981, () => {
         this.selectBiome(biome);
       });
-
-      hitArea.on('pointerover', () => {
-        this.tweens.add({
-          targets: container,
-          scaleX: 1.025,
-          scaleY: 1.025,
-          duration: 150,
-          ease: 'Cubic.easeOut'
-        });
-      });
-
-      hitArea.on('pointerout', () => {
-        btnFace.y = 0;
-        btnTxt.y = btnY;
-        this.tweens.add({
-          targets: container,
-          scaleX: 1.0,
-          scaleY: 1.0,
-          duration: 150,
-          ease: 'Cubic.easeOut'
-        });
-      });
+      this.stageContainer.add(btnExplore);
     } else {
-      // Locked biome: play warning sound on tap
-      hitArea.on('pointerdown', () => {
+      const prevName = this.getPreviousBiomeName(biome.prevId);
+      const btnW = 680;
+      const btnH = 60;
+      const btnLocked = this.createButton3D(0, btnY, btnW, btnH, `🔒 Selesaikan Ekosistem ${prevName} untuk Membuka!`, 0x1e293b, 0x334155, () => {
         if (window.soundEngine) {
           window.soundEngine.playWarning ? window.soundEngine.playWarning() : window.soundEngine.playBeep();
-          window.soundEngine.speakText('Ekosistem ini masih terkunci. Selesaikan ekosistem sebelumnya terlebih dahulu!');
+          window.soundEngine.speakText(`Ekosistem ${biome.name} masih terkunci! Selesaikan ekosistem ${prevName} terlebih dahulu.`);
         }
-        // Shake animation
+        // Animasi Shake Plakat
         this.tweens.add({
-          targets: container,
-          x: x + 8,
-          duration: 50,
+          targets: this.stageContainer,
+          x: this.scale.width / 2 + 10,
+          duration: 45,
           yoyo: true,
-          repeat: 3,
-          onComplete: () => { container.x = x; }
+          repeat: 4,
+          onComplete: () => {
+            this.stageContainer.x = this.scale.width / 2;
+          }
         });
       });
+      this.stageContainer.add(btnLocked);
     }
+  }
+
+  /**
+   * Render Strip Organisme Khas Bioma
+   */
+  renderOrganismsStrip(biome, y, plaqueW, isUnlocked) {
+    const orgs = biome.organisms || [];
+    if (orgs.length === 0) return;
+
+    const labelTxt = this.add.text(-plaqueW / 2 + 45, y, '🐾 JARING MAKANAN BIOMA:', {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: '13px',
+      color: '#fbbf24',
+      fontStyle: 'bold'
+    }).setOrigin(0, 0.5);
+    this.stageContainer.add(labelTxt);
+
+    const startX = -plaqueW / 2 + 270;
+    const pillW = 165;
+    const pillH = 34;
+
+    orgs.forEach((org, idx) => {
+      const px = startX + idx * (pillW + 32);
+      const pillGfx = this.add.graphics();
+      pillGfx.fillStyle(isUnlocked ? 0x021a14 : 0x1e293b, 0.9);
+      pillGfx.fillRoundedRect(px - pillW / 2, y - pillH / 2, pillW, pillH, 10);
+      pillGfx.lineStyle(1.2, isUnlocked ? 0x10b981 : 0x475569, 0.7);
+      pillGfx.strokeRoundedRect(px - pillW / 2, y - pillH / 2, pillW, pillH, 10);
+      this.stageContainer.add(pillGfx);
+
+      // Icon & Nama
+      const orgTxt = this.add.text(px, y, org.label, {
+        fontFamily: 'Nunito, sans-serif',
+        fontSize: '13px',
+        color: isUnlocked ? '#ffffff' : '#94a3b8',
+        fontStyle: 'bold'
+      }).setOrigin(0.5);
+      this.stageContainer.add(orgTxt);
+
+      // Panah Kausalitas Antar Organisme
+      if (idx < orgs.length - 1) {
+        const arrowTxt = this.add.text(px + pillW / 2 + 16, y, '➔', {
+          fontFamily: 'Fredoka, sans-serif',
+          fontSize: '16px',
+          color: isUnlocked ? '#fbbf24' : '#475569',
+          fontStyle: 'bold'
+        }).setOrigin(0.5);
+        this.stageContainer.add(arrowTxt);
+      }
+    });
+  }
+
+  /**
+   * Render Mini Preview Kartu Misi di Dalam Plakat
+   */
+  renderMiniMissionCard(x, y, w, h, mission, isMissionUnlocked, num) {
+    if (!mission) return;
+
+    const mCard = this.add.graphics();
+    mCard.fillStyle(0x030712, 0.75);
+    mCard.fillRoundedRect(x - w / 2, y - h / 2, w, h, 14);
+
+    const borderCol = isMissionUnlocked ? (num === 1 ? 0xf59e0b : 0xf43f5e) : 0x334155;
+    mCard.lineStyle(1.8, borderCol, 0.9);
+    mCard.strokeRoundedRect(x - w / 2, y - h / 2, w, h, 14);
+    this.stageContainer.add(mCard);
+
+    // Tag Kategori
+    const tagColor = num === 1 ? '#fbbf24' : '#fb7185';
+    const tagTxt = this.add.text(x - w / 2 + 16, y - h / 2 + 14, `${num === 1 ? '☀️ FAKTOR ALAM' : '⚠️ FAKTOR MANUSIA'} • ${mission.title}`, {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: '15px',
+      color: isMissionUnlocked ? tagColor : '#94a3b8',
+      fontStyle: 'bold'
+    });
+
+    const descTxt = this.add.text(x - w / 2 + 16, y - h / 2 + 42, isMissionUnlocked ? mission.headline : 'Selesaikan Misi 1 terlebih dahulu untuk membuka investigasi ini.', {
+      fontFamily: 'Nunito, sans-serif',
+      fontSize: '14px',
+      color: isMissionUnlocked ? '#e2e8f0' : '#64748b',
+      wordWrap: { width: w - 32 }
+    });
+    this.stageContainer.add([tagTxt, descTxt]);
+
+    // Status Pill
+    const mData = window.progressManager ? window.progressManager.getMissionData(mission.id) : null;
+    const isCompleted = mData ? mData.completed : false;
+    const mStars = mData ? mData.stars : 0;
+
+    let statusPill = '⚡ Siap Diselidiki';
+    let statusColor = '#38bdf8';
+    if (!isMissionUnlocked) {
+      statusPill = '🔒 Terkunci';
+      statusColor = '#94a3b8';
+    } else if (isCompleted) {
+      statusPill = `✅ Tuntas (${'⭐'.repeat(mStars)})`;
+      statusColor = '#4ade80';
+    }
+
+    const statTxt = this.add.text(x - w / 2 + 16, y + h / 2 - 20, statusPill, {
+      fontFamily: 'Nunito, sans-serif',
+      fontSize: '13px',
+      color: statusColor,
+      fontStyle: 'bold'
+    });
+    this.stageContainer.add(statTxt);
+  }
+
+  /**
+   * Bilah Dock Thumbnail 4 Bioma di Bawah Layar
+   */
+  createBottomDock(width) {
+    const dockY = 890;
+    this.dockTiles = [];
+
+    const tileW = 340;
+    const tileH = 92;
+    const centers = [width / 2 - 555, width / 2 - 185, width / 2 + 185, width / 2 + 555];
+
+    this.biomes.forEach((b, idx) => {
+      const cx = centers[idx];
+      const isUnlocked = window.progressManager ? window.progressManager.isEcosystemUnlocked(b.id) : (idx === 0);
+      const stars = window.progressManager ? window.progressManager.getEcosystemStars(b.id) : 0;
+
+      const container = this.add.container(cx, dockY);
+
+      // Graphics Tile
+      const gShadow = this.add.graphics();
+      const gBox = this.add.graphics();
+      container.add([gShadow, gBox]);
+
+      // Mini Badge
+      const miniBadge = this.add.image(-tileW / 2 + 45, 0, b.badge).setDisplaySize(58, 58);
+      if (!isUnlocked) {
+        miniBadge.setTint(0x444444);
+        miniBadge.setAlpha(0.5);
+      }
+      container.add(miniBadge);
+
+      // Teks Nama Bioma
+      const nameTxt = this.add.text(-tileW / 2 + 82, -14, `${b.icon} ${b.shortName}`, {
+        fontFamily: 'Fredoka, sans-serif',
+        fontSize: '18px',
+        color: '#ffffff',
+        fontStyle: 'bold'
+      });
+
+      const starTxt = this.add.text(-tileW / 2 + 84, 12, isUnlocked ? `⭐ ${stars}/6 Bintang` : '🔒 Terkunci', {
+        fontFamily: 'Nunito, sans-serif',
+        fontSize: '14px',
+        color: isUnlocked ? '#a7f3d0' : '#f87171',
+        fontStyle: 'bold'
+      });
+      container.add([nameTxt, starTxt]);
+
+      // Hit Area
+      const hit = this.add.rectangle(0, 0, tileW, tileH, 0x000000, 0.001)
+        .setInteractive({ useHandCursor: true });
+      container.add(hit);
+
+      hit.on('pointerdown', () => {
+        if (this.currentIndex !== idx) {
+          this.currentIndex = idx;
+          this.registry.set('selectedBiomeIndex', this.currentIndex);
+          if (window.soundEngine) window.soundEngine.playBeep();
+          this.updateBiomeView(true);
+        }
+      });
+
+      this.dockTiles.push({
+        container, gShadow, gBox, isUnlocked, tileW, tileH, baseY: dockY
+      });
+    });
+  }
+
+  /**
+   * Perbarui Efek Highlight pada Dock Bawah
+   */
+  updateBottomDockHighlight() {
+    this.dockTiles.forEach((tile, idx) => {
+      const isActive = (idx === this.currentIndex);
+      const { container, gShadow, gBox, isUnlocked, tileW, tileH, baseY } = tile;
+
+      gShadow.clear();
+      gBox.clear();
+
+      if (isActive) {
+        container.setY(baseY - 8);
+        container.setAlpha(1.0);
+
+        // Glow Shadow Emas
+        gShadow.fillStyle(0x000000, 0.6);
+        gShadow.fillRoundedRect(-tileW / 2 + 4, -tileH / 2 + 6, tileW, tileH, 16);
+
+        // Active Golden Face
+        gBox.fillStyle(isUnlocked ? 0x064e3b : 0x1e293b, 0.98);
+        gBox.fillRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 16);
+        gBox.lineStyle(3.5, 0xf59e0b, 1);
+        gBox.strokeRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 16);
+      } else {
+        container.setY(baseY);
+        container.setAlpha(0.78);
+
+        gShadow.fillStyle(0x000000, 0.35);
+        gShadow.fillRoundedRect(-tileW / 2 + 2, -tileH / 2 + 4, tileW, tileH, 14);
+
+        gBox.fillStyle(0x0a111e, 0.85);
+        gBox.fillRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 14);
+        gBox.lineStyle(1.8, 0x334155, 0.8);
+        gBox.strokeRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 14);
+      }
+    });
+  }
+
+  /**
+   * Suara Panduan Gita Sesuai Bioma Aktif
+   */
+  playGitaBiomeIntro() {
+    const cur = this.biomes[this.currentIndex];
+    const speechMap = {
+      sawah: 'Ekosistem sawah terestrial! Lahan pertanian padi tempat berinteraksinya petani, hama pengerat, dan predator pemangsa alami.',
+      hutan: 'Ekosistem rimba hujan tropis! Paru-paru Nusantara rumah bagi pohon raksasa, kawanan rusa, dan harimau Sumatera.',
+      sungai: 'Ekosistem perairan sungai air tawar! Sumber kehidupan bagi ikan tawar, tumbuhan air teratai, dan burung bangau.',
+      laut: 'Ekosistem samudra terumbu karang tropis! Hamparan karang warna-warni tempat hidup kawanan penyu dan ikan hiu.'
+    };
+    const voiceText = speechMap[cur.id] || 'Pilih ekosistem Nusantara yang terbuka untuk diselidiki!';
+    if (window.soundEngine) {
+      window.soundEngine.speakText(voiceText);
+    }
+  }
+
+  getPreviousBiomeName(prevId) {
+    if (!prevId) return 'Sebelumnya';
+    const found = this.biomes.find(b => b.id === prevId);
+    return found ? found.shortName : 'Sebelumnya';
   }
 
   // --- PILIH BIOME & PINDAH KE MENU MISI ---
@@ -501,12 +881,10 @@ class BiomeSelectScene extends Phaser.Scene {
     const { width, height } = this.scale;
     const modalContainer = this.add.container(0, 0).setDepth(400);
 
-    // Dimmer Backdrop yang memblokir klik di bawahnya
     const backdrop = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.82)
       .setInteractive();
     modalContainer.add(backdrop);
 
-    // Box Utama Modal (Emerald & Golden Amber Border)
     const boxW = 860;
     const boxH = 340;
     const box = this.add.rectangle(width / 2, height / 2, boxW, boxH, 0x064e3b, 0.98);
@@ -515,7 +893,6 @@ class BiomeSelectScene extends Phaser.Scene {
     innerBorder.setStrokeStyle(1.5, 0xfef08a, 0.4);
     modalContainer.add([box, innerBorder]);
 
-    // Judul Konfirmasi
     const titleText = this.add.text(width / 2, height / 2 - 100, title, {
       fontFamily: 'Fredoka, sans-serif',
       fontSize: '28px',
@@ -524,7 +901,6 @@ class BiomeSelectScene extends Phaser.Scene {
     }).setOrigin(0.5);
     modalContainer.add(titleText);
 
-    // Deskripsi Pesan
     const descText = this.add.text(width / 2, height / 2 - 35, message, {
       fontFamily: 'Nunito, sans-serif',
       fontSize: '19px',
@@ -536,7 +912,6 @@ class BiomeSelectScene extends Phaser.Scene {
     }).setOrigin(0.5);
     modalContainer.add(descText);
 
-    // Tombol Batal (Hijau Zamrud)
     const btnCancel = this.add.rectangle(width / 2 - 170, height / 2 + 75, 260, 60, 0x047857)
       .setInteractive({ useHandCursor: true });
     btnCancel.setStrokeStyle(2.5, 0x34d399);
@@ -556,24 +931,23 @@ class BiomeSelectScene extends Phaser.Scene {
       });
     });
 
-    // Tombol Konfirmasi Ya (Merah Bahaya)
-    const btnConfirm = this.add.rectangle(width / 2 + 170, height / 2 + 75, 260, 60, 0xdc2626)
+    const btnYes = this.add.rectangle(width / 2 + 170, height / 2 + 75, 260, 60, 0x991b1b)
       .setInteractive({ useHandCursor: true });
-    btnConfirm.setStrokeStyle(2.5, 0xfca5a5);
-    const tConfirm = this.add.text(width / 2 + 170, height / 2 + 75, '✅ YA, RESET KELAS', {
+    btnYes.setStrokeStyle(2.5, 0xf87171);
+    const tYes = this.add.text(width / 2 + 170, height / 2 + 75, '✅ YA, RESET', {
       fontFamily: 'Fredoka, sans-serif',
       fontSize: '20px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
-    modalContainer.add([btnConfirm, tConfirm]);
+    modalContainer.add([btnYes, tYes]);
 
-    btnConfirm.on('pointerdown', () => {
-      btnConfirm.setScale(0.94);
-      if (window.soundEngine) window.soundEngine.playWarning();
-      this.time.delayedCall(150, () => {
+    btnYes.on('pointerdown', () => {
+      btnYes.setScale(0.94);
+      if (window.soundEngine) window.soundEngine.playSuccess();
+      this.time.delayedCall(120, () => {
         modalContainer.destroy();
-        if (onYes) onYes();
+        onYes();
       });
     });
   }
