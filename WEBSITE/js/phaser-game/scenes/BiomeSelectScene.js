@@ -1,11 +1,12 @@
 /**
  * ECO-EXPLORER (PHASER 3) - BIOME SELECT SCENE
- * "Full-Screen Stage Showcase" (Character/Stage Select Slider Arcade Style)
- * - Latar Belakang Panorama 1080p Berganti Dinamis (Crossfade Halus)
- * - Plakat Pahlawan Panggung Tengah (Hero Stage Plaque) yang Mewah & Megah
- * - Preview 2 Misi Krisis C2 (Faktor Alam vs Manusia) & Strip Rantai Makanan Bioma
- * - Navigasi Hibrida: Tombol Panah Raksasa ◀ ▶, Touch Swipe Gesture IFP, & 4 Dock Mini Cards
- * - Terintegrasi Penuh dengan ProgressManager, Mode Penguji 5-Tap, dan Audio Gita
+ * Master 2-Column Split Hero Stage Showcase (Format Panggung 2-Kolom Bebas Tabrakan):
+ * - Kolom Kiri: Medali Bioma Besar + Judul & Tagline + Kotak Deskripsi Ekologis + Tombol Aksi Chunky 3D
+ * - Kolom Kanan: Header Rantai Makanan + Single-Line Sleek Organisme Khas Bioma + 2 Kartu Misi Bertumpuk yang Lega
+ * - Bilah Navigasi Atas Emas-Zamrud Terpadu (Lencana Tim 5-Tap Mode Penguji + Tombol Pill Seragam)
+ * - Dok 4 Bioma Bawah dengan Sorotan Emas Mengkilap pada Bioma Aktif
+ * - Standar Tipografi Ultra-Large IFP (Seluruh font >= 24px, zero text overflow, zero clipping)
+ * - 100% Offline & Kompatibel Protokol file:// (Bebas CORS)
  */
 
 class BiomeSelectScene extends Phaser.Scene {
@@ -72,7 +73,7 @@ class BiomeSelectScene extends Phaser.Scene {
           { key: 'teratai', label: 'Teratai' },
           { key: 'keong', label: 'Keong Air' },
           { key: 'ikan_gabus', label: 'Ikan Gabus' },
-          { key: 'bangau', label: 'Burung Bangau' }
+          { key: 'bangau', label: 'Bangau' }
         ]
       },
       {
@@ -87,9 +88,9 @@ class BiomeSelectScene extends Phaser.Scene {
         accentColor: 0x3b82f6,
         prevId: 'sungai',
         organisms: [
-          { key: 'karang', label: 'Terumbu Karang' },
+          { key: 'karang', label: 'Karang' },
           { key: 'ikan_kecil', label: 'Ikan Karang' },
-          { key: 'penyu', label: 'Penyu Hijau' },
+          { key: 'penyu', label: 'Penyu' },
           { key: 'hiu', label: 'Hiu Samudra' }
         ]
       }
@@ -111,11 +112,11 @@ class BiomeSelectScene extends Phaser.Scene {
     // Partikel Spora Mengambang Ceria
     this.createFloatingSporeFX(width, height);
 
-    // 2. Top Header Status Tim Aktif (Mempertahankan Penataan Bebas Tabrakan)
+    // 2. Top Header Status Tim Aktif (Tema Emerald Enamel & Polished Gold)
     this.createTopHeader(width, activeTeam);
 
     // 3. Kontainer Panggung Utama (Hero Stage Plaque) di Tengah Layar
-    this.stageContainer = this.add.container(width / 2, 450);
+    this.stageContainer = this.add.container(width / 2, 465);
 
     // 4. Tombol Panah Navigasi Layar Sentuh IFP (◀ dan ▶)
     this.createNavArrows(width);
@@ -124,7 +125,7 @@ class BiomeSelectScene extends Phaser.Scene {
     this.createBottomDock(width);
 
     // 6. Sub-Panduan Bawah Layar Sentuh IFP
-    this.add.text(width / 2, height - 28, '💡 Sentuh panah ◀ ▶, geser layar (swipe), atau ketuk kartu di bawah untuk memilih ekosistem', {
+    this.add.text(width / 2, height - 32, '💡 Sentuh panah ◀ ▶, geser layar (swipe), atau ketuk kartu di bawah untuk memilih ekosistem', {
       fontFamily: 'Nunito, sans-serif',
       fontSize: '24px',
       color: '#fef08a',
@@ -149,7 +150,6 @@ class BiomeSelectScene extends Phaser.Scene {
     this.input.on('pointerup', (pointer) => {
       const deltaX = pointer.x - touchStartX;
       const deltaY = pointer.y - touchStartY;
-      // Deteksi geser horizontal dominan minimal 60 piksel
       if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
         if (deltaX < 0) {
           this.navigateBiome(1); // Swipe kiri -> Bioma berikutnya
@@ -164,43 +164,49 @@ class BiomeSelectScene extends Phaser.Scene {
   }
 
   /**
-   * Header Status Tim & Navigasi Utama (Bebas Tabrakan & Overflow)
+   * Header Status Tim & Navigasi Utama (Bebas Tabrakan & Bertema Emerald Gold)
    */
   createTopHeader(width, activeTeam) {
-    const headerW = 1680;
-    const headerH = 96;
-    const headerY = 64;
+    const headerW = 1760;
+    const headerH = 74;
+    const headerY = 52;
 
     const headerLeft = width / 2 - headerW / 2;
     const headerRight = width / 2 + headerW / 2;
 
     const gHead = this.add.graphics();
+    // Drop shadow
     gHead.fillStyle(0x000000, 0.45);
-    gHead.fillRoundedRect(headerLeft + 4, headerY - headerH / 2 + 6, headerW, headerH, 18);
+    gHead.fillRoundedRect(headerLeft + 4, headerY - headerH / 2 + 5, headerW, headerH, 18);
 
-    gHead.fillStyle(0x1e1b18, 1);
+    // Dark Enamel Base
+    gHead.fillStyle(0x021a14, 1);
     gHead.fillRoundedRect(headerLeft, headerY - headerH / 2, headerW, headerH, 18);
-    gHead.fillStyle(0x064e3b, 1);
-    gHead.fillRoundedRect(headerLeft + 5, headerY - headerH / 2 + 5, headerW - 10, headerH - 10, 14);
-    gHead.lineStyle(3, 0xfbbf24, 1);
-    gHead.strokeRoundedRect(headerLeft + 5, headerY - headerH / 2 + 5, headerW - 10, headerH - 10, 14);
+
+    // Emerald Face
+    gHead.fillStyle(0x064e3b, 0.96);
+    gHead.fillRoundedRect(headerLeft + 3, headerY - headerH / 2 + 3, headerW - 6, headerH - 6, 15);
+
+    // Polished Gold Border
+    gHead.lineStyle(2.5, 0xf59e0b, 1);
+    gHead.strokeRoundedRect(headerLeft + 3, headerY - headerH / 2 + 3, headerW - 6, headerH - 6, 15);
 
     // Medallion Lencana Tim (Dengan Secret Trigger Mode Penguji: Ketuk 5x)
-    const badgeX = headerLeft + 52;
+    const badgeX = headerLeft + 48;
     const badgeRim = this.add.graphics();
-    badgeRim.fillStyle(0x1c1917, 1);
-    badgeRim.fillCircle(badgeX, headerY, 36);
-    badgeRim.lineStyle(2.5, 0xfbbf24, 1);
-    badgeRim.strokeCircle(badgeX, headerY, 36);
+    badgeRim.fillStyle(0x021a14, 1);
+    badgeRim.fillCircle(badgeX, headerY, 30);
+    badgeRim.lineStyle(2.5, 0xf59e0b, 1);
+    badgeRim.strokeCircle(badgeX, headerY, 30);
 
     const badgeImg = this.add.image(badgeX, headerY, activeTeam.badge || 'badge_elang')
-      .setDisplaySize(64, 64)
+      .setDisplaySize(56, 56)
       .setInteractive({ useHandCursor: true });
 
     let secretTapCount = 0;
     let secretTapTimer = null;
     badgeImg.on('pointerdown', () => {
-      badgeImg.setScale(0.88);
+      badgeImg.setScale(0.9);
       this.time.delayedCall(100, () => badgeImg.setScale(1.0));
       secretTapCount++;
       if (secretTapTimer) secretTapTimer.remove(false);
@@ -217,66 +223,101 @@ class BiomeSelectScene extends Phaser.Scene {
     });
 
     const totalStars = window.progressManager ? window.progressManager.getTotalStars() : 0;
-    const starPillText = `\u2B50 ${totalStars}/24 Bintang`;
 
-    const titleX = badgeX + 54;
-    this.add.text(titleX, headerY - 18, `PETA EKOSISTEM NUSANTARA - GILIRAN: ${activeTeam.name}`, {
+    const titleX = badgeX + 46;
+    this.add.text(titleX, headerY - 14, `PETA EKOSISTEM NUSANTARA`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '28px',
+      fontSize: '26px',
       color: '#fef08a',
       fontStyle: 'bold',
-      shadow: { offsetY: 2, color: '#1c1917', blur: 3, fill: true }
+      shadow: { offsetY: 2, color: '#000000', blur: 3, fill: true }
     });
 
-    this.add.text(titleX, headerY + 16, `Pilih panggung ekosistem untuk diselidiki! ${starPillText}`, {
+    this.add.text(titleX, headerY + 14, `⭐ Giliran: ${activeTeam.name} (${totalStars}/24 Bintang Terkumpul)`, {
       fontFamily: 'Nunito, sans-serif',
       fontSize: '24px',
       color: '#a7f3d0',
       fontStyle: 'bold'
     });
 
-    // Kontrol Kanan (Anchor Presisi Bebas Overflow)
-    const innerRight = headerRight - 28;
-    const btnGap = 16;
-    const btnH = 50;
+    // Kontrol Kanan (Tombol Pill Seragam Emas-Zamrud)
+    const innerRight = headerRight - 20;
+    const btnGap = 14;
+    const btnH = 48;
 
     // 1. Tombol Reset Kelas (Paling Kanan)
-    const wReset = 155;
+    const wReset = 180;
     const xReset = innerRight - wReset / 2;
-    this.createButton3D(xReset, headerY, wReset, btnH, '⚙️ Reset Kelas', 0x475569, 0x64748b, () => {
-      if (window.soundEngine) window.soundEngine.playBeep();
-      this.showConfirmModal(
-        '⚠️ KONFIRMASI RESET KELAS',
-        'Apakah Ibu/Bapak Guru yakin ingin mereset seluruh kemajuan 4 bioma ke kondisi awal?',
-        () => {
-          if (window.progressManager) {
-            window.progressManager.resetProgress();
+    this.createPillButton({
+      x: xReset,
+      y: headerY,
+      w: wReset,
+      h: btnH,
+      baseColor: 0x334155,
+      shadowColor: 0x1e293b,
+      borderColor: 0x64748b,
+      text: '⚙️ Reset Kelas',
+      textColor: '#ffffff',
+      fontSize: '24px',
+      onClick: () => {
+        if (window.soundEngine) window.soundEngine.playBeep();
+        this.showConfirmModal(
+          '⚠️ KONFIRMASI RESET KELAS',
+          'Apakah Ibu/Bapak Guru yakin ingin mereset seluruh kemajuan 4 bioma ke kondisi awal?',
+          () => {
+            if (window.progressManager) {
+              window.progressManager.resetProgress();
+            }
+            this.scene.restart();
           }
-          this.scene.restart();
-        }
-      );
+        );
+      }
     });
 
     // 2. Tombol Ganti Tim (Tengah)
-    const wTeam = 155;
+    const wTeam = 175;
     const xTeam = (xReset - wReset / 2) - btnGap - wTeam / 2;
-    this.createButton3D(xTeam, headerY, wTeam, btnH, '👥 Ganti Tim', 0x0f172a, 0x334155, () => {
-      if (window.soundEngine) {
-        window.soundEngine.playBeep();
-        window.soundEngine.stopVoice();
+    this.createPillButton({
+      x: xTeam,
+      y: headerY,
+      w: wTeam,
+      h: btnH,
+      baseColor: 0x0a353c,
+      shadowColor: 0x021a14,
+      borderColor: 0x38bdf8,
+      text: '👥 Ganti Tim',
+      textColor: '#ffffff',
+      fontSize: '24px',
+      onClick: () => {
+        if (window.soundEngine) {
+          window.soundEngine.playBeep();
+          window.soundEngine.stopVoice();
+        }
+        this.time.delayedCall(120, () => {
+          this.scene.start('TeamSelectScene');
+        });
       }
-      this.time.delayedCall(120, () => {
-        this.scene.start('TeamSelectScene');
-      });
     });
 
-    // 3. Tombol Suara Panduan Gita (Kiri Kontrol)
-    const wAudio = 52;
+    // 3. Tombol Suara Panduan Gita
+    const wAudio = 135;
     const xAudio = (xTeam - wTeam / 2) - btnGap - wAudio / 2;
-    this.createButton3D(xAudio, headerY, wAudio, btnH, '\uD83D\uDD0A', 0x065f46, 0x10b981, () => {
-      if (window.soundEngine) {
-        window.soundEngine.playBeep();
-        this.playGitaBiomeIntro();
+    this.createPillButton({
+      x: xAudio,
+      y: headerY,
+      w: wAudio,
+      h: btnH,
+      baseColor: 0x0284c7,
+      shadowColor: 0x0369a1,
+      borderColor: 0x38bdf8,
+      text: '🔊 Suara',
+      textColor: '#ffffff',
+      fontSize: '24px',
+      onClick: () => {
+        if (window.soundEngine) {
+          window.soundEngine.playBeep();
+          this.playGitaBiomeIntro();
+        }
       }
     });
   }
@@ -285,19 +326,63 @@ class BiomeSelectScene extends Phaser.Scene {
    * Tombol Panah Navigasi Layar Sentuh IFP (◀ dan ▶)
    */
   createNavArrows(width) {
-    const arrowY = 450;
-    const arrowW = 80;
-    const arrowH = 110;
+    const arrowY = 465;
+    const arrowW = 84;
+    const arrowH = 120;
+    const arrowRadius = 22;
 
-    // Tombol Panah Kiri
-    this.btnPrev = this.createButton3D(100, arrowY, arrowW, arrowH, '◀', 0x0f172a, 0x1e293b, () => {
-      this.navigateBiome(-1);
-    });
+    const createArrowBtn = (x, symbol, dir) => {
+      const container = this.add.container(x, arrowY);
+      const gfx = this.add.graphics();
 
-    // Tombol Panah Kanan
-    this.btnNext = this.createButton3D(width - 100, arrowY, arrowW, arrowH, '▶', 0x0f172a, 0x1e293b, () => {
-      this.navigateBiome(1);
-    });
+      const drawArrow = (pressed) => {
+        gfx.clear();
+        const dy = pressed ? 3 : 0;
+        // Drop shadow
+        gfx.fillStyle(0x000000, 0.5);
+        gfx.fillRoundedRect(-arrowW / 2 + 3, -arrowH / 2 + 5, arrowW, arrowH, arrowRadius);
+        // Dark enamel base
+        gfx.fillStyle(0x021a14, 0.96);
+        gfx.fillRoundedRect(-arrowW / 2, -arrowH / 2, arrowW, arrowH, arrowRadius);
+        // Face emerald
+        gfx.fillStyle(0x064e3b, 0.95);
+        gfx.fillRoundedRect(-arrowW / 2 + 3, -arrowH / 2 + dy + 3, arrowW - 6, arrowH - 6, arrowRadius - 3);
+        // Gold border
+        gfx.lineStyle(2.5, 0xf59e0b, 1);
+        gfx.strokeRoundedRect(-arrowW / 2 + 3, -arrowH / 2 + dy + 3, arrowW - 6, arrowH - 6, arrowRadius - 3);
+      };
+
+      drawArrow(false);
+      container.add(gfx);
+
+      const label = this.add.text(0, 0, symbol, {
+        fontFamily: 'Fredoka, sans-serif',
+        fontSize: '44px',
+        color: '#fef08a',
+        fontStyle: 'bold'
+      }).setOrigin(0.5);
+      container.add(label);
+
+      container.setSize(arrowW, arrowH);
+      container.setInteractive({ useHandCursor: true });
+
+      container.on('pointerover', () => container.setScale(1.06));
+      container.on('pointerout', () => container.setScale(1.0));
+      container.on('pointerdown', () => {
+        drawArrow(true);
+        label.y = 3;
+        this.time.delayedCall(120, () => {
+          drawArrow(false);
+          label.y = 0;
+        });
+        this.navigateBiome(dir);
+      });
+
+      return container;
+    };
+
+    this.btnPrev = createArrowBtn(105, '◀', -1);
+    this.btnNext = createArrowBtn(width - 105, '▶', 1);
   }
 
   /**
@@ -344,7 +429,7 @@ class BiomeSelectScene extends Phaser.Scene {
       duration: 350
     });
 
-    // 2. Render Ulang Hero Stage Plaque
+    // 2. Render Ulang Hero Stage Plaque (2-Kolom Terpisah)
     this.renderHeroStagePlaque(currentBiome, ecoData, isUnlocked, stars, animate);
 
     // 3. Perbarui Status Highlight pada Bottom Dock
@@ -352,13 +437,13 @@ class BiomeSelectScene extends Phaser.Scene {
   }
 
   /**
-   * Render Plakat Pahlawan Utama di Panggung Tengah
+   * Render Plakat Pahlawan Utama di Panggung Tengah (2-Kolom Terpisah Seimbang)
    */
   renderHeroStagePlaque(biome, ecoData, isUnlocked, stars, animate) {
     this.stageContainer.removeAll(true);
 
-    const plaqueW = 1480;
-    const plaqueH = 550;
+    const plaqueW = 1540;
+    const plaqueH = 580;
 
     // Efek Punch Animasi
     if (animate) {
@@ -380,9 +465,9 @@ class BiomeSelectScene extends Phaser.Scene {
     shadow.fillRoundedRect(-plaqueW / 2 + 6, -plaqueH / 2 + 10, plaqueW, plaqueH, 26);
     this.stageContainer.add(shadow);
 
-    // 2. Frame Kayu Solid & Enamel Dasar
+    // 2. Base & Frame Enamel Zamrud Mewah
     const frame = this.add.graphics();
-    frame.fillStyle(0x0a111e, 1);
+    frame.fillStyle(0x021a14, 1);
     frame.fillRoundedRect(-plaqueW / 2, -plaqueH / 2, plaqueW, plaqueH, 26);
 
     const faceColor = isUnlocked ? (ecoData.ambientColor || biome.ambientColor) : 0x0f172a;
@@ -396,26 +481,37 @@ class BiomeSelectScene extends Phaser.Scene {
     // Hairline Emas Halus
     frame.lineStyle(1.2, isUnlocked ? 0xfef08a : 0x64748b, 0.45);
     frame.strokeRoundedRect(-plaqueW / 2 + 9, -plaqueH / 2 + 9, plaqueW - 18, plaqueH - 18, 18);
+
+    // Garis Vertikal Pemisah Antara Kolom Kiri & Kolom Kanan
+    const dividerX = -50;
+    frame.lineStyle(1.8, isUnlocked ? borderColor : 0x334155, 0.5);
+    frame.lineBetween(dividerX, -plaqueH / 2 + 25, dividerX, plaqueH / 2 - 25);
     this.stageContainer.add(frame);
 
-    // --- A. HEADER BAR DALAM PLAKAT (Medali & Judul Ekosistem) ---
-    const medalX = -plaqueW / 2 + 95;
-    const medalY = -plaqueH / 2 + 95;
+    // ==========================================
+    // KOLOM KIRI: IDENTITAS BIOMA & TOMBOL AKSI
+    // ==========================================
+    const leftCenterX = -plaqueW / 2 + (plaqueW / 2 + dividerX) / 2; // Sekitar -410 px
+    const leftColW = (plaqueW / 2 + dividerX) - 50;                 // Sekitar 640 px
+
+    // Baris 1: Medali Ekosistem Besar + Lencana Bintang
+    const topRowY = -plaqueH / 2 + 82;
+    const medalX = -plaqueW / 2 + 90;
 
     // Halo Cahaya Radial
     const halo = this.add.graphics();
     halo.fillStyle(isUnlocked ? borderColor : 0x334155, isUnlocked ? 0.35 : 0.15);
-    halo.fillCircle(medalX, medalY, 72);
+    halo.fillCircle(medalX, topRowY, 68);
     this.stageContainer.add(halo);
 
     const medalRim = this.add.graphics();
-    medalRim.fillStyle(0x111827, 1);
-    medalRim.fillCircle(medalX, medalY, 56);
-    medalRim.lineStyle(3.5, isUnlocked ? 0xfbbf24 : 0x475569, 1);
-    medalRim.strokeCircle(medalX, medalY, 56);
+    medalRim.fillStyle(0x021a14, 1);
+    medalRim.fillCircle(medalX, topRowY, 52);
+    medalRim.lineStyle(3, isUnlocked ? 0xf59e0b : 0x475569, 1);
+    medalRim.strokeCircle(medalX, topRowY, 52);
     this.stageContainer.add(medalRim);
 
-    const badgeImg = this.add.image(medalX, medalY, biome.badge).setDisplaySize(108, 108);
+    const badgeImg = this.add.image(medalX, topRowY, biome.badge).setDisplaySize(100, 100);
     if (!isUnlocked) {
       badgeImg.setTint(0x444444);
       badgeImg.setAlpha(0.45);
@@ -423,48 +519,24 @@ class BiomeSelectScene extends Phaser.Scene {
     this.stageContainer.add(badgeImg);
 
     if (!isUnlocked) {
-      const lockOverlay = this.add.text(medalX, medalY, '🔒', { fontSize: '46px' }).setOrigin(0.5);
+      const lockOverlay = this.add.text(medalX, topRowY, '🔒', { fontSize: '44px' }).setOrigin(0.5);
       this.stageContainer.add(lockOverlay);
-      this.tweens.add({
-        targets: lockOverlay,
-        scale: { from: 0.9, to: 1.1 },
-        duration: 1000,
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut'
-      });
     }
 
-    // Teks Judul & Tagline Ekosistem
-    const titleLeftX = medalX + 78;
-    const titleTxt = this.add.text(titleLeftX, medalY - 26, `${biome.icon} ${ecoData.name.toUpperCase()}`, {
-      fontFamily: 'Fredoka, sans-serif',
-      fontSize: '34px',
-      color: isUnlocked ? '#ffffff' : '#94a3b8',
-      fontStyle: 'bold',
-      shadow: { offsetY: 2, color: '#000000', blur: 3, fill: true }
-    });
-
-    const tagTxt = this.add.text(titleLeftX, medalY + 20, biome.tagline, {
-      fontFamily: 'Nunito, sans-serif',
-      fontSize: '24px',
-      color: isUnlocked ? '#fef08a' : '#64748b',
-      fontStyle: 'bold'
-    });
-    this.stageContainer.add([titleTxt, tagTxt]);
-
-    // Lencana Status Bintang (Kanan Atas Plakat)
-    const starStatusX = plaqueW / 2 - 40;
+    // Status Bintang Kapsul (Sebelah Kanan Medali)
+    const starStatusX = medalX + 70;
+    const starW = 240;
+    const starH = 46;
     const starGfx = this.add.graphics();
     starGfx.fillStyle(isUnlocked ? 0x022c22 : 0x1e293b, 0.95);
-    starGfx.fillRoundedRect(starStatusX - 270, medalY - 26, 270, 52, 16);
+    starGfx.fillRoundedRect(starStatusX, topRowY - starH / 2, starW, starH, 14);
     starGfx.lineStyle(2, isUnlocked ? 0x10b981 : 0x64748b, 1);
-    starGfx.strokeRoundedRect(starStatusX - 270, medalY - 26, 270, 52, 16);
+    starGfx.strokeRoundedRect(starStatusX, topRowY - starH / 2, starW, starH, 14);
     this.stageContainer.add(starGfx);
 
     const starLabel = isUnlocked ? `⭐ ${stars}/6 BINTANG` : '🔒 TERKUNCI';
     const starColor = isUnlocked ? '#fef08a' : '#f87171';
-    const starTxt = this.add.text(starStatusX - 135, medalY, starLabel, {
+    const starTxt = this.add.text(starStatusX + starW / 2, topRowY, starLabel, {
       fontFamily: 'Fredoka, sans-serif',
       fontSize: '24px',
       color: starColor,
@@ -472,102 +544,213 @@ class BiomeSelectScene extends Phaser.Scene {
     }).setOrigin(0.5);
     this.stageContainer.add(starTxt);
 
-    // --- B. GARIS PEMISAH & DESKRIPSI NARASI ---
-    const divLine = this.add.graphics();
-    divLine.lineStyle(1.5, isUnlocked ? 0x334155 : 0x1e293b, 0.8);
-    divLine.lineBetween(-plaqueW / 2 + 40, -100, plaqueW / 2 - 40, -100);
-    this.stageContainer.add(divLine);
+    // Baris 2: Nama Ekosistem & Tagline
+    const titleY = -plaqueH / 2 + 168;
+    const titleTxt = this.add.text(-plaqueW / 2 + 35, titleY, `${biome.icon} ${ecoData.name.toUpperCase()}`, {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: '32px',
+      color: isUnlocked ? '#ffffff' : '#94a3b8',
+      fontStyle: 'bold',
+      shadow: { offsetY: 2, color: '#000000', blur: 3, fill: true }
+    });
 
-    const storyTxt = this.add.text(0, -68, isUnlocked ? ecoData.desc : 'Ekosistem ini masih terkunci! Tuntaskan seluruh misi dan teka-teki kausalitas pada bioma sebelumnya untuk membuka ekspedisi ini.', {
+    const tagTxt = this.add.text(-plaqueW / 2 + 35, titleY + 40, `"${biome.tagline}"`, {
+      fontFamily: 'Nunito, sans-serif',
+      fontSize: '24px',
+      color: isUnlocked ? '#fde68a' : '#64748b',
+      fontStyle: 'bold'
+    });
+    this.stageContainer.add([titleTxt, tagTxt]);
+
+    // Baris 3: Kotak Deskripsi Ekologis Sains Mandiri
+    const descBoxY = titleY + 84;
+    const descBoxW = leftColW;
+    const descBoxH = 126;
+
+    const descBoxGfx = this.add.graphics();
+    descBoxGfx.fillStyle(0x021a14, 0.9);
+    descBoxGfx.fillRoundedRect(-plaqueW / 2 + 35, descBoxY, descBoxW, descBoxH, 16);
+    descBoxGfx.lineStyle(1.8, isUnlocked ? borderColor : 0x334155, 0.8);
+    descBoxGfx.strokeRoundedRect(-plaqueW / 2 + 35, descBoxY, descBoxW, descBoxH, 16);
+    this.stageContainer.add(descBoxGfx);
+
+    const descContent = isUnlocked
+      ? ecoData.desc
+      : 'Ekosistem ini masih terkunci! Selesaikan seluruh misi dan kuis kausalitas pada bioma sebelumnya untuk membuka ekspedisi petualangan ini.';
+
+    const storyTxt = this.add.text(-plaqueW / 2 + 50, descBoxY + 16, descContent, {
       fontFamily: 'Nunito, sans-serif',
       fontSize: '24px',
       color: isUnlocked ? '#e2e8f0' : '#94a3b8',
-      align: 'center',
-      wordWrap: { width: plaqueW - 120 },
-      lineSpacing: 6
-    }).setOrigin(0.5);
+      wordWrap: { width: descBoxW - 30 },
+      lineSpacing: 5
+    });
     this.stageContainer.add(storyTxt);
 
-    // --- C. STRIP ORGANISME & RANTAI MAKANAN KHAS BIOMA ---
-    const orgStripY = -8;
-    this.renderOrganismsStrip(biome, orgStripY, plaqueW, isUnlocked);
+    // Baris 4: Tombol Aksi Chunky 3D Raksasa
+    const btnActionY = descBoxY + descBoxH + 46;
+    const btnW = descBoxW;
+    const btnH = 72;
+    const btnActionX = -plaqueW / 2 + 35 + btnW / 2;
 
-    // --- D. PREVIEW 2 KARTU MISI KRISIS C2 (Side-by-Side) ---
-    const missions = ecoData.missions || [];
-    const missionCardsY = 120;
-    const cardW = 670;
-    const cardH = 138;
-
-    // Kartu Misi 1 (Faktor Ulah Alam)
-    this.renderMiniMissionCard(-360, missionCardsY, cardW, cardH, missions[0], isUnlocked, 1);
-
-    // Kartu Misi 2 (Faktor Ulah Manusia)
-    const isM2Unlocked = isUnlocked && window.progressManager && window.progressManager.isMissionUnlocked(`${biome.id}_m2`);
-    this.renderMiniMissionCard(360, missionCardsY, cardW, cardH, missions[1], isM2Unlocked, 2);
-
-    // --- E. TOMBOL AKSI UTAMA DI BAWAH PLAKAT ---
-    const btnY = 228;
     if (isUnlocked) {
-      const btnW = 560;
-      const btnH = 64;
-      const btnExplore = this.createButton3D(0, btnY, btnW, btnH, '🚀 SELIDIKI EKOSISTEM INI 🔍', 0x065f46, 0x10b981, () => {
-        this.selectBiome(biome);
+      const btnContainer = this.add.container(btnActionX, btnActionY);
+      const btnGfx = this.add.graphics();
+
+      const drawBtn = (isPressed) => {
+        btnGfx.clear();
+        const dy = isPressed ? 4 : 0;
+        btnGfx.fillStyle(0x064e3b, 1);
+        btnGfx.fillRoundedRect(-btnW / 2, -btnH / 2 + 5, btnW, btnH, 18);
+        btnGfx.fillStyle(0x10b981, 1);
+        btnGfx.fillRoundedRect(-btnW / 2, -btnH / 2 + dy, btnW, btnH - 5, 18);
+        btnGfx.lineStyle(2.5, 0xfef08a, 1);
+        btnGfx.strokeRoundedRect(-btnW / 2, -btnH / 2 + dy, btnW, btnH - 5, 18);
+      };
+
+      drawBtn(false);
+      btnContainer.add(btnGfx);
+
+      const btnLabel = this.add.text(0, 0, '👉 SELIDIKI EKOSISTEM INI! 🚀', {
+        fontFamily: 'Fredoka, sans-serif',
+        fontSize: '30px',
+        color: '#ffffff',
+        fontStyle: 'bold',
+        shadow: { offsetY: 2, color: '#000000', blur: 4, fill: true }
+      }).setOrigin(0.5);
+      btnContainer.add(btnLabel);
+
+      btnContainer.setSize(btnW, btnH);
+      btnContainer.setInteractive({ useHandCursor: true });
+
+      btnContainer.on('pointerover', () => {
+        btnContainer.setScale(1.02);
+        if (window.soundEngine) window.soundEngine.playBeep();
       });
-      this.stageContainer.add(btnExplore);
+      btnContainer.on('pointerout', () => btnContainer.setScale(1.0));
+
+      btnContainer.on('pointerdown', () => {
+        drawBtn(true);
+        btnLabel.y = 3;
+
+        // Shockwave Ring
+        const ring = this.add.circle(this.stageContainer.x + btnActionX, this.stageContainer.y + btnActionY, 36, 0xfef08a, 0.85);
+        ring.setDepth(50);
+        this.tweens.add({
+          targets: ring,
+          scale: 4.5,
+          alpha: 0,
+          duration: 450,
+          ease: 'Cubic.easeOut',
+          onComplete: () => ring.destroy()
+        });
+
+        if (window.soundEngine) window.soundEngine.playSuccess();
+        this.time.delayedCall(160, () => {
+          this.selectBiome(biome);
+        });
+      });
+
+      btnContainer.on('pointerup', () => {
+        drawBtn(false);
+        btnLabel.y = 0;
+      });
+
+      this.stageContainer.add(btnContainer);
     } else {
       const prevName = this.getPreviousBiomeName(biome.prevId);
-      const btnW = 720;
-      const btnH = 64;
-      const btnLocked = this.createButton3D(0, btnY, btnW, btnH, `🔒 Selesaikan Ekosistem ${prevName} untuk Membuka!`, 0x1e293b, 0x334155, () => {
-        if (window.soundEngine) {
-          window.soundEngine.playWarning ? window.soundEngine.playWarning() : window.soundEngine.playBeep();
-          window.soundEngine.speakText(`Ekosistem ${biome.name} masih terkunci! Selesaikan ekosistem ${prevName} terlebih dahulu.`);
-        }
-        // Animasi Shake Plakat
-        this.tweens.add({
-          targets: this.stageContainer,
-          x: this.scale.width / 2 + 10,
-          duration: 45,
-          yoyo: true,
-          repeat: 4,
-          onComplete: () => {
-            this.stageContainer.x = this.scale.width / 2;
+      const btnLocked = this.createPillButton({
+        x: btnActionX,
+        y: btnActionY,
+        w: btnW,
+        h: btnH,
+        baseColor: 0x1e293b,
+        shadowColor: 0x0f172a,
+        borderColor: 0x475569,
+        text: `🔒 Selesaikan Ekosistem ${prevName}!`,
+        textColor: '#94a3b8',
+        fontSize: '26px',
+        onClick: () => {
+          if (window.soundEngine) {
+            window.soundEngine.playWarning ? window.soundEngine.playWarning() : window.soundEngine.playBeep();
+            window.soundEngine.speakText(`Ekosistem ${biome.name} masih terkunci! Selesaikan ekosistem ${prevName} terlebih dahulu.`);
           }
-        });
+          this.tweens.add({
+            targets: this.stageContainer,
+            x: this.scale.width / 2 + 10,
+            duration: 45,
+            yoyo: true,
+            repeat: 4,
+            onComplete: () => {
+              this.stageContainer.x = this.scale.width / 2;
+            }
+          });
+        }
       });
       this.stageContainer.add(btnLocked);
     }
-  }
 
-  /**
-   * Render Strip Organisme Khas Bioma
-   */
-  renderOrganismsStrip(biome, y, plaqueW, isUnlocked) {
-    const orgs = biome.organisms || [];
-    if (orgs.length === 0) return;
+    // ==========================================
+    // KOLOM KANAN: JARING TROFIK & 2 KARTU MISI
+    // ==========================================
+    const rightStartX = dividerX + 35;
+    const rightColW = (plaqueW / 2 - rightStartX) - 30; // Sekitar 760 px
 
-    const labelTxt = this.add.text(-plaqueW / 2 + 45, y, '🐾 JARING TROFIK:', {
+    // 1. Jaring Trofik / Rantai Makanan (Header di Baris Tersendiri -> Zero Collision!)
+    const trophicHeaderY = -plaqueH / 2 + 52;
+    const trophicHeaderTxt = this.add.text(rightStartX, trophicHeaderY, '🐾 RANTAI MAKANAN UTAMA:', {
       fontFamily: 'Fredoka, sans-serif',
       fontSize: '24px',
       color: '#fbbf24',
       fontStyle: 'bold'
-    }).setOrigin(0, 0.5);
-    this.stageContainer.add(labelTxt);
+    });
+    this.stageContainer.add(trophicHeaderTxt);
 
-    const startX = -plaqueW / 2 + 280;
-    const pillW = 175;
-    const pillH = 42;
+    // Deretan Pil Organisme Sleek Single-Line
+    const trophicRowY = trophicHeaderY + 44;
+    this.renderSingleLineTrophicChain(biome, rightStartX, trophicRowY, rightColW, isUnlocked);
+
+    // 2. Dua Kartu Misi Bertumpuk Vertikal yang Lega
+    const missions = ecoData.missions || [];
+    const missionCardW = rightColW;
+    const missionCardH = 152;
+    const missionGap = 18;
+
+    // Kartu Misi 1 (Faktor Ulah Alam)
+    const m1Y = trophicRowY + 40 + missionCardH / 2;
+    this.renderStackedMissionCard(rightStartX + missionCardW / 2, m1Y, missionCardW, missionCardH, missions[0], isUnlocked, 1);
+
+    // Kartu Misi 2 (Faktor Ulah Manusia)
+    const isM2Unlocked = isUnlocked && window.progressManager && window.progressManager.isMissionUnlocked(`${biome.id}_m2`);
+    const m2Y = m1Y + missionCardH + missionGap;
+    this.renderStackedMissionCard(rightStartX + missionCardW / 2, m2Y, missionCardW, missionCardH, missions[1], isM2Unlocked, 2);
+  }
+
+  /**
+   * Render Deretan Rantai Makanan Single Line Sleek (Bebas Tabrakan 100%)
+   */
+  renderSingleLineTrophicChain(biome, startX, y, totalW, isUnlocked) {
+    const orgs = biome.organisms || [];
+    if (orgs.length === 0) return;
+
+    const count = orgs.length;
+    // Hitung lebar pil dan jarak panah secara presisi
+    const arrowW = 28;
+    const availablePillSpace = totalW - ((count - 1) * arrowW);
+    const pillW = Math.min(150, Math.floor(availablePillSpace / count));
+    const pillH = 44;
+    const gap = (totalW - (count * pillW)) / Math.max(1, count - 1);
 
     orgs.forEach((org, idx) => {
-      const px = startX + idx * (pillW + 34);
+      const px = startX + (idx * (pillW + gap)) + pillW / 2;
+
       const pillGfx = this.add.graphics();
-      pillGfx.fillStyle(isUnlocked ? 0x021a14 : 0x1e293b, 0.9);
+      pillGfx.fillStyle(isUnlocked ? 0x021a14 : 0x1e293b, 0.95);
       pillGfx.fillRoundedRect(px - pillW / 2, y - pillH / 2, pillW, pillH, 12);
-      pillGfx.lineStyle(1.2, isUnlocked ? 0x10b981 : 0x475569, 0.7);
+      pillGfx.lineStyle(1.5, isUnlocked ? 0x10b981 : 0x475569, 0.85);
       pillGfx.strokeRoundedRect(px - pillW / 2, y - pillH / 2, pillW, pillH, 12);
       this.stageContainer.add(pillGfx);
 
-      // Icon & Nama
       const orgTxt = this.add.text(px, y, org.label, {
         fontFamily: 'Nunito, sans-serif',
         fontSize: '24px',
@@ -576,9 +759,10 @@ class BiomeSelectScene extends Phaser.Scene {
       }).setOrigin(0.5);
       this.stageContainer.add(orgTxt);
 
-      // Panah Kausalitas Antar Organisme
-      if (idx < orgs.length - 1) {
-        const arrowTxt = this.add.text(px + pillW / 2 + 17, y, '➔', {
+      // Panah Emas Antar Organisme
+      if (idx < count - 1) {
+        const ax = px + pillW / 2 + gap / 2;
+        const arrowTxt = this.add.text(ax, y, '➔', {
           fontFamily: 'Fredoka, sans-serif',
           fontSize: '24px',
           color: isUnlocked ? '#fbbf24' : '#475569',
@@ -590,38 +774,45 @@ class BiomeSelectScene extends Phaser.Scene {
   }
 
   /**
-   * Render Mini Preview Kartu Misi di Dalam Plakat
+   * Render Kartu Misi Bertumpuk Vertikal yang Lega (Anti-Clipping & Anti-Overflow)
    */
-  renderMiniMissionCard(x, y, w, h, mission, isMissionUnlocked, num) {
+  renderStackedMissionCard(cx, cy, w, h, mission, isMissionUnlocked, num) {
     if (!mission) return;
 
     const mCard = this.add.graphics();
-    mCard.fillStyle(0x030712, 0.75);
-    mCard.fillRoundedRect(x - w / 2, y - h / 2, w, h, 14);
+    mCard.fillStyle(0x021a14, 0.94);
+    mCard.fillRoundedRect(cx - w / 2, cy - h / 2, w, h, 16);
 
     const borderCol = isMissionUnlocked ? (num === 1 ? 0xf59e0b : 0xf43f5e) : 0x334155;
-    mCard.lineStyle(1.8, borderCol, 0.9);
-    mCard.strokeRoundedRect(x - w / 2, y - h / 2, w, h, 14);
+    mCard.lineStyle(2, borderCol, 0.9);
+    mCard.strokeRoundedRect(cx - w / 2, cy - h / 2, w, h, 16);
     this.stageContainer.add(mCard);
 
-    // Tag Kategori
+    const leftMargin = cx - w / 2 + 20;
+
+    // Baris 1: Tag Kategori Misi
     const tagColor = num === 1 ? '#fbbf24' : '#fb7185';
-    const tagTxt = this.add.text(x - w / 2 + 16, y - h / 2 + 16, `${num === 1 ? '☀️ FAKTOR ALAM' : '⚠️ FAKTOR MANUSIA'} • ${mission.title}`, {
+    const tagTxt = this.add.text(leftMargin, cy - h / 2 + 18, `${num === 1 ? '☀️ FAKTOR ALAM' : '⚠️ FAKTOR MANUSIA'} • Misi ${num}: ${mission.title}`, {
       fontFamily: 'Fredoka, sans-serif',
       fontSize: '24px',
       color: isMissionUnlocked ? tagColor : '#94a3b8',
       fontStyle: 'bold'
     });
 
-    const descTxt = this.add.text(x - w / 2 + 16, y - h / 2 + 50, isMissionUnlocked ? mission.headline : 'Selesaikan Misi 1 terlebih dahulu untuk membuka investigasi ini.', {
+    // Baris 2: Deskripsi Misi
+    const headlineText = isMissionUnlocked
+      ? mission.headline
+      : 'Selesaikan Misi 1 terlebih dahulu untuk membuka investigasi penyelamatan ini.';
+
+    const descTxt = this.add.text(leftMargin, cy - h / 2 + 56, headlineText, {
       fontFamily: 'Nunito, sans-serif',
       fontSize: '24px',
       color: isMissionUnlocked ? '#e2e8f0' : '#64748b',
-      wordWrap: { width: w - 32 }
+      wordWrap: { width: w - 40 }
     });
     this.stageContainer.add([tagTxt, descTxt]);
 
-    // Status Pill
+    // Baris 3: Status Kapsul (Memiliki Ruang Vertikal Cukup, Bebas Clipping Garis Bawah)
     const mData = window.progressManager ? window.progressManager.getMissionData(mission.id) : null;
     const isCompleted = mData ? mData.completed : false;
     const mStars = mData ? mData.stars : 0;
@@ -630,13 +821,13 @@ class BiomeSelectScene extends Phaser.Scene {
     let statusColor = '#38bdf8';
     if (!isMissionUnlocked) {
       statusPill = '🔒 Terkunci';
-      statusColor = '#94a3b8';
+      statusColor = '#f87171';
     } else if (isCompleted) {
-      statusPill = `✅ Tuntas (${'⭐'.repeat(mStars)})`;
+      statusPill = `✅ Misi Tuntas (${'⭐'.repeat(mStars)})`;
       statusColor = '#4ade80';
     }
 
-    const statTxt = this.add.text(x - w / 2 + 16, y + h / 2 - 22, statusPill, {
+    const statTxt = this.add.text(leftMargin, cy + h / 2 - 34, statusPill, {
       fontFamily: 'Nunito, sans-serif',
       fontSize: '24px',
       color: statusColor,
@@ -649,11 +840,11 @@ class BiomeSelectScene extends Phaser.Scene {
    * Bilah Dock Thumbnail 4 Bioma di Bawah Layar
    */
   createBottomDock(width) {
-    const dockY = 890;
+    const dockY = 925;
     this.dockTiles = [];
 
     const tileW = 340;
-    const tileH = 92;
+    const tileH = 86;
     const centers = [width / 2 - 555, width / 2 - 185, width / 2 + 185, width / 2 + 555];
 
     this.biomes.forEach((b, idx) => {
@@ -669,7 +860,7 @@ class BiomeSelectScene extends Phaser.Scene {
       container.add([gShadow, gBox]);
 
       // Mini Badge
-      const miniBadge = this.add.image(-tileW / 2 + 45, 0, b.badge).setDisplaySize(58, 58);
+      const miniBadge = this.add.image(-tileW / 2 + 45, 0, b.badge).setDisplaySize(54, 54);
       if (!isUnlocked) {
         miniBadge.setTint(0x444444);
         miniBadge.setAlpha(0.5);
@@ -707,7 +898,7 @@ class BiomeSelectScene extends Phaser.Scene {
       });
 
       this.dockTiles.push({
-        container, gShadow, gBox, isUnlocked, tileW, tileH, baseY: dockY
+        container, gShadow, gBox, isUnlocked, tileW, tileH, baseY: dockY, nameTxt, starTxt
       });
     });
   }
@@ -718,37 +909,95 @@ class BiomeSelectScene extends Phaser.Scene {
   updateBottomDockHighlight() {
     this.dockTiles.forEach((tile, idx) => {
       const isActive = (idx === this.currentIndex);
-      const { container, gShadow, gBox, isUnlocked, tileW, tileH, baseY } = tile;
+      const { container, gShadow, gBox, isUnlocked, tileW, tileH, baseY, nameTxt } = tile;
 
       gShadow.clear();
       gBox.clear();
 
       if (isActive) {
-        container.setY(baseY - 8);
+        container.setY(baseY - 6);
         container.setAlpha(1.0);
 
         // Glow Shadow Emas
-        gShadow.fillStyle(0x000000, 0.6);
-        gShadow.fillRoundedRect(-tileW / 2 + 4, -tileH / 2 + 6, tileW, tileH, 16);
+        gShadow.fillStyle(0x000000, 0.55);
+        gShadow.fillRoundedRect(-tileW / 2 + 3, -tileH / 2 + 5, tileW, tileH, 18);
 
-        // Active Golden Face
-        gBox.fillStyle(isUnlocked ? 0x064e3b : 0x1e293b, 0.98);
-        gBox.fillRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 16);
+        // Active Emerald Face
+        gBox.fillStyle(0x064e3b, 1);
+        gBox.fillRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 18);
         gBox.lineStyle(3.5, 0xf59e0b, 1);
-        gBox.strokeRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 16);
+        gBox.strokeRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 18);
+
+        nameTxt.setColor('#fef08a');
       } else {
         container.setY(baseY);
-        container.setAlpha(0.78);
+        container.setAlpha(0.8);
 
         gShadow.fillStyle(0x000000, 0.35);
-        gShadow.fillRoundedRect(-tileW / 2 + 2, -tileH / 2 + 4, tileW, tileH, 14);
+        gShadow.fillRoundedRect(-tileW / 2 + 2, -tileH / 2 + 4, tileW, tileH, 16);
 
-        gBox.fillStyle(0x0a111e, 0.85);
-        gBox.fillRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 14);
-        gBox.lineStyle(1.8, 0x334155, 0.8);
-        gBox.strokeRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 14);
+        gBox.fillStyle(0x021a14, 0.92);
+        gBox.fillRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 16);
+        gBox.lineStyle(2, 0x334155, 0.85);
+        gBox.strokeRoundedRect(-tileW / 2, -tileH / 2, tileW, tileH, 16);
+
+        nameTxt.setColor('#94a3b8');
       }
     });
+  }
+
+  /**
+   * Helper Tombol Pill Navigasi
+   */
+  createPillButton({ x, y, w, h, baseColor, shadowColor, borderColor, text, textColor, fontSize, onClick }) {
+    const btnContainer = this.add.container(x, y);
+    const pillGfx = this.add.graphics();
+
+    const drawPill = (isPressed) => {
+      pillGfx.clear();
+      const dy = isPressed ? 3 : 0;
+      pillGfx.fillStyle(shadowColor, 1);
+      pillGfx.fillRoundedRect(-w / 2, -h / 2 + 3, w, h, h / 2);
+      pillGfx.fillStyle(baseColor, 0.95);
+      pillGfx.fillRoundedRect(-w / 2, -h / 2 + dy, w, h - 3, h / 2);
+      pillGfx.lineStyle(2, borderColor, 1);
+      pillGfx.strokeRoundedRect(-w / 2, -h / 2 + dy, w, h - 3, h / 2);
+    };
+
+    drawPill(false);
+    btnContainer.add(pillGfx);
+
+    const label = this.add.text(0, 0, text, {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: fontSize || '24px',
+      color: textColor || '#ffffff',
+      fontStyle: 'bold'
+    }).setOrigin(0.5);
+    btnContainer.add(label);
+    btnContainer.label = label;
+
+    btnContainer.setSize(w, h);
+    btnContainer.setInteractive({ useHandCursor: true });
+
+    btnContainer.on('pointerover', () => {
+      btnContainer.setScale(1.04);
+    });
+
+    btnContainer.on('pointerout', () => {
+      btnContainer.setScale(1.0);
+    });
+
+    btnContainer.on('pointerdown', () => {
+      drawPill(true);
+      label.y = 2;
+      this.time.delayedCall(100, () => {
+        drawPill(false);
+        label.y = 0;
+        if (onClick) onClick();
+      });
+    });
+
+    return btnContainer;
   }
 
   /**
@@ -813,42 +1062,6 @@ class BiomeSelectScene extends Phaser.Scene {
         ease: 'Sine.easeInOut'
       });
     }
-  }
-
-  // --- HELPER TOMBOL 3D ---
-  createButton3D(x, y, w, h, label, bgDark, bgTop, callback) {
-    const container = this.add.container(x, y);
-    const gShadow = this.add.graphics();
-    gShadow.fillStyle(0x000000, 0.4);
-    gShadow.fillRoundedRect(-w / 2, -h / 2 + 4, w, h, 14);
-
-    const gFace = this.add.graphics();
-    gFace.fillStyle(bgTop, 1);
-    gFace.fillRoundedRect(-w / 2, -h / 2, w, h, 14);
-    gFace.lineStyle(2, 0xfef08a, 1);
-    gFace.strokeRoundedRect(-w / 2, -h / 2, w, h, 14);
-
-    const txt = this.add.text(0, 0, label, {
-      fontFamily: 'Fredoka, sans-serif',
-      fontSize: label.length > 3 ? '24px' : '30px',
-      color: '#ffffff',
-      fontStyle: 'bold',
-      shadow: { offsetY: 2, color: '#000000', blur: 2, fill: true }
-    }).setOrigin(0.5);
-
-    const hit = this.add.rectangle(0, 0, w, h, 0x000000, 0.001).setInteractive({ useHandCursor: true });
-    container.add([gShadow, gFace, txt, hit]);
-
-    hit.on('pointerdown', () => {
-      gFace.y = 3;
-      txt.y = 3;
-    });
-    hit.on('pointerup', () => {
-      gFace.y = 0;
-      txt.y = 0;
-      callback();
-    });
-    return container;
   }
 
   showExaminerNotice(width, height) {
