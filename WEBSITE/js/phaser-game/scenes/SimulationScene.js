@@ -282,8 +282,8 @@ class SimulationScene extends Phaser.Scene {
       });
     }
 
-    // G. Bangkai Jerami Tunggal
-    this.bangkaiImg = this.add.image(width / 2 + 180, 735, 'bangkai').setDisplaySize(88, 75);
+    // G. Bangkai Jerami Tunggal (200x200 -> 85x85 square 1:1)
+    this.bangkaiImg = this.add.image(width / 2 + 180, 735, 'bangkai').setDisplaySize(85, 85);
     this.bangkaiImg.setActive(false).setVisible(false);
     this.organismGroup.add(this.bangkaiImg);
   }

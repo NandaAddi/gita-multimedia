@@ -81,7 +81,7 @@ class QuizScene extends Phaser.Scene {
     // Avatar Gita berpikir
     const gitaThinkKey = this.textures.exists('gita_think') ? 'gita_think' : 'gita_idle';
     this.gitaAvatar = this.add.image(width / 2 - width * 0.44 + 55, 235, gitaThinkKey)
-      .setDisplaySize(125, 170);
+      .setDisplaySize(140, 140);
 
     this.tweens.add({
       targets: this.gitaAvatar,

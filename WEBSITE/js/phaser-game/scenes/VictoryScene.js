@@ -147,7 +147,7 @@ class VictoryScene extends Phaser.Scene {
 
     // Gita Bersorak
     const gitaKey = this.textures.exists('gita_cheer') ? 'gita_cheer' : 'gita_idle';
-    const gita = this.add.image(width / 2 - 420, height / 2 + 235, gitaKey).setDisplaySize(125, 175);
+    const gita = this.add.image(width / 2 - 420, height / 2 + 235, gitaKey).setDisplaySize(150, 150);
     this.tweens.add({
       targets: gita,
       y: height / 2 + 220,

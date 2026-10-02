@@ -611,7 +611,8 @@ class MissionMenuScene extends Phaser.Scene {
     const col1X = width / 2 - 480;
     createColumn(col1X, '\u26A0\uFE0F PENYEBAB RUSAK', '#fca5a5', typeColor);
 
-    const gitaBriefing = this.add.image(col1X - 140, colY - 120, 'gita_idle').setDisplaySize(120, 120);
+    const gitaEmoteKey = this.textures.exists('gita_talk') ? 'gita_talk' : 'gita_idle';
+    const gitaBriefing = this.add.image(col1X - 140, colY - 120, gitaEmoteKey).setDisplaySize(120, 120);
     modalContainer.add(gitaBriefing);
 
     const bubbleMini = this.add.rectangle(col1X + 45, colY - 120, 260, 96, 0xfffdf5, 0.98);

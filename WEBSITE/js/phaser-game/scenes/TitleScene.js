@@ -116,11 +116,11 @@ class TitleScene extends Phaser.Scene {
   // --- 3. GRAND TITLE BILLBOARD (MEWAH BERBINGKAI EMAS & DAUN) ---
   createTitleBillboard(width) {
     const boardX = width / 2;
-    const boardY = 215;
+    const boardY = 210;
 
-    // Sprite Billboard Aset Visual Modern 2D Vector (1094 x 640 = 1.71 : 1)
+    // Sprite Billboard Aset Visual Modern 2D Vector (960 x 493 = 1.947 : 1 asli bebas stretch)
     const billboard = this.add.image(boardX, boardY, 'title_billboard');
-    billboard.setDisplaySize(660, 386);
+    billboard.setDisplaySize(680, 349);
 
     // Animasi mengambang sangat lembut (ambient floating tween)
     this.tweens.add({
@@ -138,10 +138,9 @@ class TitleScene extends Phaser.Scene {
     const gitaX = 210;
     const gitaGroundY = 720;
 
-    // Sprite Karakter Gita Melambai Ramah
+    // Sprite Karakter Gita Melambai Ramah (360 x 592 = 0.608 : 1 asli bebas stretch)
     this.gita = this.add.image(gitaX, gitaGroundY, 'gita_idle');
-    // Proporsi asli 552x925
-    this.gita.setDisplaySize(265, 444);
+    this.gita.setDisplaySize(270, 444);
 
     // Animasi Melayang Halus (Bobbing Tween)
     this.tweens.add({
@@ -232,12 +231,12 @@ class TitleScene extends Phaser.Scene {
   // --- 6. 3 KARTU AKSI HORIZONTAL (MULAI, CARA BERMAIN, UNTUK GURU) ---
   createHorizontalActionCards(width) {
     const cardY = 625;
-    const cardW = 295;
-    const cardH = 388;
+    const cardH = 390;
+    const cardW = 270; // 360x520 -> 270x390 (rasio 0.6923 : 1 sempurna 100%, ikon lingkaran bulat presisi bebas oval)
 
     // Posisi X Simetris dengan Kartu 2 Tepat di Tengah Layar (960)
     const centerX = width / 2; // 960
-    const cardGap = 320;
+    const cardGap = 310;
 
     const cardsData = [
       {
