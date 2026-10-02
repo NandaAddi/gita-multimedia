@@ -1,9 +1,9 @@
 /**
  * ECO-EXPLORER (PHASER 3) - TUTORIAL SCENE (PANDUAN CARA BERMAIN)
- * Desain UI Premium Retro RPG Setara Homescreen:
+ * Desain UI Premium Modern 2D Vector Setara Homescreen:
  * • Plakat kayu rim emas & dedaunan
  * • Karakter Gita berdiri melambai ramah dengan balon dialog interaktif
- * • Bento Grid 4 kartu visual dengan ikon pixel art & lencana trofik
+ * • Bento Grid 4 kartu visual dengan ikon vektor modern & lencana trofik
  * • Tombol navigasi audio vokal studio (vo_tutor_slide1-4)
  * • Quick-Jump tabs untuk akses instan ke langkah 1, 2, 3, atau 4
  */
@@ -20,7 +20,7 @@ class TutorialScene extends Phaser.Scene {
   create() {
     const { width, height } = this.scale;
 
-    // 1. Background Sawah Pixel Art & Ambient Dark Tint
+    // 1. Background Sawah Modern 2D Vector & Ambient Dark Tint
     const bg = this.add.image(width / 2, height / 2, 'bg_sawah');
     bg.setDisplaySize(width, height);
     this.add.rectangle(width / 2, height / 2, width, height, 0x021a14, 0.72);
@@ -29,172 +29,172 @@ class TutorialScene extends Phaser.Scene {
     this.slides = [
       {
         stepNum: 1,
-        title: 'LANGKAH 1: MISI PENYELAMATAN SAWAH',
-        tag: 'TANTANGAN KELAS 5A',
-        subtitle: '5 Kelompok Kolaboratif Menyelamatkan Keseimbangan Ekosistem',
-        speech: 'Halo teman-teman detektif! Sawah kita sedang mengalami krisis darurat. Sebanyak 25 siswa di kelas akan dibagi menjadi 5 kelompok penjaga alam. Tiap kelompok akan bergantian maju ke layar sentuh selama 7 menit. Tugas kita adalah mengembalikan kesehatan sawah hingga bar berwarna hijau subur!',
-        bubbleTip: 'Mari bekerja sama menyelamatkan sawah desa kita!',
+        title: 'LANGKAH 1: 4 EKOSISTEM NUSANTARA',
+        tag: 'PETUALANGAN KELAS 5A',
+        subtitle: 'Jelajahi empat ekosistem Nusantara bersama',
+        speech: 'Langkah pertama! Kita akan menjelajahi empat ekosistem Nusantara: Sawah, Hutan Tropis, Sungai, dan Laut. Tiap ekosistem punya dua misi penyelamatan. Selesaikan semua untuk jadi Maha Detektif!',
+        bubbleTip: 'Yuk, jaga keseimbangan 4 ekosistem!',
         cardBorder: 0x10b981,
         cards: [
           {
-            icon: '👥',
-            badgeKey: 'badge_elang',
-            tag: '5 KELOMPOK AKTIF',
-            title: 'Pembagian Kelompok & Rotasi',
-            desc: '25 Siswa dibagi menjadi 5 tim (Elang, Ular, Katak, Padi, Jamur). Setiap kelompok bergantian maju memecahkan kasus krisis di layar IFP.',
+            icon: '\uD83C\uDF3E',
+            badgeKey: 'badge_sawah',
+            tag: 'SAWAH',
+            title: 'Ekosistem Sawah',
+            desc: 'Lahan pangan padi tempat petani, hama tikus, dan predator alami berinteraksi.',
             accent: 0x10b981
           },
           {
-            icon: '⏱️',
-            badgeKey: null,
-            tag: 'DURASI 7 MENIT',
-            title: 'Waktu Misi Terukur',
-            desc: 'Setiap kelompok memiliki waktu 7 menit untuk mengamati kaskade trofik, menganalisis perubahan alam, dan mengambil tindakan penyelamatan.',
-            accent: 0x38bdf8
+            icon: '\uD83C\uDF32',
+            badgeKey: 'badge_hutan',
+            tag: 'HUTAN TROPIS',
+            title: 'Ekosistem Hutan Tropis',
+            desc: 'Rimba hujan tropis rumah bagi Harimau Sumatera, rusa, dan pohon raksasa.',
+            accent: 0x16a34a
           },
           {
-            icon: '🏆',
-            badgeKey: null,
-            tag: 'TARGET KESEHATAN >= 75%',
-            title: 'Kondisi Sawah Sehat',
-            desc: 'Keseimbangan tercapai jika Bar Kesehatan Sawah mencapai warna HIJAU SUBUR (75%–100%) dan mampu bertahan stabil selama 12 detik.',
-            accent: 0xf59e0b
+            icon: '\uD83C\uDF0A',
+            badgeKey: 'badge_danau',
+            tag: 'SUNGAI',
+            title: 'Ekosistem Sungai',
+            desc: 'Perairan sungai air tawar tempat ikan, bangau, teratai, dan keong hidup.',
+            accent: 0x0891b2
           },
           {
-            icon: '🎖️',
-            badgeKey: 'badge_padi',
-            tag: '20 CO-PILOT DI MEJA',
-            title: 'Seluruh Kelas Terlibat Aktif',
-            desc: 'Teman-teman di bangku bukan penonton! Kalian bertindak sebagai Co-Pilot yang mencatat data di LKPD dan mengangkat kartu voting fisik!',
-            accent: 0xa855f7
+            icon: '\uD83D\uDC1F',
+            badgeKey: 'badge_laut',
+            tag: 'LAUT',
+            title: 'Ekosistem Laut',
+            desc: 'Samudra tropis Nusantara dengan terumbu karang, penyu, dan ikan badut.',
+            accent: 0x0284c7
           }
         ]
       },
       {
         stepNum: 2,
-        title: 'LANGKAH 2: RANTAI MAKANAN SAWAH',
-        tag: 'HUBUNGAN SEBAB-AKIBAT (C2)',
-        subtitle: 'Siapa Makan Siapa? Pahami Alur Ketergantungan Makhluk Hidup',
-        speech: 'Perhatikan alur rantai makanan sawah! Padi adalah produsen utama sumber makanan. Tikus memakan padi. Ular dan katak adalah sahabat petani yang memangsa hama. Burung elang menjaga jumlah ular, dan jamur mengurai jerami mati menjadi pupuk alami penyubur padi.',
-        bubbleTip: 'Semua makhluk hidup saling bergantung satu sama lain!',
+        title: 'LANGKAH 2: DUA JENIS KRISIS',
+        tag: 'ALAM VS MANUSIA',
+        subtitle: 'Setiap ekosistem punya 2 misi berbeda',
+        speech: 'Langkah kedua: tiap ekosistem menghadapi dua krisis. Krisis pertama disebabkan oleh alam, seperti kemarau dan gelombang panas. Krisis kedua disebabkan ulah manusia, seperti penebangan liar dan pencemaran limbah!',
+        bubbleTip: 'Kenali penyebab kerusakan ekosistem!',
         cardBorder: 0x38bdf8,
         cards: [
           {
-            icon: '🌾',
-            badgeKey: 'padi_subur',
-            tag: 'PRODUSEN UTAMA',
-            title: 'Tanaman Padi Subur',
-            desc: 'Sumber energi makanan bagi seluruh ekosistem sawah. Jika tanaman padi layu atau habis dimakan hama, seluruh hewan pemakan padi akan kelaparan!',
-            accent: 0xf59e0b
+            icon: '\u2600\uFE0F',
+            badgeKey: null,
+            tag: 'FAKTOR ALAM',
+            title: 'Misi 1: Ulah Alam',
+            desc: 'Kemarau panjang, gelombang panas samudra, dan ledakan gulma alami yang merusak ekosistem.',
+            accent: 0xd97706
           },
           {
-            icon: '🐀',
-            badgeKey: 'tikus',
-            tag: 'KONSUMEN PRIMER',
-            title: 'Hama Tikus Sawah',
-            desc: 'Memakan batang dan bulir padi. Jumlahnya akan meledak tak terkendali jika predator alaminya seperti ular sawah diburu atau dimusnahkan!',
+            icon: '\uD83D\uDEAB',
+            badgeKey: null,
+            tag: 'FAKTOR MANUSIA',
+            title: 'Misi 2: Ulah Manusia',
+            desc: 'Penebangan liar, perburuan, pencemaran limbah, dan pengeboman ikan yang merusak rantai makanan.',
             accent: 0xef4444
           },
           {
-            icon: '🐍',
-            badgeKey: 'ular',
-            tag: 'PREDATOR ALAMI',
-            title: 'Ular & Katak Sahabat Petani',
-            desc: 'Pengendali hayati alami! Ular sawah memangsa tikus, sedangkan katak memburu serangga wereng. Jangan basmi pemangsa alami ini!',
-            accent: 0x10b981
+            icon: '\u2B50',
+            badgeKey: null,
+            tag: 'SISTEM BINTANG',
+            title: 'Raih 3 Bintang',
+            desc: 'Simulasi berhasil: 1 bintang. Kuis benar: 2 bintang. Kuis benar pertama kali: 3 bintang!',
+            accent: 0xf59e0b
           },
           {
-            icon: '🍄',
-            badgeKey: 'jamur',
-            tag: 'DEKOMPOSER ALAMI',
-            title: 'Jamur Pengurai Jerami',
-            desc: 'Mendaur ulang sisa bangkai dan tumpukan jerami kering menjadi pupuk humus organik yang mengembalikan zat hara kesuburan padi.',
+            icon: '\uD83D\uDD13',
+            badgeKey: null,
+            tag: 'BUKA KUNCI',
+            title: 'Progresi Bertahap',
+            desc: 'Selesaikan Sawah dulu baru Hutan Tropis terbuka. Lalu Sungai, terakhir Laut!',
             accent: 0xa855f7
           }
         ]
       },
       {
         stepNum: 3,
-        title: 'LANGKAH 3: KONTROL ZONA SENTUH IFP',
-        tag: 'ERGONOMI LAYAR SENTUH',
-        subtitle: 'Sentuh Tombol Aksi di Bawah dan Perhatikan Jeda Reaksi Alam',
-        speech: 'Gunakan tombol di zona bawah layar untuk menambah hewan pemangsa, mengalirkan air irigasi, atau mengurai sisa jerami. Setiap tombol ditekan, ada jeda reaksi alam selama 1.2 detik. Manfaatkan jeda ini untuk berdiskusi bersama tim!',
-        bubbleTip: 'Tunggu sebentar setelah menekan tombol ya!',
+        title: 'LANGKAH 3: CARA MENYENTUH LAYAR',
+        tag: 'SENTUH & TUNGGU',
+        subtitle: 'Sentuh tombol, lalu lihat apa yang terjadi di ekosistem',
+        speech: 'Langkah ketiga! Sentuh tombol di bawah layar. Setelah itu, tunggu sebentar dan lihat apa yang terjadi di ekosistem!',
+        bubbleTip: 'Tunggu sebentar setelah menyentuh tombol, ya!',
         cardBorder: 0xf59e0b,
         cards: [
           {
-            icon: '🖐️',
+            icon: '\uD83D\uDD90\uFE0F',
             badgeKey: null,
-            tag: 'KUADRAN BAWAH',
-            title: 'Jangkauan Ramah Siswa SD',
-            desc: 'Seluruh tombol interaksi berada di kuadran bawah layar sentuh (Y: 780–1050 px) agar pas dan nyaman dijangkau oleh tinggi badan siswa kelas 5.',
+            tag: 'DI BAWAH',
+            title: 'Tombol di Bawah',
+            desc: 'Semua tombol ada di bagian bawah layar, mudah dijangkau.',
             accent: 0x38bdf8
           },
           {
-            icon: '🔘',
+            icon: '\uD83D\uDD18',
             badgeKey: null,
-            tag: 'UKURAN 80x80 PIKSEL',
-            title: 'Tombol Anti-Salah Sentuh',
-            desc: 'Tombol dibuat ekstra besar dengan jarak sela yang lega sehingga jari tangan anak tidak mudah salah sentuh tombol saat beraksi.',
+            tag: 'TOMBOL BESAR',
+            title: 'Ukuran Pas & Nyaman',
+            desc: 'Tombolnya besar, jadi jarimu tidak salah sentuh saat memilih aksi.',
             accent: 0x10b981
           },
           {
-            icon: '⏳',
+            icon: '\u23F3',
             badgeKey: null,
-            tag: 'PROGRESS BAR 1.2 DETIK',
-            title: 'Jeda Observasi Alam',
-            desc: 'Cooldown bar memberi waktu bagi alam untuk bereaksi secara matematis, mencegah siswa memencet tombol berkali-kali tanpa berpikir (*anti-spam*).',
+            tag: 'JEDA SEBENTAR',
+            title: 'Jeda 1,2 Detik',
+            desc: 'Setelah menyentuh tombol, tunggu sebentar. Perhatikan apa yang berubah di ekosistem!',
             accent: 0xf59e0b
           },
           {
-            icon: '🤝',
+            icon: '\uD83E\uDD1D',
             badgeKey: null,
-            tag: 'DUKUNGAN MULTI-TOUCH',
-            title: 'Kolaborasi 2 Operator',
-            desc: 'Layar IFP mendukung hingga 4 sentuhan simultan sehingga 2 siswa dapat berinteraksi bersamaan tanpa saling memblokir perintah input layar.',
+            tag: 'MAIN BERDUA',
+            title: 'Kolaborasi Bersama',
+            desc: 'Dua temanmu boleh menyentuh layar bersamaan tanpa berebut.',
             accent: 0xa855f7
           }
         ]
       },
       {
         stepNum: 4,
-        title: 'LANGKAH 4: BANTUAN CO-PILOT (VOTING)',
-        tag: 'CSCL KOLABORASI KELAS',
-        subtitle: 'Siswa di Meja Mengangkat Kartu Voting Warna untuk Memandu Misi',
-        speech: 'Jika kelompok di depan layar merasa bingung, tekan tombol TANYA TEMAN! Teman-teman di meja akan serempak mengangkat kartu warna fisik untuk memberi saran tindakan terbaik!',
-        bubbleTip: 'Angkat kartu voting kalian tinggi-tinggi di meja!',
+        title: 'LANGKAH 4: PENASIHAT MEJA (VOTING)',
+        tag: 'KERJA SAMA KELAS',
+        subtitle: 'Teman di meja mengangkat kartu warna untuk memberi saran',
+        speech: 'Langkah keempat! Teman di meja adalah Penasihat. Saat kami menyentuh Tanya Teman, angkat kartu warna kalian untuk memberi saran!',
+        bubbleTip: 'Angkat kartu kalian tinggi-tinggi!',
         cardBorder: 0xa855f7,
         cards: [
           {
-            icon: '📢',
-            badgeKey: null,
-            tag: 'TOMBOL TANYA TEMAN',
-            title: 'Panggilan Diskusi Kelas',
-            desc: 'Tekan tombol ini di layar IFP! Timer simulasi otomatis dijeda dan bel kelas berbunyi memberi waktu 15 detik bagi seluruh siswa di meja untuk berdiskusi.',
+            icon: '\uD83D\uDCE2',
+            badgeKey: 'btn_tanya_teman',
+            tag: 'TANYA TEMAN',
+            title: 'Tombol Tanya Teman',
+            desc: 'Waktu berhenti sebentar. Penasihat Meja punya 15 detik untuk berdiskusi.',
             accent: 0x38bdf8
           },
           {
-            icon: '🟢',
-            badgeKey: 'badge_katak',
-            tag: 'KARTU HIJAU FISIK',
-            title: 'Tambah Pemangsa / Jamur',
-            desc: 'Angkat kartu hijau jika tim merekomendasikan menambah Ular, Katak, atau Jamur Pengurai untuk memulihkan rantai makanan.',
+            icon: '\uD83D\uDFE2',
+            badgeKey: 'card_voting_hijau',
+            tag: 'KARTU HIJAU',
+            title: 'Tambah Pemangsa / Pengurai',
+            desc: 'Tambah predator atau pengurai untuk menjaga rantai makanan ekosistem.',
             accent: 0x10b981
           },
           {
-            icon: '🟡',
-            badgeKey: 'icon_irigasi',
-            tag: 'KARTU KUNING FISIK',
-            title: 'Alirkan Air Irigasi',
-            desc: 'Angkat kartu kuning jika tanah sawah tampak retak-retak kekeringan dan tanaman padi membutuhkan pasokan air segar segera.',
+            icon: '\uD83D\uDFE1',
+            badgeKey: 'card_voting_kuning',
+            tag: 'KARTU KUNING',
+            title: 'Alirkan Air / Reboisasi',
+            desc: 'Alirkan air atau tanam tumbuhan untuk memulihkan habitat.',
             accent: 0xf59e0b
           },
           {
-            icon: '🔴',
-            badgeKey: 'tikus',
-            tag: 'KARTU MERAH FISIK',
-            title: 'Kendalikan Hama / Racun',
-            desc: 'Angkat kartu merah jika tim merekomendasikan membatasi lonjakan hama tikus atau membersihkan semprotan racun kimia dari tanah.',
+            icon: '\uD83D\uDD34',
+            badgeKey: 'card_voting_merah',
+            tag: 'KARTU MERAH',
+            title: 'Kurangi Hama / Bersihkan',
+            desc: 'Kurangi hama atau bersihkan limbah dan sampah plastik.',
             accent: 0xef4444
           }
         ]
@@ -214,7 +214,7 @@ class TutorialScene extends Phaser.Scene {
   createHeader(width) {
     const headerY = 56;
     const headerW = 1840;
-    const headerH = 78;
+    const headerH = 86;
 
     // Wadah Plakat Kayu Hijau Hutan
     const headerBg = this.add.graphics();
@@ -224,12 +224,12 @@ class TutorialScene extends Phaser.Scene {
     headerBg.strokeRoundedRect(width / 2 - headerW / 2, headerY - headerH / 2, headerW, headerH, 16);
 
     // Tombol Kembali ke Menu Utama (Kiri)
-    const btnBack = this.add.rectangle(width / 2 - headerW / 2 + 125, headerY, 200, 50, 0x1e293b)
+    const btnBack = this.add.rectangle(width / 2 - headerW / 2 + 135, headerY, 230, 56, 0x1e293b)
       .setInteractive({ useHandCursor: true });
     btnBack.setStrokeStyle(2, 0x94a3b8);
-    const tBack = this.add.text(width / 2 - headerW / 2 + 125, headerY, '🚪 MENU UTAMA', {
+    const tBack = this.add.text(width / 2 - headerW / 2 + 135, headerY, '🚪 MENU UTAMA', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '17px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -251,28 +251,28 @@ class TutorialScene extends Phaser.Scene {
     });
 
     // Judul Plakat Tengah
-    this.add.text(width / 2, headerY - 14, '📖 BUKU PANDUAN: CARA MENJADI PENJAGA SAWAH', {
+    this.add.text(width / 2, headerY - 16, '📖 BUKU PANDUAN: CARA JADI PENJAGA SAWAH', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '25px',
+      fontSize: '32px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
     // Pill Sub-Header Langkah Aktif
-    this.subHeaderPill = this.add.text(width / 2, headerY + 18, 'Langkah 1 dari 4 • Tantangan Kelas 5A', {
+    this.subHeaderPill = this.add.text(width / 2, headerY + 20, 'Langkah 1 dari 4 • Tantangan Kelas 5A', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '15px',
+      fontSize: '24px',
       color: '#a7f3d0',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
     // Tombol Siap Bermain (Kanan Atas)
-    const btnPlay = this.add.rectangle(width / 2 + headerW / 2 - 125, headerY, 200, 50, 0x059669)
+    const btnPlay = this.add.rectangle(width / 2 + headerW / 2 - 135, headerY, 230, 56, 0x059669)
       .setInteractive({ useHandCursor: true });
     btnPlay.setStrokeStyle(2, 0xfef08a);
-    const tPlay = this.add.text(width / 2 + headerW / 2 - 125, headerY, '🚀 SIAP BERMAIN!', {
+    const tPlay = this.add.text(width / 2 + headerW / 2 - 135, headerY, '🚀 SIAP BERMAIN!', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '18px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -323,20 +323,20 @@ class TutorialScene extends Phaser.Scene {
 
     // 1. Quick-Jump Tabs (4 Tombol Pintas Langkah 1-4)
     this.tabButtons = [];
-    const tabLabels = ['[1] MISI', '[2] RANTAI', '[3] KONTROL', '[4] CO-PILOT'];
-    const tabW = 88;
-    const tabSpacing = 96;
+    const tabLabels = ['1. MISI', '2. TROFIK', '3. AKSI', '4. TIM'];
+    const tabW = 98;
+    const tabSpacing = 102;
     const tabStartX = leftCenterX - ((4 - 1) * tabSpacing) / 2;
 
     for (let i = 0; i < 4; i++) {
       const tx = tabStartX + (i * tabSpacing);
-      const btn = this.add.rectangle(tx, boardY - 330, tabW, 36, 0x1e293b)
+      const btn = this.add.rectangle(tx, boardY - 330, tabW, 46, 0x1e293b)
         .setInteractive({ useHandCursor: true });
       btn.setStrokeStyle(2, 0x475569);
 
       const tText = this.add.text(tx, boardY - 330, tabLabels[i], {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '13px',
+        fontSize: '24px',
         color: '#94a3b8',
         fontStyle: 'bold'
       }).setOrigin(0.5);
@@ -355,14 +355,14 @@ class TutorialScene extends Phaser.Scene {
     // 2. Balon Ucapan Gita yang Mengapung di Atas Kepala
     const bubbleX = leftCenterX;
     const bubbleY = boardY - 210;
-    const bubbleW = 370;
-    const bubbleH = 80;
+    const bubbleW = 410;
+    const bubbleH = 110;
 
     const bG = this.add.graphics();
     bG.fillStyle(0xfffdf5, 0.98);
-    bG.fillRoundedRect(bubbleX - bubbleW / 2, bubbleY - bubbleH / 2, bubbleW, bubbleH, 14);
+    bG.fillRoundedRect(bubbleX - bubbleW / 2, bubbleY - bubbleH / 2, bubbleW, bubbleH, 16);
     bG.lineStyle(2, 0x1e293b, 1);
-    bG.strokeRoundedRect(bubbleX - bubbleW / 2, bubbleY - bubbleH / 2, bubbleW, bubbleH, 14);
+    bG.strokeRoundedRect(bubbleX - bubbleW / 2, bubbleY - bubbleH / 2, bubbleW, bubbleH, 16);
 
     // Ekor Balon Menunjuk ke Kepala Gita
     bG.fillStyle(0xfffdf5, 1);
@@ -377,11 +377,12 @@ class TutorialScene extends Phaser.Scene {
 
     this.gitaBubbleText = this.add.text(bubbleX, bubbleY, 'Mari belajar menjaga sawah!', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '16px',
+      fontSize: '24px',
       color: '#0f172a',
       fontStyle: 'bold',
       align: 'center',
-      wordWrap: { width: bubbleW - 40 }
+      wordWrap: { width: bubbleW - 30 },
+      lineSpacing: 4
     }).setOrigin(0.5);
 
     // 3. Karakter Gita Full-Body Berdiri Ramah
@@ -400,12 +401,12 @@ class TutorialScene extends Phaser.Scene {
     });
 
     // 4. Tombol Suara Vokal Studio Gita (🔊 DENGARKAN GITA)
-    this.btnVoiceSlide = this.add.rectangle(leftCenterX, boardY + 310, 340, 54, 0x10b981)
+    this.btnVoiceSlide = this.add.rectangle(leftCenterX, boardY + 310, 360, 60, 0x10b981)
       .setInteractive({ useHandCursor: true });
     this.btnVoiceSlide.setStrokeStyle(3, 0xfef08a);
     this.tVoiceSlide = this.add.text(leftCenterX, boardY + 310, '🔊 DENGARKAN GITA', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '20px',
+      fontSize: '26px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -414,10 +415,34 @@ class TutorialScene extends Phaser.Scene {
       this.btnVoiceSlide.setScale(0.93);
       this.time.delayedCall(100, () => this.btnVoiceSlide.setScale(1.0));
       const slide = this.slides[this.currentSlide];
-      const voKey = `vo_tutor_slide${this.currentSlide + 1}`;
-      if (window.soundEngine) {
-        window.soundEngine.playBeep();
-        window.soundEngine.playVO(voKey, slide.speech);
+
+      if (this.gitaSprite && this.textures.exists('gita_talk')) {
+        this.gitaSprite.setTexture('gita_talk');
+      }
+
+      const onSpeechDone = () => {
+        if (this.gitaSprite && this.textures.exists('gita_idle')) {
+          this.gitaSprite.setTexture(this.currentSlide === 3 ? 'gita_thumbsup' : 'gita_idle');
+        }
+      };
+
+      if (this.currentSlide === 1) {
+        if (window.soundEngine) {
+          window.soundEngine.playBeep();
+          window.soundEngine.playVO('vo_tutor_slide2a', 'Langkah kedua: siapa makan siapa di sawah? Padi adalah makanan utama. Tikus memakan padi. Ular dan katak memangsa hama.', () => {
+            if (this.currentSlide === 1 && window.soundEngine) {
+              window.soundEngine.playVO('vo_tutor_slide2b', 'Elang menjaga jumlah ular. Jamur mengubah jerami mati menjadi pupuk alami. Semua saling membutuhkan!', onSpeechDone);
+            } else {
+              onSpeechDone();
+            }
+          });
+        }
+      } else {
+        const voKey = `vo_tutor_slide${this.currentSlide + 1}`;
+        if (window.soundEngine) {
+          window.soundEngine.playBeep();
+          window.soundEngine.playVO(voKey, slide.speech, onSpeechDone);
+        }
       }
     });
 
@@ -428,20 +453,21 @@ class TutorialScene extends Phaser.Scene {
     const rightW = boardW - (dividerX - (width / 2 - boardW / 2)) - 80; // ~1330 px
 
     // Banner Header Judul Slide
-    this.bannerCard = this.add.rectangle(rightStartX + rightW / 2, boardY - 305, rightW, 72, 0x0f172a, 0.95);
+    this.bannerCard = this.add.rectangle(rightStartX + rightW / 2, boardY - 305, rightW, 80, 0x0f172a, 0.95);
     this.bannerCard.setStrokeStyle(2, 0xf59e0b);
 
-    this.slideTitleText = this.add.text(rightStartX + 30, boardY - 317, '', {
+    this.slideTitleText = this.add.text(rightStartX + 30, boardY - 320, '', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '26px',
+      fontSize: '34px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0, 0.5);
 
-    this.slideSubtitleText = this.add.text(rightStartX + 30, boardY - 290, '', {
+    this.slideSubtitleText = this.add.text(rightStartX + 30, boardY - 286, '', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '16px',
-      color: '#94a3b8'
+      fontSize: '24px',
+      color: '#94a3b8',
+      fontStyle: 'bold'
     }).setOrigin(0, 0.5);
 
     // Bento Grid 4 Kartu Interaktif (2 Kolom x 2 Baris)
@@ -479,9 +505,9 @@ class TutorialScene extends Phaser.Scene {
       spriteImg.setVisible(false);
 
       // Tag Kategori Kecil di Samping Icon
-      const tagText = this.add.text(pos.x - cardColW / 2 + 102, pos.y - cardRowH / 2 + 36, 'KATEGORI', {
+      const tagText = this.add.text(pos.x - cardColW / 2 + 102, pos.y - cardRowH / 2 + 30, 'KATEGORI', {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#38bdf8',
         fontStyle: 'bold'
       });
@@ -489,24 +515,24 @@ class TutorialScene extends Phaser.Scene {
       // Judul Kartu
       const titleText = this.add.text(pos.x - cardColW / 2 + 102, pos.y - cardRowH / 2 + 62, 'Judul Kartu', {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '20px',
+        fontSize: '28px',
         color: '#ffffff',
         fontStyle: 'bold'
       });
 
       // Garis Pembatas Halus di Bawah Judul
-      const lineY = pos.y - cardRowH / 2 + 94;
+      const lineY = pos.y - cardRowH / 2 + 98;
       const lineG = this.add.graphics();
       lineG.lineStyle(1, 0x334155, 0.8);
       lineG.strokeLineShape(new Phaser.Geom.Line(pos.x - cardColW / 2 + 25, lineY, pos.x + cardColW / 2 - 25, lineY));
 
       // Deskripsi Paragraf
-      const descText = this.add.text(pos.x - cardColW / 2 + 25, lineY + 15, 'Penjelasan lengkap...', {
+      const descText = this.add.text(pos.x - cardColW / 2 + 25, lineY + 12, 'Penjelasan lengkap...', {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '17px',
+        fontSize: '24px',
         color: '#cbd5e1',
         wordWrap: { width: cardColW - 50 },
-        lineSpacing: 6
+        lineSpacing: 5
       });
 
       // Hover Effect pada Kartu
@@ -537,12 +563,12 @@ class TutorialScene extends Phaser.Scene {
     const navY = height - 52;
 
     // Tombol Sebelumnya ◀️ (Kiri)
-    this.btnPrev = this.add.rectangle(width / 2 - 280, navY, 220, 54, 0x1e293b)
+    this.btnPrev = this.add.rectangle(width / 2 - 290, navY, 240, 56, 0x1e293b)
       .setInteractive({ useHandCursor: true });
     this.btnPrev.setStrokeStyle(2, 0x94a3b8);
-    this.btnPrevText = this.add.text(width / 2 - 280, navY, '◀️ SEBELUMNYA', {
+    this.btnPrevText = this.add.text(width / 2 - 290, navY, '◀️ SEBELUMNYA', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '18px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -568,18 +594,18 @@ class TutorialScene extends Phaser.Scene {
 
     // Indikator Titik 4 Halaman Berangka ([1] [2] [3] [4])
     this.dots = [];
-    const dotSpacing = 50;
+    const dotSpacing = 58;
     const dotStartX = width / 2 - ((4 - 1) * dotSpacing) / 2;
 
     for (let i = 0; i < 4; i++) {
       const dx = dotStartX + (i * dotSpacing);
-      const dot = this.add.rectangle(dx, navY, 36, 36, 0x1e293b)
+      const dot = this.add.rectangle(dx, navY, 48, 48, 0x1e293b)
         .setInteractive({ useHandCursor: true });
       dot.setStrokeStyle(2, 0x475569);
 
       const dText = this.add.text(dx, navY, `${i + 1}`, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '17px',
+        fontSize: '24px',
         color: '#94a3b8',
         fontStyle: 'bold'
       }).setOrigin(0.5);
@@ -599,12 +625,12 @@ class TutorialScene extends Phaser.Scene {
     }
 
     // Tombol Selanjutnya ▶️ (Kanan)
-    this.btnNext = this.add.rectangle(width / 2 + 280, navY, 240, 54, 0x0284c7)
+    this.btnNext = this.add.rectangle(width / 2 + 290, navY, 260, 56, 0x0284c7)
       .setInteractive({ useHandCursor: true });
     this.btnNext.setStrokeStyle(2, 0x38bdf8);
-    this.btnNextText = this.add.text(width / 2 + 280, navY, 'SELANJUTNYA ▶️', {
+    this.btnNextText = this.add.text(width / 2 + 290, navY, 'SELANJUTNYA ▶️', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '18px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);

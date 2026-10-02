@@ -1,8 +1,8 @@
 /**
  * ECO-EXPLORER (PHASER 3) - TITLE SCENE (HOMESCREEN / MENU UTAMA)
  * Dirancang khusus untuk Layar Sentuh Interactive Flat Panel (IFP) SDN Percobaan 2 Malang.
- * Tampilan UI 100% selaras dengan desain acuan:
- * - Background sawah panorama 16-bit 1080p
+ * Tampilan UI Modern 2D Vector Cartoon 100% selaras dengan desain acuan:
+ * - Background sawah panorama Modern 2D Vector 1080p
  * - Papan Judul Mewah Berbingkai Emas & Daun Rimbun
  * - Maskot Gita Melambai & Balon Ucapan Sapaan
  * - Tiga Kartu Aksi Interaktif (Mulai Bermain, Cara Bermain, Tentang & Panduan)
@@ -17,7 +17,7 @@ class TitleScene extends Phaser.Scene {
   create() {
     const { width, height } = this.scale;
 
-    // 1. Background Sawah Pixel Art 1080p Panorama
+    // 1. Background Sawah Modern 2D Vector 1080p Panorama
     const bg = this.add.image(width / 2, height / 2, 'bg_sawah');
     bg.setDisplaySize(width, height);
 
@@ -43,14 +43,14 @@ class TitleScene extends Phaser.Scene {
 
     // Helper untuk membuat pill button interaktif
     const createPillButton = (x, text, isToggleAudio = false) => {
-      const btnW = isToggleAudio ? 124 : 148;
-      const btnH = 42;
+      const btnW = isToggleAudio ? 160 : 180;
+      const btnH = 52;
 
       const pill = this.add.graphics();
       pill.fillStyle(0x0a353c, 0.92);
-      pill.fillRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 21);
+      pill.fillRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 26);
       pill.lineStyle(2, 0x38bdf8, 1);
-      pill.strokeRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 21);
+      pill.strokeRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 26);
 
       const container = this.add.container(x, topY, [pill]);
       container.setSize(btnW, btnH);
@@ -58,7 +58,7 @@ class TitleScene extends Phaser.Scene {
 
       const label = this.add.text(0, 0, text, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '15px',
+        fontSize: '24px',
         color: '#ffffff',
         fontStyle: 'bold'
       }).setOrigin(0.5);
@@ -68,18 +68,18 @@ class TitleScene extends Phaser.Scene {
       container.on('pointerover', () => {
         pill.clear();
         pill.fillStyle(0x0f4b55, 0.98);
-        pill.fillRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 21);
+        pill.fillRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 26);
         pill.lineStyle(2, 0xfef08a, 1);
-        pill.strokeRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 21);
+        pill.strokeRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 26);
         container.setScale(1.04);
       });
 
       container.on('pointerout', () => {
         pill.clear();
         pill.fillStyle(0x0a353c, 0.92);
-        pill.fillRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 21);
+        pill.fillRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 26);
         pill.lineStyle(2, 0x38bdf8, 1);
-        pill.strokeRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 21);
+        pill.strokeRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 26);
         container.setScale(1.0);
       });
 
@@ -92,7 +92,7 @@ class TitleScene extends Phaser.Scene {
     };
 
     // A. Tombol Suara
-    const audioBtn = createPillButton(width - 230, '🔊 Suara', true);
+    const audioBtn = createPillButton(width - 290, '🔊 Suara', true);
     audioBtn.container.on('pointerdown', () => {
       if (window.soundEngine) {
         const isMuted = window.soundEngine.toggleMute();
@@ -102,7 +102,7 @@ class TitleScene extends Phaser.Scene {
     });
 
     // B. Tombol Layar Penuh
-    const fullBtn = createPillButton(width - 85, '⛶ Layar Penuh', false);
+    const fullBtn = createPillButton(width - 105, '⛶ Layar Penuh', false);
     fullBtn.container.on('pointerdown', () => {
       if (window.soundEngine) window.soundEngine.playBeep();
       if (this.scale.isFullscreen) {
@@ -116,11 +116,11 @@ class TitleScene extends Phaser.Scene {
   // --- 3. GRAND TITLE BILLBOARD (MEWAH BERBINGKAI EMAS & DAUN) ---
   createTitleBillboard(width) {
     const boardX = width / 2;
-    const boardY = 205;
+    const boardY = 215;
 
-    // Sprite Billboard Aset Visual Berkualitas Tinggi (Preserve Asli 1295 x 641 = 2.02 : 1 Anti-Stretch)
+    // Sprite Billboard Aset Visual Modern 2D Vector (1094 x 640 = 1.71 : 1)
     const billboard = this.add.image(boardX, boardY, 'title_billboard');
-    billboard.setDisplaySize(800, 396);
+    billboard.setDisplaySize(660, 386);
 
     // Animasi mengambang sangat lembut (ambient floating tween)
     this.tweens.add({
@@ -154,17 +154,17 @@ class TitleScene extends Phaser.Scene {
     });
 
     // Balon Ucapan Gita
-    const bubbleX = 235;
-    const bubbleY = 465;
-    const bubbleW = 330;
-    const bubbleH = 112;
+    const bubbleX = 255;
+    const bubbleY = 445;
+    const bubbleW = 450;
+    const bubbleH = 155;
 
     const bgG = this.add.graphics();
     // Kotak Balon Krem Bersih
     bgG.fillStyle(0xfffdf5, 0.98);
-    bgG.fillRoundedRect(bubbleX - bubbleW / 2, bubbleY - bubbleH / 2, bubbleW, bubbleH, 16);
+    bgG.fillRoundedRect(bubbleX - bubbleW / 2, bubbleY - bubbleH / 2, bubbleW, bubbleH, 18);
     bgG.lineStyle(3, 0x1e293b, 1);
-    bgG.strokeRoundedRect(bubbleX - bubbleW / 2, bubbleY - bubbleH / 2, bubbleW, bubbleH, 16);
+    bgG.strokeRoundedRect(bubbleX - bubbleW / 2, bubbleY - bubbleH / 2, bubbleW, bubbleH, 18);
 
     // Ekor Balon Menunjuk ke Arah Kepala Gita
     bgG.fillStyle(0xfffdf5, 1);
@@ -183,36 +183,44 @@ class TitleScene extends Phaser.Scene {
 
     // Aksen Sparkle Emas di Kiri Atas Balon
     this.add.text(bubbleX - bubbleW / 2 - 8, bubbleY - bubbleH / 2 - 8, '✨', {
-      fontSize: '22px'
+      fontSize: '28px'
     }).setOrigin(0.5);
 
     // Tombol Suara Mini di Kanan Atas Balon (🔊)
-    const btnVoiceGreeting = this.add.rectangle(bubbleX + bubbleW / 2 - 22, bubbleY - bubbleH / 2 + 20, 32, 32, 0x10b981)
+    const btnVoiceGreeting = this.add.rectangle(bubbleX + bubbleW / 2 - 28, bubbleY - bubbleH / 2 + 28, 42, 42, 0x10b981)
       .setInteractive({ useHandCursor: true });
     btnVoiceGreeting.setStrokeStyle(2, 0xfef08a);
-    this.add.text(bubbleX + bubbleW / 2 - 22, bubbleY - bubbleH / 2 + 20, '🔊', { fontSize: '16px' }).setOrigin(0.5);
+    this.add.text(bubbleX + bubbleW / 2 - 28, bubbleY - bubbleH / 2 + 28, '🔊', { fontSize: '24px' }).setOrigin(0.5);
 
     // Teks Sapaan Ramah Gita
-    this.add.text(bubbleX - 15, bubbleY - 24, 'Halo Teman-Teman! Aku Gita!', {
+    this.add.text(bubbleX - 20, bubbleY - 32, 'Halo Teman-Teman! Aku Gita!', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '17px',
+      fontSize: '26px',
       color: '#0f172a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
-    this.add.text(bubbleX, bubbleY + 12, 'Yuk kita selamatkan sawah\nbersama-sama! ❤️ (Sentuh untuk dengarkan)', {
+    this.add.text(bubbleX, bubbleY + 22, 'Yuk jaga keseimbangan 4 ekosistem\nNusantara bersama! (Sentuh suara)', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '14px',
+      fontSize: '24px',
       color: '#334155',
       fontStyle: 'bold',
       align: 'center',
-      lineSpacing: 3
+      lineSpacing: 6
     }).setOrigin(0.5);
 
     const playWelcomeVO = () => {
+      if (this.gita && this.textures.exists('gita_talk')) {
+        this.gita.setTexture('gita_talk');
+        this.time.delayedCall(5000, () => {
+          if (this.gita && this.gita.active && this.textures.exists('gita_idle')) {
+            this.gita.setTexture('gita_idle');
+          }
+        });
+      }
       if (window.soundEngine) {
         window.soundEngine.playBeep();
-        window.soundEngine.playVO('vo_title_welcome', 'Halo Teman-Teman! Aku Gita si Detektif Cilik! Sawah desa kita sedang menghadapi masalah besar. Yuk, kita bekerja sama menyelamatkan keseimbangan sawah bersama-sama!');
+        window.soundEngine.playVO('vo_title_welcome', 'Halo, teman-teman! Aku Gita, detektif cilik. Mari kita selamatkan keseimbangan 4 ekosistem Nusantara bersama-sama!');
       }
     };
 
@@ -221,7 +229,7 @@ class TitleScene extends Phaser.Scene {
     this.gita.setInteractive({ useHandCursor: true }).on('pointerdown', playWelcomeVO);
   }
 
-  // --- 6. 3 KARTU AKSI HORIZONTAL (MULAI, CARA BERMAIN, TENTANG) ---
+  // --- 6. 3 KARTU AKSI HORIZONTAL (MULAI, CARA BERMAIN, UNTUK GURU) ---
   createHorizontalActionCards(width) {
     const cardY = 625;
     const cardW = 295;
@@ -313,83 +321,84 @@ class TitleScene extends Phaser.Scene {
   createTeacherTipBar(width, height) {
     const barX = width / 2;
     const barY = height - 48;
-    const barW = 1200;
-    const barH = 46;
+    const barW = 1460;
+    const barH = 58;
 
     const barG = this.add.graphics();
     barG.fillStyle(0x063328, 0.95);
-    barG.fillRoundedRect(barX - barW / 2, barY - barH / 2, barW, barH, 23);
+    barG.fillRoundedRect(barX - barW / 2, barY - barH / 2, barW, barH, 29);
     barG.lineStyle(2, 0x10b981, 0.85);
-    barG.strokeRoundedRect(barX - barW / 2, barY - barH / 2, barW, barH, 23);
+    barG.strokeRoundedRect(barX - barW / 2, barY - barH / 2, barW, barH, 29);
 
-    this.add.text(barX, barY, '💡 Tips Guru: Sentuh 📖 "CARA BERMAIN" bersama seluruh siswa sebelum memulai simulasi kelompok.', {
+    this.add.text(barX, barY, '💡 Ajak seluruh siswa membaca "Cara Bermain" sebelum mulai.', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '16px',
+      fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
   }
 
-  // --- POPUP MODAL: TENTANG MEDIA & PANDUAN PENGGUNAAN ---
+  // --- POPUP MODAL: TENTANG MEDIA & PANDUAN UNTUK GURU ---
   showAboutModal() {
     const { width, height } = this.scale;
     const modalGroup = this.add.group();
 
     // Latar belakang gelap transparan
-    const dimBg = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.8)
+    const dimBg = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.85)
       .setInteractive();
     modalGroup.add(dimBg);
 
     // Kotak Modal Utama
-    const boxW = 1140;
-    const boxH = 690;
+    const boxW = 1460;
+    const boxH = 920;
     const modalBox = this.add.rectangle(width / 2, height / 2, boxW, boxH, 0x0f172a, 0.98);
     modalBox.setStrokeStyle(4, 0xfbbf24);
     modalGroup.add(modalBox);
 
     // Header Modal
-    const title = this.add.text(width / 2, height / 2 - 285, '🌾 TENTANG MEDIA & PANDUAN PENGGUNAAN KELAS', {
+    const title = this.add.text(width / 2, height / 2 - 400, '🌾 TENTANG MEDIA & PANDUAN UNTUK GURU', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '26px',
+      fontSize: '36px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
     modalGroup.add(title);
 
-    // Konten Informasi
+    // Konten Informasi Lengkap & Spesifikasi Teknis
     const infoContent = 
       '📌 IDENTITAS PENGEMBANGAN:\n' +
-      '• Judul: Pengembangan Multimedia Interaktif Berbasis Simulasi pada Materi Keseimbangan Ekosistem\n' +
-      '• Peneliti / Pengembang: Gito (Teknologi Pendidikan)\n' +
-      '• Sasaran Pengguna: 25 Siswa Kelas 5A SDN Percobaan 2 Malang & Guru Kelas\n' +
-      '• Kurikulum: Kurikulum Merdeka — IPAS Fase C (Materi Rantai & Keseimbangan Sawah)\n' +
-      '• Target Perangkat: Layar Sentuh Interactive Flat Panel (IFP 65–86 Inch, 1920x1080 Native)\n\n' +
+      '• Judul: Multimedia Edu-Sim Rantai Makanan & Keseimbangan 4 Ekosistem Nusantara\n' +
+      '• Peneliti / Pengembang: Gito (Teknologi Pendidikan) | Sasaran: Siswa Kelas 5 SDN Percobaan 2\n' +
+      '• Kurikulum: IPAS Fase C Kurikulum Merdeka | Target: Layar Sentuh IFP 65–86 Inch (1920x1080)\n\n' +
       '📋 PANDUAN PELAKSANAAN UNTUK GURU:\n' +
-      '1. Bagilah 25 siswa menjadi 5 Kelompok (Tim Elang, Tim Ular, Tim Katak, Tim Padi, Tim Jamur).\n' +
-      '2. Setiap sesi tantangan berlangsung 7 Menit. Perwakilan tim aktif (4–5 siswa) maju ke depan layar IFP.\n' +
-      '3. Siswa di meja bertindak sebagai "Co-Pilot" dengan memegang Kartu Voting Fisik (🟢 Hijau, 🟡 Kuning, 🔴 Merah).\n' +
-      '4. Saat tim di IFP menekan tombol "📢 TANYA TEMAN", 20 siswa di meja mengangkat kartu untuk memberi saran aksi.\n' +
-      '5. Pasca-simulasi, selesaikan teka-teki sebab-akibat (C2) di Buku Rahasia Detektif sebelum berganti giliran tim.';
+      '1. Bagilah 25 siswa menjadi 5 Kelompok Ahli Jigsaw (Tim Elang, Ular, Katak, Padi, Jamur).\n' +
+      '2. Setiap giliran tim berdurasi 7 Menit. Perwakilan (Petugas Layar) maju ke layar IFP.\n' +
+      '3. Siswa di meja bertindak sebagai Penasihat Meja dengan Kartu Voting Fisik (🟢 Hijau, 🟡 Kuning, 🔴 Merah).\n' +
+      '4. Saat tombol "📢 TANYA TEMAN" ditekan, siswa di meja mengangkat kartu saran tindakan penyelamatan.\n' +
+      '5. Pasca-simulasi, selesaikan teka-teki sebab-akibat (C2) di Buku Catatan Detektif Gita.\n\n' +
+      '⚙️ ERGONOMI LAYAR SENTUH IFP KELAS 5:\n' +
+      '• Kuadran Bawah (Y: 780–1050 px) nyaman bagi tinggi badan anak kelas 5 SD (130–150 cm).\n' +
+      '• Tombol Besar anti-salah sentuh dan jeda 1,2 detik melatih diskusi bermakna tanpa tergesa-gesa.';
 
     const bodyText = this.add.text(width / 2, height / 2 - 40, infoContent, {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '19px',
+      fontSize: '24px',
       color: '#e2e8f0',
       align: 'left',
-      wordWrap: { width: boxW - 120 },
-      lineSpacing: 8
+      wordWrap: { width: boxW - 80 },
+      lineSpacing: 6
     }).setOrigin(0.5);
     modalGroup.add(bodyText);
 
     // Tombol Suara Panduan Gita (🔊)
-    const btnVoiceGuide = this.add.rectangle(width / 2 - 160, height / 2 + 275, 280, 56, 0x10b981)
+    const btnVoiceGuide = this.add.rectangle(width / 2 - 180, height / 2 + 390, 340, 64, 0x10b981)
       .setInteractive({ useHandCursor: true });
     btnVoiceGuide.setStrokeStyle(3, 0xfef08a);
     modalGroup.add(btnVoiceGuide);
 
-    const btnVoiceGuideText = this.add.text(width / 2 - 160, height / 2 + 275, '🔊 DENGARKAN GITA', {
+    const btnVoiceGuideText = this.add.text(width / 2 - 180, height / 2 + 390, '🔊 DENGARKAN GITA', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '20px',
+      fontSize: '26px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -400,19 +409,19 @@ class TitleScene extends Phaser.Scene {
       this.time.delayedCall(120, () => btnVoiceGuide.setScale(1.0));
       if (window.soundEngine) {
         window.soundEngine.playBeep();
-        window.soundEngine.playVO('vo_title_guide', 'Sentuh kartu Mulai Bermain untuk memilih kelompokmu, atau sentuh Cara Bermain untuk mempelajari aturan rantai makanan sawah!');
+        window.soundEngine.playVO('vo_title_guide', 'Sentuh Mulai Bermain untuk memilih kelompokmu. Atau sentuh Cara Bermain untuk belajar aturannya!');
       }
     });
 
     // Tombol Tutup Modal
-    const btnClose = this.add.rectangle(width / 2 + 160, height / 2 + 275, 260, 56, 0xef4444)
+    const btnClose = this.add.rectangle(width / 2 + 180, height / 2 + 390, 320, 64, 0xef4444)
       .setInteractive({ useHandCursor: true });
     btnClose.setStrokeStyle(3, 0xffffff);
     modalGroup.add(btnClose);
 
-    const btnCloseText = this.add.text(width / 2 + 160, height / 2 + 275, '❌ KEMBALI KE MENU', {
+    const btnCloseText = this.add.text(width / 2 + 180, height / 2 + 390, '❌ KEMBALI KE MENU', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '20px',
+      fontSize: '26px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
