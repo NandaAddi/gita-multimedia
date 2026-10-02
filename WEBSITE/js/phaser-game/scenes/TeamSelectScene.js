@@ -1,15 +1,12 @@
 /**
- * ECO-EXPLORER (PHASER 3) - TEAM SELECT SCENE (ARCADE CHARACTER SELECT REFACTOR)
- * Layout Pahlawan Karakter Arcade (Hero Character Select) - Audited Typography:
- * - Tipografi Terbaca Jelas (Readable IFP Standard): Huruf besar & tebal (17px - 32px), kontras tinggi WCAG AAA
- * - 5 Kartu Pahlawan Vertikal Gagah (Card Width 320px, Height 746px)
- * - Maskot Hewan Resolusi Tinggi Berukuran Besar (190x190px) dengan Animasi Napas (Breathing Idle)
- * - Lingkaran Aura Cahaya Khas & Pedestal Bayangan di Bawah Maskot
- * - Lencana Medali Emas Resmi Pahlawan Disematkan di Pojok Atas
- * - Skema Warna Unik Kontras Tiap Tim (Elang, Ular, Katak, Padi, Jamur)
- * - Header Komando Terpadu Ramping (Streamlined Plaque: Menu, Gita, Judul, Suara, Fullscreen)
- * - Tombol Taktil Chunky 3D Golden Amber dengan Feedback Sentuh Shockwave
- * - Kepatuhan Penuh: Zero Em-Dash & Aksesibilitas Layar Sentuh IFP 65-75 Inci
+ * ECO-EXPLORER (PHASER 3) - TEAM SELECT SCENE
+ * Master Arcade Hero Character Select Slider (Format Panggung Karakter Tunggal Megah):
+ * - 1 Hero Tampil Besar di Panggung Pusat (Maskot 280px + Pedestal 3D + Aura Bercahaya)
+ * - Bilah Navigasi 2-Zona Bebas Tabrakan: Header Komando Ramping + Judul Layar Terpisah
+ * - Panggung Informasi Seimbang: Kiri (Maskot & Status) | Kanan (Lencana, Peran Sains, Misi, & Tombol Aksi)
+ * - Sistem Navigasi Hibrida: Tombol Panah Arkade Samping (◀ / ▶) + Dok 5 Ubin Selektor + Touch Swipe
+ * - Standar Tipografi Ultra-Large IFP (Seluruh font >= 24px, zero text overflow, zero clipping)
+ * - 100% Offline & Kompatibel Protokol file:// (Bebas CORS)
  */
 
 class TeamSelectScene extends Phaser.Scene {
@@ -20,31 +17,28 @@ class TeamSelectScene extends Phaser.Scene {
   create() {
     const { width, height } = this.scale;
 
-    // 1. Background Sawah Modern 2D Vector Panorama 1080p
+    // 1. Background Panorama Sawah 1080p dengan Tint Lembut
     const bg = this.add.image(width / 2, height / 2, 'bg_sawah');
     bg.setDisplaySize(width, height);
 
-    // Gradasi lembut atmosferik: menjaga langit atas tetap cerah, memberikan bayangan teduh di bawah kartu
     const bgGfx = this.add.graphics();
-    bgGfx.fillGradientStyle(0x021a14, 0x021a14, 0x021a14, 0x021a14, 0.05, 0.05, 0.40, 0.40);
+    bgGfx.fillGradientStyle(0x021a14, 0x021a14, 0x021a14, 0x021a14, 0.08, 0.08, 0.45, 0.45);
     bgGfx.fillRect(0, 0, width, height);
 
-    // 2. Header Komando Ramping Terpadu (Menu, Gita Voice, Judul, & Kontrol IFP)
-    this.createStreamlinedHeader(width);
-
-    // 3. Data 5 Tim Detektif Pahlawan Sawah (Identitas Visual Kontras & Tipografi Terbaca)
-    const teams = [
+    // 2. Data 5 Tim Detektif Pahlawan Sawah
+    this.teams = [
       {
         id: 'elang',
         name: 'TIM ELANG',
         roleTag: '👑 KONSUMEN PUNCAK',
-        role: '👑 Konsumen Puncak',
+        role: '👑 Pemangsa Puncak Rantai Makanan',
         motto: 'Penjaga Langit Sawah',
         biomeRole: 'Elang • Harimau • Bangau • Hiu',
+        desc: 'Memangsa ular dan mengontrol rantai makanan dari udara agar ekosistem tetap seimbang.',
         mascot: 'elang',
         mascotScale: 1.05,
         missionId: 1,
-        missionLabel: '👑 Puncak 4 Bioma',
+        missionLabel: 'Puncak 4 Ekosistem',
         badge: 'badge_elang',
         accentColor: 0xf59e0b,      // Amber Gold
         badgeColor: 0xef4444,       // Crimson
@@ -58,13 +52,14 @@ class TeamSelectScene extends Phaser.Scene {
         id: 'ular',
         name: 'TIM ULAR',
         roleTag: '🛡️ PENGENDALI HAMA',
-        role: '🛡️ Pemburu Hama',
+        role: '🛡️ Pemburu Hama Alami',
         motto: 'Sahabat Pemburu Hama',
         biomeRole: 'Ular • Rusa • Ikan Tawar • Ikan Karang',
+        desc: 'Berpatroli di pematang sawah memburu tikus agar rumpun padi tidak habis dirusak.',
         mascot: 'ular',
         mascotScale: 1.0,
         missionId: 1,
-        missionLabel: '🛡️ Pengendali 4 Bioma',
+        missionLabel: 'Pengendali 4 Ekosistem',
         badge: 'badge_ular',
         accentColor: 0x10b981,      // Emerald Green
         badgeColor: 0x059669,
@@ -78,13 +73,14 @@ class TeamSelectScene extends Phaser.Scene {
         id: 'katak',
         name: 'TIM KATAK',
         roleTag: '🦗 PEMANGSA SERANGGA',
-        role: '🦗 Pemakan Serangga',
-        motto: 'Penjaga Sawah dari Wereng',
+        role: '🦗 Pemangsa Serangga Sawah',
+        motto: 'Penjaga Padi dari Wereng',
         biomeRole: 'Katak • Serangga • Benih • Penyu',
+        desc: 'Melompat di sela tanaman memakan wereng cokelat dan serangga perusak daun padi.',
         mascot: 'katak',
         mascotScale: 0.95,
         missionId: 2,
-        missionLabel: '🦗 Pemangsa 4 Bioma',
+        missionLabel: 'Pemangsa 4 Ekosistem',
         badge: 'badge_katak',
         accentColor: 0x84cc16,      // Lime Green
         badgeColor: 0x65a30d,
@@ -98,13 +94,14 @@ class TeamSelectScene extends Phaser.Scene {
         id: 'padi',
         name: 'TIM PADI',
         roleTag: '🌾 SUMBER ENERGI',
-        role: '🌾 Produsen Utama',
+        role: '🌾 Produsen Utama Ekosistem',
         motto: 'Pemberi Energi Utama',
         biomeRole: 'Padi • Pohon Rimba • Teratai • Karang',
+        desc: 'Menyerap air dan sinar matahari untuk menghasilkan bulir padi makanan seluruh makhluk hidup.',
         mascot: 'padi_subur',
         mascotScale: 1.05,
         missionId: 3,
-        missionLabel: '🌾 Produsen 4 Bioma',
+        missionLabel: 'Produsen 4 Ekosistem',
         badge: 'badge_padi',
         accentColor: 0xf59e0b,      // Golden Harvest
         badgeColor: 0xd97706,
@@ -118,13 +115,14 @@ class TeamSelectScene extends Phaser.Scene {
         id: 'jamur',
         name: 'TIM JAMUR',
         roleTag: '🍄 PENYUBUR TANAH',
-        role: '🍄 Ahli Pengurai',
+        role: '🍄 Ahli Dekomposer Alami',
         motto: 'Penyubur Tanah Alami',
-        biomeRole: 'Jamur • Pengurai Rimba • Bakteri • Detritivor',
+        biomeRole: 'Jamur • Pengurai Rimba • Bakteri',
+        desc: 'Mengurai sisa jerami dan bangkai hewan menjadi zat hara pupuk kompos alami penyubur tanah.',
         mascot: 'jamur',
         mascotScale: 1.0,
         missionId: 4,
-        missionLabel: '🍄 Pengurai 4 Bioma',
+        missionLabel: 'Pengurai 4 Ekosistem',
         badge: 'badge_jamur',
         accentColor: 0xc084fc,      // Mystic Violet
         badgeColor: 0x9333ea,
@@ -136,27 +134,46 @@ class TeamSelectScene extends Phaser.Scene {
       }
     ];
 
-    let classSession = this.registry.get('classSession');
-    if (!classSession) {
-      classSession = { completedMissions: {} };
-      this.registry.set('classSession', classSession);
+    // Indeks tim yang sedang aktif ditampilkan di panggung utama
+    const activeTeamSaved = this.registry.get('activeTeam');
+    let initIndex = 0;
+    if (activeTeamSaved && activeTeamSaved.id) {
+      const foundIdx = this.teams.findIndex(t => t.id === activeTeamSaved.id);
+      if (foundIdx >= 0) initIndex = foundIdx;
     }
+    this.currentTeamIndex = initIndex;
 
-    // 4. Render 5 Kartu Pahlawan Arcade (Hero Character Roster)
-    this.createHeroTeamCards(width, height, teams, classSession);
+    this.classSession = this.registry.get('classSession') || { completedMissions: {} };
 
-    // 5. Footer Tips Guru Ramah Siswa
+    // 3. Bilah Navigasi Atas Ramping (Bebas Tabrakan)
+    this.createStreamlinedHeader(width);
+
+    // 4. Plakat Judul Layar Mandiri
+    this.createScreenTitle(width);
+
+    // 5. Wadah Container Panggung Utama
+    this.stageContainer = this.add.container(0, 0);
+
+    // 6. Tombol Navigasi Samping & Gestur Sentuh
+    this.createNavigationControls(width, height);
+
+    // 7. Dok Miniatur 5 Tim di Kuadran Bawah
+    this.createBottomHeroDock(width, height);
+
+    // 8. Footer Tips Guru
     this.createTeacherTipBar(width, height);
+
+    // 9. Tampilkan Hero Pertama
+    this.updateHeroView(false);
   }
 
   /**
-   * Header Komando Terpadu Ramping (Streamlined Plaque)
-   * Menyatukan Navigasi, Gita Avatar & Speech, Judul Game, dan Kontrol IFP
+   * Bilah Header Atas Ramping (Navigasi, Gita Guide, dan Utility IFP)
    */
   createStreamlinedHeader(width) {
     const headerW = 1840;
-    const headerH = 80;
-    const headerY = 54;
+    const headerH = 68;
+    const headerY = 46;
 
     const headerLeft = width / 2 - headerW / 2;
     const headerRight = width / 2 + headerW / 2;
@@ -164,33 +181,28 @@ class TeamSelectScene extends Phaser.Scene {
     const gHead = this.add.graphics();
     // Drop shadow
     gHead.fillStyle(0x000000, 0.45);
-    gHead.fillRoundedRect(headerLeft + 4, headerY - headerH / 2 + 6, headerW, headerH, 18);
+    gHead.fillRoundedRect(headerLeft + 4, headerY - headerH / 2 + 5, headerW, headerH, 16);
 
     // Dark Enamel Base
     gHead.fillStyle(0x021a14, 1);
-    gHead.fillRoundedRect(headerLeft, headerY - headerH / 2, headerW, headerH, 18);
+    gHead.fillRoundedRect(headerLeft, headerY - headerH / 2, headerW, headerH, 16);
 
-    // Emerald Face Glassmorphism
+    // Emerald Face
     gHead.fillStyle(0x064e3b, 0.96);
-    gHead.fillRoundedRect(headerLeft + 4, headerY - headerH / 2 + 4, headerW - 8, headerH - 8, 15);
+    gHead.fillRoundedRect(headerLeft + 3, headerY - headerH / 2 + 3, headerW - 6, headerH - 6, 14);
 
-    // Polished Golden Border
+    // Polished Gold Border
     gHead.lineStyle(2.5, 0xf59e0b, 1);
-    gHead.strokeRoundedRect(headerLeft + 4, headerY - headerH / 2 + 4, headerW - 8, headerH - 8, 15);
+    gHead.strokeRoundedRect(headerLeft + 3, headerY - headerH / 2 + 3, headerW - 6, headerH - 6, 14);
 
-    // Inner gold hairline
-    gHead.lineStyle(1, 0xfef08a, 0.4);
-    gHead.strokeRoundedRect(headerLeft + 7, headerY - headerH / 2 + 7, headerW - 14, headerH - 14, 12);
-
-    // --- A. Tombol Menu Utama di Kiri (Anchor Aman dari Margin Kiri Panel) ---
-    const innerLeft = headerLeft + 20;
+    // --- A. Tombol Menu Utama di Kiri ---
     const wMenu = 190;
-    const xMenu = innerLeft + wMenu / 2;
+    const xMenu = headerLeft + 18 + wMenu / 2;
     this.createPillButton({
       x: xMenu,
       y: headerY,
       w: wMenu,
-      h: 52,
+      h: 48,
       baseColor: 0x0a353c,
       shadowColor: 0x021a14,
       borderColor: 0x38bdf8,
@@ -203,9 +215,9 @@ class TeamSelectScene extends Phaser.Scene {
       }
     });
 
-    // --- B. Avatar & Balon Bicara Gita ---
-    const avatarR = 28;
-    const gitaX = xMenu + wMenu / 2 + 16 + avatarR;
+    // --- B. Avatar & Sapaan Pemandu Gita ---
+    const avatarR = 26;
+    const gitaX = xMenu + wMenu / 2 + 20 + avatarR;
 
     const avatarBg = this.add.circle(gitaX, headerY, avatarR, 0x021a14, 1);
     avatarBg.setStrokeStyle(2, 0xf59e0b);
@@ -214,8 +226,8 @@ class TeamSelectScene extends Phaser.Scene {
     circleMaskGfx.fillCircle(gitaX, headerY, avatarR - 2);
     const avatarMask = circleMaskGfx.createGeometryMask();
 
-    const gitaImg = this.add.image(gitaX, headerY + 14, 'gita_talk');
-    gitaImg.setDisplaySize(96, 96);
+    const gitaImg = this.add.image(gitaX, headerY + 12, 'gita_talk');
+    gitaImg.setDisplaySize(88, 88);
     gitaImg.setMask(avatarMask);
 
     this.tweens.add({
@@ -227,40 +239,32 @@ class TeamSelectScene extends Phaser.Scene {
       ease: 'Sine.easeInOut'
     });
 
-    // Kotak dialog ringkas Gita
-    const speechW = 460;
-    const speechH = 64;
-    const speechX = gitaX + avatarR + 12 + speechW / 2;
+    // Speech Box Ringkas Gita
+    const speechW = 750;
+    const speechH = 50;
+    const speechX = gitaX + avatarR + 14 + speechW / 2;
 
     const speechGfx = this.add.graphics();
     speechGfx.fillStyle(0x022c22, 0.95);
-    speechGfx.fillRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 16);
+    speechGfx.fillRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 14);
     speechGfx.lineStyle(1.5, 0x10b981, 0.9);
-    speechGfx.strokeRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 16);
+    speechGfx.strokeRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 14);
 
-    const textLeftX = speechX - speechW / 2 + 16;
-    this.add.text(textLeftX, headerY - 14, '🔍 GITA (PANDUAN SISWA):', {
-      fontFamily: 'Fredoka, sans-serif',
+    this.add.text(speechX, headerY, '👧 GITA: Sentuh pahlawan timmu untuk mulai bertualang!', {
+      fontFamily: 'Nunito, sans-serif',
       fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold'
-    }).setOrigin(0, 0.5);
+    }).setOrigin(0.5);
 
-    this.add.text(textLeftX, headerY + 14, 'Pilih pahlawan timmu untuk mulai!', {
-      fontFamily: 'Nunito, sans-serif',
-      fontSize: '24px',
-      color: '#ffffff',
-      fontStyle: 'bold'
-    }).setOrigin(0, 0.5);
-
-    // Tombol Dengarkan Gita
-    const wListen = 170;
-    const xListen = speechX + speechW / 2 + 14 + wListen / 2;
+    // Tombol Suara Gita
+    const wListen = 195;
+    const xListen = speechX + speechW / 2 + 16 + wListen / 2;
     this.createPillButton({
       x: xListen,
       y: headerY,
       w: wListen,
-      h: 52,
+      h: 48,
       baseColor: 0x0284c7,
       shadowColor: 0x0369a1,
       borderColor: 0x38bdf8,
@@ -275,9 +279,8 @@ class TeamSelectScene extends Phaser.Scene {
       }
     });
 
-    // --- D. Kontrol Kanan Atas (Suara & Fullscreen) ---
-    const innerRight = headerRight - 20;
-    const ctrlGap = 12;
+    // --- C. Kontrol Kanan (Suara & Fullscreen) ---
+    const innerRight = headerRight - 18;
 
     // Tombol Fullscreen (Paling Kanan)
     const wFullscreen = 150;
@@ -286,7 +289,7 @@ class TeamSelectScene extends Phaser.Scene {
       x: xFullscreen,
       y: headerY,
       w: wFullscreen,
-      h: 52,
+      h: 48,
       baseColor: 0x0a353c,
       shadowColor: 0x021a14,
       borderColor: 0x38bdf8,
@@ -304,14 +307,14 @@ class TeamSelectScene extends Phaser.Scene {
     });
 
     // Tombol Suara
-    const wAudio = 125;
-    const xAudio = (xFullscreen - wFullscreen / 2) - ctrlGap - wAudio / 2;
+    const wAudio = 130;
+    const xAudio = (xFullscreen - wFullscreen / 2) - 14 - wAudio / 2;
     const isMutedInit = window.soundEngine ? window.soundEngine.muted : false;
     const audioBtn = this.createPillButton({
       x: xAudio,
       y: headerY,
       w: wAudio,
-      h: 52,
+      h: 48,
       baseColor: 0x0a353c,
       shadowColor: 0x021a14,
       borderColor: 0x38bdf8,
@@ -326,321 +329,534 @@ class TeamSelectScene extends Phaser.Scene {
         }
       }
     });
+  }
 
-    // --- C. Plakat Judul Tengah Gagah ---
-    const leftBoundTitle = xListen + wListen / 2;
-    const rightBoundTitle = xAudio - wAudio / 2;
-    const titleX = (leftBoundTitle + rightBoundTitle) / 2;
+  /**
+   * Plakat Judul Layar Mandiri yang Bersih & Elegan
+   */
+  createScreenTitle(width) {
+    const titleY = 118;
+    const plateW = 1060;
+    const plateH = 82;
+    const plateY = titleY + 18;
 
-    this.add.text(titleX, headerY - 14, '🏆 PILIH TIM DETEKTIF SAWAH 🌾', {
+    const plateGfx = this.add.graphics();
+    plateGfx.fillStyle(0x021a14, 0.72);
+    plateGfx.fillRoundedRect(width / 2 - plateW / 2, plateY - plateH / 2, plateW, plateH, 18);
+    plateGfx.lineStyle(1.5, 0x10b981, 0.6);
+    plateGfx.strokeRoundedRect(width / 2 - plateW / 2, plateY - plateH / 2, plateW, plateH, 18);
+
+    this.add.text(width / 2, titleY, '🏆 PILIH TIM DETEKTIF SAWAH 🌾', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '28px',
+      fontSize: '36px',
       color: '#fef08a',
       fontStyle: 'bold',
       shadow: { offsetY: 2, color: '#000000', blur: 4, fill: true }
     }).setOrigin(0.5);
 
-    this.add.text(titleX, headerY + 16, '🎮 Wakil kelompok maju dan sentuh pahlawan timmu!', {
+    this.add.text(width / 2, titleY + 36, '🎮 Wakil kelompok maju ke layar IFP dan sentuh pahlawan timmu!', {
       fontFamily: 'Nunito, sans-serif',
       fontSize: '24px',
-      color: '#e2e8f0',
+      color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
   }
 
   /**
-   * 5 Kartu Pahlawan Arcade (Hero Character Roster)
-   * Menampilkan Maskot Hewan Besar, Pedestal Aura, Lencana Medali Emas, dan Tombol Taktil 3D
+   * Render Panggung Pahlawan Utama (Hero Character Stage)
    */
-  createHeroTeamCards(width, height, teams, classSession) {
-    const cardW = 320;
-    const cardH = 746;
-    const cardY = 566;
-    const centers = [220, 590, 960, 1330, 1700];
+  updateHeroView(isAnimated = true) {
+    const { width } = this.scale;
+    const t = this.teams[this.currentTeamIndex];
 
-    teams.forEach((t, i) => {
-      const cx = centers[i];
-      const container = this.add.container(cx, cardY);
+    this.stageContainer.removeAll(true);
 
-      // --- A. GRAPHICS DASAR KARTU HERO ---
-      const cardGfx = this.add.graphics();
+    const stageW = 1280;
+    const stageH = 550;
+    const stageX = width / 2;
+    const stageY = 485;
 
-      const drawCard = (isHovered) => {
-        cardGfx.clear();
-        const shadowDy = isHovered ? 12 : 8;
+    const stageGfx = this.add.graphics();
 
-        // 3D Drop Shadow
-        cardGfx.fillStyle(0x000000, isHovered ? 0.60 : 0.45);
-        cardGfx.fillRoundedRect(-cardW / 2 + 4, -cardH / 2 + shadowDy, cardW - 8, cardH - 4, 20);
+    // Drop Shadow
+    stageGfx.fillStyle(0x000000, 0.55);
+    stageGfx.fillRoundedRect(stageX - stageW / 2 + 6, stageY - stageH / 2 + 10, stageW, stageH, 24);
 
-        // Enamel Base Kontras Khas Tim
-        cardGfx.fillStyle(t.cardBaseColor, 1);
-        cardGfx.fillRoundedRect(-cardW / 2, -cardH / 2, cardW, cardH, 20);
+    // Base Enamel Khas Tim
+    stageGfx.fillStyle(t.cardBaseColor, 1);
+    stageGfx.fillRoundedRect(stageX - stageW / 2, stageY - stageH / 2, stageW, stageH, 24);
 
-        // Card Face Gradient/Color
-        cardGfx.fillStyle(t.cardFaceColor, 0.97);
-        cardGfx.fillRoundedRect(-cardW / 2 + 3, -cardH / 2 + 3, cardW - 6, cardH - 6, 18);
+    // Face Glassmorphism
+    stageGfx.fillStyle(t.cardFaceColor, 0.97);
+    stageGfx.fillRoundedRect(stageX - stageW / 2 + 4, stageY - stageH / 2 + 4, stageW - 8, stageH - 8, 20);
 
-        // Top Header Strip (Tempat Nama & Lencana)
-        cardGfx.fillStyle(0x021a14, 0.75);
-        cardGfx.fillRoundedRect(-cardW / 2 + 3, -cardH / 2 + 3, cardW - 6, 142, { tl: 18, tr: 18, bl: 0, br: 0 });
+    // Polished Golden Border
+    stageGfx.lineStyle(3, t.accentColor, 1);
+    stageGfx.strokeRoundedRect(stageX - stageW / 2 + 4, stageY - stageH / 2 + 4, stageW - 8, stageH - 8, 20);
 
-        // Garis Pembatas Header Emas Tipis
-        cardGfx.lineStyle(1.5, t.accentColor, 0.5);
-        cardGfx.lineBetween(-cardW / 2 + 3, -cardH / 2 + 145, cardW / 2 - 3, -cardH / 2 + 145);
+    // Inner Hairline
+    stageGfx.lineStyle(1.5, 0xfef08a, 0.45);
+    stageGfx.strokeRoundedRect(stageX - stageW / 2 + 8, stageY - stageH / 2 + 8, stageW - 16, stageH - 16, 17);
 
-        // Border Garis Emas Berkilau / Neon Tim
-        const borderColor = isHovered ? 0xfef08a : t.accentColor;
-        cardGfx.lineStyle(isHovered ? 3.5 : 2.5, borderColor, 1);
-        cardGfx.strokeRoundedRect(-cardW / 2 + 3, -cardH / 2 + 3, cardW - 6, cardH - 6, 18);
+    // Vertical Divider Line Antara Kolom Maskot & Kolom Informasi
+    const dividerX = stageX - 120;
+    stageGfx.lineStyle(1.5, t.accentColor, 0.4);
+    stageGfx.lineBetween(dividerX, stageY - stageH / 2 + 25, dividerX, stageY + stageH / 2 - 25);
 
-        // Hairline dalam mewah
-        cardGfx.lineStyle(1, 0xfef08a, isHovered ? 0.6 : 0.25);
-        cardGfx.strokeRoundedRect(-cardW / 2 + 6, -cardH / 2 + 6, cardW - 12, cardH - 12, 16);
-      };
+    this.stageContainer.add(stageGfx);
 
-      drawCard(false);
-      container.add(cardGfx);
+    // ==========================================
+    // KOLOM KIRI: PANGGUNG MASKOT BESAR & PEDESTAL
+    // ==========================================
+    const mascotCenterX = stageX - 350;
+    const mascotCenterY = stageY + 10;
 
-      // --- B. STATUS SELESAI (Gold Star Success Pill) ---
-      if (classSession.completedMissions[t.missionId]) {
-        const doneGfx = this.add.graphics();
-        doneGfx.fillStyle(0x166534, 1);
-        doneGfx.fillRoundedRect(-cardW / 2 + 14, -cardH / 2 + 10, 134, 34, 17);
-        doneGfx.fillStyle(0x22c55e, 1);
-        doneGfx.fillRoundedRect(-cardW / 2 + 14, -cardH / 2 + 8, 134, 32, 16);
-        container.add(doneGfx);
+    // Radial Aura Tim
+    const auraCircle = this.add.circle(mascotCenterX, mascotCenterY, 140, t.auraColor, 0.25);
+    this.stageContainer.add(auraCircle);
 
-        const doneText = this.add.text(-cardW / 2 + 81, -cardH / 2 + 24, '⭐ SELESAI', {
-          fontFamily: 'Fredoka, sans-serif',
-          fontSize: '24px',
-          color: '#ffffff',
-          fontStyle: 'bold'
-        }).setOrigin(0.5);
-        container.add(doneText);
+    // 3D Pedestal Shadow
+    const pedestalShadow = this.add.ellipse(mascotCenterX, mascotCenterY + 125, 260, 36, 0x000000, 0.45);
+    this.stageContainer.add(pedestalShadow);
+
+    // Sprite Maskot Hewan Resolusi Tinggi
+    const mascotImg = this.add.image(mascotCenterX, mascotCenterY, t.mascot);
+    const targetSize = Math.round(270 * (t.mascotScale || 1.0));
+    mascotImg.setDisplaySize(targetSize, targetSize);
+    this.stageContainer.add(mascotImg);
+
+    // Animasi Napas (Breathing Idle Tween)
+    this.tweens.add({
+      targets: [mascotImg, auraCircle],
+      y: mascotCenterY - 10,
+      duration: 1500,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
+
+    // Lencana Status Misi Selesai (Jika Sudah Pernah Tuntas di Sesi Kelas)
+    if (this.classSession.completedMissions[t.missionId]) {
+      const doneGfx = this.add.graphics();
+      doneGfx.fillStyle(0x166534, 1);
+      doneGfx.fillRoundedRect(mascotCenterX - 95, stageY - stageH / 2 + 30, 190, 42, 21);
+      doneGfx.fillStyle(0x22c55e, 1);
+      doneGfx.fillRoundedRect(mascotCenterX - 95, stageY - stageH / 2 + 28, 190, 40, 20);
+      doneGfx.lineStyle(2, 0xfef08a, 1);
+      doneGfx.strokeRoundedRect(mascotCenterX - 95, stageY - stageH / 2 + 28, 190, 40, 20);
+      this.stageContainer.add(doneGfx);
+
+      const doneText = this.add.text(mascotCenterX, stageY - stageH / 2 + 48, '⭐ MISI SELESAI', {
+        fontFamily: 'Fredoka, sans-serif',
+        fontSize: '24px',
+        color: '#ffffff',
+        fontStyle: 'bold'
+      }).setOrigin(0.5);
+      this.stageContainer.add(doneText);
+    }
+
+    // ==========================================
+    // KOLOM KANAN: DOSSIER SAINS & TOMBOL AKSI
+    // ==========================================
+    const infoStartX = dividerX + 40;
+    const contentW = stageW / 2 + 80;
+
+    // Baris 1: Tag Kategori & Medali Resmi
+    const row1Y = stageY - stageH / 2 + 48;
+    const tagBg = this.add.graphics();
+    tagBg.fillStyle(0x021a14, 0.85);
+    tagBg.fillRoundedRect(infoStartX, row1Y - 20, 270, 42, 10);
+    tagBg.lineStyle(1.5, t.accentColor, 0.9);
+    tagBg.strokeRoundedRect(infoStartX, row1Y - 20, 270, 42, 10);
+    this.stageContainer.add(tagBg);
+
+    const tagText = this.add.text(infoStartX + 135, row1Y, t.roleTag, {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: '24px',
+      color: '#fef08a',
+      fontStyle: 'bold'
+    }).setOrigin(0.5);
+    this.stageContainer.add(tagText);
+
+    // Medali Emas Resmi Pahlawan
+    const badgeX = stageX + stageW / 2 - 65;
+    const badgeGlow = this.add.circle(badgeX, row1Y, 38, t.accentColor, 0.4);
+    const badgeImg = this.add.image(badgeX, row1Y, t.badge).setDisplaySize(76, 76);
+    this.stageContainer.add([badgeGlow, badgeImg]);
+
+    // Baris 2: Nama Tim
+    const nameY = row1Y + 54;
+    const nameText = this.add.text(infoStartX, nameY, t.name, {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: '44px',
+      color: '#ffffff',
+      fontStyle: 'bold',
+      shadow: { offsetY: 2, color: '#000000', blur: 4, fill: true }
+    });
+    this.stageContainer.add(nameText);
+
+    // Baris 3: Semboyan Tim
+    const mottoY = nameY + 44;
+    const mottoText = this.add.text(infoStartX, mottoY, `"${t.motto}"`, {
+      fontFamily: 'Nunito, sans-serif',
+      fontSize: '26px',
+      color: '#fde68a',
+      fontStyle: 'bold'
+    });
+    this.stageContainer.add(mottoText);
+
+    // Baris 4: Kotak Dossier Peran Ekologis & Rantai Makanan
+    const boxY = mottoY + 38;
+    const boxW = 590;
+    const boxH = 142;
+
+    const roleBoxGfx = this.add.graphics();
+    roleBoxGfx.fillStyle(0x021a14, 0.92);
+    roleBoxGfx.fillRoundedRect(infoStartX, boxY, boxW, boxH, 14);
+    roleBoxGfx.lineStyle(1.5, t.accentColor, 0.8);
+    roleBoxGfx.strokeRoundedRect(infoStartX, boxY, boxW, boxH, 14);
+    this.stageContainer.add(roleBoxGfx);
+
+    // Sub-judul Peran
+    const roleTitle = this.add.text(infoStartX + 18, boxY + 16, t.role, {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: '24px',
+      color: '#a7f3d0',
+      fontStyle: 'bold'
+    });
+
+    // Garis Organisme Padanan 4 Bioma
+    const orgText = this.add.text(infoStartX + 18, boxY + 48, `🌱 ${t.biomeRole}`, {
+      fontFamily: 'Nunito, sans-serif',
+      fontSize: '24px',
+      color: '#fef08a',
+      fontStyle: 'bold',
+      wordWrap: { width: boxW - 36 }
+    });
+
+    // Deskripsi Tugas Ekologis
+    const descText = this.add.text(infoStartX + 18, boxY + 84, t.desc, {
+      fontFamily: 'Nunito, sans-serif',
+      fontSize: '24px',
+      color: '#e2e8f0',
+      wordWrap: { width: boxW - 36 },
+      lineSpacing: 4
+    });
+    this.stageContainer.add([roleTitle, orgText, descText]);
+
+    // Baris 5: Banner Penugasan Misi Spesialis
+    const missionY = boxY + boxH + 16;
+    const missionGfx = this.add.graphics();
+    missionGfx.fillStyle(0x082f49, 0.92);
+    missionGfx.fillRoundedRect(infoStartX, missionY, boxW, 46, 12);
+    missionGfx.lineStyle(1.5, 0x38bdf8, 0.85);
+    missionGfx.strokeRoundedRect(infoStartX, missionY, boxW, 46, 12);
+    this.stageContainer.add(missionGfx);
+
+    const missionText = this.add.text(infoStartX + boxW / 2, missionY + 23, `⭐ SPESIALIS TUGAS: ${t.missionLabel.toUpperCase()}`, {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: '24px',
+      color: '#7dd3fc',
+      fontStyle: 'bold'
+    }).setOrigin(0.5);
+    this.stageContainer.add(missionText);
+
+    // Baris 6: Tombol Chunky 3D "👉 PILIH TIM INI! 🚀"
+    const btnW = boxW;
+    const btnH = 74;
+    const btnX = infoStartX + btnW / 2;
+    const btnY = missionY + 46 + 18 + btnH / 2;
+
+    const btnContainer = this.add.container(btnX, btnY);
+    const btnGfx = this.add.graphics();
+
+    const drawButton = (isPressed) => {
+      btnGfx.clear();
+      const dy = isPressed ? 4 : 0;
+      // 3D Bevel Shadow
+      btnGfx.fillStyle(t.btnBaseColor || 0xb45309, 1);
+      btnGfx.fillRoundedRect(-btnW / 2, -btnH / 2 + 5, btnW, btnH, 18);
+
+      // Button Face
+      btnGfx.fillStyle(t.btnFaceColor || 0xf59e0b, 1);
+      btnGfx.fillRoundedRect(-btnW / 2, -btnH / 2 + dy, btnW, btnH - 5, 18);
+
+      // Gold Glow Border
+      btnGfx.lineStyle(2.5, 0xfef08a, 1);
+      btnGfx.strokeRoundedRect(-btnW / 2, -btnH / 2 + dy, btnW, btnH - 5, 18);
+    };
+
+    drawButton(false);
+    btnContainer.add(btnGfx);
+
+    const btnText = this.add.text(0, 0, '👉 PILIH TIM INI! 🚀', {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: '30px',
+      color: '#ffffff',
+      fontStyle: 'bold',
+      shadow: { offsetY: 2, color: '#000000', blur: 4, fill: true }
+    }).setOrigin(0.5);
+    btnContainer.add(btnText);
+
+    btnContainer.setSize(btnW, btnH);
+    btnContainer.setInteractive({ useHandCursor: true });
+
+    btnContainer.on('pointerover', () => {
+      btnContainer.setScale(1.02);
+      if (window.soundEngine) window.soundEngine.playBeep();
+    });
+    btnContainer.on('pointerout', () => {
+      btnContainer.setScale(1.0);
+    });
+
+    btnContainer.on('pointerdown', () => {
+      drawButton(true);
+      btnText.y = 3;
+
+      // Gelombang kejut Shockwave Ring emas
+      const ring = this.add.circle(btnX, btnY, 40, 0xfef08a, 0.85);
+      ring.setDepth(50);
+      this.tweens.add({
+        targets: ring,
+        scale: 4.5,
+        alpha: 0,
+        duration: 450,
+        ease: 'Cubic.easeOut',
+        onComplete: () => ring.destroy()
+      });
+
+      if (window.soundEngine) {
+        window.soundEngine.playSuccess();
       }
 
-      // --- C. LENCANA MEDALI RESMI (Di Pojok Kanan Atas Kartu) ---
-      const badgeX = cardW / 2 - 46;
-      const badgeY = -cardH / 2 + 48;
-
-      const badgeGlow = this.add.circle(badgeX, badgeY, 34, t.accentColor, 0.35);
-      container.add(badgeGlow);
-
-      const badgeImg = this.add.image(badgeX, badgeY, t.badge);
-      badgeImg.setDisplaySize(72, 72);
-      container.add(badgeImg);
-
-      // --- D. IDENTITAS TIM (Nama & Motto) ---
-      const tagBg = this.add.graphics();
-      tagBg.fillStyle(0x021a14, 0.7);
-      tagBg.fillRoundedRect(-cardW / 2 + 14, -cardH / 2 + 14, 205, 34, 8);
-      tagBg.lineStyle(1, t.accentColor, 0.6);
-      tagBg.strokeRoundedRect(-cardW / 2 + 14, -cardH / 2 + 14, 205, 34, 8);
-      container.add(tagBg);
-
-      const tagText = this.add.text(-cardW / 2 + 22, -cardH / 2 + 19, t.roleTag, {
-        fontFamily: 'Fredoka, sans-serif',
-        fontSize: '24px',
-        color: '#fef08a',
-        fontStyle: 'bold'
-      });
-      container.add(tagText);
-
-      const nameText = this.add.text(0, -cardH / 2 + 82, t.name, {
-        fontFamily: 'Fredoka, sans-serif',
-        fontSize: '34px',
-        color: '#ffffff',
-        fontStyle: 'bold',
-        shadow: { offsetY: 2, color: '#000000', blur: 5, fill: true }
-      }).setOrigin(0.5);
-      container.add(nameText);
-
-      const mottoText = this.add.text(0, -cardH / 2 + 118, `"${t.motto}"`, {
-        fontFamily: 'Nunito, sans-serif',
-        fontSize: '24px',
-        color: '#fde68a',
-        fontStyle: 'bold'
-      }).setOrigin(0.5);
-      container.add(mottoText);
-
-      // --- E. PANGGUNG MASKOT HEWAN BESAR (Hero Mascot Showcase) ---
-      const mascotCenterY = -cardH / 2 + 282;
-
-      // Radial Aura tim di belakang hewan
-      const auraCircle = this.add.circle(0, mascotCenterY, 98, t.auraColor, 0.22);
-      container.add(auraCircle);
-
-      // Bayangan pijakan di bawah hewan (Pedestal Shadow)
-      const pedestalShadow = this.add.ellipse(0, mascotCenterY + 88, 175, 24, 0x000000, 0.40);
-      container.add(pedestalShadow);
-
-      // Sprite Kartun Hewan Pahlawan Besar
-      const mascotImg = this.add.image(0, mascotCenterY, t.mascot);
-      const targetSize = Math.round(185 * (t.mascotScale || 1.0));
-      mascotImg.setDisplaySize(targetSize, targetSize);
-      container.add(mascotImg);
-
-      // Animasi Napas Pahlawan (Idle Breathing Yoyo Tween)
-      this.tweens.add({
-        targets: [mascotImg, auraCircle],
-        y: mascotCenterY - 8,
-        duration: 1400 + i * 140,
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut'
-      });
-
-      // --- F. KAPSUL PERAN EKOLOGIS & SPESIALIS MISI ---
-      // 1. Kapsul Peran
-      const roleY = -cardH / 2 + 440;
-      const roleGfx = this.add.graphics();
-      roleGfx.fillStyle(0x021a14, 0.88);
-      roleGfx.fillRoundedRect(-146, roleY - 30, 292, 60, 14);
-      roleGfx.lineStyle(1.5, t.accentColor, 0.9);
-      roleGfx.strokeRoundedRect(-146, roleY - 30, 292, 60, 14);
-      container.add(roleGfx);
-
-      const roleText = this.add.text(0, roleY - 12, t.role, {
-        fontFamily: 'Nunito, sans-serif',
-        fontSize: '24px',
-        color: '#ffffff',
-        fontStyle: 'bold'
-      }).setOrigin(0.5);
-
-      const subRoleText = this.add.text(0, roleY + 14, t.biomeRole || '', {
-        fontFamily: 'Fredoka, sans-serif',
-        fontSize: '24px',
-        color: '#fef08a'
-      }).setOrigin(0.5);
-      container.add([roleText, subRoleText]);
-
-      // 2. Kapsul Misi
-      const missionY = -cardH / 2 + 515;
-      const missionGfx = this.add.graphics();
-      missionGfx.fillStyle(0x082f49, 0.88);
-      missionGfx.fillRoundedRect(-146, missionY - 26, 292, 52, 14);
-      missionGfx.lineStyle(1.5, 0x38bdf8, 0.85);
-      missionGfx.strokeRoundedRect(-146, missionY - 26, 292, 52, 14);
-      container.add(missionGfx);
-
-      const missionText = this.add.text(0, missionY, t.missionLabel, {
-        fontFamily: 'Fredoka, sans-serif',
-        fontSize: '24px',
-        color: '#7dd3fc',
-        fontStyle: 'bold'
-      }).setOrigin(0.5);
-      container.add(missionText);
-
-      // --- G. TOMBOL CHUNKY 3D "👉 PILIH TIM INI!" ---
-      const btnW = 282;
-      const btnH = 68;
-      const btnY = cardH / 2 - 50;
-
-      const btnContainer = this.add.container(0, btnY);
-      const btnGfx = this.add.graphics();
-
-      const drawButton = (isPressed) => {
-        btnGfx.clear();
-        const dy = isPressed ? 4 : 0;
-        // Bottom 3D bevel shadow
-        btnGfx.fillStyle(t.btnBaseColor || 0xb45309, 1);
-        btnGfx.fillRoundedRect(-btnW / 2, -btnH / 2 + 5, btnW, btnH, 16);
-
-        // Front Face
-        btnGfx.fillStyle(t.btnFaceColor || 0xf59e0b, 1);
-        btnGfx.fillRoundedRect(-btnW / 2, -btnH / 2 + dy, btnW, btnH - 5, 16);
-
-        // Highlight line
-        btnGfx.lineStyle(2, 0xfef08a, 0.9);
-        btnGfx.strokeRoundedRect(-btnW / 2, -btnH / 2 + dy, btnW, btnH - 5, 16);
-      };
-
-      drawButton(false);
-      btnContainer.add(btnGfx);
-
-      const btnText = this.add.text(0, 0, '👉 PILIH TIM INI!', {
-        fontFamily: 'Fredoka, sans-serif',
-        fontSize: '28px',
-        color: '#ffffff',
-        fontStyle: 'bold',
-        shadow: { offsetY: 2, color: '#78350f', blur: 3, fill: true }
-      }).setOrigin(0.5);
-      btnContainer.add(btnText);
-
-      btnContainer.setSize(btnW, btnH);
-      btnContainer.setInteractive({ useHandCursor: true });
-
-      // Efek Interaktif Hover Kartu & Tombol
-      const onHoverCard = () => {
-        container.setScale(1.03);
-        container.setDepth(15);
-        drawCard(true);
-        auraCircle.setAlpha(0.48);
-        badgeGlow.setAlpha(0.65);
-        if (window.soundEngine) window.soundEngine.playBeep();
-      };
-
-      const onOutCard = () => {
-        container.setScale(1.0);
-        container.setDepth(1);
-        drawCard(false);
-        auraCircle.setAlpha(0.22);
-        badgeGlow.setAlpha(0.35);
-      };
-
-      btnContainer.on('pointerover', onHoverCard);
-      btnContainer.on('pointerout', onOutCard);
-
-      // Sentuhan Eksekusi Pemilihan Tim
-      btnContainer.on('pointerdown', () => {
-        drawButton(true);
-        btnText.y = 3;
-
-        // Efek visual Shockwave Ring melingkar
-        const ring = this.add.circle(cx, cardY + btnY, 40, 0xfef08a, 0.8);
-        ring.setDepth(50);
-        this.tweens.add({
-          targets: ring,
-          scale: 4.5,
-          alpha: 0,
-          duration: 450,
-          ease: 'Cubic.easeOut',
-          onComplete: () => ring.destroy()
-        });
+      this.time.delayedCall(160, () => {
+        this.registry.set('activeTeam', t);
+        this.registry.set('assignedMissionId', t.missionId);
+        this.registry.set('activeEcosystem', 'sawah');
 
         if (window.soundEngine) {
-          window.soundEngine.playSuccess();
+          window.soundEngine.playVO('vo_team_selected', 'Pilihan hebat! Tim detektif sudah siap. Ayo jelajahi ekosistem Nusantara!');
         }
 
-        this.time.delayedCall(150, () => {
-          this.registry.set('activeTeam', t);
-          this.registry.set('assignedMissionId', t.missionId);
-          this.registry.set('activeEcosystem', 'sawah');
-
-          if (window.soundEngine) {
-            window.soundEngine.playVO('vo_team_selected', 'Pilihan hebat! Tim detektif sudah siap. Ayo jelajahi ekosistem Nusantara!');
-          }
-
-          // Transisi sinematik halus ke BiomeSelectScene
-          this.cameras.main.fade(300, 2, 44, 34);
-          this.time.delayedCall(300, () => {
-            this.scene.start('BiomeSelectScene');
-          });
+        // Transisi sinematik halus ke BiomeSelectScene
+        this.cameras.main.fade(320, 2, 44, 34);
+        this.time.delayedCall(320, () => {
+          this.scene.start('BiomeSelectScene');
         });
       });
+    });
 
-      btnContainer.on('pointerup', () => {
-        drawButton(false);
-        btnText.y = 0;
+    btnContainer.on('pointerup', () => {
+      drawButton(false);
+      btnText.y = 0;
+    });
+
+    this.stageContainer.add(btnContainer);
+
+    // Animasi Masuk Halus (Slide & Fade) saat Berganti Hero
+    if (isAnimated) {
+      this.stageContainer.setAlpha(0);
+      this.stageContainer.y = 12;
+      this.tweens.add({
+        targets: this.stageContainer,
+        alpha: 1,
+        y: 0,
+        duration: 260,
+        ease: 'Cubic.easeOut'
+      });
+    }
+
+    // Perbarui Tampilan Sorotan Dok Selektor di Bawah
+    this.updateBottomDockHighlights();
+  }
+
+  /**
+   * Tombol Panah Arkade Samping & Pendeteksi Gestur Usap Sentuh IFP
+   */
+  createNavigationControls(width, height) {
+    const arrowY = 485;
+    const arrowW = 84;
+    const arrowH = 120;
+    const arrowRadius = 22;
+
+    const createArrowBtn = (x, symbol, dir) => {
+      const container = this.add.container(x, arrowY);
+      const gfx = this.add.graphics();
+
+      const drawArrow = (pressed) => {
+        gfx.clear();
+        const dy = pressed ? 3 : 0;
+        // Drop shadow
+        gfx.fillStyle(0x000000, 0.5);
+        gfx.fillRoundedRect(-arrowW / 2 + 3, -arrowH / 2 + 5, arrowW, arrowH, arrowRadius);
+        // Dark enamel base
+        gfx.fillStyle(0x021a14, 0.96);
+        gfx.fillRoundedRect(-arrowW / 2, -arrowH / 2, arrowW, arrowH, arrowRadius);
+        // Face emerald
+        gfx.fillStyle(0x064e3b, 0.95);
+        gfx.fillRoundedRect(-arrowW / 2 + 3, -arrowH / 2 + dy + 3, arrowW - 6, arrowH - 6, arrowRadius - 3);
+        // Gold border
+        gfx.lineStyle(2.5, 0xf59e0b, 1);
+        gfx.strokeRoundedRect(-arrowW / 2 + 3, -arrowH / 2 + dy + 3, arrowW - 6, arrowH - 6, arrowRadius - 3);
+      };
+
+      drawArrow(false);
+      container.add(gfx);
+
+      const label = this.add.text(0, 0, symbol, {
+        fontFamily: 'Fredoka, sans-serif',
+        fontSize: '44px',
+        color: '#fef08a',
+        fontStyle: 'bold'
+      }).setOrigin(0.5);
+      container.add(label);
+
+      container.setSize(arrowW, arrowH);
+      container.setInteractive({ useHandCursor: true });
+
+      container.on('pointerover', () => container.setScale(1.06));
+      container.on('pointerout', () => container.setScale(1.0));
+      container.on('pointerdown', () => {
+        drawArrow(true);
+        label.y = 3;
+        this.time.delayedCall(120, () => {
+          drawArrow(false);
+          label.y = 0;
+        });
+        this.navigateTeam(dir);
       });
 
-      container.add(btnContainer);
+      return container;
+    };
+
+    createArrowBtn(175, '◀', -1);
+    createArrowBtn(width - 175, '▶', 1);
+
+    // Pendeteksi Gestur Sentuh Geser Layar (Touch Swipe Gesture)
+    let touchStartX = 0;
+    let touchStartY = 0;
+    this.input.on('pointerdown', (pointer) => {
+      touchStartX = pointer.x;
+      touchStartY = pointer.y;
+    });
+
+    this.input.on('pointerup', (pointer) => {
+      const deltaX = pointer.x - touchStartX;
+      const deltaY = pointer.y - touchStartY;
+      if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+        if (deltaX < 0) {
+          this.navigateTeam(1);  // Swipe kiri -> Pahlawan berikutnya
+        } else {
+          this.navigateTeam(-1); // Swipe kanan -> Pahlawan sebelumnya
+        }
+      }
     });
   }
 
   /**
-   * Helper Pill Button Interaktif Seiras Homepage
+   * Pindah Indeks Pahlawan (Looping 0 - 4)
+   */
+  navigateTeam(direction) {
+    if (window.soundEngine) window.soundEngine.playBeep();
+    this.currentTeamIndex = (this.currentTeamIndex + direction + this.teams.length) % this.teams.length;
+    this.updateHeroView(true);
+  }
+
+  /**
+   * Dok Selektor Miniatur 5 Tim di Bawah Panggung (1-Touch Instant Select)
+   */
+  createBottomHeroDock(width, height) {
+    const dockY = 825;
+    const tileW = 236;
+    const tileH = 82;
+    const tileGap = 16;
+    const tileRadius = 18;
+
+    const totalDockW = (this.teams.length * tileW) + ((this.teams.length - 1) * tileGap);
+    const startX = width / 2 - totalDockW / 2 + tileW / 2;
+
+    this.dockTiles = [];
+
+    this.teams.forEach((t, i) => {
+      const tx = startX + (i * (tileW + tileGap));
+      const tileContainer = this.add.container(tx, dockY);
+      const gfx = this.add.graphics();
+      tileContainer.add(gfx);
+
+      // Mini Badge Lencana
+      const miniBadge = this.add.image(-tileW / 2 + 40, 0, t.badge).setDisplaySize(50, 50);
+
+      // Nama Tim
+      const miniName = this.add.text(-tileW / 2 + 76, 0, t.name, {
+        fontFamily: 'Fredoka, sans-serif',
+        fontSize: '24px',
+        color: '#e2e8f0',
+        fontStyle: 'bold'
+      }).setOrigin(0, 0.5);
+
+      tileContainer.add([miniBadge, miniName]);
+      tileContainer.setSize(tileW, tileH);
+      tileContainer.setInteractive({ useHandCursor: true });
+
+      tileContainer.on('pointerover', () => {
+        tileContainer.setScale(1.04);
+      });
+      tileContainer.on('pointerout', () => {
+        tileContainer.setScale(i === this.currentTeamIndex ? 1.05 : 1.0);
+      });
+
+      tileContainer.on('pointerdown', () => {
+        if (this.currentTeamIndex !== i) {
+          if (window.soundEngine) window.soundEngine.playBeep();
+          this.currentTeamIndex = i;
+          this.updateHeroView(true);
+        }
+      });
+
+      this.dockTiles.push({ container: tileContainer, gfx: gfx, name: miniName, team: t, w: tileW, h: tileH, r: tileRadius });
+    });
+  }
+
+  /**
+   * Perbarui Sorotan Visual Emas pada Ubin yang Sedang Aktif
+   */
+  updateBottomDockHighlights() {
+    if (!this.dockTiles) return;
+
+    this.dockTiles.forEach((item, i) => {
+      const isActive = (i === this.currentTeamIndex);
+      const { gfx, w, h, r } = item;
+      gfx.clear();
+
+      if (isActive) {
+        // Shadow
+        gfx.fillStyle(0x000000, 0.45);
+        gfx.fillRoundedRect(-w / 2 + 2, -h / 2 + 4, w, h, r);
+        // Base Emerald
+        gfx.fillStyle(0x064e3b, 1);
+        gfx.fillRoundedRect(-w / 2, -h / 2, w, h, r);
+        // Golden Border
+        gfx.lineStyle(3, 0xf59e0b, 1);
+        gfx.strokeRoundedRect(-w / 2, -h / 2, w, h, r);
+
+        item.name.setColor('#fef08a');
+        item.container.setScale(1.05);
+      } else {
+        // Subtle base
+        gfx.fillStyle(0x021a14, 0.92);
+        gfx.fillRoundedRect(-w / 2, -h / 2, w, h, r);
+        // Slate Border
+        gfx.lineStyle(2, 0x334155, 0.85);
+        gfx.strokeRoundedRect(-w / 2, -h / 2, w, h, r);
+
+        item.name.setColor('#94a3b8');
+        item.container.setScale(1.0);
+      }
+    });
+  }
+
+  /**
+   * Helper Tombol Pill Navigasi
    */
   createPillButton({ x, y, w, h, baseColor, shadowColor, borderColor, text, textColor, fontSize, onClick }) {
     const btnContainer = this.add.container(x, y);
@@ -662,7 +878,7 @@ class TeamSelectScene extends Phaser.Scene {
 
     const label = this.add.text(0, 0, text, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: fontSize || '16px',
+      fontSize: fontSize || '24px',
       color: textColor || '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -694,18 +910,18 @@ class TeamSelectScene extends Phaser.Scene {
   }
 
   /**
-   * Footer Tips Guru Seiras Homepage
+   * Footer Tips Guru Ramah Siswa
    */
   createTeacherTipBar(width, height) {
-    const footerW = 1580;
-    const footerH = 56;
-    const footerY = height - 32;
+    const footerW = 1680;
+    const footerH = 54;
+    const footerY = height - 38;
 
     const footerGfx = this.add.graphics();
     footerGfx.fillStyle(0x064e3b, 0.95);
-    footerGfx.fillRoundedRect(width / 2 - footerW / 2, footerY - footerH / 2, footerW, footerH, 28);
-    footerGfx.lineStyle(2, 0x10b981, 1);
-    footerGfx.strokeRoundedRect(width / 2 - footerW / 2, footerY - footerH / 2, footerW, footerH, 28);
+    footerGfx.fillRoundedRect(width / 2 - footerW / 2, footerY - footerH / 2, footerW, footerH, 27);
+    footerGfx.lineStyle(2.5, 0x10b981, 1);
+    footerGfx.strokeRoundedRect(width / 2 - footerW / 2, footerY - footerH / 2, footerW, footerH, 27);
 
     this.add.text(
       width / 2,
