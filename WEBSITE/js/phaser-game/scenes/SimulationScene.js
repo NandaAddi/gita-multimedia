@@ -382,19 +382,19 @@ class SimulationScene extends Phaser.Scene {
     this.updateOrganismPool();
   }
 
-  // --- 2. TOP HUD RAMPING (64 PX) ---
+  // --- 2. TOP HUD RAMPING (70 PX) ---
   createTopHUD(width) {
     const topGroup = [];
-    const bar = this.add.rectangle(width / 2, 40, width * 0.98, 64, 0x090d16, 0.95);
+    const bar = this.add.rectangle(width / 2, 42, width * 0.98, 70, 0x090d16, 0.95);
     bar.setStrokeStyle(2, 0x0284c7);
     topGroup.push(bar);
 
     // Tombol Keluar (Kiri)
-    const btnBack = this.add.rectangle(75, 40, 100, 40, 0x1e293b).setInteractive({ useHandCursor: true });
+    const btnBack = this.add.rectangle(85, 42, 130, 48, 0x1e293b).setInteractive({ useHandCursor: true });
     btnBack.setStrokeStyle(1.5, 0x475569);
-    const tBack = this.add.text(75, 40, '🚪 KELUAR', {
+    const tBack = this.add.text(85, 42, '🚪 KELUAR', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '15px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -408,20 +408,20 @@ class SimulationScene extends Phaser.Scene {
     btnBack.on('pointerup', () => btnBack.setScale(1.0));
 
     // Lencana & Nama Tim
-    const badge = this.add.image(175, 40, this.activeTeam.badge).setDisplaySize(42, 42);
-    const tTeam = this.add.text(205, 40, this.activeTeam.name, {
+    const badge = this.add.image(185, 42, this.activeTeam.badge).setDisplaySize(48, 48);
+    const tTeam = this.add.text(220, 42, this.activeTeam.name, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '22px',
+      fontSize: '26px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0, 0.5);
     topGroup.push(badge, tTeam);
 
     // Timer Giliran Kelompok (Capsule Box)
-    const timerBox = this.add.rectangle(460, 40, 200, 40, 0x0f172a).setStrokeStyle(1.5, 0xf59e0b);
-    this.timerText = this.add.text(460, 40, '⏱️ WAKTU: 07:00', {
+    const timerBox = this.add.rectangle(510, 42, 240, 48, 0x0f172a).setStrokeStyle(1.5, 0xf59e0b);
+    this.timerText = this.add.text(510, 42, '⏱️ WAKTU: 07:00', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '18px',
+      fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -429,47 +429,47 @@ class SimulationScene extends Phaser.Scene {
 
     // Pod Bar Kesehatan Ekosistem (Centered at width / 2 = 960)
     const podW = 460;
-    const podH = 54;
-    const healthPodBg = this.add.rectangle(width / 2, 40, podW, podH, 0x07111e, 0.95).setStrokeStyle(2, 0x10b981);
+    const podH = 58;
+    const healthPodBg = this.add.rectangle(width / 2, 42, podW, podH, 0x07111e, 0.95).setStrokeStyle(2, 0x10b981);
     topGroup.push(healthPodBg);
 
     const ecoNameShort = (this.activeEcosystem ? this.activeEcosystem.shortName.toUpperCase() : 'EKOSISTEM');
-    const tHealthLbl = this.add.text(width / 2 - podW / 2 + 18, 28, `🌿 KESEHATAN ${ecoNameShort}:`, {
+    const tHealthLbl = this.add.text(width / 2 - podW / 2 + 16, 30, `🌿 ${ecoNameShort}:`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '14px',
+      fontSize: '24px',
       color: '#94a3b8',
       fontStyle: 'bold'
     }).setOrigin(0, 0.5);
 
-    this.moodText = this.add.text(width / 2 + podW / 2 - 18, 28, `😱 BAHAYA (${this.ecoHealth}%)`, {
+    this.moodText = this.add.text(width / 2 + podW / 2 - 16, 30, `😱 ${this.ecoHealth}%`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '15px',
+      fontSize: '24px',
       color: '#ef4444',
       fontStyle: 'bold'
     }).setOrigin(1, 0.5);
 
     const hpBarWidth = 424;
     this.hpBarMaxWidth = hpBarWidth;
-    const hpBg = this.add.rectangle(width / 2, 51, hpBarWidth, 12, 0x1e293b).setStrokeStyle(1, 0x334155);
-    this.hpBarFill = this.add.rectangle(width / 2 - hpBarWidth / 2, 51, (hpBarWidth * this.ecoHealth) / 100, 10, 0xef4444).setOrigin(0, 0.5);
+    const hpBg = this.add.rectangle(width / 2, 54, hpBarWidth, 12, 0x1e293b).setStrokeStyle(1, 0x334155);
+    this.hpBarFill = this.add.rectangle(width / 2 - hpBarWidth / 2, 54, (hpBarWidth * this.ecoHealth) / 100, 10, 0xef4444).setOrigin(0, 0.5);
     topGroup.push(tHealthLbl, this.moodText, hpBg, this.hpBarFill);
 
     // Tombol Bantuan Penasihat Meja (CSCL Tanya Teman)
-    const btnCoPilot = this.add.container(1380, 40);
-    const btnCoPilotBg = this.add.rectangle(0, 0, 185, 40, 0x0284c7).setStrokeStyle(2, 0xbae6fd);
+    const btnCoPilot = this.add.container(1330, 42);
+    const btnCoPilotBg = this.add.rectangle(0, 0, 210, 48, 0x0284c7).setStrokeStyle(2, 0xbae6fd);
     const iconTanyaKey = this.textures.exists('btn_tanya_teman') ? 'btn_tanya_teman' : null;
     if (iconTanyaKey) {
-      const iconTanya = this.add.image(-60, 0, iconTanyaKey).setDisplaySize(28, 28);
+      const iconTanya = this.add.image(-75, 0, iconTanyaKey).setDisplaySize(32, 32);
       btnCoPilot.add(iconTanya);
     }
-    const tCoPilot = this.add.text(iconTanyaKey ? 10 : 0, 0, '📢 TANYA TEMAN', {
+    const tCoPilot = this.add.text(iconTanyaKey ? 15 : 0, 0, '📢 TANYA TEMAN', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '14px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
     btnCoPilot.add([btnCoPilotBg, tCoPilot]);
-    btnCoPilot.setSize(185, 40);
+    btnCoPilot.setSize(210, 48);
     btnCoPilot.setInteractive({ useHandCursor: true });
     btnCoPilot.setDepth(15);
     topGroup.push(btnCoPilot);
@@ -482,16 +482,16 @@ class SimulationScene extends Phaser.Scene {
     btnCoPilot.on('pointerup', () => btnCoPilot.setScale(1.0));
 
     // Tombol Pintas Kamus Ekologi
-    const btnKamus = this.add.container(1580, 40);
-    const btnKamusBg = this.add.rectangle(0, 0, 175, 40, 0x064e3b).setStrokeStyle(2, 0xf59e0b);
+    const btnKamus = this.add.container(1565, 42);
+    const btnKamusBg = this.add.rectangle(0, 0, 210, 48, 0x064e3b).setStrokeStyle(2, 0xf59e0b);
     const tKamus = this.add.text(0, 0, '📖 KAMUS ALAM', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '14px',
+      fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
     btnKamus.add([btnKamusBg, tKamus]);
-    btnKamus.setSize(175, 40);
+    btnKamus.setSize(210, 48);
     btnKamus.setInteractive({ useHandCursor: true });
     btnKamus.setDepth(15);
     topGroup.push(btnKamus);
@@ -504,16 +504,16 @@ class SimulationScene extends Phaser.Scene {
     btnKamus.on('pointerup', () => btnKamus.setScale(1.0));
 
     // Tombol Toggle Audio (Sound Switcher)
-    const btnAudio = this.add.container(1730, 40);
-    const btnAudioBg = this.add.rectangle(0, 0, 75, 40, 0x1e293b).setStrokeStyle(1.5, 0x475569);
+    const btnAudio = this.add.container(1735, 42);
+    const btnAudioBg = this.add.rectangle(0, 0, 90, 48, 0x1e293b).setStrokeStyle(1.5, 0x475569);
     const tAudio = this.add.text(0, 0, '🔊 Suara', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '13px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
     btnAudio.add([btnAudioBg, tAudio]);
-    btnAudio.setSize(75, 40);
+    btnAudio.setSize(90, 48);
     btnAudio.setInteractive({ useHandCursor: true });
     btnAudio.setDepth(15);
     topGroup.push(btnAudio);
@@ -529,16 +529,16 @@ class SimulationScene extends Phaser.Scene {
     btnAudio.on('pointerup', () => btnAudio.setScale(1.0));
 
     // Tombol Toggle Fullscreen
-    const btnFs = this.add.container(1820, 40);
-    const btnFsBg = this.add.rectangle(0, 0, 75, 40, 0x1e293b).setStrokeStyle(1.5, 0x475569);
+    const btnFs = this.add.container(1835, 42);
+    const btnFsBg = this.add.rectangle(0, 0, 90, 48, 0x1e293b).setStrokeStyle(1.5, 0x475569);
     const tFs = this.add.text(0, 0, '⛶ Layar', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '13px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
     btnFs.add([btnFsBg, tFs]);
-    btnFs.setSize(75, 40);
+    btnFs.setSize(90, 48);
     btnFs.setInteractive({ useHandCursor: true });
     btnFs.setDepth(15);
     topGroup.push(btnFs);
@@ -558,9 +558,9 @@ class SimulationScene extends Phaser.Scene {
 
   // --- 3. PANEL DIALOG GITA (KIRI ATAS - MAYER EMBODIMENT, REDUNDANCY & PERSONALIZATION) ---
   createKikiGuide(width) {
-    this.kikiSprite = this.add.image(85, 155, 'gita_idle').setDisplaySize(95, 95).setDepth(15);
-    this.gitaEmote = this.add.text(125, 115, '👀', { fontSize: '24px' }).setDepth(17).setOrigin(0.5);
-    this.dialogBg = this.add.image(395, 155, 'dialog_box').setDisplaySize(520, 90).setDepth(15);
+    this.kikiSprite = this.add.image(85, 160, 'gita_idle').setDisplaySize(100, 100).setDepth(15);
+    this.gitaEmote = this.add.text(125, 118, '👀', { fontSize: '26px' }).setDepth(17).setOrigin(0.5);
+    this.dialogBg = this.add.image(450, 160, 'dialog_box').setDisplaySize(630, 110).setDepth(15);
 
     let initialHeadline = this.activeMission.headline 
       ? `📌 ${this.activeTeam.name}: ${this.activeMission.headline}` 
@@ -571,25 +571,25 @@ class SimulationScene extends Phaser.Scene {
     this.guideFullSpeech = initialSpeech;
 
     // Header Tag Maskot
-    this.add.text(165, 126, '👧 GITA (PANDUAN DETEKTIF):', {
+    this.add.text(155, 125, '👧 GITA (PANDUAN DETEKTIF):', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '12px',
+      fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setDepth(16);
 
-    this.guideText = this.add.text(165, 154, initialHeadline, {
+    this.guideText = this.add.text(155, 168, initialHeadline, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '15px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold',
-      wordWrap: { width: 360 },
-      lineSpacing: 3
+      wordWrap: { width: 440 },
+      lineSpacing: 4
     }).setOrigin(0, 0.5).setDepth(16);
 
-    const btnVoice = this.add.rectangle(555, 155, 38, 38, 0x10b981).setInteractive({ useHandCursor: true }).setDepth(15);
+    const btnVoice = this.add.rectangle(680, 160, 48, 48, 0x10b981).setInteractive({ useHandCursor: true }).setDepth(15);
     btnVoice.setStrokeStyle(2, 0xfef08a);
-    this.add.text(555, 155, '🔊', { fontSize: '18px' }).setOrigin(0.5).setDepth(16);
+    this.add.text(680, 160, '🔊', { fontSize: '26px' }).setOrigin(0.5).setDepth(16);
 
     btnVoice.on('pointerdown', () => {
       btnVoice.setScale(0.9);
@@ -602,9 +602,9 @@ class SimulationScene extends Phaser.Scene {
     btnVoice.on('pointerup', () => btnVoice.setScale(1.0));
 
     // Tombol Bantuan Scaffolding Gita (Vygotsky ZPD & MKO)
-    const btnHint = this.add.rectangle(602, 155, 38, 38, 0xf59e0b).setInteractive({ useHandCursor: true }).setDepth(15);
+    const btnHint = this.add.rectangle(735, 160, 48, 48, 0xf59e0b).setInteractive({ useHandCursor: true }).setDepth(15);
     btnHint.setStrokeStyle(2, 0xffffff);
-    this.add.text(602, 155, '💡', { fontSize: '18px' }).setOrigin(0.5).setDepth(16);
+    this.add.text(735, 160, '💡', { fontSize: '26px' }).setOrigin(0.5).setDepth(16);
 
     btnHint.on('pointerdown', () => {
       btnHint.setScale(0.9);
@@ -750,33 +750,33 @@ class SimulationScene extends Phaser.Scene {
 
   // --- 4. QUEST CHECKLIST HUD REAL-TIME (KANAN ATAS - PIAGET CONCRETE) ---
   createQuestChecklistHUD(width) {
-    const boxW = 510;
-    const boxH = 155;
+    const boxW = 560;
+    const boxH = 205;
     const boxX = width - boxW / 2 - 25;
-    const boxY = 160;
+    const boxY = 185;
 
     const questCard = this.add.rectangle(boxX, boxY, boxW, boxH, 0x07111e, 0.95).setDepth(15);
     questCard.setStrokeStyle(2, 0x10b981);
 
     // Header Pill
-    const headPill = this.add.rectangle(boxX, boxY - 50, boxW - 28, 28, 0x064e3b).setDepth(16);
+    const headPill = this.add.rectangle(boxX, boxY - 65, boxW - 24, 42, 0x064e3b).setDepth(16);
     headPill.setStrokeStyle(1.5, 0xf59e0b);
-    this.add.text(boxX, boxY - 50, '📋 TUGAS PENYELAMATAN DETEKTIF', {
+    this.add.text(boxX, boxY - 65, '📋 TARGET MISI DETEKTIF', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '14px',
+      fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5).setDepth(17);
 
     this.questTextLines = [];
     for (let i = 0; i < 3; i++) {
-      const rowY = boxY - 14 + (i * 32);
-      const rowBg = this.add.rectangle(boxX, rowY, boxW - 28, 26, 0x0f172a, 0.85).setDepth(16);
+      const rowY = boxY - 18 + (i * 44);
+      const rowBg = this.add.rectangle(boxX, rowY, boxW - 24, 38, 0x0f172a, 0.85).setDepth(16);
       rowBg.setStrokeStyle(1, 0x1e293b);
 
-      const qText = this.add.text(boxX - boxW / 2 + 24, rowY, '', {
+      const qText = this.add.text(boxX - boxW / 2 + 20, rowY, '', {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#ffffff',
         fontStyle: 'bold'
       }).setOrigin(0, 0.5).setDepth(17);
@@ -808,7 +808,7 @@ class SimulationScene extends Phaser.Scene {
         let label = '';
         if (typeof t.target === 'boolean') {
           met = (val === t.target);
-          label = `${met ? '✅' : '⬜'} ${t.text}: ${met ? 'Aman & Bersih' : 'Perlu Bersihkan'}`;
+          label = `${met ? '✅' : '⬜'} ${t.text}: ${met ? 'Bersih' : 'Perlu Aksi'}`;
         } else if (t.min !== undefined) {
           met = (val >= t.min);
           label = `${met ? '✅' : '⬜'} ${t.text}: ${val}${t.unit} (Min ${t.min})`;
@@ -828,46 +828,46 @@ class SimulationScene extends Phaser.Scene {
     } else if (this.legacyMissionId === 1) {
       // Misi 1: Ular & Tikus
       q1Met = this.pop.ular >= 20;
-      t1 = `${q1Met ? '✅' : '⬜'} 🐍 Lepas Ular Sawah: ${this.pop.ular}/20 ekor (Min 20)`;
+      t1 = `${q1Met ? '✅' : '⬜'} 🐍 Lepas Ular: ${this.pop.ular}/20 (Min 20)`;
 
       q2Met = this.pop.tikus <= 30;
-      t2 = `${q2Met ? '✅' : '⬜'} 🐀 Hama Tikus Terkendali: ${this.pop.tikus} ekor (Maks 30)`;
+      t2 = `${q2Met ? '✅' : '⬜'} 🐀 Hama Tikus: ${this.pop.tikus} (Maks 30)`;
 
       q3Met = this.pop.padi >= 50;
-      t3 = `${q3Met ? '✅' : '⬜'} 🌾 Tanaman Padi Subur: ${this.pop.padi}/50 rumpun (Min 50)`;
+      t3 = `${q3Met ? '✅' : '⬜'} 🌾 Tanaman Padi: ${this.pop.padi}/50 (Min 50)`;
 
     } else if (this.legacyMissionId === 2) {
       // Misi 2: Racun Kimia & Katak
       q1Met = this.pop.katak >= 30;
-      t1 = `${q1Met ? '✅' : '⬜'} 🐸 Pulihkan Katak Sawah: ${this.pop.katak}/30 ekor (Min 30)`;
+      t1 = `${q1Met ? '✅' : '⬜'} 🐸 Katak Sawah: ${this.pop.katak}/30 (Min 30)`;
 
       q2Met = this.pop.padi >= 60;
-      t2 = `${q2Met ? '✅' : '⬜'} 🌾 Tanaman Padi Pulih: ${this.pop.padi}/60 rumpun (Min 60)`;
+      t2 = `${q2Met ? '✅' : '⬜'} 🌾 Tanaman Padi: ${this.pop.padi}/60 (Min 60)`;
 
       q3Met = this.ecoHealth >= 75;
-      t3 = `${q3Met ? '✅' : '⬜'} 🍃 Sawah Bebas Racun & Sehat (${this.ecoHealth}%)`;
+      t3 = `${q3Met ? '✅' : '⬜'} 🍃 Sawah Sehat (${this.ecoHealth}%)`;
 
     } else if (this.legacyMissionId === 3) {
       // Misi 3: Kekeringan Irigasi
       q1Met = this.waterLevel >= 60;
-      t1 = `${q1Met ? '✅' : '⬜'} 💧 Alirkan Air Irigasi: ${this.waterLevel}% (Min 60%)`;
+      t1 = `${q1Met ? '✅' : '⬜'} 💧 Air Irigasi: ${this.waterLevel}% (Min 60%)`;
 
       q2Met = this.pop.padi >= 50;
-      t2 = `${q2Met ? '✅' : '⬜'} 🌾 Tanaman Padi Segar: ${this.pop.padi}/50 rumpun (Min 50)`;
+      t2 = `${q2Met ? '✅' : '⬜'} 🌾 Tanaman Padi: ${this.pop.padi}/50 (Min 50)`;
 
       q3Met = this.ecoHealth >= 75;
-      t3 = `${q3Met ? '✅' : '⬜'} ⚖️ Rantai Makanan Seimbang (${this.ecoHealth}%)`;
+      t3 = `${q3Met ? '✅' : '⬜'} ⚖️ Rantai Seimbang (${this.ecoHealth}%)`;
 
     } else {
       // Misi 4: Sahabat Pengurai
       q1Met = this.pop.jamur >= 25;
-      t1 = `${q1Met ? '✅' : '⬜'} 🍄 Kembangkan Jamur Pengurai: ${this.pop.jamur}/25 koloni`;
+      t1 = `${q1Met ? '✅' : '⬜'} 🍄 Jamur Pengurai: ${this.pop.jamur}/25`;
 
       q2Met = this.organicWaste <= 15;
-      t2 = `${q2Met ? '✅' : '⬜'} ✨ Urai Sisa Jerami: Sisa ${this.organicWaste} ikat (Maks 15)`;
+      t2 = `${q2Met ? '✅' : '⬜'} ✨ Sisa Jerami: ${this.organicWaste} (Maks 15)`;
 
       q3Met = this.pop.padi >= 60;
-      t3 = `${q3Met ? '✅' : '⬜'} 🌾 Padi Menyerap Pupuk Humus: ${this.pop.padi}/60 rumpun`;
+      t3 = `${q3Met ? '✅' : '⬜'} 🌾 Padi Subur: ${this.pop.padi}/60`;
     }
 
     this.questTextLines[0].setText(t1).setColor(q1Met ? '#34d399' : '#f8fafc');
@@ -895,28 +895,28 @@ class SimulationScene extends Phaser.Scene {
 
   // --- 5. PANEL KONTROL ZONA BAWAH (CONTEXTUAL ACTION GATING - 4 KOLOM SIMETRIS) ---
   createTouchControls(width, height) {
-    const panelH = 196;
-    const panelY = height - panelH / 2 - 10;
+    const panelH = 224;
+    const panelY = height - panelH / 2 - 8;
 
     const controlPanel = this.add.rectangle(width / 2, panelY, width * 0.98, panelH, 0x090d16, 0.96);
     controlPanel.setStrokeStyle(2, 0x1e293b);
 
     // Label Header Zona Sentuh
-    this.touchZoneHeader = this.add.text(width / 2, height - 188, '🎮 ZONA SENTUH IFP: PILIH TINDAKAN PENYELAMATAN KELOMPOK', {
+    this.touchZoneHeader = this.add.text(width / 2, height - 204, '🎮 ZONA SENTUH IFP: PILIH TINDAKAN PENYELAMATAN KELOMPOK', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '16px',
+      fontSize: '24px',
       color: '#fef08a'
     }).setOrigin(0.5);
 
     // Progress Bar Visual Cooldown
     if (this.textures.exists('hud_cooldown_bar')) {
-      this.cooldownBarFrame = this.add.image(width / 2, height - 168, 'hud_cooldown_bar')
+      this.cooldownBarFrame = this.add.image(width / 2, height - 176, 'hud_cooldown_bar')
         .setDisplaySize(380, 18)
         .setAlpha(0.7)
         .setVisible(false);
     }
-    this.cooldownBarBg = this.add.rectangle(width / 2, height - 168, 360, 8, 0x1e293b).setVisible(false);
-    this.cooldownBarFill = this.add.rectangle(width / 2 - 180, height - 168, 360, 8, 0x38bdf8).setOrigin(0, 0.5).setVisible(false);
+    this.cooldownBarBg = this.add.rectangle(width / 2, height - 176, 360, 8, 0x1e293b).setVisible(false);
+    this.cooldownBarFill = this.add.rectangle(width / 2 - 180, height - 176, 360, 8, 0x38bdf8).setOrigin(0, 0.5).setVisible(false);
 
     this.actionButtons = [];
     this.actionLabels = {};
@@ -924,12 +924,11 @@ class SimulationScene extends Phaser.Scene {
     // KONFIGURASI 4 KOLOM SIMETRIS (3 KARTU AKSI + 1 TOMBOL SELESAI)
     const missionActions = this.getContextualActions();
 
-    // 4 Kolom: lebar 390px, sela 70px, margin kiri-kanan tepat 75px
-    const cardW = 390;
-    const cardH = 138;
+    const cardW = 420;
+    const cardH = 155;
     const cardY = height - 88;
-    const startX = 270;
-    const cardSpacing = 460;
+    const startX = 255;
+    const cardSpacing = 470;
 
     missionActions.forEach((act, idx) => {
       const cx = startX + (idx * cardSpacing);
@@ -940,44 +939,44 @@ class SimulationScene extends Phaser.Scene {
 
       // Ikon Aksi (Sprite Gambar Nyata atau Emoji Fallback)
       if (act.iconAsset && this.textures.exists(act.iconAsset)) {
-        this.add.image(cx - 150, cardY - 34, act.iconAsset).setDisplaySize(44, 44);
+        this.add.image(cx - 155, cardY - 40, act.iconAsset).setDisplaySize(52, 52);
       } else {
-        this.add.text(cx - 150, cardY - 34, act.icon, { fontSize: '36px' }).setOrigin(0.5);
+        this.add.text(cx - 155, cardY - 40, act.icon, { fontSize: '40px' }).setOrigin(0.5);
       }
 
       // Judul Tindakan
-      this.add.text(cx - 115, cardY - 44, act.title, {
+      this.add.text(cx - 115, cardY - 50, act.title, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '17px',
+        fontSize: '24px',
         color: '#ffffff',
         fontStyle: 'bold'
       }).setOrigin(0, 0.5);
 
       // Subtitle / Peran Ekologis
-      this.add.text(cx - 115, cardY - 24, act.desc, {
+      this.add.text(cx - 115, cardY - 22, act.desc, {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '13px',
+        fontSize: '24px',
         color: '#94a3b8',
         fontStyle: 'bold'
       }).setOrigin(0, 0.5);
 
       // Tombol Aksi Sentuh
-      const btnAction = this.add.rectangle(cx, cardY + 10, cardW - 40, 38, act.btnColor)
+      const btnAction = this.add.rectangle(cx, cardY + 18, cardW - 30, 44, act.btnColor)
         .setInteractive({ useHandCursor: true });
       btnAction.setStrokeStyle(2, 0xffffff);
 
-      const btnLabel = this.add.text(cx, cardY + 10, act.btnText, {
+      const btnLabel = this.add.text(cx, cardY + 18, act.btnText, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '16px',
+        fontSize: '24px',
         color: '#ffffff',
         fontStyle: 'bold'
       }).setOrigin(0.5);
 
       // Label Status & Target Kuota Terintegrasi (Spatial Contiguity Principle)
-      const statusPill = this.add.rectangle(cx, cardY + 46, cardW - 50, 24, 0x07111e).setStrokeStyle(1, act.color, 0.5);
-      const statusText = this.add.text(cx, cardY + 46, act.statusGetter(), {
+      const statusPill = this.add.rectangle(cx, cardY + 54, cardW - 30, 30, 0x07111e).setStrokeStyle(1, act.color, 0.5);
+      const statusText = this.add.text(cx, cardY + 54, act.statusGetter(), {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '13px',
+        fontSize: '24px',
         color: '#fef08a'
       }).setOrigin(0.5);
       this.actionLabels[act.id] = { textObj: statusText, getter: act.statusGetter };
@@ -992,40 +991,40 @@ class SimulationScene extends Phaser.Scene {
     });
 
     // KOLOM 4: TOMBOL SELESAI (CEK HASIL PENYELIDIKAN) - SEIMBANG & SIMETRIS DI SISI KANAN
-    const finishX = 1650;
+    const finishX = 1665;
     const finishCard = this.add.rectangle(finishX, cardY, cardW, cardH, 0x064e3b, 0.96).setStrokeStyle(3, 0xf59e0b);
 
     // Ikon & Header Kartu Selesai
-    this.add.text(finishX - 150, cardY - 34, '🏆', { fontSize: '36px' }).setOrigin(0.5);
-    this.add.text(finishX - 115, cardY - 44, 'SELESAI MISI', {
+    this.add.text(finishX - 155, cardY - 40, '🏆', { fontSize: '40px' }).setOrigin(0.5);
+    this.add.text(finishX - 115, cardY - 50, 'SELESAI MISI', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '17px',
+      fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0, 0.5);
 
-    this.add.text(finishX - 115, cardY - 24, 'Periksa keseimbangan ekosistem', {
+    this.add.text(finishX - 115, cardY - 22, 'Periksa ekosistem', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '13px',
+      fontSize: '24px',
       color: '#cbd5e1',
       fontStyle: 'bold'
     }).setOrigin(0, 0.5);
 
-    this.btnVerify = this.add.rectangle(finishX, cardY + 10, cardW - 40, 38, 0x10b981)
+    this.btnVerify = this.add.rectangle(finishX, cardY + 18, cardW - 30, 44, 0x10b981)
       .setInteractive({ useHandCursor: true });
     this.btnVerify.setStrokeStyle(2, 0xffffff);
 
-    this.add.text(finishX, cardY + 10, '✅ CEK HASIL PENYELIDIKAN 🔍', {
+    this.add.text(finishX, cardY + 18, '✅ CEK HASIL 🔍', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '15px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
-    const finishPill = this.add.rectangle(finishX, cardY + 46, cardW - 50, 24, 0x022c22).setStrokeStyle(1, 0xf59e0b, 0.5);
-    this.add.text(finishX, cardY + 46, '⭐ Evaluasi C2 & Bintang Detektif', {
+    const finishPill = this.add.rectangle(finishX, cardY + 54, cardW - 30, 30, 0x022c22).setStrokeStyle(1, 0xf59e0b, 0.5);
+    this.add.text(finishX, cardY + 54, '⭐ Evaluasi Bintang', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '13px',
+      fontSize: '24px',
       color: '#fef08a'
     }).setOrigin(0.5);
 
@@ -1666,7 +1665,7 @@ class SimulationScene extends Phaser.Scene {
 
     const biteFx = this.add.text(victim.x, victim.y - 12, '💥 HAP!', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '15px',
+      fontSize: '24px',
       color: '#f87171'
     }).setOrigin(0.5).setDepth(14);
 
@@ -1878,8 +1877,8 @@ class SimulationScene extends Phaser.Scene {
       .setDepth(200);
 
     // Box Utama Modal
-    const boxW = 1220;
-    const boxH = 680;
+    const boxW = 1440;
+    const boxH = 820;
     const modalBox = this.add.rectangle(width / 2, height / 2, boxW, boxH, 0x064e3b, 0.98)
       .setStrokeStyle(4, 0xf59e0b);
     const innerBorder = this.add.rectangle(width / 2, height / 2, boxW - 12, boxH - 12)
@@ -1887,12 +1886,12 @@ class SimulationScene extends Phaser.Scene {
     modalContainer.add([modalBox, innerBorder]);
 
     // Tombol Close X Pojok Kanan Atas
-    const btnClose = this.add.rectangle(width / 2 + boxW / 2 - 38, height / 2 - boxH / 2 + 38, 46, 46, 0xef4444)
+    const btnClose = this.add.rectangle(width / 2 + boxW / 2 - 42, height / 2 - boxH / 2 + 42, 54, 54, 0xef4444)
       .setInteractive({ useHandCursor: true });
     btnClose.setStrokeStyle(2, 0xffffff);
-    const tClose = this.add.text(width / 2 + boxW / 2 - 38, height / 2 - boxH / 2 + 38, '✕', {
+    const tClose = this.add.text(width / 2 + boxW / 2 - 42, height / 2 - boxH / 2 + 42, '✕', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '26px',
+      fontSize: '28px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -1900,33 +1899,33 @@ class SimulationScene extends Phaser.Scene {
 
     // Avatar Gita Pemanggil Kelas
     const gitaAvatarKey = this.textures.exists('gita_talk') ? 'gita_talk' : 'gita_idle';
-    const gitaAvatar = this.add.image(width / 2 - boxW / 2 + 95, height / 2 - boxH / 2 + 95, gitaAvatarKey)
-      .setDisplaySize(125, 125);
+    const gitaAvatar = this.add.image(width / 2 - boxW / 2 + 105, height / 2 - boxH / 2 + 105, gitaAvatarKey)
+      .setDisplaySize(140, 140);
     modalContainer.add(gitaAvatar);
 
     // Header Panggilan Kelas
-    const titleText = this.add.text(width / 2 + 40, height / 2 - 275, '📢 PANGGILAN PENASIHAT MEJA: DISKUSI & VOTING', {
+    const titleText = this.add.text(width / 2 + 50, height / 2 - 340, '📢 PANGGILAN PENASIHAT MEJA: DISKUSI & VOTING', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '28px',
+      fontSize: '34px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
     modalContainer.add(titleText);
 
-    const subText = this.add.text(width / 2 + 40, height / 2 - 235, 'Petugas Layar butuh saran! Teman di meja, diskusikan lalu angkat kartu fisik kalian!', {
+    const subText = this.add.text(width / 2 + 50, height / 2 - 295, 'Petugas Layar butuh saran! Teman di meja, diskusikan lalu angkat kartu fisik kalian!', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '18px',
+      fontSize: '24px',
       color: '#cbd5e1'
     }).setOrigin(0.5);
     modalContainer.add(subText);
 
     // Timer Countdown Diskusi 15 Detik
     let voteSeconds = 15;
-    const timerBox = this.add.rectangle(width / 2, height / 2 - 180, 380, 44, 0x022c22)
+    const timerBox = this.add.rectangle(width / 2, height / 2 - 235, 440, 52, 0x022c22)
       .setStrokeStyle(2, 0xf59e0b);
-    const timerText = this.add.text(width / 2, height / 2 - 180, `⏱️ WAKTU VOTING: ${voteSeconds} DETIK`, {
+    const timerText = this.add.text(width / 2, height / 2 - 235, `⏱️ WAKTU VOTING: ${voteSeconds} DETIK`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '19px',
+      fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -2087,10 +2086,10 @@ class SimulationScene extends Phaser.Scene {
       ];
     }
 
-    const cardY = height / 2 + 55;
-    const cardW = 345;
-    const cardH = 340;
-    const cardSpacing = 375;
+    const cardY = height / 2 + 50;
+    const cardW = 420;
+    const cardH = 430;
+    const cardSpacing = 450;
     const startX = width / 2 - cardSpacing;
 
     const finalizeVote = (chosen) => {
@@ -2142,9 +2141,9 @@ class SimulationScene extends Phaser.Scene {
         .setInteractive({ useHandCursor: true });
       modalContainer.add(card);
 
-      const tagText = this.add.text(cx, cardY - 138, opt.tag, {
+      const tagText = this.add.text(cx, cardY - 175, opt.tag, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '19px',
+        fontSize: '24px',
         color: '#fef08a',
         fontStyle: 'bold'
       }).setOrigin(0.5);
@@ -2152,21 +2151,21 @@ class SimulationScene extends Phaser.Scene {
 
       // Kartu Visual LKPD Nyata
       if (this.textures.exists(opt.assetKey)) {
-        const cardImg = this.add.image(cx, cardY - 45, opt.assetKey).setDisplaySize(130, 130);
+        const cardImg = this.add.image(cx, cardY - 70, opt.assetKey).setDisplaySize(145, 145);
         modalContainer.add(cardImg);
       }
 
-      const cardTitle = this.add.text(cx, cardY + 38, opt.title, {
+      const cardTitle = this.add.text(cx, cardY + 30, opt.title, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '16px',
+        fontSize: '24px',
         color: '#ffffff',
         fontStyle: 'bold'
       }).setOrigin(0.5);
       modalContainer.add(cardTitle);
 
-      const cardDesc = this.add.text(cx, cardY + 70, opt.desc, {
+      const cardDesc = this.add.text(cx, cardY + 75, opt.desc, {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '13px',
+        fontSize: '24px',
         color: '#cbd5e1',
         align: 'center',
         wordWrap: { width: cardW - 30 },
@@ -2174,11 +2173,11 @@ class SimulationScene extends Phaser.Scene {
       }).setOrigin(0.5);
       modalContainer.add(cardDesc);
 
-      const btnChoose = this.add.rectangle(cx, cardY + 124, cardW - 50, 42, opt.border)
+      const btnChoose = this.add.rectangle(cx, cardY + 160, cardW - 40, 52, opt.border)
         .setInteractive({ useHandCursor: true });
-      const btnChooseText = this.add.text(cx, cardY + 124, '🗳️ SUARA TERBANYAK', {
+      const btnChooseText = this.add.text(cx, cardY + 160, '🗳️ SUARA TERBANYAK', {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '15px',
+        fontSize: '24px',
         color: '#ffffff',
         fontStyle: 'bold'
       }).setOrigin(0.5);
@@ -2199,12 +2198,12 @@ class SimulationScene extends Phaser.Scene {
     });
 
     // Tombol Lanjutkan di Bawah
-    const btnCancel = this.add.rectangle(width / 2, height / 2 + 285, 260, 44, 0x334155)
+    const btnCancel = this.add.rectangle(width / 2, height / 2 + 355, 360, 54, 0x334155)
       .setInteractive({ useHandCursor: true })
       .setStrokeStyle(2, 0x94a3b8);
-    const btnCancelText = this.add.text(width / 2, height / 2 + 285, '⏩ LANJUTKAN SIMULASI', {
+    const btnCancelText = this.add.text(width / 2, height / 2 + 355, '⏩ LANJUTKAN SIMULASI', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '16px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -2228,8 +2227,8 @@ class SimulationScene extends Phaser.Scene {
     const kamusContainer = this.add.container(0, 0).setDepth(251);
 
     // Box Utama Modal Kamus
-    const boxW = 1240;
-    const boxH = 730;
+    const boxW = 1520;
+    const boxH = 880;
     const modalBox = this.add.rectangle(width / 2, height / 2, boxW, boxH, 0x064e3b, 0.98)
       .setStrokeStyle(4, 0xf59e0b);
     const innerBorder = this.add.rectangle(width / 2, height / 2, boxW - 12, boxH - 12)
@@ -2237,26 +2236,26 @@ class SimulationScene extends Phaser.Scene {
     kamusContainer.add([modalBox, innerBorder]);
 
     // Header Kamus
-    const titleText = this.add.text(width / 2, height / 2 - 320, '📖 ENSIKLOPEDIA & KAMUS SAWAH DETEKTIF', {
+    const titleText = this.add.text(width / 2, height / 2 - 380, '📖 ENSIKLOPEDIA & KAMUS SAWAH DETEKTIF', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '28px',
+      fontSize: '34px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
-    const subText = this.add.text(width / 2, height / 2 - 285, 'Kamus sains ekosistem sawah SDN Percobaan 2: Sentuh salah satu kartu untuk membaca penjelasan lengkap!', {
+    const subText = this.add.text(width / 2, height / 2 - 335, 'Kamus sains ekosistem sawah: Sentuh salah satu kartu untuk membaca penjelasan lengkap!', {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '16px',
+      fontSize: '24px',
       color: '#e2e8f0'
     }).setOrigin(0.5);
     kamusContainer.add([titleText, subText]);
 
     // Tombol Tutup ✕
-    const btnClose = this.add.rectangle(width / 2 + boxW / 2 - 38, height / 2 - boxH / 2 + 38, 46, 46, 0xef4444)
+    const btnClose = this.add.rectangle(width / 2 + boxW / 2 - 42, height / 2 - boxH / 2 + 42, 54, 54, 0xef4444)
       .setInteractive({ useHandCursor: true });
     btnClose.setStrokeStyle(2, 0xffffff);
-    const tClose = this.add.text(width / 2 + boxW / 2 - 38, height / 2 - boxH / 2 + 38, '✕', {
+    const tClose = this.add.text(width / 2 + boxW / 2 - 42, height / 2 - boxH / 2 + 42, '✕', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '26px',
+      fontSize: '28px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -2279,8 +2278,8 @@ class SimulationScene extends Phaser.Scene {
         tag: 'HABITAT & JALUR',
         tagColor: 0x059669,
         summary: 'Tanggul tanah pemisah petak sawah',
-        desc: 'Pematang sawah adalah tanggul tanah pembatas air antarpetak sawah. Di sini rumput alami tumbuh sebagai sarang serangga menguntungkan dan jalan patroli ular pemangsa tikus.',
-        role: 'Peran: Menahan genangan air irigasi dan menjadi koridor jelajah predator alami.'
+        desc: 'Pematang sawah adalah tanggul pembatas petak sawah. Di sini rumput alami tumbuh sebagai sarang serangga dan jalan patroli ular pemangsa hama.',
+        role: 'Peran: Menahan genangan air irigasi dan koridor jelajah predator alami.'
       },
       {
         key: 'kamus_wereng',
@@ -2288,8 +2287,8 @@ class SimulationScene extends Phaser.Scene {
         tag: 'HAMA PENGHISAP',
         tagColor: 0xd97706,
         summary: 'Serangga perusak batang padi',
-        desc: 'Wereng cokelat adalah serangga kecil yang menghisap cairan batang padi hingga tanaman layu mengering cokelat keemasan seperti terbakar (gejala hopperburn).',
-        role: 'Peran: Ditekan secara alami oleh predator seperti katak sawah dan laba-laba pemburu.'
+        desc: 'Wereng cokelat menghisap cairan batang padi hingga tanaman layu mengering cokelat keemasan seperti terbakar (gejala hopperburn).',
+        role: 'Peran: Ditekan secara alami oleh katak sawah dan laba-laba pemburu.'
       },
       {
         key: 'kamus_irigasi',
@@ -2297,8 +2296,8 @@ class SimulationScene extends Phaser.Scene {
         tag: 'SUMBER AIR',
         tagColor: 0x0284c7,
         summary: 'Sistem pengairan teknis sawah',
-        desc: 'Saluran irigasi mengalirkan air dari sungai atau bendungan ke sawah. Air menjaga kelembapan tanah, melarutkan nutrisi pupuk, dan menjadi tempat hidup katak.',
-        role: 'Peran: Mencegah tanah sawah retak kering dan menjaga fotosintesis rumpun padi.'
+        desc: 'Saluran irigasi mengalirkan air dari bendungan ke sawah. Air menjaga kelembapan tanah, melarutkan nutrisi, dan habitat katak.',
+        role: 'Peran: Mencegah sawah retak kering dan menyuburkan fotosintesis padi.'
       },
       {
         key: 'kamus_pengurai',
@@ -2306,35 +2305,35 @@ class SimulationScene extends Phaser.Scene {
         tag: 'DEKOMPOSER',
         tagColor: 0x7c3aed,
         summary: 'Mikroba daur ulang nutrisi tanah',
-        desc: 'Jamur dan mikroba pengurai bertugas membusukkan bangkai hewan dan jerami kering menjadi zat hara dan humus yang menyuburkan tanah sawah.',
-        role: 'Peran: Menutup siklus nutrisi rantai makanan agar energi tidak terbuang sia-sia.'
+        desc: 'Jamur pengurai bertugas membusukkan bangkai hewan dan jerami kering menjadi zat hara dan humus penyubur tanah.',
+        role: 'Peran: Menutup siklus nutrisi rantai makanan agar energi tidak hilang.'
       },
       {
         key: 'kamus_pemangsa',
         title: 'Predator Alami',
-        tag: 'PENJAGA KESEIMBANGAN',
+        tag: 'PENJAGA ALAM',
         tagColor: 0x047857,
         summary: 'Ular, katak, & elang pemburu hama',
-        desc: 'Predator alami memburu hewan pengganggu tanpa racun sintetis. Ular sawah memangsa tikus, katak memakan serangga, dan elang mengawasi dari udara.',
-        role: 'Peran: Menjaga populasi herbivora tetap seimbang tanpa merusak lingkungan.'
+        desc: 'Predator alami memburu hama tanpa racun kimia sintetis. Ular sawah memangsa tikus dan katak memakan serangga penggerek.',
+        role: 'Peran: Menjaga populasi herbivora seimbang tanpa merusak lingkungan.'
       },
       {
         key: 'kamus_hama',
         title: 'Hama Sawah',
-        tag: 'KONSUMEN PRIMER',
+        tag: 'KONSUMEN 1',
         tagColor: 0xd97706,
         summary: 'Tikus & serangga pemakan padi',
-        desc: 'Hewan pemakan tanaman pangan yang populasinya melonjak tajam jika predator pemburunya hilang akibat perburuan liar atau pencemaran racun kimia.',
-        role: 'Peran: Menjadi makanan bagi predator tingkat dua jika jumlahnya terkontrol.'
+        desc: 'Hewan pemakan tanaman padi yang melonjak jika predator pemburunya hilang akibat perburuan liar atau pencemaran pestisida.',
+        role: 'Peran: Menjadi mangsa bagi predator jika jumlahnya seimbang.'
       },
       {
         key: 'kamus_gulma',
         title: 'Gulma Tanaman',
-        tag: 'KOMPETITOR HARA',
+        tag: 'KOMPETITOR',
         tagColor: 0x4f46e5,
         summary: 'Tumbuhan liar pesaing padi',
-        desc: 'Gulma adalah rumput liar yang bersaing dengan padi dalam memperebutkan pupuk tanah, sinar matahari, dan ruang tumbuh di petak sawah.',
-        role: 'Peran: Dikendalikan secara biologis atau penyiangan teratur oleh petani.'
+        desc: 'Rumput liar yang bersaing dengan padi memperebutkan pupuk tanah, air, sinar matahari, dan ruang tumbuh di petak sawah.',
+        role: 'Peran: Dikendalikan secara biologis atau penyiangan teratur.'
       },
       {
         key: 'kamus_limbah',
@@ -2342,17 +2341,17 @@ class SimulationScene extends Phaser.Scene {
         tag: 'BAHAN ORGANIK',
         tagColor: 0xb45309,
         summary: 'Sisa panen bernutrisi tinggi',
-        desc: 'Batang padi kering pascapanen. Jika dibakar akan mencemari udara, tetapi jika diurai oleh jamur pengurai akan berubah menjadi pupuk kompos alami.',
-        role: 'Peran: Bahan baku pupuk organik terbaik untuk mengembalikan kesuburan tanah.'
+        desc: 'Batang padi kering pascapanen. Jika dibakar mencemari udara, tetapi jika diurai jamur akan menjadi kompos alami yang subur.',
+        role: 'Peran: Bahan baku pupuk organik terbaik untuk tanah sawah.'
       }
     ];
 
     // Grid 4 Kolom x 2 Baris
     const cols = 4;
-    const colSpacing = 275;
-    const rowSpacing = 215;
+    const colSpacing = 350;
+    const rowSpacing = 250;
     const startGridX = width / 2 - ((cols - 1) * colSpacing) / 2;
-    const startGridY = height / 2 - 120;
+    const startGridY = height / 2 - 95;
 
     kamusData.forEach((item, index) => {
       const col = index % cols;
@@ -2360,54 +2359,55 @@ class SimulationScene extends Phaser.Scene {
       const cx = startGridX + col * colSpacing;
       const cy = startGridY + row * rowSpacing;
 
-      const cardW = 255;
-      const cardH = 200;
+      const cardW = 325;
+      const cardH = 230;
 
       const cardBg = this.add.rectangle(cx, cy, cardW, cardH, 0x022c22, 0.95)
-        .setStrokeStyle(2, 0x10b981)
+        .setStrokeStyle(2.5, 0x10b981)
         .setInteractive({ useHandCursor: true });
       kamusContainer.add(cardBg);
 
       // Gambar Thumbnail Kartu Kamus
       if (this.textures.exists(item.key)) {
-        const thumb = this.add.image(cx, cy - 38, item.key).setDisplaySize(92, 92);
+        const thumb = this.add.image(cx, cy - 48, item.key).setDisplaySize(96, 96);
         kamusContainer.add(thumb);
       }
 
       // Tag Kategori
-      const tagBg = this.add.rectangle(cx, cy + 24, cardW - 60, 20, item.tagColor);
-      const tagTxt = this.add.text(cx, cy + 24, item.tag, {
+      const tagBg = this.add.rectangle(cx, cy + 22, cardW - 40, 32, item.tagColor);
+      const tagTxt = this.add.text(cx, cy + 22, item.tag, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '11px',
+        fontSize: '24px',
         color: '#ffffff',
         fontStyle: 'bold'
       }).setOrigin(0.5);
       kamusContainer.add([tagBg, tagTxt]);
 
       // Judul Kartu
-      const titleTxt = this.add.text(cx, cy + 48, item.title, {
+      const titleTxt = this.add.text(cx, cy + 58, item.title, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '15px',
+        fontSize: '24px',
         color: '#fef08a',
         fontStyle: 'bold'
       }).setOrigin(0.5);
       kamusContainer.add(titleTxt);
 
       // Tombol Buka Detail
-      const hintTxt = this.add.text(cx, cy + 72, '🔍 Sentuh untuk Baca', {
+      const hintTxt = this.add.text(cx, cy + 88, '🔍 Sentuh Detail', {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '12px',
-        color: '#93c5fd'
+        fontSize: '24px',
+        color: '#93c5fd',
+        fontStyle: 'bold'
       }).setOrigin(0.5);
       kamusContainer.add(hintTxt);
 
       // Hover
       cardBg.on('pointerover', () => {
         cardBg.setStrokeStyle(3, 0xf59e0b);
-        cardBg.setScale(1.04);
+        cardBg.setScale(1.03);
       });
       cardBg.on('pointerout', () => {
-        cardBg.setStrokeStyle(2, 0x10b981);
+        cardBg.setStrokeStyle(2.5, 0x10b981);
         cardBg.setScale(1.0);
       });
 
@@ -2427,8 +2427,8 @@ class SimulationScene extends Phaser.Scene {
       .setInteractive();
     detailGroup.add(dimDetail);
 
-    const detailW = 860;
-    const detailH = 540;
+    const detailW = 1200;
+    const detailH = 720;
     const box = this.add.rectangle(width / 2, height / 2, detailW, detailH, 0x064e3b, 0.99)
       .setStrokeStyle(4, 0xf59e0b);
     const inner = this.add.rectangle(width / 2, height / 2, detailW - 12, detailH - 12)
@@ -2437,55 +2437,55 @@ class SimulationScene extends Phaser.Scene {
 
     // Ilustrasi Besar
     if (this.textures.exists(item.key)) {
-      const bigImg = this.add.image(width / 2 - 250, height / 2 - 20, item.key).setDisplaySize(260, 260);
+      const bigImg = this.add.image(width / 2 - 320, height / 2, item.key).setDisplaySize(320, 320);
       detailGroup.add(bigImg);
     }
 
     // Teks Informasi di Kanan
-    const infoX = width / 2 - 80;
+    const infoX = width / 2 - 110;
 
-    const tTag = this.add.text(infoX, height / 2 - 200, item.tag, {
+    const tTag = this.add.text(infoX, height / 2 - 240, item.tag, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '15px',
+      fontSize: '24px',
       color: '#34d399',
       fontStyle: 'bold'
     });
     detailGroup.add(tTag);
 
-    const tTitle = this.add.text(infoX, height / 2 - 165, item.title, {
+    const tTitle = this.add.text(infoX, height / 2 - 195, item.title, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '28px',
+      fontSize: '36px',
       color: '#fef08a',
       fontStyle: 'bold'
     });
     detailGroup.add(tTitle);
 
-    const tDesc = this.add.text(infoX, height / 2 - 95, item.desc, {
+    const tDesc = this.add.text(infoX, height / 2 - 110, item.desc, {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '17px',
+      fontSize: '24px',
       color: '#f8fafc',
-      wordWrap: { width: 480 },
+      wordWrap: { width: 620 },
       lineSpacing: 6
     });
     detailGroup.add(tDesc);
 
-    const tRole = this.add.text(infoX, height / 2 + 50, item.role, {
+    const tRole = this.add.text(infoX, height / 2 + 70, item.role, {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '16px',
+      fontSize: '24px',
       color: '#a7f3d0',
       fontStyle: 'bold',
-      wordWrap: { width: 480 },
+      wordWrap: { width: 620 },
       lineSpacing: 5
     });
     detailGroup.add(tRole);
 
     // Tombol Kembali
-    const btnBack = this.add.rectangle(width / 2, height / 2 + 215, 240, 46, 0x10b981)
+    const btnBack = this.add.rectangle(width / 2, height / 2 + 280, 360, 56, 0x10b981)
       .setInteractive({ useHandCursor: true });
     btnBack.setStrokeStyle(2, 0xfef08a);
-    const btnBackText = this.add.text(width / 2, height / 2 + 215, '🔙 KEMBALI KE DAFTAR', {
+    const btnBackText = this.add.text(width / 2, height / 2 + 280, '🔙 KEMBALI KE DAFTAR', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '16px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
@@ -2504,7 +2504,7 @@ class SimulationScene extends Phaser.Scene {
     const { width, height } = this.scale;
     const txt = this.add.text(width / 2, height / 2 - 50, text, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '22px',
+      fontSize: '26px',
       color: '#ffffff',
       backgroundColor: '#0f172a',
       padding: { x: 20, y: 10 }
