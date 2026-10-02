@@ -158,39 +158,45 @@ class TeamSelectScene extends Phaser.Scene {
     const headerH = 80;
     const headerY = 54;
 
+    const headerLeft = width / 2 - headerW / 2;
+    const headerRight = width / 2 + headerW / 2;
+
     const gHead = this.add.graphics();
     // Drop shadow
     gHead.fillStyle(0x000000, 0.45);
-    gHead.fillRoundedRect(width / 2 - headerW / 2 + 4, headerY - headerH / 2 + 6, headerW, headerH, 18);
+    gHead.fillRoundedRect(headerLeft + 4, headerY - headerH / 2 + 6, headerW, headerH, 18);
 
     // Dark Enamel Base
     gHead.fillStyle(0x021a14, 1);
-    gHead.fillRoundedRect(width / 2 - headerW / 2, headerY - headerH / 2, headerW, headerH, 18);
+    gHead.fillRoundedRect(headerLeft, headerY - headerH / 2, headerW, headerH, 18);
 
     // Emerald Face Glassmorphism
     gHead.fillStyle(0x064e3b, 0.96);
-    gHead.fillRoundedRect(width / 2 - headerW / 2 + 4, headerY - headerH / 2 + 4, headerW - 8, headerH - 8, 15);
+    gHead.fillRoundedRect(headerLeft + 4, headerY - headerH / 2 + 4, headerW - 8, headerH - 8, 15);
 
     // Polished Golden Border
     gHead.lineStyle(2.5, 0xf59e0b, 1);
-    gHead.strokeRoundedRect(width / 2 - headerW / 2 + 4, headerY - headerH / 2 + 4, headerW - 8, headerH - 8, 15);
+    gHead.strokeRoundedRect(headerLeft + 4, headerY - headerH / 2 + 4, headerW - 8, headerH - 8, 15);
 
     // Inner gold hairline
     gHead.lineStyle(1, 0xfef08a, 0.4);
-    gHead.strokeRoundedRect(width / 2 - headerW / 2 + 7, headerY - headerH / 2 + 7, headerW - 14, headerH - 14, 12);
+    gHead.strokeRoundedRect(headerLeft + 7, headerY - headerH / 2 + 7, headerW - 14, headerH - 14, 12);
 
-    // --- A. Tombol Menu Utama di Kiri ---
+    // --- A. Tombol Menu Utama di Kiri (Anchor Aman dari Margin Kiri Panel) ---
+    const innerLeft = headerLeft + 28;
+    const wMenu = 160;
+    const xMenu = innerLeft + wMenu / 2;
     this.createPillButton({
-      x: width / 2 - headerW / 2 + 105,
+      x: xMenu,
       y: headerY,
-      w: 175,
-      h: 48,
+      w: wMenu,
+      h: 46,
       baseColor: 0x0a353c,
       shadowColor: 0x021a14,
       borderColor: 0x38bdf8,
       text: '◀ MENU UTAMA',
       textColor: '#ffffff',
-      fontSize: '16px',
+      fontSize: '15px',
       onClick: () => {
         if (window.soundEngine) window.soundEngine.playBeep();
         this.scene.start('TitleScene');
@@ -198,8 +204,8 @@ class TeamSelectScene extends Phaser.Scene {
     });
 
     // --- B. Avatar & Balon Bicara Gita ---
-    const gitaX = width / 2 - headerW / 2 + 245;
-    const avatarR = 28;
+    const avatarR = 26;
+    const gitaX = xMenu + wMenu / 2 + 20 + avatarR;
 
     const avatarBg = this.add.circle(gitaX, headerY, avatarR, 0x021a14, 1);
     avatarBg.setStrokeStyle(2, 0xf59e0b);
@@ -208,8 +214,8 @@ class TeamSelectScene extends Phaser.Scene {
     circleMaskGfx.fillCircle(gitaX, headerY, avatarR - 2);
     const avatarMask = circleMaskGfx.createGeometryMask();
 
-    const gitaImg = this.add.image(gitaX, headerY + 16, 'gita_talk');
-    gitaImg.setDisplaySize(100, 100);
+    const gitaImg = this.add.image(gitaX, headerY + 14, 'gita_talk');
+    gitaImg.setDisplaySize(92, 92);
     gitaImg.setMask(avatarMask);
 
     this.tweens.add({
@@ -222,8 +228,8 @@ class TeamSelectScene extends Phaser.Scene {
     });
 
     // Kotak dialog ringkas Gita
-    const speechW = 490;
-    const speechH = 50;
+    const speechW = 420;
+    const speechH = 48;
     const speechX = gitaX + avatarR + 12 + speechW / 2;
 
     const speechGfx = this.add.graphics();
@@ -232,25 +238,27 @@ class TeamSelectScene extends Phaser.Scene {
     speechGfx.lineStyle(1.5, 0x10b981, 0.85);
     speechGfx.strokeRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 12);
 
-    this.add.text(speechX - speechW / 2 + 16, headerY - 12, '🔍 GITA (PANDUAN SISWA):', {
+    this.add.text(speechX - speechW / 2 + 14, headerY - 11, '🔍 GITA (PANDUAN SISWA):', {
       fontFamily: 'Fredoka, sans-serif', fontSize: '13px', color: '#fef08a', fontStyle: 'bold'
     });
-    this.add.text(speechX - speechW / 2 + 16, headerY + 8, 'Pilih pahlawan timmu untuk mulai!', {
-      fontFamily: 'Nunito, sans-serif', fontSize: '17px', color: '#ffffff', fontStyle: 'bold'
+    this.add.text(speechX - speechW / 2 + 14, headerY + 8, 'Pilih pahlawan timmu untuk mulai!', {
+      fontFamily: 'Nunito, sans-serif', fontSize: '16px', color: '#ffffff', fontStyle: 'bold'
     });
 
     // Tombol Dengarkan Gita
+    const wListen = 140;
+    const xListen = speechX + speechW / 2 + 12 + wListen / 2;
     this.createPillButton({
-      x: speechX + speechW / 2 + 88,
+      x: xListen,
       y: headerY,
-      w: 148,
+      w: wListen,
       h: 46,
       baseColor: 0x0284c7,
       shadowColor: 0x0369a1,
       borderColor: 0x38bdf8,
       text: '🔊 DENGARKAN',
       textColor: '#ffffff',
-      fontSize: '15px',
+      fontSize: '14px',
       onClick: () => {
         if (window.soundEngine) {
           window.soundEngine.playBeep();
@@ -259,49 +267,17 @@ class TeamSelectScene extends Phaser.Scene {
       }
     });
 
-    // --- C. Plakat Judul Tengah Gagah ---
-    const titleX = width / 2 + 250;
-    this.add.text(titleX, headerY - 13, '🏆 PILIH TIM DETEKTIF SAWAH 🌾', {
-      fontFamily: 'Fredoka, sans-serif',
-      fontSize: '26px',
-      color: '#fef08a',
-      fontStyle: 'bold',
-      shadow: { offsetY: 2, color: '#000000', blur: 4, fill: true }
-    }).setOrigin(0.5);
+    // --- D. Kontrol Kanan Atas (Suara & Fullscreen) - Di-anchor dari Margin Kanan Panel ---
+    const innerRight = headerRight - 28;
+    const ctrlGap = 12;
 
-    this.add.text(titleX, headerY + 16, '🎮 Wakil kelompok, maju dan sentuh pahlawan timmu!', {
-      fontFamily: 'Nunito, sans-serif',
-      fontSize: '15px',
-      color: '#e2e8f0',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
-
-    // --- D. Kontrol Kanan Atas (Suara & Fullscreen) ---
-    const isMutedInit = window.soundEngine ? window.soundEngine.muted : false;
-    const audioBtn = this.createPillButton({
-      x: width / 2 + headerW / 2 - 185,
-      y: headerY,
-      w: 115,
-      h: 46,
-      baseColor: 0x0a353c,
-      shadowColor: 0x021a14,
-      borderColor: 0x38bdf8,
-      text: isMutedInit ? '🔇 Bisu' : '🔊 Suara',
-      textColor: '#ffffff',
-      fontSize: '15px',
-      onClick: () => {
-        if (window.soundEngine) {
-          const isMuted = window.soundEngine.toggleMute();
-          audioBtn.label.setText(isMuted ? '🔇 Bisu' : '🔊 Suara');
-          if (!isMuted) window.soundEngine.playBeep();
-        }
-      }
-    });
-
+    // Tombol Fullscreen (Paling Kanan)
+    const wFullscreen = 135;
+    const xFullscreen = innerRight - wFullscreen / 2;
     this.createPillButton({
-      x: width / 2 + headerW / 2 - 65,
+      x: xFullscreen,
       y: headerY,
-      w: 125,
+      w: wFullscreen,
       h: 46,
       baseColor: 0x0a353c,
       shadowColor: 0x021a14,
@@ -318,6 +294,50 @@ class TeamSelectScene extends Phaser.Scene {
         }
       }
     });
+
+    // Tombol Suara
+    const wAudio = 110;
+    const xAudio = (xFullscreen - wFullscreen / 2) - ctrlGap - wAudio / 2;
+    const isMutedInit = window.soundEngine ? window.soundEngine.muted : false;
+    const audioBtn = this.createPillButton({
+      x: xAudio,
+      y: headerY,
+      w: wAudio,
+      h: 46,
+      baseColor: 0x0a353c,
+      shadowColor: 0x021a14,
+      borderColor: 0x38bdf8,
+      text: isMutedInit ? '🔇 Bisu' : '🔊 Suara',
+      textColor: '#ffffff',
+      fontSize: '14px',
+      onClick: () => {
+        if (window.soundEngine) {
+          const isMuted = window.soundEngine.toggleMute();
+          audioBtn.label.setText(isMuted ? '🔇 Bisu' : '🔊 Suara');
+          if (!isMuted) window.soundEngine.playBeep();
+        }
+      }
+    });
+
+    // --- C. Plakat Judul Tengah Gagah (Tepat di Pusat Ruang antara Tombol Dengarkan & Tombol Suara) ---
+    const leftBoundTitle = xListen + wListen / 2;
+    const rightBoundTitle = xAudio - wAudio / 2;
+    const titleX = (leftBoundTitle + rightBoundTitle) / 2;
+
+    this.add.text(titleX, headerY - 13, '🏆 PILIH TIM DETEKTIF SAWAH 🌾', {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: '24px',
+      color: '#fef08a',
+      fontStyle: 'bold',
+      shadow: { offsetY: 2, color: '#000000', blur: 4, fill: true }
+    }).setOrigin(0.5);
+
+    this.add.text(titleX, headerY + 16, '🎮 Wakil kelompok, maju dan sentuh pahlawan timmu!', {
+      fontFamily: 'Nunito, sans-serif',
+      fontSize: '15px',
+      color: '#e2e8f0',
+      fontStyle: 'bold'
+    }).setOrigin(0.5);
   }
 
   /**
