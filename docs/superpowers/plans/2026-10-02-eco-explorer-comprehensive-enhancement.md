@@ -177,7 +177,7 @@ git commit -m "feat(simulation): implement dynamic multi-biome ecological cascad
 - Consumes: `window.progressManager`
 - Produces: `progressManager.unlockAllForExaminer()`, Phaser 3 Touch Modal Dialog di `BiomeSelectScene`.
 
-- [ ] **Step 1: Tambahkan method `unlockAllForExaminer()` di `ProgressManager.js`**
+- [x] **Step 1: Tambahkan method `unlockAllForExaminer()` di `ProgressManager.js`**
 
 ```javascript
   /**
@@ -201,14 +201,14 @@ git commit -m "feat(simulation): implement dynamic multi-biome ecological cascad
   }
 ```
 
-- [ ] **Step 2: Buat modal konfirmasi sentuh Phaser di `BiomeSelectScene.js`**
+- [x] **Step 2: Buat modal konfirmasi sentuh Phaser di `BiomeSelectScene.js`**
 
 Gantikan kode `window.confirm()` dengan metode internal `showConfirmModal(title, message, onYes)`:
 - Backdrop gelap transparan (Alpha 0.8) ramah IFP.
 - Kotak pesan mewah berbingkai emas `0xf59e0b` dengan teks Fredoka tebal.
 - Dua tombol besar sentuh jemari: `✅ Ya, Reset` (merah) dan `❌ Batal` (hijau zamrud).
 
-- [ ] **Step 3: Tambahkan Secret Gesture / Shortcut "Mode Penguji" di `BiomeSelectScene.js`**
+- [x] **Step 3: Tambahkan Secret Gesture / Shortcut "Mode Penguji" di `BiomeSelectScene.js`**
 
 - Ketuk lencana tim di header sebanyak 5 kali dalam rentang waktu 3 detik:
   - Bunyikan chime sukses `playSuccess()`.
@@ -216,12 +216,12 @@ Gantikan kode `window.confirm()` dengan metode internal `showConfirmModal(title,
   - Tampilkan floating banner emas: `🎓 MODE PENGUJI AKTIF: 4 BIOMA & 8 MISI TERBUKA!`.
   - Restart scene untuk memperbarui kartu peta ekosistem.
 
-- [ ] **Step 4: Verifikasi sintaksis dan integrasi**
+- [x] **Step 4: Verifikasi sintaksis dan integrasi**
 
 Run: `node -c WEBSITE/js/phaser-game/managers/ProgressManager.js WEBSITE/js/phaser-game/scenes/BiomeSelectScene.js`  
 Expected: Exit code 0.
 
-- [ ] **Step 5: Commit perubahan Task 2**
+- [x] **Step 5: Commit perubahan Task 2**
 
 ```bash
 git add WEBSITE/js/phaser-game/managers/ProgressManager.js WEBSITE/js/phaser-game/scenes/BiomeSelectScene.js
