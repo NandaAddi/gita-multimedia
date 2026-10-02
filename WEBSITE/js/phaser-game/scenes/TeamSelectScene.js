@@ -227,27 +227,35 @@ class TeamSelectScene extends Phaser.Scene {
       ease: 'Sine.easeInOut'
     });
 
-    // Kotak dialog ringkas Gita
+    // Kotak dialog ringkas Gita (Tinggi proporsional & padding vertikal presisi)
     const speechW = 420;
-    const speechH = 48;
+    const speechH = 56;
     const speechX = gitaX + avatarR + 12 + speechW / 2;
 
     const speechGfx = this.add.graphics();
     speechGfx.fillStyle(0x022c22, 0.95);
-    speechGfx.fillRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 12);
-    speechGfx.lineStyle(1.5, 0x10b981, 0.85);
-    speechGfx.strokeRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 12);
+    speechGfx.fillRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 14);
+    speechGfx.lineStyle(1.5, 0x10b981, 0.9);
+    speechGfx.strokeRoundedRect(speechX - speechW / 2, headerY - speechH / 2, speechW, speechH, 14);
 
-    this.add.text(speechX - speechW / 2 + 14, headerY - 11, '🔍 GITA (PANDUAN SISWA):', {
-      fontFamily: 'Fredoka, sans-serif', fontSize: '13px', color: '#fef08a', fontStyle: 'bold'
-    });
-    this.add.text(speechX - speechW / 2 + 14, headerY + 8, 'Pilih pahlawan timmu untuk mulai!', {
-      fontFamily: 'Nunito, sans-serif', fontSize: '16px', color: '#ffffff', fontStyle: 'bold'
-    });
+    const textLeftX = speechX - speechW / 2 + 16;
+    this.add.text(textLeftX, headerY - 12, '🔍 GITA (PANDUAN SISWA):', {
+      fontFamily: 'Fredoka, sans-serif',
+      fontSize: '13px',
+      color: '#fef08a',
+      fontStyle: 'bold'
+    }).setOrigin(0, 0.5);
+
+    this.add.text(textLeftX, headerY + 11, 'Pilih pahlawan timmu untuk mulai!', {
+      fontFamily: 'Nunito, sans-serif',
+      fontSize: '16px',
+      color: '#ffffff',
+      fontStyle: 'bold'
+    }).setOrigin(0, 0.5);
 
     // Tombol Dengarkan Gita
     const wListen = 140;
-    const xListen = speechX + speechW / 2 + 12 + wListen / 2;
+    const xListen = speechX + speechW / 2 + 14 + wListen / 2;
     this.createPillButton({
       x: xListen,
       y: headerY,
