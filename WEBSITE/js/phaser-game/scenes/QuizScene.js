@@ -56,56 +56,57 @@ class QuizScene extends Phaser.Scene {
     bg.setTint(0x334433);
 
     // 2. Header
-    const header = this.add.rectangle(width / 2, 65, width * 0.94, 85, 0x0f172a, 0.96);
+    const header = this.add.rectangle(width / 2, 70, width * 0.94, 96, 0x0f172a, 0.96);
     header.setStrokeStyle(3, 0xfbbf24);
 
     const missionTitle = this.activeMission ? this.activeMission.title : 'Teka-Teki Ekosistem';
-    this.add.text(width / 2, 45, `\uD83D\uDD0D BUKU CATATAN DETEKTIF: ${missionTitle.toUpperCase()}`, {
+    this.add.text(width / 2, 48, `\uD83D\uDD0D BUKU CATATAN DETEKTIF: ${missionTitle.toUpperCase()}`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '24px',
+      fontSize: '30px',
       color: '#fef08a',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
-    this.add.text(width / 2, 80, `${ecoName} | Giliran Diskusi: ${simResult.team ? simResult.team.name : 'TIM DETEKTIF'} & Teman-Teman Kelas 5A`, {
+    this.add.text(width / 2, 88, `${ecoName} | Giliran Diskusi: ${simResult.team ? simResult.team.name : 'TIM DETEKTIF'} & Seluruh Kelas 5A`, {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '17px',
-      color: '#cbd5e1'
+      fontSize: '24px',
+      color: '#cbd5e1',
+      fontStyle: 'bold'
     }).setOrigin(0.5);
 
     // 3. Kartu Pertanyaan
-    const card = this.add.rectangle(width / 2, 230, width * 0.94, 200, ambientColor, 0.95);
+    const card = this.add.rectangle(width / 2, 235, width * 0.94, 210, ambientColor, 0.95);
     card.setStrokeStyle(2.5, accentColor);
 
     // Avatar Gita berpikir
     const gitaThinkKey = this.textures.exists('gita_think') ? 'gita_think' : 'gita_idle';
-    this.gitaAvatar = this.add.image(width / 2 - width * 0.44 + 50, 230, gitaThinkKey)
-      .setDisplaySize(120, 165);
+    this.gitaAvatar = this.add.image(width / 2 - width * 0.44 + 55, 235, gitaThinkKey)
+      .setDisplaySize(125, 170);
 
     this.tweens.add({
       targets: this.gitaAvatar,
-      y: 224,
+      y: 228,
       duration: 1400,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut'
     });
 
-    const textStartX = width / 2 - width * 0.44 + 130;
+    const textStartX = width / 2 - width * 0.44 + 135;
 
     // Judul
     const typeLabel = this.activeMission ? this.activeMission.typeLabel : 'Teka-Teki';
     this.add.text(textStartX, 150, `\uD83D\uDCDC ${typeLabel}: TEKA-TEKI SEBAB AKIBAT`, {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '21px',
+      fontSize: '26px',
       color: '#fef08a',
       fontStyle: 'bold'
     });
 
     // Pertanyaan
-    this.add.text(textStartX, 185, quizData.question, {
+    this.add.text(textStartX, 190, quizData.question, {
       fontFamily: 'Nunito, sans-serif',
-      fontSize: '20px',
+      fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold',
       wordWrap: { width: width * 0.70 },
@@ -113,9 +114,9 @@ class QuizScene extends Phaser.Scene {
     });
 
     // Tombol Suara Soal
-    const btnVoiceQ = this.add.rectangle(width / 2 + width * 0.42, 215, 64, 64, accentColor).setInteractive({ useHandCursor: true });
-    btnVoiceQ.setStrokeStyle(2, 0xfef08a);
-    this.add.text(width / 2 + width * 0.42, 215, '\uD83D\uDD0A', { fontSize: '28px' }).setOrigin(0.5);
+    const btnVoiceQ = this.add.rectangle(width / 2 + width * 0.42, 225, 72, 72, accentColor).setInteractive({ useHandCursor: true });
+    btnVoiceQ.setStrokeStyle(2.5, 0xfef08a);
+    this.add.text(width / 2 + width * 0.42, 225, '\uD83D\uDD0A', { fontSize: '32px' }).setOrigin(0.5);
 
     btnVoiceQ.on('pointerdown', () => {
       btnVoiceQ.setScale(0.9);
@@ -127,33 +128,34 @@ class QuizScene extends Phaser.Scene {
     btnVoiceQ.on('pointerup', () => btnVoiceQ.setScale(1.0));
 
     // 4. Pilihan Jawaban
-    const optY = 405;
-    const optSpacing = 115;
+    const optY = 415;
+    const optSpacing = 118;
     this.optionButtons = [];
 
     quizData.options.forEach((opt, idx) => {
       const oy = optY + (idx * optSpacing);
-      const btn = this.add.rectangle(width / 2, oy, width * 0.94, 98, ambientColor, 0.95)
+      const btn = this.add.rectangle(width / 2, oy, width * 0.94, 104, ambientColor, 0.95)
         .setInteractive({ useHandCursor: true })
         .setStrokeStyle(2.5, accentColor);
 
       // Huruf Badge
       const letters = ['A', 'B', 'C'];
-      const badgeX = width / 2 - width * 0.44 + 40;
-      const iconCircle = this.add.circle(badgeX, oy, 30, 0x021a14).setStrokeStyle(2, 0xf59e0b);
+      const badgeX = width / 2 - width * 0.44 + 45;
+      const iconCircle = this.add.circle(badgeX, oy, 34, 0x021a14).setStrokeStyle(2, 0xf59e0b);
       this.add.text(badgeX, oy, letters[idx], {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '26px',
+        fontSize: '28px',
         color: '#fef08a',
         fontStyle: 'bold'
       }).setOrigin(0.5);
 
       // Teks Pilihan
-      this.add.text(width / 2 - width * 0.44 + 90, oy, opt.text, {
+      this.add.text(width / 2 - width * 0.44 + 95, oy, opt.text, {
         fontFamily: 'Nunito, sans-serif',
-        fontSize: '19px',
+        fontSize: '24px',
         color: '#ffffff',
-        wordWrap: { width: width * 0.81 },
+        fontStyle: 'bold',
+        wordWrap: { width: width * 0.80 },
         lineSpacing: 4
       }).setOrigin(0, 0.5);
 
@@ -211,11 +213,11 @@ class QuizScene extends Phaser.Scene {
 
       if (this.feedbackBox) this.feedbackBox.destroy();
       this.feedbackBox = this.add.container(width / 2, 855).setDepth(22);
-      const fbBg = this.add.rectangle(0, 0, width * 0.94, 72, 0x064e3b, 0.98);
+      const fbBg = this.add.rectangle(0, 0, width * 0.94, 84, 0x064e3b, 0.98);
       fbBg.setStrokeStyle(3, 0xf59e0b);
       const fbTxt = this.add.text(0, 0, '✅ ' + (quizData.explanation || 'Jawaban benar!'), {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '18px',
+        fontSize: '24px',
         color: '#fef08a',
         wordWrap: { width: width * 0.9 }
       }).setOrigin(0.5);
@@ -243,13 +245,13 @@ class QuizScene extends Phaser.Scene {
 
       if (this.feedbackBox) this.feedbackBox.destroy();
       this.feedbackBox = this.add.container(width / 2, 855).setDepth(22);
-      const fbBg = this.add.rectangle(0, 0, width * 0.94, 72, 0x450a0a, 0.98);
+      const fbBg = this.add.rectangle(0, 0, width * 0.94, 84, 0x450a0a, 0.98);
       fbBg.setStrokeStyle(3, 0xef4444);
 
-      const wrongFeedback = '❌ Belum tepat. Perhatikan bagan rantai makanan di atas, lalu diskusikan kembali!';
+      const wrongFeedback = '❌ Belum tepat. Perhatikan bagan rantai makanan di bawah, lalu diskusikan kembali!';
       const fbTxt = this.add.text(0, 0, wrongFeedback, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '18px',
+        fontSize: '24px',
         color: '#fecaca',
         wordWrap: { width: width * 0.9 }
       }).setOrigin(0.5);
@@ -325,13 +327,13 @@ class QuizScene extends Phaser.Scene {
     const container = this.add.container(width / 2, cardY).setDepth(20);
 
     // Box Latar Belakang Diagram
-    const bgBox = this.add.rectangle(0, 0, width * 0.94, 88, 0x021a14, 0.94);
+    const bgBox = this.add.rectangle(0, 0, width * 0.94, 104, 0x021a14, 0.94);
     bgBox.setStrokeStyle(2, 0xf59e0b);
     container.add(bgBox);
 
-    const titleBadge = this.add.text(-width * 0.44, -30, '🔗 SKEMA SEBAB-AKIBAT RANTAI MAKANAN (C2):', {
+    const titleBadge = this.add.text(-width * 0.44, -36, '🔗 SKEMA SEBAB-AKIBAT RANTAI MAKANAN (C2):', {
       fontFamily: 'Fredoka, sans-serif',
-      fontSize: '13px',
+      fontSize: '24px',
       color: '#fef08a',
       fontStyle: 'bold'
     });
@@ -344,12 +346,12 @@ class QuizScene extends Phaser.Scene {
 
     steps.forEach((st, i) => {
       const nx = startX + (i * (nodeW + 32)) + nodeW / 2;
-      const pill = this.add.rectangle(nx, 10, nodeW, 44, st.color, 0.92);
+      const pill = this.add.rectangle(nx, 12, nodeW, 52, st.color, 0.92);
       pill.setStrokeStyle(1.5, 0xfef08a, 0.8);
 
-      const pTxt = this.add.text(nx, 10, st.label, {
+      const pTxt = this.add.text(nx, 12, st.label, {
         fontFamily: 'Fredoka, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#ffffff',
         fontStyle: 'bold'
       }).setOrigin(0.5);
@@ -358,9 +360,9 @@ class QuizScene extends Phaser.Scene {
 
       if (i < steps.length - 1) {
         const arrowX = nx + nodeW / 2 + 16;
-        const arrow = this.add.text(arrowX, 10, '➔', {
+        const arrow = this.add.text(arrowX, 12, '➔', {
           fontFamily: 'Fredoka, sans-serif',
-          fontSize: '18px',
+          fontSize: '24px',
           color: '#fbbf24',
           fontStyle: 'bold'
         }).setOrigin(0.5);
