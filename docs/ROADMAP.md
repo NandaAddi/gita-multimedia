@@ -91,7 +91,8 @@ Penelitian ini menggunakan model **Alessi & Trollip (2001)** yang dirancang khus
   4. Menyelaraskan padanan peran tim lintas bioma pada `TeamSelectScene.js` dan sinkronisasi rekomendasi kartu voting CSCL Penasihat Meja kontekstual.
   5. Memodernisasi antarmuka portal riset landing page `WEBSITE/index.html` dengan desain Emerald Glassmorphism dan tautan instan pembaca dokumen offline `docs/docs.js`.
   6. Mengembangkan automated headless test suites (`test_simulation_logic.js` & `test_progress_manager.js`) dan uji coba gladi bersih di layar sentuh IFP SDN Percobaan 2 Malang.
-* **Target Output:** Master Media Versi Beta tervalidasi 100%, portal riset modern, dokumen akademik tersinkronisasi, dan hasil tes teknis IFP.
+  7. **Audit & Refaktor Tipografi Ultra-Large IFP Standard ($\ge 24$ px):** Melakukan audit font komprehensif pada seluruh 9 scene Phaser (`scripts/audit_fonts.py`), mengeliminasi 100% font kecil (sebelumnya 110 font di bawah 20px), menetapkan batas minimum absolut $\ge 24$ px di seluruh game, serta memperluas container/modal agar terbaca jelas dari bangku belakang kelas 5A.
+* **Target Output:** Master Media Versi Beta tervalidasi 100%, standar tipografi IFP $\ge 24$ px, portal riset modern, dokumen akademik tersinkronisasi, dan hasil tes teknis IFP.
 * **Koordinasi:** Koordinasi teknis pelaksanaan pembelajaran bersama Guru Kelas 5A dan persiapan instrumen uji coba lapangan.
 
 #### Pekan 12: Uji Coba Lapangan dengan 25 Siswa (Beta Testing) - [MILESTONE 2]
