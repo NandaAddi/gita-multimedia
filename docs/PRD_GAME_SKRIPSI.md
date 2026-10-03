@@ -444,9 +444,15 @@ Selain implementasi berbasis Phaser 3, proyek ini menyediakan versi **Standalone
   * `js/main.js`: Bootstrapper panggung, responsive IFP viewport fit, 60 FPS animation loop, dan screen router.
 * **Protokol Eksekusi Luring Tanpa Hambatan (Zero-CORS):**
   * Seluruh modul dimuat secara berurutan melalui tag `<script src="...">` klasik tanpa pembungkus `<script type="module">`. Hal ini menjamin media dapat dibuka langsung via klik ganda protokol `file:///` di Chromium atau sistem operasi IFP Android/Windows sekolah tanpa memicu pemblokiran keamanan CORS.
+* **Tipografi Ramah Anak & Lucu (Playful & Kid-Friendly Typography Stack):**
+  * Mengeliminasi 100% font formal kaku (Times New Roman / serif sistem).
+  * Mengintegrasikan font Google Fonts ramah anak: **Baloo 2**, **Fredoka**, dan **Nunito** yang memiliki karakter membulat (*rounded terminals*), gemuk (*chunky*), ceria, dan sangat disukai anak-anak SD kelas 5.
+  * Penyediaan **Aset Font Lokal WOFF2 Lengkap** di `fonts/` (`baloo_2_700.woff2`, `fredoka_700.woff2`, `nunito_800.woff2`, dll.) melalui `@font-face` di `css/game.css`, menjamin teks tampil lucu dan konsisten 100% baik saat terkoneksi internet maupun luring total di IFP sekolah.
+  * Teks logo panggung `ECO-EXPLORER` bergaya kartun pop 3D berlapis emas dengan stroke hijau tua empuk.
 * **Verifikasi Otomatis & Zero Regression:**
   * Didukung oleh test suite otomatis (`scripts/verify_modular_game.js`) yang memverifikasi inisialisasi modul, eksekusi render panggung, siklus hidup simulasi, alur bridging dialog RPG, kuis C2, hingga selebrasi kemenangan.
   * Audit tipografi otomatis (`scripts/audit_standalone_fonts.py`) dengan skor kelulusan 100% (0 pelanggaran font < 24px).
+
 
 
 ---
