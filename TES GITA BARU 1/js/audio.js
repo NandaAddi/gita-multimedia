@@ -78,6 +78,10 @@ const sfx = {
   },
   deny() {
     tone(180, 0.14, 'square', 0.06);
+  },
+  whoosh() {
+    tone(440, 0.1, 'sine', 0.08);
+    tone(660, 0.08, 'sine', 0.06, 0.03);
   }
 };
 

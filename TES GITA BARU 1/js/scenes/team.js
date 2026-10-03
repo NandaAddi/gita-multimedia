@@ -1,36 +1,262 @@
 /* ============================================================
    ECO-EXPLORER — js/scenes/team.js
-   Layar Pemilihan Tim Petualang (5 Tim)
+   Layar Pemilihan Tim Petualang (Arcade 3D Hero Stage & Smooth Carousel)
    ============================================================ */
 
 let teamIdx = 0;
-function buildTeam(){
- const saved=TEAMS.findIndex(t=>t.id===G.team);teamIdx=saved>=0?saved:0;
- el('#scr-team').innerHTML='<div class="ui">'
- +'<div class="topbar"><button class="btn tb-btn" id="t-back">'+ic('back',24)+' Judul</button>'
- +'<div class="plaque">Pilih Tim Petualangmu</div><div class="spacer"></div>'
- +'<div class="tb-stars">'+ic('star',24)+' <b>'+totStars()+'/24</b></div></div>'
- +'<div class="stage panel-deep">'
- +'<div class="arrow prev" id="t-prev">'+ic('back',44)+'</div><div class="arrow next" id="t-next">'+ic('arrowR',44)+'</div>'
- +'<div class="hero-left"><div class="pedestal"><canvas id="t-mascot" width="340" height="340"></canvas></div>'
- +'<div class="hero-name" id="t-name"></div></div>'
- +'<div class="hero-right"><div class="hero-motto" id="t-motto"></div>'
- +'<div class="hero-dossier" id="t-doss"></div>'
- +'<div class="hero-spec">'+ic('medal',28)+' <span id="t-spec"></span></div></div></div>'
- +'<div class="dock" id="t-dock"></div></div>';
- el('#t-back').onclick=()=>{sfx.click();titleBubble();go('title');};
- el('#t-prev').onclick=()=>{sfx.click();teamIdx=(teamIdx+4)%5;renderTeam();};
- el('#t-next').onclick=()=>{sfx.click();teamIdx=(teamIdx+1)%5;renderTeam();};
- renderTeam();}
-function renderTeam(){const t=TEAMS[teamIdx],sm2=MISSIONS.find(m=>m.id===t.spec);
- el('#t-name').textContent=t.name;
- el('#t-motto').textContent='"'+t.motto+'"';
- el('#t-doss').innerHTML='<b style="color:#fef08a;font-family:Fredoka">'+t.role+'</b><br>'+t.dossier;
- el('#t-spec').textContent='Keahlian: '+t.perk.label+' (bonus kuota & cooldown singkat) • Misi spesial: '+sm2.title;
- const c=el('#t-mascot').getContext('2d');c.clearRect(0,0,340,340);c.save();c.translate(170,178);MASC[t.mascot](c);c.restore();
- el('#t-dock').innerHTML=TEAMS.map((tm,i)=>'<div class="dock-tile '+(i===teamIdx?'on':'')+'" data-i="'+i+'">'+tm.name+'<span class="sm" style="font-size:24px;opacity:.85">'+tm.role+'</span></div>').join('')
- +'<button class="btn btn-gold" id="t-pick" style="height:86px;font-size:25px;padding:0 34px">'+ic('check',26)+' Pilih Tim Ini!</button>';
- els('#t-dock .dock-tile').forEach(d=>d.onclick=()=>{sfx.click();teamIdx=+d.dataset.i;renderTeam();});
- el('#t-pick').onclick=()=>{G.team=t.id;saveG();sfx.success();toast('Kamu memilih '+t.name+'! '+t.perk.label+' jadi lebih kuat.');
-  speak('Hebat! Kamu memilih '+t.name+'.');buildBiome();go('biome');};}
+let teamKeyBound = false;
 
+const TEAM_THEMES = {
+  padi: {
+    podiumTop: '#10b981',
+    podiumSide: '#064e3b',
+    aura: 'rgba(16, 185, 129, 0.35)',
+    accent: '#fef08a'
+  },
+  ular: {
+    podiumTop: '#f43f5e',
+    podiumSide: '#881337',
+    aura: 'rgba(244, 63, 94, 0.35)',
+    accent: '#fecdd3'
+  },
+  jamur: {
+    podiumTop: '#f59e0b',
+    podiumSide: '#78350f',
+    aura: 'rgba(245, 158, 11, 0.35)',
+    accent: '#fef08a'
+  },
+  elang: {
+    podiumTop: '#3b82f6',
+    podiumSide: '#1e3a8a',
+    aura: 'rgba(59, 130, 246, 0.35)',
+    accent: '#bfdbfe'
+  },
+  katak: {
+    podiumTop: '#06b6d4',
+    podiumSide: '#0e7490',
+    aura: 'rgba(6, 182, 212, 0.35)',
+    accent: '#cffafe'
+  }
+};
+
+function buildTeam() {
+  const saved = TEAMS.findIndex(t => t.id === G.team);
+  teamIdx = saved >= 0 ? saved : 0;
+
+  el('#scr-team').innerHTML = `
+    <div class="ui">
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <button class="btn tb-btn" id="t-back">${ic('back', 24)} Judul</button>
+        <div class="plaque">Pilih Tim Petualangmu</div>
+        <div class="spacer"></div>
+        <div class="tb-stars">${ic('star', 24)} <b>${totStars()}/24</b></div>
+      </div>
+
+      <!-- MAIN HERO SHOWCASE STAGE -->
+      <div class="stage panel-deep" id="team-stage">
+        <!-- ARCADE 3D NAV BUTTONS -->
+        <button class="arrow prev arcade-arrow" id="t-prev" aria-label="Tim Sebelumnya">
+          ${ic('back', 44)}
+        </button>
+        <button class="arrow next arcade-arrow" id="t-next" aria-label="Tim Berikutnya">
+          ${ic('arrowR', 44)}
+        </button>
+
+        <!-- SLIDING HERO CARD INNER -->
+        <div class="hero-inner-wrap" id="hero-wrap">
+          <div class="hero-left">
+            <div class="pedestal-stage">
+              <div class="podium-aura" id="t-aura"></div>
+              <canvas id="t-mascot" width="400" height="400"></canvas>
+            </div>
+            <div class="hero-name-plate" id="t-name"></div>
+          </div>
+
+          <div class="hero-right">
+            <div class="hero-motto" id="t-motto"></div>
+            <div class="hero-dossier" id="t-doss"></div>
+            <div class="hero-spec" id="t-spec-box">
+              <span class="spec-ic">${ic('medal', 30)}</span>
+              <span class="spec-txt" id="t-spec"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM CONTROL BAR -->
+      <div class="team-footer-bar">
+        <div class="dock-row" id="t-dock"></div>
+        <button class="btn btn-gold btn-hero-pick" id="t-pick">
+          ${ic('check', 28)} Pilih Tim Ini!
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Navigation handlers
+  el('#t-back').onclick = () => {
+    sfx.click();
+    titleBubble();
+    go('title');
+  };
+
+  el('#t-prev').onclick = () => navigateTeam(-1);
+  el('#t-next').onclick = () => navigateTeam(1);
+
+  // Swipe gesture handlers for IFP Touchscreen
+  const stage = el('#team-stage');
+  let startX = 0, startY = 0;
+  stage.addEventListener('pointerdown', (e) => {
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+  stage.addEventListener('pointerup', (e) => {
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) navigateTeam(1);
+      else navigateTeam(-1);
+    }
+  });
+
+  // Global Keyboard Navigation (Arrow Keys)
+  if (!teamKeyBound) {
+    teamKeyBound = true;
+    window.addEventListener('keydown', (e) => {
+      if (CUR !== 'team') return;
+      if (e.key === 'ArrowRight') navigateTeam(1);
+      else if (e.key === 'ArrowLeft') navigateTeam(-1);
+    });
+  }
+
+  renderTeam('init');
+}
+
+function navigateTeam(delta) {
+  sfx.whoosh();
+  teamIdx = (teamIdx + delta + TEAMS.length) % TEAMS.length;
+  renderTeam(delta > 0 ? 'next' : 'prev');
+}
+
+function renderTeam(dir) {
+  const t = TEAMS[teamIdx];
+  const sm2 = MISSIONS.find(m => m.id === t.spec);
+  const theme = TEAM_THEMES[t.id] || TEAM_THEMES.padi;
+
+  // Update theme class on stage
+  const stage = el('#team-stage');
+  if (stage) {
+    stage.className = 'stage panel-deep theme-' + t.id;
+  }
+
+  // Smooth slide transition
+  const wrap = el('#hero-wrap');
+  if (wrap && dir && dir !== 'init') {
+    wrap.classList.remove('slide-from-right', 'slide-from-left');
+    // Force reflow
+    void wrap.offsetWidth;
+    wrap.classList.add(dir === 'next' ? 'slide-from-right' : 'slide-from-left');
+  }
+
+  // Text contents
+  el('#t-name').textContent = t.name;
+  el('#t-motto').textContent = '"' + t.motto + '"';
+  el('#t-doss').innerHTML = '<div class="doss-role">' + t.role + '</div><div class="doss-desc">' + t.dossier + '</div>';
+  el('#t-spec').textContent = 'Keahlian: ' + t.perk.label + ' (bonus kuota & cooldown singkat) • Misi spesial: ' + sm2.title;
+
+  // Draw 3D Illuminated Podium & Mascot
+  drawPodiumAndMascot(t, theme);
+
+  // Render Bottom Dock Tiles
+  el('#t-dock').innerHTML = TEAMS.map((tm, i) => `
+    <div class="dock-tile team-tile-${tm.id} ${i === teamIdx ? 'on' : ''}" data-i="${i}">
+      <span class="dt-name">${tm.name}</span>
+      <span class="dt-role">${tm.role}</span>
+    </div>
+  `).join('');
+
+  els('#t-dock .dock-tile').forEach(d => {
+    d.onclick = () => {
+      const targetIdx = +d.dataset.i;
+      if (targetIdx !== teamIdx) {
+        const delta = targetIdx > teamIdx ? 1 : -1;
+        teamIdx = targetIdx;
+        sfx.whoosh();
+        renderTeam(delta > 0 ? 'next' : 'prev');
+      }
+    };
+  });
+
+  // Main CTA button
+  el('#t-pick').onclick = () => {
+    G.team = t.id;
+    saveG();
+    sfx.success();
+    toast('Kamu memilih ' + t.name + '! ' + t.perk.label + ' jadi lebih kuat.');
+    speak('Hebat! Kamu memilih ' + t.name + '.');
+    buildBiome();
+    go('biome');
+  };
+}
+
+function drawPodiumAndMascot(t, theme) {
+  const cv = el('#t-mascot');
+  if (!cv) return;
+  const c = cv.getContext('2d');
+  c.clearRect(0, 0, 400, 400);
+
+  // 1. Soft Stage Shadow under Podium
+  c.save();
+  c.beginPath();
+  c.ellipse(200, 345, 140, 30, 0, 0, Math.PI * 2);
+  c.fillStyle = 'rgba(0, 0, 0, 0.45)';
+  c.fill();
+  c.restore();
+
+  // 2. 3D Cylindrical Podium Base (Bevel & Depth)
+  c.save();
+  const gradSide = c.createLinearGradient(0, 290, 0, 335);
+  gradSide.addColorStop(0, theme.podiumSide);
+  gradSide.addColorStop(1, '#021812');
+  c.fillStyle = gradSide;
+
+  c.beginPath();
+  c.moveTo(65, 300);
+  c.lineTo(65, 325);
+  c.ellipse(200, 325, 135, 26, 0, 0, Math.PI, false);
+  c.lineTo(335, 300);
+  c.ellipse(200, 300, 135, 26, 0, Math.PI, 0, true);
+  c.closePath();
+  c.fill();
+  c.restore();
+
+  // 3. Podium Top Surface
+  c.save();
+  const gradTop = c.createRadialGradient(200, 295, 20, 200, 295, 135);
+  gradTop.addColorStop(0, theme.podiumTop);
+  gradTop.addColorStop(0.85, theme.podiumSide);
+  gradTop.addColorStop(1, '#032018');
+  c.fillStyle = gradTop;
+
+  c.beginPath();
+  c.ellipse(200, 300, 135, 26, 0, 0, Math.PI * 2);
+  c.fill();
+
+  // 4. Specular Highlight Ring on Podium Surface
+  c.lineWidth = 2.5;
+  c.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+  c.beginPath();
+  c.ellipse(200, 298, 126, 22, 0, 0, Math.PI * 2);
+  c.stroke();
+  c.restore();
+
+  // 5. Mascot Vector Drawing with slight Scale-Up
+  c.save();
+  c.translate(200, 205);
+  c.scale(1.15, 1.15);
+  if (MASC[t.mascot]) {
+    MASC[t.mascot](c);
+  }
+  c.restore();
+}

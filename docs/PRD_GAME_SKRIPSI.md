@@ -449,6 +449,12 @@ Selain implementasi berbasis Phaser 3, proyek ini menyediakan versi **Standalone
   * Mengintegrasikan font Google Fonts ramah anak: **Baloo 2**, **Fredoka**, dan **Nunito** yang memiliki karakter membulat (*rounded terminals*), gemuk (*chunky*), ceria, dan sangat disukai anak-anak SD kelas 5.
   * Penyediaan **Aset Font Lokal WOFF2 Lengkap** di `fonts/` (`baloo_2_700.woff2`, `fredoka_700.woff2`, `nunito_800.woff2`, dll.) melalui `@font-face` di `css/game.css`, menjamin teks tampil lucu dan konsisten 100% baik saat terkoneksi internet maupun luring total di IFP sekolah.
   * Teks logo panggung `ECO-EXPLORER` bergaya kartun pop 3D berlapis emas dengan stroke hijau tua empuk.
+* **Antarmuka Pemilihan Tim Arcade 3D Podium & Smooth Carousel (`team.js`):**
+  * **Zero AI-Slop & Anti-Vibe Coding:** Meniadakan seluruh hiasan emoji acak pada teks/tombol, meniadakan border outline kawat tipis, dan menggantinya dengan *tonal layering* kaca hijau gelap serta *chunky solid bevel*.
+  * **Podium Silinder 3D Beriluminasi:** Maskot tim dirender di atas podium 3D bertingkat dengan bayangan alas realistis, bevel samping bergradien, dan cincin specular reflektif di canvas procedural.
+  * **Dynamic Team Aura:** Aura panggung dan aksen pencahayaan otomatis berubah warna mengikuti tim yang aktif (Padi: Hijau Zamrud, Ular: Merah Ruby, Jamur: Amber Hangat, Elang: Biru Safir, Katak: Biru Toska).
+  * **Smooth Spring Slide Transition:** Animasi perpindahan tim menggunakan akselerasi kurva spring empuk (`cubic-bezier(0.2, 0.8, 0.25, 1)`) disertai efek suara audio synth *whoosh* lembut.
+  * **Multi-Input Ergonomics:** Mendukung usapan jari sentuh (*swipe gesture*) di layar IFP, tombol keyboard panah kiri/kanan, tombol panah arkade emas 3D di sisi kiri/kanan panggung, serta 5 tombol dock kapsul bawah dengan indikator terpilih (*active scale pop*).
 * **Verifikasi Otomatis & Zero Regression:**
   * Didukung oleh test suite otomatis (`scripts/verify_modular_game.js`) yang memverifikasi inisialisasi modul, eksekusi render panggung, siklus hidup simulasi, alur bridging dialog RPG, kuis C2, hingga selebrasi kemenangan.
   * Audit tipografi otomatis (`scripts/audit_standalone_fonts.py`) dengan skor kelulusan 100% (0 pelanggaran font < 24px).
