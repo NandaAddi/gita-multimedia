@@ -569,47 +569,69 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
   background: radial-gradient(circle, rgba(6, 182, 212, 0.55) 0%, rgba(6, 182, 212, 0) 70%);
 }
 
-/* BOTTOM CONTROL BAR */
+/* BOTTOM CONTROL BAR (CHUNKY & POLISHED) */
 .team-footer-bar {
   position: absolute;
   left: 140px;
   right: 140px;
-  bottom: 24px;
-  height: 94px;
+  bottom: 22px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 22px;
+  gap: 20px;
   z-index: 8;
 }
 
-.dock-row {
+.team-dock-pod {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   flex: 1;
+  background: rgba(2, 28, 20, 0.88);
+  padding: 8px 12px;
+  border-radius: 28px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .dock-tile {
   flex: 1;
-  height: 86px;
-  border-radius: 22px;
-  background: rgba(2, 44, 34, 0.95);
+  height: 82px;
+  border-radius: 20px;
+  background: rgba(6, 60, 48, 0.65);
   border: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 0 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
-  transition: transform 0.14s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.14s, background 0.2s;
+  padding: 6px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.16s, background 0.2s;
+}
+
+.dt-badge-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.dt-num {
+  font-family: var(--font-fun);
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(254, 240, 138, 0.8);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 999px;
+  padding: 1px 8px;
+  line-height: 1.1;
 }
 
 .dock-tile .dt-name {
   font-family: var(--font-fun);
   font-weight: 700;
   font-size: 24px;
-  color: #cfe9dd;
+  color: #e2f5ec;
   line-height: 1.15;
   text-align: center;
 }
@@ -618,52 +640,102 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 24px;
-  color: rgba(207, 233, 221, 0.8);
+  color: #a7f3d0;
   line-height: 1.15;
   margin-top: 3px;
   text-align: center;
+  white-space: nowrap;
 }
 
 .dock-tile:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45);
+  background: rgba(10, 80, 62, 0.85);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
 }
 
+/* ZERO OUTLINE KAWAT — CHUNKY SOLID BEVEL */
 .dock-tile.on {
   transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55), 0 0 0 3px #f5a30b;
-  background: #064e3b;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.4), 0 16px 28px rgba(0, 0, 0, 0.55);
+  border: none;
 }
 
-.dock-tile.on .dt-name {
-  color: #fef08a;
+.dock-tile.team-tile-padi.on {
+  background: linear-gradient(180deg, #10b981 0%, #047857 100%);
 }
 
-.dock-tile.on .dt-role {
+.dock-tile.team-tile-ular.on {
+  background: linear-gradient(180deg, #f43f5e 0%, #be123c 100%);
+}
+
+.dock-tile.team-tile-jamur.on {
+  background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%);
+}
+
+.dock-tile.team-tile-elang.on {
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+.dock-tile.team-tile-katak.on {
+  background: linear-gradient(180deg, #06b6d4 0%, #0e7490 100%);
+}
+
+.dock-tile.on .dt-num {
+  background: rgba(0, 0, 0, 0.35);
   color: #ffffff;
 }
 
+.dock-tile.on .dt-name {
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+
+.dock-tile.on .dt-role {
+  color: #fef08a;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
 .btn-hero-pick {
-  height: 86px;
-  padding: 0 42px;
+  height: 98px;
+  min-width: 290px;
+  padding: 0 38px;
   font-family: var(--font-fun);
   font-weight: 700;
   font-size: 26px;
   letter-spacing: 0.5px;
-  border-radius: 22px;
+  border-radius: 26px;
+  border: none;
   flex: none;
-  box-shadow: 0 6px 0 #b45309, 0 14px 28px rgba(245, 163, 11, 0.4);
-  animation: pickPulse 2.4s infinite ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 60%, #d97706 100%);
+  box-shadow: 0 8px 0 #92400e, 0 16px 32px rgba(245, 158, 11, 0.45);
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s, filter 0.15s;
+  animation: pickPulse 2.8s infinite ease-in-out;
+}
+
+.btn-hero-pick:hover {
+  background: linear-gradient(180deg, #fde047 0%, #fbbf24 60%, #d97706 100%);
+  filter: brightness(1.05);
+}
+
+.btn-hero-pick:active {
+  transform: translateY(6px);
+  box-shadow: 0 2px 0 #92400e, 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes pickPulse {
   0%, 100% {
     transform: scale(1);
-    box-shadow: 0 6px 0 #b45309, 0 14px 28px rgba(245, 163, 11, 0.4);
+    box-shadow: 0 8px 0 #92400e, 0 16px 32px rgba(245, 158, 11, 0.45);
   }
   50% {
     transform: scale(1.02);
-    box-shadow: 0 6px 0 #b45309, 0 18px 36px rgba(245, 163, 11, 0.6);
+    box-shadow: 0 8px 0 #92400e, 0 20px 40px rgba(245, 158, 11, 0.65);
   }
 }
 

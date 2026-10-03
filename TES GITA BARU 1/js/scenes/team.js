@@ -86,9 +86,9 @@ function buildTeam() {
 
       <!-- BOTTOM CONTROL BAR -->
       <div class="team-footer-bar">
-        <div class="dock-row" id="t-dock"></div>
+        <div class="team-dock-pod" id="t-dock"></div>
         <button class="btn btn-gold btn-hero-pick" id="t-pick">
-          ${ic('check', 28)} Pilih Tim Ini!
+          ${ic('check', 28)} <span>Pilih Tim Ini!</span>
         </button>
       </div>
     </div>
@@ -168,10 +168,13 @@ function renderTeam(dir) {
   // Draw 3D Illuminated Podium & Mascot
   drawPodiumAndMascot(t, theme);
 
-  // Render Bottom Dock Tiles
+  // Render Bottom Dock Tiles with Group Numbers
   el('#t-dock').innerHTML = TEAMS.map((tm, i) => `
     <div class="dock-tile team-tile-${tm.id} ${i === teamIdx ? 'on' : ''}" data-i="${i}">
-      <span class="dt-name">${tm.name}</span>
+      <div class="dt-badge-header">
+        <span class="dt-num">0${i + 1}</span>
+        <span class="dt-name">${tm.name}</span>
+      </div>
       <span class="dt-role">${tm.role}</span>
     </div>
   `).join('');
