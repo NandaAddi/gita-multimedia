@@ -4,6 +4,7 @@
    ============================================================ */
 
 const G = { team: null, stars: {}, sound: true };
+let NAV = { biome: 'sawah' };
 
 function loadG() {
   try {

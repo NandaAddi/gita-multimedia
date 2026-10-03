@@ -123,6 +123,3 @@ function renderConfetti(t){const c=CTX.conf;if(!c)return;c.clearRect(0,0,1920,10
  CONF.forEach(p=>{p.y+=p.vy;p.x+=p.vx+Math.sin(t/300+p.r)*.6;p.r+=p.vr;
   if(p.y>1120){p.y=-40;p.x=rnd(0,1920);}
   c.save();c.translate(p.x,p.y);c.rotate(p.r);c.fillStyle=p.c;c.fillRect(-p.w/2,-p.h/2,p.w,p.h);c.restore();});}
-
-/* ================= LOOP UTAMA ================= */
-let loopN=0;

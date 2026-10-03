@@ -1,0 +1,131 @@
+/* ============================================================
+   ECO-EXPLORER — js/main.js
+   Entry Point, Responsive Canvas Fitting, Render Loop, & Bootstrapper
+   ============================================================ */
+
+let fitQueued = false;
+function fit(){
+  if(fitQueued) return;
+  fitQueued = true;
+  requestAnimationFrame(() => {
+    fitQueued = false;
+    try {
+      const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+      const st = el('#stage');
+      if(st) st.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+    } catch(e) {}
+  });
+}
+
+let loopN = 0;
+function loop(t){
+  try {
+    if(!document.hidden){
+      loopN++;
+      if(CUR === 'title'){
+        sceneSawah(CTX.title, t, {prod: 48, water: 68, herb: 12, pred: 6, poison: 0});
+      } else if(CUR === 'sim' && SIM){
+        SCENE[SIM.m.biome](CTX.sim, t, SIM.S);
+      } else if(CUR === 'biome' && loopN % 6 === 0){
+        PREVS.forEach(p => drawPreview(p, t));
+      } else if(CUR === 'victory'){
+        renderConfetti(t);
+      }
+    }
+  } catch(e) {
+    console.error('[Eco-Explorer][' + CUR + ']', e);
+  }
+  requestAnimationFrame(loop);
+}
+
+/* ================= INISIALISASI ================= */
+function init(){
+  loadG();
+  soundOn = G.sound !== false;
+  fit();
+
+  CTX.title = el('#cv-title').getContext('2d');
+  CTX.sim = el('#cv-sim').getContext('2d');
+  CTX.conf = el('#cv-confetti').getContext('2d');
+
+  try {
+    ['#cv-title', '#cv-sim', '#cv-confetti'].forEach(id => {
+      const cv = el(id);
+      if(cv && (cv.width !== 1920 || cv.height !== 1080)){
+        console.warn('[Eco-Explorer] canvas ' + id + ' berukuran ' + cv.width + 'x' + cv.height + ', seharusnya 1920x1080');
+      }
+    });
+    console.log('[Eco-Explorer] init OK, DPR=' + (window.devicePixelRatio || 1));
+  } catch(e) {}
+
+  titleBubble();
+  syncSound();
+
+  el('#btn-start').onclick = () => {
+    sfx.click();
+    buildTutorial();
+    go('tutorial');
+  };
+
+  el('#btn-how').onclick = () => {
+    sfx.click();
+    modal(howHTML());
+  };
+
+  el('#btn-teacher').onclick = () => {
+    sfx.click();
+    const r = modal(teacherHTML());
+    r.querySelector('#tg-reset').onclick = () => {
+      G.stars = {};
+      saveG();
+      titleBubble();
+      toast('Progres berhasil direset. Mulai petualangan baru!');
+      closeModal();
+    };
+  };
+
+  el('#t-snd').onclick = toggleSound;
+
+  addEventListener('resize', fit);
+  addEventListener('orientationchange', fit);
+  addEventListener('pointerdown', function once(){
+    audioReady = true;
+    try { ac(); } catch(e) {}
+    bgmStart();
+  }, {once: true});
+
+  document.addEventListener('visibilitychange', () => {
+    try {
+      if(!AC) return;
+      if(document.hidden) AC.suspend();
+      else if(audioReady && soundOn) AC.resume();
+    } catch(e) {}
+  });
+
+  const p = new URLSearchParams(location.search).get('screen');
+  if(p === 'tutorial'){
+    buildTutorial();
+    go('tutorial');
+  } else if(p === 'team'){
+    buildTeam();
+    go('team');
+  } else if(p === 'biome'){
+    buildBiome();
+    go('biome');
+  } else if(p === 'sim'){
+    const misId = new URLSearchParams(location.search).get('mission') || 'sawah-1';
+    const targetMis = MISSIONS.find(m => m.id === misId) || MISSIONS[0];
+    startSim(targetMis);
+  } else {
+    go('title');
+  }
+
+  requestAnimationFrame(loop);
+}
+
+// Eksekusi init
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}

@@ -431,6 +431,24 @@ Jika waktu habis, layar **tidak pernah** menampilkan tulisan *"Game Over"*. Seba
 * **Dokumentasi Generator Aset Visual AI Terstruktur:**
   * Seluruh prompt citra Google Gemini / Imagen 3 untuk karakter maskot Gita, organisme sawah, organisme multi-bioma (laut, hutan, danau), 8 kartu pop-up Kamus Kata konkret, kartu voting CSCL Penasihat Meja, dan antarmuka IFP didokumentasikan lengkap beserta negative prompt di [`docs/PROMPT_ASSET_GEMINI.md`](file:///d:/SKRIPSI%20GITA/docs/PROMPT_ASSET_GEMINI.md).
 
+### 9.2 Arsitektur Standalone Web & Canvas Modular (Clean Vanilla JS — `TES GITA BARU 1`)
+Selain implementasi berbasis Phaser 3, proyek ini menyediakan versi **Standalone Web Canvas Engine (`TES GITA BARU 1`)** yang dirancang khusus untuk reliabilitas ekstrem pada layar interaktif (IFP) sekolah tanpa ketergantungan web server (100% Offline & Zero-CORS):
+* **Pemisahan Modul Terstruktur (Clean Vanilla Architecture):**
+  * `css/game.css`: Desain sistem panggung 1920x1080, Tonal Glassmorphism, dock kartu aksi simetris, dan modal kamus 2 kolom (100% mematuhi batas bawah tipografi IFP $\ge 24$px).
+  * `js/config.js`: SVG icons generator (vector math), konstanta panggung, dan palet warna bioma.
+  * `js/state.js`: State store reaktif (`G`, `NAV`), persistensi `localStorage`, serta modal/toast helpers.
+  * `js/audio.js`: Web Audio API procedural sound synthesizer (klik, chime, berhasil, salah, petir, bom) dan background music generator.
+  * `js/data/ecosystems.js` & `js/data/missions.js`: Master konfigurasi 4 bioma, 8 misi krisis, dan dialog bridging 2 tahap.
+  * `js/renderers/characters.js` & `js/renderers/backgrounds.js`: Procedural canvas renderers untuk ekspresi Gita, 5 maskot tim, partikel cuaca, dan latar dinamis 4 ekosistem.
+  * `js/scenes/`: 8 pengontrol scene terpisah (`title.js`, `tutorial.js`, `team.js`, `biome.js`, `mission-menu.js`, `simulation.js`, `quiz.js`, `victory.js`).
+  * `js/main.js`: Bootstrapper panggung, responsive IFP viewport fit, 60 FPS animation loop, dan screen router.
+* **Protokol Eksekusi Luring Tanpa Hambatan (Zero-CORS):**
+  * Seluruh modul dimuat secara berurutan melalui tag `<script src="...">` klasik tanpa pembungkus `<script type="module">`. Hal ini menjamin media dapat dibuka langsung via klik ganda protokol `file:///` di Chromium atau sistem operasi IFP Android/Windows sekolah tanpa memicu pemblokiran keamanan CORS.
+* **Verifikasi Otomatis & Zero Regression:**
+  * Didukung oleh test suite otomatis (`scripts/verify_modular_game.js`) yang memverifikasi inisialisasi modul, eksekusi render panggung, siklus hidup simulasi, alur bridging dialog RPG, kuis C2, hingga selebrasi kemenangan.
+  * Audit tipografi otomatis (`scripts/audit_standalone_fonts.py`) dengan skor kelulusan 100% (0 pelanggaran font < 24px).
+
+
 ---
 
 ## 10. KISI-KISI UJI VALIDASI AHLI (KESIAPAN SIDANG SKRIPSI)
