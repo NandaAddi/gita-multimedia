@@ -97,6 +97,7 @@ Penelitian ini menggunakan model **Alessi & Trollip (2001)** yang dirancang khus
 * **Koordinasi:** Koordinasi teknis pelaksanaan pembelajaran bersama Guru Kelas 5A dan persiapan instrumen uji coba lapangan.
 
   9. **Optimasi Ergonomi Layar Sentuh IFP & Tonal Glassmorphism Standalone HTML (TES GITA BARU 1/index.html):** Menerapkan standar tipografi $\ge 24$ px mutlak (0 pelanggaran pada scripts/audit_standalone_fonts.py), perombakan visual anti-vibe-coding ke Tonal Glassmorphism, re-layout bertingkat Dock kartu aksi dan Kamus Alam 2-kolom lapang, serta pembersihan instrumen FPS meter untuk kesiapan implementasi kelas 5A.
+  10. **Implementasi Bridging Character Dialogue Box In-Game (Pre-Instruction Scaffolding):** Menambahkan dialog box bergaya RPG di kuadran bawah arena simulasi saat hari 0 (simulasi ter-jeda/paused) yang menampilkan duet interaktif Gita & lencana maskot tim terpilih, 2 langkah narasi krisis dan arahan aksi pertama, narasi audio hibrida otomatis (`speak()` & chime), serta tombol sentuh emas IFP $\ge 58$px.
 
 #### Pekan 12: Uji Coba Lapangan dengan 25 Siswa (Beta Testing) - [MILESTONE 2]
 * **Kegiatan:** Melaksanakan pembelajaran di kelas 5A menggunakan media simulasi di IFP, membagi kelompok belajar, serta membagikan angket respon bergambar ke siswa dan guru.

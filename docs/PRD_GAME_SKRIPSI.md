@@ -225,6 +225,11 @@ gba(2, 44, 34, 0.95),
 gba(6, 78, 59, 0.85)), dan chunky 3D buttons solid bevel.
    * **Re-layout Adaptif Dock & Kamus:** Penataan bertingkat kartu aksi dock bawah setinggi 54px dan transformasi Kamus Alam menjadi grid 2-kolom lapang agar teks deskripsi 24px nyaman dibaca dari jarak meja siswa (5–8 meter).
    * **Clean Release:** Menghapus instrumentasi debug widget FPS meter dan log konsol berulang agar tampilan IFP 100% bersih untuk kegiatan belajar siswa kelas 5A.
+   * **Bridging Character Dialogue Box (Pre-Instruction Scaffolding):**
+     - Menerapkan dialog box RPG sinematik di kuadran bawah panggung simulasi saat misi dibuka (waktu simulasi dijeda/paused di Hari 0 agar siswa tidak panik).
+     - **Duet Interaktif Gita & Maskot Tim:** Menampilkan potret Gita ekspresif di sisi kiri lengkap dengan nameplate `GITA • Detektif Alam`, serta lencana maskot tim pilihan siswa di sisi kanan untuk memperkuat identitas tim (*team agency*).
+     - **Alur 2 Langkah Bertahap:** Langkah 1 memaparkan akar krisis ekosistem (*Mayer Pre-training Principle*); Langkah 2 mengarahkan kartu aksi pertama yang konkret (*Vygotsky Scaffolding*).
+     - **Audio Hibrida:** Bunyi lonceng lembut (*chime*), pembacaan vokal otomatis via `speak()`, dan tombol sentuh IFP emas 3D bevel ($\ge 58$px, font 26–27px).
 
 ---
 
