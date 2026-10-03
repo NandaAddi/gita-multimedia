@@ -461,7 +461,21 @@ Selain implementasi berbasis Phaser 3, proyek ini menyediakan versi **Standalone
   * **Dossier Sains & Rantai Makanan Horizontal Lega:** Kolom kanan panggung menampung plakat identitas bioma, lencana status eksplorasi, deskripsi sains ekologis dengan bantalan lega, rantai trofik horizontal 4 organisme (*Produsen → Konsumen I → Konsumen II → Pengurai*) yang jelas dan mudah dibaca, serta tombol aksi sentuh chunky emas 3D `Jelajahi Ekosistem ▶`.
   * **4 Capsule Dock Pods Kuadran Bawah:** Dok navigasi bawah menampilkan 4 pod ubin kapsul bernomor (`01` Sawah, `02` Hutan Tropis, `03` Sungai Air Tawar, `04` Laut Terumbu Karang) berlatar enamel tonal gelap dan aksen bevel emas menyala saat aktif.
   * **Transisi Spring Slide & Multi-Input IFP:** Animasi geser horizontal menggunakan kurva suspensi empuk (`heroSlideRight` / `heroSlideLeft`) diiringi suara desiran angin sintetis `sfx.whoosh()`, serta mendukung usapan layar sentuh (*touch swipe*), tombol panah samping arkade, keyboard panah, dan sentuhan langsung pada dock pod.
-  * **Zero AI-Slop & Standar Tipografi $\ge 24$ px:** Bebas dari outline kawat tipis amatir (anti-vibe-coding) dan 100% mematuhi batas bawah keterbacaan kelas berjarak 5–8 meter.
+* **Layar Penuh Cara Bermain Interaktif (Visual Bento Grid 4 Panel — `how.js`):**
+  * **Transformasi dari Modal Sempit ke Full-Page 1080p:** Menghapus jendela pop-up sempit lama dan menggantinya dengan panggung penuh yang lapang, ramah anak, dan bebas dari distraksi.
+  * **Mascot Scaffolding Banner (Gita si Detektif Cilik):** Sapaan hangat terintegrasi dengan avatar Gita SVG resolusi tinggi yang membimbing siswa memahami 4 rahasia sukses permainan.
+  * **Visual Bento Grid 4 Panel:**
+    1. *Pilih Tim Spesialis:* Keunggulan 5 tim (Padi, Elang, Katak, Jamur, Ular) dengan bonus kuota dan pemangkasan jeda cooldown.
+    2. *Pantau Kesehatan & Hari:* Zona status Eco-Health (*Bahaya < 45%*, *Waspada 45–74%*, *Sehat ≥ 75%*) dan batas target hari.
+    3. *Strategi Kartu Aksi:* Penggunaan kuota, urutan tindakan strategis (atasi ancaman krisis dahulu baru pulihkan produsen), dan jeda reaksi alam 1,2 detik.
+    4. *Musyawarah Kelas & Kuis C2:* Jeda voting kelas dengan kartu fisik 3 warna, Kamus Alam, dan kuis kausalitas C2 untuk mengumpulkan total 24 bintang.
+  * **Footer Action Bar:** Tombol sentuh emas chunky 3D `MULAI PETUALANGAN SEKARANG! ▶` yang langsung membawa siswa ke panggung pemilihan tim.
+* **Layar Penuh Panduan Guru & Kurikulum IPAS (Cockpit Dashboard 3 Kolom — `teacher.js`):**
+  * **Desain Khusus Guru Kelas 5A & Uji Coba Lapangan:** Memberikan dashboard terpadu bagi guru mitra di SDN Percobaan 2 Malang tanpa membebani siswa saat bermain mandiri.
+  * **Kolom 1 (Kurikulum & Landasan Kognitif):** Memaparkan Capaian Pembelajaran (CP) IPAS Fase C, resolusi ketimpangan kognitif C1 vs C2 (Bloom Revisi), dan keselarasan model R&D Alessi & Trollip (2001).
+  * **Kolom 2 (Sintaks Kelas & CSCL):** Panduan orkestrasi 25 siswa kelas 5A (diferensiasi 5 Petugas Layar IFP vs 20 Penasihat Meja di bangku), panduan voting musyawarah kartu fisik 3 warna (Hijau, Kuning, Merah), serta sinkronisasi Buku Catatan Detektif (LKPD Fisik).
+  * **Kolom 3 (Rubrik Evaluasi, Kontrol Data & Aksi):** Formula 3 Bintang detektif, tombol taktil ruby `Reset Progres Kelas` dengan modal konfirmasi sentuh IFP 2 langkah (*anti-accidental reset*), dan tombol emas `MULAI SESI KELAS ▶`.
+  * **Mode Penguji Rahasia (Examiner Gesture):** 5 ketukan berturut-turut pada lencana sekolah SDN Percobaan 2 Malang membuka instan seluruh 4 bioma, 8 misi, dan 24 bintang untuk kebutuhan presentasi seminar proposal, validasi ahli, maupun sidang skripsi.
 * **Verifikasi Otomatis & Zero Regression:**
   * Didukung oleh test suite otomatis (`scripts/verify_modular_game.js`) yang memverifikasi inisialisasi modul, eksekusi render panggung, siklus hidup simulasi, alur bridging dialog RPG, kuis C2, hingga selebrasi kemenangan.
   * Audit tipografi otomatis (`scripts/audit_standalone_fonts.py`) dengan skor kelulusan 100% (0 pelanggaran font < 24px).

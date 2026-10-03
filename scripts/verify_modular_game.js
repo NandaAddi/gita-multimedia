@@ -62,7 +62,8 @@ vm.createContext(context);
 const scripts = [
   'config.js', 'state.js', 'audio.js', 'data/ecosystems.js', 'data/missions.js',
   'renderers/characters.js', 'renderers/backgrounds.js',
-  'scenes/title.js', 'scenes/tutorial.js', 'scenes/team.js', 'scenes/biome.js',
+  'scenes/title.js', 'scenes/tutorial.js', 'scenes/how.js', 'scenes/teacher.js',
+  'scenes/team.js', 'scenes/biome.js',
   'scenes/mission-menu.js', 'scenes/simulation.js', 'scenes/quiz.js', 'scenes/victory.js',
   'main.js'
 ];
@@ -72,6 +73,12 @@ for (const s of scripts) {
 }
 
 console.log('Testing scene flow functions...');
+vm.runInContext("buildHow(); go('how');", context);
+console.log('  [OK] How to play screen built (Bento 4 panels)');
+
+vm.runInContext("buildTeacher(); go('teacher');", context);
+console.log('  [OK] Teacher guide screen built (Cockpit 3 columns)');
+
 vm.runInContext("buildTutorial(); go('tutorial');", context);
 console.log('  [OK] Tutorial screen built');
 

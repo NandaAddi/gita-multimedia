@@ -63,25 +63,20 @@ function init(){
 
   el('#btn-start').onclick = () => {
     sfx.click();
-    buildTutorial();
-    go('tutorial');
+    buildTeam();
+    go('team');
   };
 
   el('#btn-how').onclick = () => {
     sfx.click();
-    modal(howHTML());
+    buildHow();
+    go('how');
   };
 
   el('#btn-teacher').onclick = () => {
     sfx.click();
-    const r = modal(teacherHTML());
-    r.querySelector('#tg-reset').onclick = () => {
-      G.stars = {};
-      saveG();
-      titleBubble();
-      toast('Progres berhasil direset. Mulai petualangan baru!');
-      closeModal();
-    };
+    buildTeacher();
+    go('teacher');
   };
 
   el('#t-snd').onclick = toggleSound;
