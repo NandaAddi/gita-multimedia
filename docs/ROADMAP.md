@@ -96,6 +96,8 @@ Penelitian ini menggunakan model **Alessi & Trollip (2001)** yang dirancang khus
 * **Target Output:** Master Media Versi Beta tervalidasi 100%, standar tipografi IFP $\ge 24$ px, antarmuka pemilihan tim hero slider ramah anak, portal riset modern, dokumen akademik tersinkronisasi, dan hasil tes teknis IFP.
 * **Koordinasi:** Koordinasi teknis pelaksanaan pembelajaran bersama Guru Kelas 5A dan persiapan instrumen uji coba lapangan.
 
+  9. **Optimasi Ergonomi Layar Sentuh IFP & Tonal Glassmorphism Standalone HTML (TES GITA BARU 1/index.html):** Menerapkan standar tipografi $\ge 24$ px mutlak (0 pelanggaran pada scripts/audit_standalone_fonts.py), perombakan visual anti-vibe-coding ke Tonal Glassmorphism, re-layout bertingkat Dock kartu aksi dan Kamus Alam 2-kolom lapang, serta pembersihan instrumen FPS meter untuk kesiapan implementasi kelas 5A.
+
 #### Pekan 12: Uji Coba Lapangan dengan 25 Siswa (Beta Testing) - [MILESTONE 2]
 * **Kegiatan:** Melaksanakan pembelajaran di kelas 5A menggunakan media simulasi di IFP, membagi kelompok belajar, serta membagikan angket respon bergambar ke siswa dan guru.
 * **Target Output:** 25 berkas angket respon siswa, 1 berkas angket guru, dokumentasi foto/video, dan Surat Keterangan Selesai Penelitian.
