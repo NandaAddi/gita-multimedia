@@ -7,35 +7,29 @@ let teamIdx = 0;
 let teamKeyBound = false;
 
 const TEAM_THEMES = {
-  padi: {
+  sawah: {
     podiumTop: '#10b981',
     podiumSide: '#064e3b',
-    aura: 'rgba(16, 185, 129, 0.35)',
+    aura: 'rgba(16,185,129,.35)',
     accent: '#fef08a'
   },
-  ular: {
-    podiumTop: '#f43f5e',
-    podiumSide: '#881337',
-    aura: 'rgba(244, 63, 94, 0.35)',
-    accent: '#fecdd3'
-  },
-  jamur: {
-    podiumTop: '#f59e0b',
+  hutan: {
+    podiumTop: '#d97706',
     podiumSide: '#78350f',
-    aura: 'rgba(245, 158, 11, 0.35)',
-    accent: '#fef08a'
+    aura: 'rgba(217,119,6,.35)',
+    accent: '#fef3c7'
   },
-  elang: {
-    podiumTop: '#3b82f6',
-    podiumSide: '#1e3a8a',
-    aura: 'rgba(59, 130, 246, 0.35)',
-    accent: '#bfdbfe'
+  sungai: {
+    podiumTop: '#0e7490',
+    podiumSide: '#134e4a',
+    aura: 'rgba(14,116,144,.35)',
+    accent: '#ccfbf1'
   },
-  katak: {
-    podiumTop: '#06b6d4',
-    podiumSide: '#0e7490',
-    aura: 'rgba(6, 182, 212, 0.35)',
-    accent: '#cffafe'
+  laut: {
+    podiumTop: '#0284c7',
+    podiumSide: '#0c4a6e',
+    aura: 'rgba(2,132,199,.35)',
+    accent: '#e0f2fe'
   }
 };
 
@@ -48,18 +42,18 @@ function buildTeam() {
       <!-- TOPBAR -->
       <div class="topbar">
         <button class="btn tb-btn" id="t-back">${ic('back', 24)} Judul</button>
-        <div class="plaque">Pilih Tim Petualangmu</div>
+        <div class="plaque">Pilih Kelompok Detektifmu</div>
         <div class="spacer"></div>
-        <div class="tb-stars">${ic('star', 24)} <b>${totStars()}/24</b></div>
+        <div class="tb-stars">${ic('star', 24)} <b>${totStars()}/48</b></div>
       </div>
 
       <!-- MAIN HERO SHOWCASE STAGE -->
       <div class="stage panel-deep" id="team-stage">
         <!-- ARCADE 3D NAV BUTTONS -->
-        <button class="arrow prev arcade-arrow" id="t-prev" aria-label="Tim Sebelumnya">
+        <button class="arrow prev arcade-arrow" id="t-prev" aria-label="Kelompok Sebelumnya">
           ${ic('back', 44)}
         </button>
-        <button class="arrow next arcade-arrow" id="t-next" aria-label="Tim Berikutnya">
+        <button class="arrow next arcade-arrow" id="t-next" aria-label="Kelompok Berikutnya">
           ${ic('arrowR', 44)}
         </button>
 
@@ -88,7 +82,7 @@ function buildTeam() {
       <div class="team-footer-bar">
         <div class="team-dock-pod" id="t-dock"></div>
         <button class="btn btn-gold btn-hero-pick" id="t-pick">
-          ${ic('check', 28)} <span>Pilih Tim Ini!</span>
+          ${ic('check', 28)} <span>Pilih Detektif Ini!</span>
         </button>
       </div>
     </div>
@@ -163,7 +157,7 @@ function renderTeam(dir) {
   el('#t-name').textContent = t.name;
   el('#t-motto').textContent = '"' + t.motto + '"';
   el('#t-doss').innerHTML = '<div class="doss-role">' + t.role + '</div><div class="doss-desc">' + t.dossier + '</div>';
-  el('#t-spec').textContent = 'Keahlian: ' + t.perk.label + ' (bonus kuota & cooldown singkat) • Misi spesial: ' + sm2.title;
+  el('#t-spec').textContent = 'Keahlian: ' + t.perk.label + ' • Misi Spesialis: ' + (sm2 ? sm2.title : t.role);
 
   // Draw 3D Illuminated Podium & Mascot
   drawPodiumAndMascot(t, theme);
@@ -191,15 +185,16 @@ function renderTeam(dir) {
     };
   });
 
-  // Main CTA button
+  // Main CTA button (Direct Access ke Menu 4 Misi Ekosistem)
   el('#t-pick').onclick = () => {
     G.team = t.id;
+    NAV.biome = t.id;
     saveG();
     sfx.success();
-    toast('Kamu memilih ' + t.name + '! ' + t.perk.label + ' jadi lebih kuat.');
-    speak('Hebat! Kamu memilih ' + t.name + '.');
-    buildBiome();
-    go('biome');
+    toast('Kelompokmu bertugas sebagai ' + t.name + '! Menuju Markas Misi...');
+    speak('Hebat! Kelompokmu bertugas sebagai ' + t.name + '.');
+    if (typeof buildMissionMenu === 'function') buildMissionMenu();
+    go('mission');
   };
 }
 
@@ -213,7 +208,7 @@ function drawPodiumAndMascot(t, theme) {
   c.save();
   c.beginPath();
   c.ellipse(200, 345, 140, 30, 0, 0, Math.PI * 2);
-  c.fillStyle = 'rgba(0, 0, 0, 0.45)';
+  c.fillStyle = 'rgba(0,0,0,.45)';
   c.fill();
   c.restore();
 
@@ -221,7 +216,7 @@ function drawPodiumAndMascot(t, theme) {
   c.save();
   const gradSide = c.createLinearGradient(0, 290, 0, 335);
   gradSide.addColorStop(0, theme.podiumSide);
-  gradSide.addColorStop(1, '#021812');
+  gradSide.addColorStop(1, PAL.panelDeep);
   c.fillStyle = gradSide;
 
   c.beginPath();
@@ -239,7 +234,7 @@ function drawPodiumAndMascot(t, theme) {
   const gradTop = c.createRadialGradient(200, 295, 20, 200, 295, 135);
   gradTop.addColorStop(0, theme.podiumTop);
   gradTop.addColorStop(0.85, theme.podiumSide);
-  gradTop.addColorStop(1, '#032018');
+  gradTop.addColorStop(1, PAL.panelDeep);
   c.fillStyle = gradTop;
 
   c.beginPath();
@@ -248,7 +243,7 @@ function drawPodiumAndMascot(t, theme) {
 
   // 4. Specular Highlight Ring on Podium Surface
   c.lineWidth = 2.5;
-  c.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+  c.strokeStyle = 'rgba(255,255,255,.45)';
   c.beginPath();
   c.ellipse(200, 298, 126, 22, 0, 0, Math.PI * 2);
   c.stroke();

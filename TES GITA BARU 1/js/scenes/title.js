@@ -5,10 +5,17 @@
 
 /* ================= LAYAR: JUDUL ================= */
 function titleBubble(){const n=totStars();
- el('#gita-title').innerHTML=gitaSVG(190,'happy');
+  // Image-sequence Gita di kiri bubble (tanpa fallback SVG).
+  // Wadah dikunci 190x210 (layout/kartu tidak bergeser),
+  // gambar 400px meluber ke bawah di belakang kartu.
+  try{
+    if(typeof GitaSeq !== 'undefined' && GitaSeq.play){
+      GitaSeq.play('#gita-title', { size: 400, fps: 12 });
+    }
+  }catch(e){}
  el('#bubble-title').innerHTML=n>0
-  ?'Selamat datang kembali, <b>Detektif Alam</b>! Kamu sudah mengumpulkan <b>'+n+' dari 24 bintang</b>. Siap melanjutkan menyelamatkan ekosistem Indonesia?'
-  :'Hai, aku <b>Gita</b>! Ekosistem Indonesia sedang kesusahan. Jadilah <b>Detektif Alam</b>, pilih tim, dan selesaikan 8 misi penyelamatan. Siap?';
+  ?'Selamat datang kembali, <b>Detektif Alam</b>! Kamu sudah mengumpulkan <b>'+n+' dari 48 bintang</b>. Siap melanjutkan menyelamatkan ekosistem Indonesia?'
+  :'Hai, aku <b>Gita</b>! Ekosistem Indonesia sedang kesusahan. Jadilah <b>Detektif Alam</b>, pilih kelompokmu, dan selesaikan 16 misi penyelamatan. Siap?';
  el('#foot-stars').textContent=n;}
 
 

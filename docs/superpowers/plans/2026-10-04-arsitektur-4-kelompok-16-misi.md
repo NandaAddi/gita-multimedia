@@ -80,11 +80,11 @@
 - Consumes: `TEAMS` (4 kelompok), `totStars()` (maksimal 48 bintang).
 - Produces: Pemilihan tim menyimpan `G.team = id`, langsung menavigasi `NAV.biome = G.team`, lalu memanggil `go('mission'); buildMissionMenu();`.
 
-- [ ] **Step 1: Perbarui fungsi `totStars()` di `js/state.js`**
+- [x] **Step 1: Perbarui fungsi `totStars()` di `js/state.js`**
   - Pastikan total bintang kini menghitung dari 16 misi (maksimal 48 bintang).
   - Pastikan logika `loadG()` dan `saveG()` menangani 4 ID kelompok baru (`sawah`, `hutan`, `sungai`, `laut`).
 
-- [ ] **Step 2: Perbarui `TEAM_THEMES` dan render stage pahlawan di `js/scenes/team.js`**
+- [x] **Step 2: Perbarui `TEAM_THEMES` dan render stage pahlawan di `js/scenes/team.js`**
   - Sediakan tema visual panggung untuk 4 kelompok:
     - `sawah`: Zamrud & Emas (`#10b981`, `#064e3b`, `#fef08a`)
     - `hutan`: Oranye Hutan & Cokelat Rimba (`#d97706`, `#78350f`, `#fef3c7`)
@@ -92,7 +92,7 @@
     - `laut`: Biru Laut Samudra (`#0284c7`, `#0c4a6e`, `#e0f2fe`)
   - Update dok miniatur 4 ubin kelompok di bawah panggung.
 
-- [ ] **Step 3: Hubungkan tombol `👉 PILIH DETEKTIF INI!` untuk langsung membuka menu 4 misi**
+- [x] **Step 3: Hubungkan tombol `👉 PILIH DETEKTIF INI!` untuk langsung membuka menu 4 misi**
   - Mengubah handler tombol konfirmasi: set `G.team = t.id; NAV.biome = t.id; saveG(); go('mission'); buildMissionMenu();`.
   - Meniadakan perantara layar bioma (`#scr-biome`) saat memilih kelompok.
 
