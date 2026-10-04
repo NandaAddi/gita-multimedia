@@ -34,9 +34,9 @@ Penelitian ini menggunakan model **Alessi & Trollip (2001)** yang dirancang khus
 * **Target Output:** Draf Bab 2 (Kajian Pustaka dan Kerangka Berpikir).
 * **Koordinasi:** Bimbingan Bab 2 bersama Dosen Pembimbing.
 
-#### Pekan 3: Metodologi Penelitian & Kisi-Kisi Instrumen (Bab 3)
-* **Kegiatan:** Menetapkan langkah pengembangan Alessi & Trollip, merancang kriteria uji kelayakan ahli, dan menyusun kisi-kisi angket siswa serta guru.
-* **Target Output:** Draf Bab 3 (Metode Penelitian) dan Lampiran Kisi-Kisi Instrumen Angket.
+#### Pekan 3: Metodologi Penelitian & Kisi-Kisi Instrumen Evaluasi (Bab 3)
+* **Kegiatan:** Menetapkan langkah pengembangan Alessi & Trollip, merancang kriteria uji kelayakan ahli, menyusun kisi-kisi angket respon, serta menyusun **20 butir instrumen tes evaluasi kognitif (Pretest dan Posttest C2)** yang dipetakan ke dalam 4 Tujuan Pembelajaran (TP) dan 4 Bioma Nusantara.
+* **Target Output:** Draf Bab 3 (Metode Penelitian), Lampiran Kisi-Kisi Instrumen Angket, dan Naskah 20 Butir Soal Pretest-Posttest IPAS Fase C beserta rubrik penilaian.
 * **Koordinasi:** Bimbingan Bab 3 dan persetujuan kisi-kisi instrumen oleh Dosen Pembimbing.
 
 #### Pekan 4: Seminar Proposal (Sempro) - [MILESTONE 1]
@@ -75,12 +75,12 @@ Penelitian ini menggunakan model **Alessi & Trollip (2001)** yang dirancang khus
 #### Pekan 9–10: Produksi Penuh 63 Aset Visual Vektor Modern, Arsitektur 4 Bioma & Sistem 3 Bintang (Alpha Final)
 * **Kegiatan:** 
   1. Mengolah dan mengoptimasi seluruh 63 aset citra hasil generator AI dari `D:\SKRIPSI GITA\ASSET-BARU` (karakter Gita, organisme sawah, organisme 4 bioma, lencana, ikon krisis, kamus kata, kartu voting CSCL).
-  2. Mengembangkan arsitektur **4 Ekosistem Nusantara (Sawah, Hutan Tropis, Sungai Air Tawar, Laut Terumbu Karang)** dengan **8 Misi** (Misi 1: Faktor Ulah Alam & Misi 2: Faktor Ulah Manusia).
-  3. Mengimplementasikan **Sistem Gamifikasi 3 Bintang** (1: Stabilitas $\ge 75\%$, 2: Lulus Kuis C2, 3: Menjawab Benar di Percobaan Pertama) dengan total 24 Bintang.
+  2. Mengembangkan arsitektur **4 Ekosistem Nusantara (Sawah, Hutan Tropis, Sungai Air Tawar, Laut Terumbu Karang)** dengan **16 Misi Kausalitas** (4 Bioma × 4 Misi: 2 Faktor Ulah Alam & 2 Faktor Ulah Manusia).
+  3. Mengimplementasikan **Sistem Gamifikasi 3 Bintang** (1: Stabilitas $\ge 75\%$, 2: Lulus Kuis C2, 3: Menjawab Benar di Percobaan Pertama) dengan total 48 Bintang (12 Bintang per Kelompok Detektif).
   4. Menerapkan **Progression Lock**: Misi 2 terkunci hingga Misi 1 + Kuis selesai; Bioma berikutnya terkunci hingga bioma sebelumnya tuntas.
   5. Menambahkan modul scene baru `BiomeSelectScene.js` berformat **Full-Screen Stage Showcase Carousel Slider** (background crossfade 1080p dinamis, hero stage plaque, arcade side arrows, thumbnail dock bawah, dan gesture swipe), peremajaan UI Arcade Hero Roster pada `TeamSelectScene.js`, dan refaktor `MissionMenuScene.js`, `SimulationScene.js`, `QuizScene.js`, serta `VictoryScene.js` menjadi data-driven dengan `ecosystems-data.js` dan `ProgressManager.js` (persistent LocalStorage).
   6. Refaktor & penataan ergonomis antarmuka `SimulationScene.js`: Arsitektur *Two-Row Centered Health Meter Pod* di $X = 960$ (meniadakan 100% tumpang tindih teks status dan bar), perataan 4 kolom simetris pada kuadran bawah ($390 \times 138$ px, sela 70 px, margin 75 px, *zero border clipping*), penambahan kontrol suara `🔊` dan layar penuh `⛶` di bilah atas, plakat header `👧 GITA`, serta widget checklist terminal.
-* **Target Output:** Master Media Simulasi Alpha Final (`WEBSITE/phaser.html`) dengan 4 Ekosistem Nusantara, 8 Misi lengkap kuis C2, sistem 3 bintang, dan 100% visual vector modern bebas CORS.
+* **Target Output:** Master Media Simulasi Alpha Final (`WEBSITE/phaser.html`) dengan 4 Ekosistem Nusantara, 16 Misi lengkap kuis C2, sistem 3 bintang (48 Bintang total), dan 100% visual vector modern bebas CORS.
 * **Koordinasi:** Menyerahkan produk media simulasi Alpha siap uji coba kepada Dosen Pembimbing untuk persiapan validasi ahli materi dan media.
 
 #### Pekan 11: Penguatan Pedagogis, Fitur Penguji, & Gladi Bersih IFP Sekolah (Versi Beta)
@@ -96,25 +96,26 @@ Penelitian ini menggunakan model **Alessi & Trollip (2001)** yang dirancang khus
 * **Target Output:** Master Media Versi Beta tervalidasi 100%, standar tipografi IFP $\ge 24$ px, antarmuka pemilihan tim hero slider ramah anak, portal riset modern, dokumen akademik tersinkronisasi, dan hasil tes teknis IFP.
 * **Koordinasi:** Koordinasi teknis pelaksanaan pembelajaran bersama Guru Kelas 5A dan persiapan instrumen uji coba lapangan.
 
-  9. **Optimasi Ergonomi Layar Sentuh IFP & Tonal Glassmorphism Standalone HTML (TES GITA BARU 1/index.html):** Menerapkan standar tipografi $\ge 24$ px mutlak (0 pelanggaran pada scripts/audit_standalone_fonts.py), perombakan visual anti-vibe-coding ke Tonal Glassmorphism, re-layout bertingkat Dock kartu aksi dan Kamus Alam 2-kolom lapang, serta pembersihan instrumen FPS meter untuk kesiapan implementasi kelas 5A.
-  10. **Implementasi Bridging Character Dialogue Box In-Game (Pre-Instruction Scaffolding):** Menambahkan dialog box bergaya RPG di kuadran bawah arena simulasi saat hari 0 (simulasi ter-jeda/paused) yang menampilkan duet interaktif Gita & lencana maskot tim terpilih, 2 langkah narasi krisis dan arahan aksi pertama, narasi audio hibrida otomatis (`speak()` & chime), serta tombol sentuh emas IFP $\ge 58$px.
-  11. **Refaktor Arsitektur Modular Clean Vanilla JS Standalone (Zero-CORS & IFP-Optimized):** Merestrukturisasi berkas monolitik tunggal 2.027 baris menjadi arsitektur modular standar industri yang terpisah rapi (16 berkas modular dalam subdirektori `css/`, `js/config.js`, `js/state.js`, `js/audio.js`, `js/data/`, `js/renderers/`, `js/scenes/`, `js/main.js`), mempertahankan 100% kompatibilitas luring offline protokol `file:///` tanpa web server (Zero-CORS), serta validasi seluruh siklus game & audit font IFP $\ge 24$px.
-  12. **Revamp Antarmuka Pemilihan Tim Arcade 3D Podium & Smooth Carousel (TES GITA BARU 1):** Mengupgrade tampilan layar pemilihan 5 tim petualang dengan podium silinder 3D beriluminasi di canvas procedural, transisi geser horizontal bersuspensi spring empuk (`cubic-bezier(0.2, 0.8, 0.25, 1)`), dukungan swipe sentuh IFP & keyboard arrows, tombol panah arkade emas 3D, aura tematik dinamis per tim, bebas polusi emoji, dan kepatuhan tipografi lucu IFP $\ge 24$px.
-  13. **Revamp Layar Pemilihan Ekosistem Stage Showcase Carousel Slider & 60 FPS Diorama (TES GITA BARU 1):** Merombak total format grid 2x2 yang memotong baris bawah menjadi panggung slider sinematik satu ekosistem per slide. Mengintegrasikan jendela diorama lanskap animasi 60 FPS ($680 \times 440$px) real-time via `PREVS`, dossier sains ekologis dan visualisasi rantai makanan horizontal 4 organisme lapang, tombol CTA emas chunky 3D `Jelajahi Ekosistem ▶`, 4 capsule dock pods bernomor di kuadran bawah dengan active gold bevel, animasi spring slide horizontal dengan efek suara `sfx.whoosh()`, kontrol gesture usap IFP, serta kepatuhan 100% tipografi ramah anak IFP $\ge 24$px tanpa AI slop.
-  14. **Transformasi Layar Penuh Cara Bermain & Cockpit Panduan Guru (TES GITA BARU 1):** Mengubah menu pop-up/modal sempit menjadi 2 layar penuh (*Full-Page Screens*) 1080p native IFP: Layar Cara Bermain (`how.js`) berformat Visual Bento Grid 4 Panel (Tim Spesialis, Eco-Health & Siklus Hari, Kartu Aksi Jeda 1,2s, Musyawarah CSCL & Kuis C2) dan tombol CTA emas langsung ke panggung tim; serta Layar Panduan Guru (`teacher.js`) berformat Cockpit Dashboard 3 Kolom (Kurikulum IPAS Fase C & C2, Sintaks Jigsaw & Voting Kartu 3 Warna kelas 5A, Rubrik 24 Bintang, Reset Progres terproteksi in-engine IFP modal, serta Mode Penguji Rahasia 5-tap gesture buka semua bintang/misi).
-
 #### Pekan 12: Uji Coba Lapangan dengan 25 Siswa (Beta Testing) - [MILESTONE 2]
-* **Kegiatan:** Melaksanakan pembelajaran di kelas 5A menggunakan media simulasi di IFP, membagi kelompok belajar, serta membagikan angket respon bergambar ke siswa dan guru.
-* **Target Output:** 25 berkas angket respon siswa, 1 berkas angket guru, dokumentasi foto/video, dan Surat Keterangan Selesai Penelitian.
+* **Kegiatan:** Melaksanakan pembelajaran di kelas 5A SDN Percobaan 2 Malang:
+  1. Pelaksanaan **Pretest 20 Butir Soal C2** sebelum pembelajaran untuk memetakan kemampuan awal siswa pada 4 TP.
+  2. Implementasi pembelajaran berbantuan media simulasi *Eco-Explorer* di layar sentuh IFP (pembagian 5 kelompok Jigsaw, penyelidikan 8 misi, pengisian LKPD, dan voting kartu warna).
+  3. Pelaksanaan **Posttest 20 Butir Soal C2** pasca-pembelajaran untuk mengukur peningkatan pemahaman siswa.
+  4. Pengisian angket respon kepraktisan media oleh siswa dan guru.
+* **Target Output:** 25 lembar pretest, 25 lembar posttest, 25 berkas angket respon siswa, 1 berkas angket guru, dokumentasi foto/video interaksi IFP, dan Surat Keterangan Selesai Penelitian.
 * **Koordinasi:** Refleksi proses pembelajaran bersama Guru Kelas dan Kepala Sekolah.
 
 ---
 
 ### BULAN 4: FASE LAPORAN AKHIR & SIDANG SKRIPSI (PEKAN 13 – 16)
 
-#### Pekan 13: Olah Data Angket & Draf Bab 4 (Hasil Penelitian)
-* **Kegiatan:** Menghitung persentase skor kelayakan dari validator ahli dan skor kepraktisan dari siswa/guru, serta mendokumentasikan foto perbaikan media (*Before vs After*).
-* **Target Output:** Tabel hasil olah data statistik deskriptif dan draf Bab 4 bagian hasil pengembangan.
+#### Pekan 13: Olah Data Angket, Uji N-Gain Pretest-Posttest & Draf Bab 4 (Hasil Penelitian)
+* **Kegiatan:** 
+  1. Menghitung persentase skor kelayakan dari validator ahli materi dan ahli media.
+  2. Menghitung skor kepraktisan media dari angket respon siswa dan guru.
+  3. Menganalisis peningkatan hasil belajar pretest ke posttest menggunakan rumus **N-Gain Score (Hake, 1998)** untuk membuktikan efektivitas media dalam meningkatkan pemahaman C2 pada masing-masing 4 TP.
+  4. Mendokumentasikan foto perbaikan media (*Before vs After*).
+* **Target Output:** Tabel hasil olah data statistik deskriptif, rekapitulasi skor N-Gain per TP dan per siswa, serta draf Bab 4 bagian hasil pengembangan.
 * **Koordinasi:** Bimbingan Bab 4 bersama Dosen Pembimbing.
 
 #### Pekan 14: Penulisan Bab 4 (Pembahasan) & Bab 5 (Kesimpulan)

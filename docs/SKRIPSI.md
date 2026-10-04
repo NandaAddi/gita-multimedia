@@ -111,26 +111,34 @@ Berdasarkan Taksonomi Bloom yang direvisi (Anderson & Krathwohl, 2001), materi I
 
 Media konvensional (buku teks dan PowerPoint statis) cenderung mengondisikan siswa pada memori deklaratif (C1), di mana siswa sekadar menghafal bagan rantai makanan linier tanpa memahami dinamika non-linier ketika terjadi gangguan. Simulasi interaktif *Eco-Explorer* menghadirkan representasi dinamis yang memvisualisasikan hukum konservasi energi dan tekanan trofik secara konkret.
 
-### 2. Ekspansi 4 Bioma Nusantara & Tipologi Gangguan (Faktor Alam vs Faktor Manusia)
-Untuk mencegah miskonsepsi bahwa ekosistem hanya terbatas pada lingkungan sawah lokal, media dikembangkan mencakup **4 Bioma Representatif Nusantara**:
-1. **🌾 Sawah (Agroekosistem Terestrial):** Menghubungkan padi, tikus, katak, ular, elang, dan jamur dekomposer.
-2. **🌲 Hutan Tropis (Bioma Hutan Hujan):** Menghubungkan pohon hutan, rusa, harimau, serangga, dan dekomposer humus.
-3. **🏞️ Sungai Air Tawar (Ekosistem Perairan Lotik):** Menghubungkan teratai air, zooplankton, ikan gabus, bangau, dan pengurai sedimen.
-4. **🌊 Laut Terumbu Karang (Ekosistem Marin Tropis):** Menghubungkan terumbu karang, ikan karang kecil, penyu, hiu, dan detritivor laut.
+### 2. Ekspansi 4 Bioma Nusantara & Tipologi 16 Misi Kausalitas (Faktor Alam vs Faktor Manusia)
+Untuk mencegah miskonsepsi bahwa ekosistem hanya terbatas pada lingkungan sawah lokal, media dikembangkan mencakup **4 Bioma Representatif Nusantara** dengan total **16 Misi Kausalitas**:
+1. **🌾 Sawah (Agroekosistem Terestrial):** Menyelidiki rantai makanan padi, wereng, katak, ular, elang, dan dekomposer jerami.
+   * *2 Misi Ulah Alam:* M1 Kemarau Panjang & Padi Kering; M2 Ledakan Hama Wereng Cokelat.
+   * *2 Misi Ulah Manusia:* M3 Racun Kimia Pestisida Mematikan; M4 Perburuan Liar Ular Sawah.
+2. **🌲 Hutan Tropis (Bioma Hutan Hujan):** Menyelidiki pohon meranti, rusa, Harimau Sumatera, serangga, dan dekomposer humus.
+   * *2 Misi Ulah Alam:* M1 Kemarau & Mata Air Rimba Kering; M2 Gesekan Ranting & Asap Hutan.
+   * *2 Misi Ulah Manusia:* M3 Pembalakan Liar Pohon Rimba; M4 Jerat Kawat Pemburu Harimau.
+3. **🏞️ Sungai Air Tawar (Ekosistem Perairan Lotik):** Menyelidiki fitoplankton, eceng gondok, ikan kecil, bangau, dan pengurai sedimen.
+   * *2 Misi Ulah Alam:* M1 Air Surut & Ledakan Gulma Eceng Gondok; M2 Erosi Tebing & Pendangkalan Lumpur.
+   * *2 Misi Ulah Manusia:* M3 Limbah Kimia Detergen Pabrik; M4 Penangkapan Ikan Berbahaya (Setrum & Tuba).
+4. **🌊 Laut Terumbu Karang (Ekosistem Marin Tropis):** Menyelidiki karang acropora, ikan karang kecil, penyu hijau, hiu, dan detritivor samudra.
+   * *2 Misi Ulah Alam:* M1 Air Laut Panas & Pemutihan Karang (*Bleaching*); M2 Gelombang Badai Tropis & Karang Roboh.
+   * *2 Misi Ulah Manusia:* M3 Bom Ikan Peledak Penghancur Karang; M4 Sampah Plastik Samudra & Pukat Hanyut.
 
-Setiap bioma dirancang dengan **dua skenario kasus komparatif**:
-* **Faktor Ulah Alam:** Menstimulasi pemahaman tentang faktor pembatas abiotik alami (kemarau ekstrem, kebakaran hutan akibat petir, banjir sedimentasi lumpur, dan gelombang panas laut/bleaching).
-* **Faktor Ulah Manusia (*Antropogenik*):** Menyadarkan siswa terhadap intervensi destruktif manusia (penggunaan pestisida berlebih, penebangan liar dan perburuan predator, pembuangan limbah beracun pabrik, serta destructive fishing/bom ikan).
+Struktur komparatif ini (2 Ulah Alam vs 2 Ulah Manusia di setiap bioma) memfasilitasi penalaran diferensial C2, di mana siswa belajar membedakan mekanisme pemulihan alami versus kerusakan antropogenik yang masif.
 
-### 3. Gamifikasi Edukatif: Sistem 3 Bintang & Progression Lock
+### 3. Gamifikasi Edukatif: Sistem 3 Bintang & Progression Lock 2 Jalur Paralel
 Mengadopsi prinsip desain motivasional Alessi & Trollip (2001) serta teori motivasi belajar Ryan & Deci (Self-Determination Theory):
 * **Bintang 1 (Kompetensi Regulasi Dinamis):** Meraih stabilitas ekosistem $\ge 75\%$ dan menyelesaikan checklist target organisme.
 * **Bintang 2 (Debriefing Refleksi Kognitif):** Menyelesaikan kuis penalaran sebab-akibat di Buku Catatan Detektif.
 * **Bintang 3 (Penguasaan Akurasi / *Mastery*):** Menjawab butir soal penalaran kausalitas dengan benar pada percobaan pertama (*first attempt*).
-* **Progression Lock:** Akses misi manusia terkunci sampai misi alam terselesaikan, dan bioma selanjutnya terkunci sampai bioma sebelumnya tuntas. Mekanisme ini memastikan *scaffolding* berlangsung bertahap dari pemahaman dasar menuju konsep yang lebih kompleks.
+* **Total Prestasi:** 12 Bintang per Kelompok Detektif, total 48 Bintang di seluruh panggung Nusantara.
+* **Progression Lock 2 Jalur Paralel:** Pada menu misi masing-masing kelompok, Misi 1 Alam dan Misi 1 Manusia terbuka sejak awal secara berdampingan (Grid 2x2). Misi 2 pada masing-masing jalur akan terbuka setelah Misi 1 jalur terkait tuntas. Mekanisme ini memberikan otonomi eksplorasi tanpa menimbulkan kebingungan navigasi (*cognitive load reduction*).
 
 ### 4. Ergonomi & Sosiopedagogis Interaksi Kelas (CSCL & IFP)
-* **Model Kolaborasi Jigsaw:** 5 Tim Spesialis bergantian maju sebagai *Petugas Layar* di depan Interactive Flat Panel (IFP), sementara siswa di meja bertindak aktif sebagai *Penasihat Meja* menggunakan 3 Kartu Voting Warna fisik.
+* **Model Kolaborasi Jigsaw 4 Kelompok Ahli:** 25 Siswa kelas 5A dibagi ke dalam 4 Kelompok Detektif (🌾 Sawah, 🌲 Hutan, 🌊 Sungai, 🪸 Laut) dengan 6–7 siswa per kelompok. Setiap kelompok bergantian maju sebagai *Petugas Layar* di depan Interactive Flat Panel (IFP), sementara siswa kelompok lain di meja bertindak aktif sebagai *Penasihat Meja* menggunakan 3 Kartu Voting Warna fisik.
+* **Akses Langsung Tanpa Hambatan (*Direct Biome Access*):** Setiap kelompok langsung diarahkan ke bioma spesialisasinya melalui Layar Pemilihan Kelompok, mengeliminasi tahapan navigasi redundan dan memaksimalkan waktu belajar efektif pada jam pelajaran IFP.
 * **Ergonomi Layar Sentuh IFP:** Kuadran kontrol diletakkan pada lower-third (ketinggian jangkau siswa kelas 5 SD), tombol berukuran besar (80×80 px), dengan sistem *anti-spam cooldown* (1,2 detik) untuk mendorong pertimbangan reflektif sebelum bertindak.
 
 ### 5. Diagram Kausalitas Visual C2 & Prinsip Multimedia Mayer (Debriefing Berbasis Bukti)
@@ -140,5 +148,168 @@ Pada fase debriefing pasca-simulasi (`QuizScene.js`), umpan balik jawaban siswa 
 * **Integrasi Lembar Kerja (LKPD):** Diagram digital ini direplikasi ke dalam Buku Catatan Detektif cetak, menjamin kesinambungan kognitif antara pengalaman digital di layar IFP dan catatan reflektif di meja kelas.
 
 ### 6. Mode Validasi Penguji & Keandalan Operasional 100% Offline
-* **Mode Penguji / Dosen (*Examiner Mode*):** Guna memenuhi kebutuhan pengujian ahli media, ahli materi, dan simulasi sidang skripsi tanpa harus memainkan seluruh 8 misi secara berurutan, ditambahkan mekanisme *5-tap secret trigger* pada lencana tim di `BiomeSelectScene.js` yang membuka seluruh 4 bioma, 8 misi, dan 24 bintang evaluasi secara instan via `ProgressManager.js`.
+* **Mode Penguji / Dosen (*Examiner Mode*):** Guna memenuhi kebutuhan pengujian ahli media, ahli materi, dan simulasi sidang skripsi tanpa harus memainkan seluruh 16 misi secara berurutan, ditambahkan mekanisme *5-tap secret trigger* pada lencana tim di `BiomeSelectScene.js` yang membuka seluruh 4 bioma, 16 misi, dan 48 bintang evaluasi secara instan via `ProgressManager.js`.
 * **Hardware-Aware Touch Modal:** Mengeliminasi dialog *native* peramban (`window.confirm`) yang tidak responsif terhadap sentuhan jari di IFP dengan merancang modal sentuh in-engine Phaser, menjamin reliabilitas saat gladi bersih di sekolah maupun demonstrasi pengujian akademik.
+
+---
+
+## **E. Instrumen Evaluasi Penelitian: Pretest & Posttest IPAS Fase C (20 Butir Soal C2)**
+
+### 1. Capaian & Tujuan Pembelajaran Kurikulum Merdeka
+* **Capaian Pembelajaran (CP):**
+  > *"Capaian pembelajaran Ilmu Pengetahuan Alam dan Sosial pada Fase C (kelas V SD) menekankan kemampuan peserta didik dalam memahami hingga menganalisis bagaimana alam semesta seperti hubungan antar komponen biotik dan abiotik, serta lingkungan sosial pengaruh terhadap ekosistem yang dapat terjadi di sekitarnya."*
+
+* **4 Tujuan Pembelajaran (TP):**
+  1. **TP 1:** Peserta didik mampu mengidentifikasi komponen biotik dan abiotik dalam berbagai jenis ekosistem.
+  2. **TP 2:** Peserta didik mampu memahami hubungan rantai makanan dan jaring-jaring makanan pada ekosistem hutan tropis, laut, sawah, dan sungai.
+  3. **TP 3:** Peserta didik mampu memprediksi dampak perubahan jumlah populasi komponen biotik terhadap rantai makanan dalam suatu ekosistem.
+  4. **TP 4:** Peserta didik mampu menganalisis dampak perubahan populasi komponen biotik terhadap keseimbangan ekosistem, serta dampak aktivitas manusia terhadap keseimbangan ekosistem.
+
+### 2. Kisi-Kisi Distribusi Butir Soal Evaluasi
+* **Distribusi Butir per TP:**
+  * **TP 1 (Komponen Biotik & Abiotik):** Butir 1, 2, 3, 4, 5, 7 (Total 6 butir)
+  * **TP 2 (Rantai & Jaring Makanan 4 Bioma):** Butir 6, 8, 9, 10, 11, 12, 13, 14 (Total 8 butir)
+  * **TP 3 (Prediksi Dinamika Populasi C2 Inferring):** Butir 14, 16, 19, 20 (Total 4 butir terintegrasi)
+  * **TP 4 (Keseimbangan Ekosistem & Aktivitas Manusia):** Butir 15, 17, 18, 19, 20 (Total 5 butir)
+* **Distribusi Ekosistem:**
+  * **Sawah:** Butir 1, 6, 11, 14, 15, 16
+  * **Hutan Tropis:** Butir 8, 9, 13, 17
+  * **Sungai Air Tawar:** Butir 12, 18
+  * **Laut Terumbu Karang:** Butir 4, 5, 20
+  * **Konsep Umum Ekologis:** Butir 2, 3, 7, 10, 19
+
+### 3. Naskah 20 Butir Soal Pretest & Posttest Beserta Kunci Jawaban
+1. Berikut yang termasuk komponen abiotik dalam ekosistem sawah adalah...  
+   a. Padi  
+   b. Air *(Kunci: b)*  
+   c. Burung pipit  
+   d. Tikus  
+
+2. Makhluk hidup yang berperan sebagai pengurai dalam ekosistem adalah...  
+   a. Tumbuhan  
+   b. Bakteri dan jamur *(Kunci: b)*  
+   c. Burung  
+   d. Matahari  
+
+3. Komponen abiotik yang paling berpengaruh terhadap proses fotosintesis tumbuhan adalah...  
+   a. Cahaya matahari *(Kunci: a)*  
+   b. Suhu  
+   c. Tanah  
+   d. Udara  
+
+4. Dalam ekosistem laut, contoh komponen biotik adalah...  
+   a. Air laut  
+   b. Garam  
+   c. Ikan *(Kunci: c)*  
+   d. Suhu air  
+
+5. Pada ekosistem laut, plankton berperan sebagai...  
+   a. Konsumen tingkat tinggi  
+   b. Produsen *(Kunci: b)*  
+   c. Pengurai  
+   d. Predator utama  
+
+6. Urutan rantai makanan yang tepat pada ekosistem sawah adalah...  
+   a. Padi → ular → tikus → elang  
+   b. Elang → ular → tikus → padi  
+   c. Elang → tikus → ular → padi  
+   d. Padi → tikus → ular → elang *(Kunci: d)*  
+
+7. Fungsi utama komponen abiotik seperti air dan udara bagi makhluk hidup adalah...  
+   a. Sebagai makanan  
+   b. Sebagai tempat tinggal  
+   c. Mendukung keberlangsungan hidup *(Kunci: c)*  
+   d. Sebagai predator  
+
+8. Dalam ekosistem hutan tropis, rusa yang memakan tumbuhan termasuk dalam kelompok...  
+   a. Konsumen tingkat I *(Kunci: a)*  
+   b. Konsumen tingkat III  
+   c. Pengurai  
+   d. Produsen  
+
+9. Singa yang memakan rusa berperan sebagai...  
+   a. Konsumen tingkat I  
+   b. Konsumen tingkat II *(Kunci: b)*  
+   c. Pengurai  
+   d. Predator utama  
+
+10. Jaring-jaring makanan terbentuk karena...  
+    a. Beberapa rantai makanan saling berhubungan *(Kunci: a)*  
+    b. Hanya ada satu jenis makanan  
+    c. Tidak ada produsen  
+    d. Semua hewan adalah karnivora  
+
+11. Urutan rantai makanan yang tepat pada ekosistem sawah adalah...  
+    a. Padi → ular → tikus → elang  
+    b. Elang → ular → tikus → padi  
+    c. Padi → tikus → ular → elang *(Kunci: c)*  
+    d. Elang → tikus → ular → padi  
+
+12. Contoh rantai makanan yang tepat pada ekosistem sungai adalah...  
+    a. Ikan besar → ikan kecil → fitoplankton  
+    b. Fitoplankton → ikan kecil → ikan besar *(Kunci: b)*  
+    c. Ikan kecil → fitoplankton → ikan besar  
+    d. Fitoplankton → ikan besar → ikan kecil  
+
+13. Di ekosistem hutan tropis terdapat tumbuhan, belalang, katak, dan ular. Urutan rantai makanan yang tepat adalah...  
+    a. Ular → katak → belalang → tumbuhan  
+    b. Belalang → tumbuhan → ular → katak  
+    c. Tumbuhan → belalang → katak → ular *(Kunci: c)*  
+    d. Katak → belalang → tumbuhan → ular  
+
+14. Di ekosistem sawah, tikus memakan padi dan juga dimakan oleh ular serta burung hantu. Kondisi ini menunjukkan bahwa tikus...  
+    a. Menjadi penghubung dalam jaring-jaring makanan *(Kunci: a)*  
+    b. Hanya menjadi bagian dari satu rantai makanan  
+    c. Berperan sebagai produsen  
+    d. Tidak memiliki predator alami  
+
+15. Upaya yang tepat untuk menjaga keseimbangan ekosistem sawah adalah...  
+    a. Membasmi semua hama tanpa terkecuali  
+    b. Menjaga kelestarian predator alami seperti ular dan burung *(Kunci: b)*  
+    c. Menebang pohon di sekitar sawah  
+    d. Membuang sampah ke sungai dekat sawah  
+
+16. Jika populasi ular di sawah berkurang drastis, kemungkinan yang terjadi adalah...  
+    a. Populasi tikus meningkat *(Kunci: a)*  
+    b. Populasi padi meningkat  
+    c. Elang punah  
+    d. Tidak ada perubahan  
+
+17. Penebangan hutan secara liar dapat menyebabkan...  
+    a. Meningkatnya jumlah produsen  
+    b. Populasi hewan semakin stabil  
+    c. Populasi hewan semakin banyak  
+    d. Terganggunya keseimbangan ekosistem *(Kunci: d)*  
+
+18. Jika terjadi pencemaran air sungai, dampak yang mungkin terjadi adalah...  
+    a. Ikan semakin banyak  
+    b. Tumbuhan air tumbuh subur  
+    c. Ikan dan tumbuhan air mati *(Kunci: c)*  
+    d. Tidak terjadi dampak apapun  
+
+19. Perburuan liar terhadap predator seperti elang dapat menyebabkan...  
+    a. Populasi mangsa (tikus) menurun  
+    b. Populasi mangsa (tikus) meningkat pesat *(Kunci: b)*  
+    c. Keseimbangan ekosistem semakin membaik  
+    d. Ekosistem tidak mengalami perubahan  
+
+20. Di ekosistem laut, jika populasi ikan besar menurun karena penangkapan berlebihan, dampak yang paling mungkin terjadi terhadap jaring-jaring makanan adalah...  
+    a. Populasi plankton langsung menurun  
+    b. Populasi ikan kecil menurun  
+    c. Populasi ikan kecil meningkat karena predatornya berkurang *(Kunci: c)*  
+    d. Tidak ada dampak karena ekosistem laut sangat luas  
+
+### 4. Metode Analisis Efektivitas Pembelajaran (N-Gain Score)
+Guna mengukur peningkatan penguasaan pemahaman relasional C2 siswa kelas 5A sebelum dan sesudah menggunakan multimedia interaktif *Eco-Explorer*, digunakan rumus *Normalized Gain* (Hake, 1998):
+
+$$g = \frac{S_{post} - S_{pre}}{S_{max} - S_{pre}}$$
+
+* **Keterangan:**
+  * $S_{post}$ : Skor rata-rata posttest siswa
+  * $S_{pre}$ : Skor rata-rata pretest siswa
+  * $S_{max}$ : Skor maksimum ideal (skor 100)
+* **Kriteria Efektivitas:**
+  * $g \ge 0{,}70$ : Kategori Tinggi (*Efektivitas Tinggi*)
+  * $0{,}30 \le g < 0{,}70$ : Kategori Sedang (*Efektivitas Sedang*)
+  * $g < 0{,}30$ : Kategori Rendah (*Efektivitas Rendah*)
+
