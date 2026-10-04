@@ -138,11 +138,11 @@
 - Modify: `TES GITA BARU 1/js/scenes/simulation.js`
 - Modify: `TES GITA BARU 1/js/scenes/how.js`
 
-- [ ] **Step 1: Verifikasi kesiapan `simulation.js` untuk 16 misi**
+- [x] **Step 1: Verifikasi kesiapan `simulation.js` untuk 16 misi**
   - Pastikan tombol aksi dan parameter status simulasi (`poison`, `trap`, `heat`, `bomb`, `gulma`, `lumpur`, `wereng`, `api`, `setrum`, `pukat`) terdefinisi dengan aman tanpa memicu *undefined variable exception*.
   - Pastikan tombol kembali di header simulasi mengarahkan kembali ke `go('mission'); buildMissionMenu();`.
 
-- [ ] **Step 2: Selaraskan layar Cara Bermain (`how.js`)**
+- [x] **Step 2: Selaraskan layar Cara Bermain (`how.js`)**
   - Update Langkah 1: Jelaskan sistem 4 Kelompok Detektif (Detektif Sawah, Hutan, Sungai, Laut).
   - Update Langkah 3: Jelaskan pembagian 4 Misi (2 Ulah Alam vs 2 Ulah Manusia).
   - Tombol navigasi akhir tetap mengarahkan siswa ke Layar Pemilihan Kelompok (`go('team'); buildTeam();`).

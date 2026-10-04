@@ -98,7 +98,7 @@ function startSim(m){
   quota:m.actions.map(a=>a.quota+(team.perk.ids.includes(a.id)?1:0)),
   cdi:m.actions.map(a=>team.perk.ids.includes(a.id)?2:3),
   cool:m.actions.map(()=>0),paused:true,mp:0,done:false,voted:0,voteAt:[6,14,22],limit:m.par+18,
-  ui:{left:true,right:true,leftDot:false},bridging:true};
+   ui:{left:true,right:true,top:true,leftDot:false},bridging:true};
  SIM.S.health=m.health(SIM.S);
  buildSimUI();go('sim');updateHUD();
  showBridgeDialog(m,team);}
@@ -112,7 +112,8 @@ function buildSimUI(){const m=SIM.m;
  +'<button class="btn tb-btn" id="sim-help">'+ic('mag',24)+' Tips</button>'
  +'<button class="btn tb-btn" id="sim-kamus">'+ic('book',24)+' Kamus</button>'
  +'<button class="btn tb-btn snd-btn"></button>'
- +'<div class="tb-stars">'+ic('star',24)+' <b>'+totStars()+'/24</b></div></div>'
+  +'<div class="tb-stars">'+ic('star',24)+' <b>'+totStars()+'/24</b></div>'
+  +'<button class="btn tb-btn" id="sim-top-hide" title="Sembunyikan panel atas">▲</button></div>'
  +'<div class="hpod"><div class="r1"><span>Kesehatan Ekosistem</span><span class="st" id="hp-val"></span></div>'
  +'<div class="hbar"><div id="hp-bar"></div></div></div>'
  +'<div class="hud-left">'
@@ -128,8 +129,9 @@ function buildSimUI(){const m=SIM.m;
    +'<div class="mrow"><button class="btn btn-ruby" id="ab-y">'+ic('back',24)+' Ya, Berhenti</button><button class="btn btn-gold" id="ab-n">'+ic('play',24)+' Lanjut Main</button></div>',true);
   r.querySelector('#ab-y').onclick=()=>{closeModal();leaveSim();buildMissionMenu(SIM?SIM.m.biome:NAV.biome);go('mission');};
   r.querySelector('#ab-n').onclick=()=>{sfx.click();closeModal();};};
- el('#sim-pause').onclick=function(){if(!SIM)return;SIM.paused=!SIM.paused;this.classList.toggle('pause-on',SIM.paused);
-  this.innerHTML=SIM.paused?ic('play',24)+' Lanjut':ic('pause',24)+' Jeda';sfx.click();};
+  el('#sim-pause').onclick=function(){if(!SIM)return;SIM.paused=!SIM.paused;this.classList.toggle('pause-on',SIM.paused);
+   this.innerHTML=SIM.paused?ic('play',24)+' Lanjut':ic('pause',24)+' Jeda';sfx.click();};
+  el('#sim-top-hide').onclick=()=>toggleUIPanel('top');
  el('#sim-help').onclick=()=>{sfx.click();modal('<h2>Tips Misi</h2>'+SIM.m.tips.map(t=>'<p>• '+t+'</p>').join('')
   +'<p style="color:#7fd4e8;font-family:Fredoka">Target waktu: ≤ '+SIM.m.par+' hari untuk 3 bintang.</p>'
   +'<div class="mrow"><button class="btn btn-gold" data-close>Mengerti!</button></div>');};
@@ -151,6 +153,11 @@ function gitaLine(){const S=SIM.S,m=SIM.m;
  if(S.gulma!==undefined&&S.gulma>40)return 'Eceng gondok menutupi sungai! Angkat gulmanya agar oksigen masuk.';
  if(S.heat!==undefined&&S.heat>55)return 'Air laut terlalu panas! Naungi karang agar tidak memutih.';
  if(S.water!==undefined&&S.water<35)return 'Air semakin sedikit! Alirkan air lebih dulu — semua makhluk hidup butuh air.';
+  if(S.wereng!==undefined&&S.wereng>35)return 'Wereng cokelat melonjak! Lepas katak pemangsa dan semprot ekstrak mimba.';
+  if(S.api!==undefined&&S.api>35)return 'Bara api rimba menyala! Padamkan titik api dan buat sekat bakar basah.';
+  if(S.lumpur!==undefined&&S.lumpur>35)return 'Lumpur erosi menimbun sungai! Keruk lumpur dan tanam rumput vetiver di tebing.';
+  if(S.storm!==undefined&&S.storm>35)return 'Ombak badai mematahkan karang! Pasang rangka spider terumbu dan bersihkan lamun.';
+  if(S.net!==undefined&&S.net>35)return 'Jaring pukat trawl meratakan dasar karang! Sita pukat dan selamatkan penyu.';
  if(S.herb>S.prod*.45&&S.prod<45)return 'Pemakan tumbuhan terlalu banyak! Kembalikan pemangsanya agar seimbang.';
  if(S.health>=80)return 'Hebat! Ekosistem mulai seimbang. Pertahankan sampai semua target tercapai!';
  return pick(['Ayo, cegah kerusakan sebelum merembet ke rantai makanan!','Ingat: semua makhluk saling membutuhkan satu sama lain.','Setiap aksi ada batasnya — gunakan dengan tepat!','Buka Kamus Alam kalau menemukan istilah asing!']);}
@@ -189,10 +196,11 @@ function buildHUD(){if(!SIM)return;const m=SIM.m;
  dg.appendChild(fin);H.finishCard=fin;
  const ui=el('#sim-ui');
  ui.querySelectorAll('.edge-tab').forEach(e=>e.remove());
- const tL=document.createElement('div');tL.className='edge-tab left';tL.innerHTML=ic('target',30)+'<span class="dot"></span>';
- const tR=document.createElement('div');tR.className='edge-tab right';tR.innerHTML=ic('mag',30);
- tL.onclick=()=>toggleUIPanel('left');tR.onclick=()=>toggleUIPanel('right');
- ui.appendChild(tL);ui.appendChild(tR);
+  const tL=document.createElement('div');tL.className='edge-tab left';tL.innerHTML=ic('target',30)+'<span class="dot"></span>';
+  const tR=document.createElement('div');tR.className='edge-tab right';tR.innerHTML=ic('mag',30);
+  const tT=document.createElement('div');tT.className='edge-tab top';tT.innerHTML='<span style="font-size:30px;line-height:1">▼</span>';
+  tL.onclick=()=>toggleUIPanel('left');tR.onclick=()=>toggleUIPanel('right');tT.onclick=()=>toggleUIPanel('top');
+  ui.appendChild(tL);ui.appendChild(tR);ui.appendChild(tT);
  const hl=ui.querySelector('.hud-left'),hr=ui.querySelector('.hud-right');
  if(hl&&!hl.querySelector('.panel-x')){const x=document.createElement('button');x.className='panel-x';x.textContent='×';x.onclick=()=>toggleUIPanel('left');hl.appendChild(x);}
  if(hr&&!hr.querySelector('.panel-x')){const x=document.createElement('button');x.className='panel-x';x.textContent='×';x.onclick=()=>toggleUIPanel('right');hr.appendChild(x);}
@@ -202,9 +210,13 @@ function syncUITabs(){if(!SIM||!SIM.ui)return;
  const tL=document.querySelector('#sim-ui .edge-tab.left'),tR=document.querySelector('#sim-ui .edge-tab.right');
  if(L)L.classList.toggle('collapsed',!SIM.ui.left);
  if(R)R.classList.toggle('collapsed',!SIM.ui.right);
- if(tL){tL.classList.toggle('show',!SIM.ui.left);
-  const d=tL.querySelector('.dot');if(d)d.classList.toggle('show',!!(SIM.ui.leftDot&&!SIM.ui.left));}
- if(tR)tR.classList.toggle('show',!SIM.ui.right);}
+  if(tL){tL.classList.toggle('show',!SIM.ui.left);
+   const d=tL.querySelector('.dot');if(d)d.classList.toggle('show',!!(SIM.ui.leftDot&&!SIM.ui.left));}
+  if(tR)tR.classList.toggle('show',!SIM.ui.right);
+  const tb=document.querySelector('#sim-ui .sim-topbar'),hp=document.querySelector('#sim-ui .hpod'),tT=document.querySelector('#sim-ui .edge-tab.top');
+  if(tb)tb.classList.toggle('collapsed',!SIM.ui.top);
+  if(hp)hp.classList.toggle('collapsed',!SIM.ui.top);
+  if(tT)tT.classList.toggle('show',!SIM.ui.top);}
 function toggleUIPanel(side){if(!SIM||!SIM.ui)return;SIM.ui[side]=!SIM.ui[side];
  if(side==='left')SIM.ui.leftDot=false;sfx.click();syncUITabs();}
 function updateHUD(){if(!SIM)return;const m=SIM.m,S=SIM.S;
@@ -216,7 +228,7 @@ function updateHUD(){if(!SIM)return;const m=SIM.m,S=SIM.S;
  const hc=h>=75?'good':h>=55?'mid':h>=35?'warn':'danger';
  H.hpBar.className=hc;H.hpVal.className='st '+hc;
  m.stats.forEach((s,i)=>{const v=S[s[0]]||0,mx=STATMAX[s[0]]||100,f=c01(v/mx);
-  const hh=s[3]===1?f:1-f,col=hh>.6?'#2ec98b':hh>.3?'#f5c445':'#ff5c4d';
+   const hh=s[3]===1?f:1-f,col=hh>.6?PAL.good:hh>.3?PAL.warn:PAL.danger;
   const bar=H.statBar[i],val=H.statVal[i];
   bar.style.width=Math.round(f*100)+'%';bar.style.background=col;
   val.textContent=Math.round(v);val.style.color=col;});
@@ -261,7 +273,7 @@ function showVote(){const m=SIM.m;
   closeModal();simUpdate();});}
 function simFail(timeout){if(!SIM)return;clearInterval(SIM.timer);SIM.timer=null;SIM.done=true;sfx.wrong();
  const m=SIM.m;
-  const r=modal('<h2 style="color:#ff9d94">'+ic('clock',34)+' '+(timeout?'Waktu Telah Habis!':'Ekosistem Rusak Berat!')+'</h2>'
+   const r=modal('<h2 style="color:#fca5a5">'+ic('clock',34)+' '+(timeout?'Waktu Telah Habis!':'Ekosistem Rusak Berat!')+'</h2>'
   +'<p>'+(timeout?'Hari telah habis, tetapi target misi belum tercapai. Jangan menyerah — ekosistem ini masih membutuhkanmu!'
    :'Kesehatan ekosistem jatuh ke titik kritis. Renungkan: aksi mana yang seharusnya dilakukan lebih dulu?')+'</p>'
   +'<p style="background:rgba(2,44,34,.6);border-radius:12px;padding:12px 18px">Ingat urutan yang tepat: atasi <b>ancaman terbesar</b> (racun, jerat, bom) sebelum memulihkan penghuninya!</p>'

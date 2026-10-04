@@ -1,11 +1,123 @@
 /* ============================================================
    ECO-EXPLORER — js/scenes/how.js
-   Layar Penuh: Cara Bermain & Aturan Misi (Bento Grid 4 Panel)
+   Layar Penuh: Cara Bermain & Aturan Misi (Stepper 4 Langkah
+   berilustrasi — 1 kartu tampil per langkah + mockup tiap langkah)
    ============================================================ */
+
+let howStep = 0;
+
+function howSteps(){
+  return [
+    { badge: 'Langkah 1 &bull; 4 Kelompok', title: 'PILIH KELOMPOK DETEKTIF',
+      desc: 'Pilih salah satu dari <b>4 Kelompok Detektif Ekosistem</b> (Sawah, Hutan, Sungai, Laut). Setiap kelompok bertanggung jawab menyelidiki satu ekosistem Nusantara secara tuntas!',
+      extra: '<div class="bento-chips-row">'
+        + '<span class="bento-chip chip-padi">Detektif Sawah</span>'
+        + '<span class="bento-chip chip-elang">Detektif Hutan</span>'
+        + '<span class="bento-chip chip-katak">Detektif Sungai</span>'
+        + '<span class="bento-chip chip-jamur">Detektif Laut</span></div>',
+      illus: 'teams' },
+    { badge: 'Langkah 2 &bull; Eco-Health', title: 'PANTAU KESEHATAN &amp; HARI',
+      desc: 'Perhatikan <b>Bar Kesehatan Ekosistem</b> dan <b>Target Hari</b>. Setiap hari kondisi alam berevolusi dinamis. Selamatkan ekosistem sebelum target hari habis dan capai status <b>SEHAT (&ge; 75%)</b>!',
+      extra: '<div class="bento-zones-row">'
+        + '<span class="zone-pill zone-danger">Bahaya (&lt; 45%)</span>'
+        + '<span class="zone-pill zone-warn">Waspada (45 - 74%)</span>'
+        + '<span class="zone-pill zone-healthy">Sehat (&ge; 75%)</span></div>',
+      illus: 'health' },
+    { badge: 'Langkah 3 &bull; Jeda 1,2 Detik', title: 'STRATEGI KARTU AKSI',
+      desc: 'Setiap ekosistem memiliki <b>4 Misi Kausalitas</b>: 2 Kasus Ulah Alam (kemarau, wereng, badai, gulma) dan 2 Kasus Ulah Manusia (pestisida, jerat satwa, bom ikan, limbah pabrik)! Gunakan <b>3 kartu aksi</b> di kuadran bawah layar untuk memulihkan alam.',
+      extra: '<div class="bento-strategy-bar"><span class="strat-step">1. Atasi Ancaman</span>'
+        + '<span class="strat-ar">&rarr;</span><span class="strat-step">2. Pulihkan Produsen</span>'
+        + '<span class="strat-ar">&rarr;</span><span class="strat-step">3. Seimbangkan Rantai</span></div>',
+      illus: 'actions' },
+    { badge: 'Langkah 4 &bull; 48 Bintang', title: 'MUSYAWARAH &amp; KUIS C2',
+      desc: 'Di hari musyawarah, simulasi dijeda untuk <b>voting kelas</b> menggunakan kartu fisik 3 warna! Manfaatkan <b>Kamus Alam</b> dan selesaikan <b>kuis sebab-akibat C2</b> di akhir misi untuk mengumpulkan total <b>48 Bintang Prestasi</b> (12 bintang per kelompok).',
+      extra: '<div class="bento-stars-row"><span class="star-chip">★ Kesehatan &ge; 75%</span>'
+        + '<span class="star-chip">★★ Lulus Kuis C2</span>'
+        + '<span class="star-chip">★★★ Percobaan Pertama</span></div>',
+      illus: 'vote' }
+  ];
+}
+
+function howIllusHTML(kind){
+  if(kind === 'teams'){
+    return '<div class="mock-teams"><div class="mock-title">Pilih timmu!</div><div class="mock-team-row" id="mock-teams"></div>'
+      + '<div class="mock-hint">4 detektif &bull; tap untuk memilih</div></div>';
+  }
+  if(kind === 'health'){
+    return '<div class="mock-health"><div class="mock-day">Hari <b>12</b><span>/40</span></div>'
+      + '<div class="mock-hp"><div class="mock-hp-top"><span>Kesehatan</span><b>82%</b></div>'
+      + '<div class="mock-hpbar"><i style="width:82%"></i></div></div>'
+      + '<div class="mock-hint">Bar hijau = aman!</div></div>';
+  }
+  if(kind === 'actions'){
+    return '<div class="mock-dock">'
+      + '<div class="mock-card"><div class="mock-ic">' + ic('drop', 30) + '</div><div class="mock-tt">Alirkan Air</div>'
+      + '<div class="mock-btn">Lakukan!</div><div class="mock-quota">Sisa: 6</div></div>'
+      + '<div class="mock-card cooling"><div class="mock-ic">' + ic('sprout', 30) + '</div><div class="mock-tt">Tanam Padi</div>'
+      + '<div class="mock-btn">Istirahat…</div><div class="mock-cd"><i style="width:60%"></i></div></div>'
+      + '<div class="mock-card"><div class="mock-ic">' + ic('mushroom', 30) + '</div><div class="mock-tt">Urai Jerami</div>'
+      + '<div class="mock-btn">Lakukan!</div><div class="mock-quota">Sisa: 5</div></div></div>';
+  }
+  return '<div class="mock-vote"><div class="mock-title">Musyawarah kelas — pilih 1!</div>'
+    + '<div class="mock-vote-row"><span class="mock-vote-chip c-hijau">Aksi Hijau</span>'
+    + '<span class="mock-vote-chip c-kuning">Aksi Kuning</span>'
+    + '<span class="mock-vote-chip c-merah">Aksi Merah</span></div>'
+    + '<div class="mock-quiz"><div class="mock-q">Kuis: siapa pemangsa tikus?</div>'
+    + '<div class="mock-opt">Katak</div><div class="mock-opt ok">Ular ✓</div><div class="mock-opt">Elang</div></div></div>';
+}
+
+function drawHowTeams(){
+  const row = el('#mock-teams');
+  if(!row || typeof TEAMS === 'undefined' || typeof MASC === 'undefined') return;
+  row.innerHTML = '';
+  TEAMS.forEach(t => {
+    const d = document.createElement('div');
+    d.className = 'mock-team';
+    d.innerHTML = '<canvas width="110" height="110"></canvas><span>' + t.name.replace('Tim ', '') + '</span>';
+    row.appendChild(d);
+    const cv = d.querySelector('canvas');
+    if(cv && MASC[t.mascot]){
+      const c = cv.getContext('2d');
+      c.save();
+      c.translate(55, 62);
+      c.scale(0.36, 0.36);
+      MASC[t.mascot](c);
+      c.restore();
+    }
+  });
+}
+
+function renderHowStep(silent){
+  const steps = howSteps();
+  howStep = Math.max(0, Math.min(steps.length - 1, howStep));
+  const s = steps[howStep];
+  // tab aktif
+  el('#scr-how').querySelectorAll('.how-step-tab').forEach((b, i) => b.classList.toggle('on', i === howStep));
+  // dots
+  const dots = el('#scr-how').querySelector('.how-dots');
+  if(dots) dots.innerHTML = steps.map((_, i) => '<i class="' + (i === howStep ? 'on' : '') + '"></i>').join('');
+  // slide
+  const slide = el('#how-slide');
+  if(slide){
+    slide.innerHTML = '<div class="how-illus">' + howIllusHTML(s.illus) + '</div>'
+      + '<div class="how-step-body"><div class="bento-badge">' + s.badge + '</div>'
+      + '<div class="bento-title">' + s.title + '</div>'
+      + '<p class="bento-desc">' + s.desc + '</p>' + s.extra + '</div>';
+  }
+  if(s.illus === 'teams') drawHowTeams();
+  // nav
+  const prev = el('#how-prev'), next = el('#how-next');
+  if(prev) prev.disabled = howStep === 0;
+  if(next) next.innerHTML = howStep === steps.length - 1
+    ? 'Mulai Petualangan ' + ic('arrowR', 24)
+    : 'Lanjut ' + ic('arrowR', 24);
+  if(!silent) sfx.click();
+}
 
 function buildHow() {
   const root = el('#scr-how');
   if (!root) return;
+  howStep = 0;
 
   root.innerHTML = `
     <div class="how-screen-wrap">
@@ -37,90 +149,33 @@ function buildHow() {
         </div>
       </div>
 
-      <!-- Visual Bento Grid 4 Panels -->
-      <div class="how-bento-grid">
-        <!-- Panel 1: Pilih Tim Spesialis -->
-        <div class="how-bento-card bento-p1">
-          <div class="bento-badge">Langkah 1 &bull; 5 Maskot</div>
-          <div class="bento-title">
-            <span class="bento-ic">${ic('users', 32)}</span>
-            <span>PILIH TIM SPESIALIS</span>
-          </div>
-          <p class="bento-desc">
-            Pilih salah satu dari <b>5 Tim Ahli</b> (Padi, Elang, Katak, Jamur, Ular). Setiap tim memiliki <b>keahlian khusus</b> yang memberikan bonus kuota aksi dan masa istirahat (cooldown) lebih singkat pada aksi andalannya!
-          </p>
-          <div class="bento-chips-row">
-            <span class="bento-chip chip-padi">Padi (Produsen)</span>
-            <span class="bento-chip chip-ular">Ular (Predator Hama)</span>
-            <span class="bento-chip chip-jamur">Jamur (Pengurai)</span>
-            <span class="bento-chip chip-elang">Elang (Predator Puncak)</span>
-            <span class="bento-chip chip-katak">Katak (Bioindikator)</span>
-          </div>
+      <!-- Stepper: 1 kartu per langkah -->
+      <div class="how-stepper">
+        <div class="how-steps-bar">
+          <button class="how-step-tab" data-s="0"><b>1</b><span>Pilih Tim</span></button>
+          <button class="how-step-tab" data-s="1"><b>2</b><span>Kesehatan</span></button>
+          <button class="how-step-tab" data-s="2"><b>3</b><span>Kartu Aksi</span></button>
+          <button class="how-step-tab" data-s="3"><b>4</b><span>Kuis</span></button>
         </div>
-
-        <!-- Panel 2: Keseimbangan & Siklus Hari -->
-        <div class="how-bento-card bento-p2">
-          <div class="bento-badge">Langkah 2 &bull; Eco-Health</div>
-          <div class="bento-title">
-            <span class="bento-ic">${ic('target', 32)}</span>
-            <span>PANTAU KESEHATAN &amp; HARI</span>
-          </div>
-          <p class="bento-desc">
-            Perhatikan <b>Bar Kesehatan Ekosistem</b> dan <b>Target Hari</b>. Setiap hari kondisi alam berevolusi dinamis. Selamatkan ekosistem sebelum target hari habis dan capai status <b>SEHAT (&ge; 75%)</b>!
-          </p>
-          <div class="bento-zones-row">
-            <span class="zone-pill zone-danger">Bahaya (&lt; 45%)</span>
-            <span class="zone-pill zone-warn">Waspada (45 - 74%)</span>
-            <span class="zone-pill zone-healthy">Sehat (&ge; 75%)</span>
-          </div>
+        <div class="how-step-slide" id="how-slide"></div>
+        <div class="how-step-nav">
+          <button class="btn btn-secondary" id="how-prev">${ic('back', 24)} Kembali</button>
+          <div class="how-dots"></div>
+          <button class="btn btn-gold" id="how-next"></button>
         </div>
-
-        <!-- Panel 3: Kartu Aksi & Jeda Cooldown -->
-        <div class="how-bento-card bento-p3">
-          <div class="bento-badge">Langkah 3 &bull; Jeda 1,2 Detik</div>
-          <div class="bento-title">
-            <span class="bento-ic">${ic('clock', 32)}</span>
-            <span>STRATEGI KARTU AKSI</span>
-          </div>
-          <p class="bento-desc">
-            Gunakan <b>3 kartu aksi</b> di kuadran bawah layar secara cermat. Setiap aksi memiliki kuota pemakaian dan <b>jeda reaksi alam 1,2 detik</b>. Kaidah utama: atasi sumber ancaman krisis terlebih dahulu, baru pulihkan populasi!
-          </p>
-          <div class="bento-strategy-bar">
-            <span class="strat-step">1. Atasi Ancaman</span>
-            <span class="strat-ar">&rarr;</span>
-            <span class="strat-step">2. Pulihkan Produsen</span>
-            <span class="strat-ar">&rarr;</span>
-            <span class="strat-step">3. Seimbangkan Rantai</span>
-          </div>
-        </div>
-
-        <!-- Panel 4: Musyawarah Kelas & Kuis 3 Bintang -->
-        <div class="how-bento-card bento-p4">
-          <div class="bento-badge">Langkah 4 &bull; 24 Bintang</div>
-          <div class="bento-title">
-            <span class="bento-ic">${ic('medal', 32)}</span>
-            <span>MUSYAWARAH &amp; KUIS C2</span>
-          </div>
-          <p class="bento-desc">
-            Di hari musyawarah, simulasi dijeda untuk <b>voting kelas</b> menggunakan kartu fisik 3 warna! Manfaatkan <b>Kamus Alam</b> dan selesaikan <b>kuis sebab-akibat C2</b> di akhir misi untuk mengumpulkan total <b>24 Bintang Prestasi</b>.
-          </p>
-          <div class="bento-stars-row">
-            <span class="star-chip">★ Kesehatan &ge; 75%</span>
-            <span class="star-chip">★★ Lulus Kuis C2</span>
-            <span class="star-chip">★★★ Percobaan Pertama</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom CTA Action Bar -->
-      <div class="how-footer-bar">
-        <button class="btn btn-gold how-cta-btn" id="how-cta-start">
-          <span>MULAI PETUALANGAN SEKARANG!</span>
-          <svg class="ic" width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5l11 7-11 7Z"/></svg>
-        </button>
       </div>
     </div>
   `;
+
+  // Step tabs + nav
+  root.querySelectorAll('.how-step-tab').forEach(b => {
+    b.onclick = () => { howStep = +b.dataset.s; renderHowStep(); };
+  });
+  el('#how-prev').onclick = () => { if(howStep > 0){ howStep--; renderHowStep(); } else sfx.click(); };
+  el('#how-next').onclick = () => {
+    if(howStep < howSteps().length - 1){ howStep++; renderHowStep(); }
+    else { sfx.click(); buildTeam(); go('team'); }
+  };
 
   // Bind Buttons
   const backBtn = el('#how-back');
@@ -128,15 +183,6 @@ function buildHow() {
     backBtn.onclick = () => {
       sfx.click();
       go('title');
-    };
-  }
-
-  const ctaBtn = el('#how-cta-start');
-  if (ctaBtn) {
-    ctaBtn.onclick = () => {
-      sfx.click();
-      buildTeam();
-      go('team');
     };
   }
 
@@ -148,5 +194,6 @@ function buildHow() {
     };
   }
 
+  renderHowStep(true);
   syncSound();
 }
