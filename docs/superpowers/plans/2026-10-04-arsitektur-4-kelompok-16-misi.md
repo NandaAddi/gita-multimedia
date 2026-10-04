@@ -108,14 +108,14 @@
 - Consumes: `G.team`, `NAV.biome`, `G.stars`, 4 misi per bioma (2 Alam, 2 Manusia).
 - Produces: Grid 2 Kolom Komparatif di `#scr-mission` (Kolom Kiri 2 Misi Alam, Kolom Kanan 2 Misi Manusia).
 
-- [ ] **Step 1: Terapkan logika Progression Lock 2 Jalur Paralel di `mission-menu.js`**
+- [x] **Step 1: Terapkan logika Progression Lock 2 Jalur Paralel di `mission-menu.js`**
   - Untuk 4 misi dalam bioma aktif:
     - Misi Alam 1: Terbuka langsung (`unlocked = true`).
     - Misi Alam 2: Terbuka jika Misi Alam 1 memiliki $\ge 1$ bintang.
     - Misi Manusia 1: Terbuka langsung (`unlocked = true`).
     - Misi Manusia 2: Terbuka jika Misi Manusia 1 memiliki $\ge 1$ bintang.
 
-- [ ] **Step 2: Bangun DOM Grid 2x2 Komparatif di `buildMissionMenu()`**
+- [x] **Step 2: Bangun DOM Grid 2x2 Komparatif di `buildMissionMenu()`**
   - Header Komando: Tombol `👥 Ganti Kelompok` (kembali ke `#scr-team`), Badge Nama Detektif Kelompok Aktif, Plakat Total Bintang Kelompok (`⭐ x/12 BINTANG`), dan utilitas suara/fullscreen.
   - Sisi Kiri (Kolom Ulah Alam):
     - Plakat Kategori: `🍃 TANTANGAN ULAH ALAM (2 KASUS)`
@@ -126,7 +126,7 @@
     - Kartu Misi Manusia 1 (Status: Terbuka/Selesai)
     - Kartu Misi Manusia 2 (Status: Terkunci/Terbuka)
 
-- [ ] **Step 3: Sesuaikan CSS Grid 2x2 pada `game.css`**
+- [x] **Step 3: Sesuaikan CSS Grid 2x2 pada `game.css`**
   - Terapkan layout responsive 2-column flex/grid yang pas pada rasio 16:9 IFP (1920x1080) tanpa scrollbar tersembunyi.
   - Terapkan standar Zero Outline/Stroke (Chunky Solid Bevel dengan kilau atas halus).
 
