@@ -181,7 +181,7 @@ function buildHow() {
   const backBtn = el('#how-back');
   if (backBtn) {
     backBtn.onclick = () => {
-      sfx.click();
+      sfx.back();
       go('title');
     };
   }

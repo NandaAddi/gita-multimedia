@@ -51,49 +51,51 @@ function buildMissionMenu(biomeKey) {
   const bMissions = MISSIONS.filter(m => m.biome === b);
   const alamMissions = bMissions.filter(m => m.type === 'alam');
   const manusiaMissions = bMissions.filter(m => m.type === 'manusia');
+  const sortedMissions = [...alamMissions, ...manusiaMissions];
 
-  // Hitung total bintang kelompok di bioma ini (Maksimal 12: 4 misi × 3 bintang)
   const groupStars = bMissions.reduce((s, m) => s + (G.stars[m.id] || 0), 0);
 
-  // Sistem Progression Lock: 2 Jalur Paralel
-  // Jalur Alam: Kasus 1 Alam selalu terbuka. Kasus 2 Alam terbuka jika Kasus 1 Alam memiliki >= 1 bintang.
-  // Jalur Manusia: Kasus 1 Manusia selalu terbuka. Kasus 2 Manusia terbuka jika Kasus 1 Manusia memiliki >= 1 bintang.
   function isUnlocked(m, list, subIdx) {
     if (subIdx === 0) return true;
     const prev = list[subIdx - 1];
     return (G.stars[prev.id] || 0) > 0;
   }
 
-  function renderCard(m, list, subIdx, colLabel) {
+  function renderCard(m, list, subIdx, colLabel, globalIdx) {
     const st = G.stars[m.id] || 0;
     const un = isUnlocked(m, list, subIdx);
-    const prev = subIdx > 0 ? list[subIdx - 1] : null;
+    const badgeColor = m.type === 'alam' ? '#047857' : '#b45309';
+    const badgeIcon = m.type === 'alam' ? '🍃' : '⚠️';
+    const badgeText = m.type === 'alam' ? 'TANTANGAN ALAM' : 'TANTANGAN MANUSIA';
 
     return `
-      <div class="mcard panel-deep ${un ? '' : 'locked'}">
-        <div class="mcard-header">
-          <div class="micon ${m.type}">${ic(m.type === 'manusia' ? 'users' : BICON[m.biome], 38)}</div>
-          <div class="mtype-wrap">
-            <div class="mcard-subnum">${colLabel} • KASUS 0${subIdx + 1}</div>
-            <div class="mtitle">${m.title}</div>
+      <div class="mcard panel-deep carousel-slide ${un ? '' : 'locked'}" id="mcard-${globalIdx}" style="display:${globalIdx === 0 ? 'flex' : 'none'};flex-direction:column;width:100%;height:100%;justify-content:center;padding:32px;">
+        <div class="mcard-badge" style="background:${badgeColor};color:#fff;padding:6px 20px;border-radius:16px;font-family:var(--font-fun);align-self:center;margin-bottom:24px;font-size:22px;box-shadow:0 4px 10px rgba(0,0,0,0.3);">
+           ${badgeIcon} ${badgeText}
+        </div>
+        <div class="mcard-header" style="flex-direction:column;text-align:center;gap:12px;margin-bottom:20px;">
+          <div class="micon ${m.type}" style="width:100px;height:100px;margin:0 auto;font-size:48px;">${ic(m.type === 'manusia' ? 'users' : BICON[m.biome], 54)}</div>
+          <div class="mtype-wrap" style="align-items:center;">
+            <div class="mcard-subnum" style="font-size:18px;">${colLabel} • KASUS 0${subIdx + 1}</div>
+            <div class="mtitle" style="font-size:36px;margin-top:8px;">${m.title}</div>
           </div>
-          <div class="mstars">
+          <div class="mstars" style="font-size:40px;justify-content:center;margin-top:12px;">
             ${[0, 1, 2].map(k => `<span class="${k < st ? '' : 'off'}">★</span>`).join('')}
           </div>
         </div>
 
-        <div class="mbody">
-          <div class="mhead">${m.headline}</div>
-          <div class="mtask">Tugas: ${m.task}</div>
+        <div class="mbody" style="text-align:center;font-size:24px;margin-bottom:32px;flex:1;">
+          <div class="mhead" style="margin-bottom:16px;color:#fff;">${m.headline}</div>
+          <div class="mtask" style="color:#9fd8c3;background:rgba(0,0,0,0.2);padding:16px;border-radius:12px;"><b>Tugas:</b> ${m.task}</div>
         </div>
 
-        <div class="mcard-action">
+        <div class="mcard-action" style="margin-top:auto;">
           ${un
-            ? `<button class="btn btn-gold go" data-id="${m.id}">
+            ? `<button class="btn btn-gold go" style="width:100%;font-size:26px;padding:20px;border-radius:16px;" data-id="${m.id}">
                  ${st ? 'Ulangi Kasus Ini' : 'Mulai Investigasi!'} 🚀
                </button>`
-            : `<button class="btn go" disabled>
-                 ${ic('lock', 22)} Selesaikan Kasus 0${subIdx} (Min. 1⭐)
+            : `<button class="btn go" disabled style="width:100%;font-size:26px;padding:20px;border-radius:16px;">
+                 ${ic('lock', 24)} Selesaikan Kasus 0${subIdx} (Min. 1⭐)
                </button>`
           }
         </div>
@@ -112,59 +114,94 @@ function buildMissionMenu(biomeKey) {
         <div class="tb-stars">${ic('star', 24)} <b>${groupStars}/12 ⭐</b></div>
       </div>
 
-      <!-- MAIN 2x2 COMPARATIVE GRID -->
-      <div class="mmenu">
-        <div class="mgrid-2x2">
-          <!-- KOLOM KIRI: 2 MISI ULAH ALAM -->
-          <div class="mcol">
-            <div class="mcol-header alam">
-              ${ic('drop', 26)} <span>🍃 TANTANGAN ULAH ALAM (2 KASUS)</span>
-            </div>
-            ${alamMissions.map((m, idx) => renderCard(m, alamMissions, idx, 'FAKTOR ALAM')).join('')}
+      <!-- MAIN CAROUSEL -->
+      <div class="mmenu" style="display:flex;align-items:center;justify-content:center;height:calc(100vh - 180px);position:relative;flex-direction:column;">
+        
+        <div style="display:flex;align-items:center;justify-content:center;width:100%;gap:40px;">
+          <button class="btn" id="car-prev" style="width:80px;height:80px;border-radius:50%;font-size:36px;background:var(--forest);color:#fff;border:none;box-shadow:0 6px 16px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;">◀</button>
+          
+          <div class="carousel-track" style="width:800px;min-height:560px;display:flex;">
+            ${sortedMissions.map((m, idx) => {
+              const list = m.type === 'alam' ? alamMissions : manusiaMissions;
+              const subIdx = list.indexOf(m);
+              const colLabel = m.type === 'alam' ? 'FAKTOR ALAM' : 'FAKTOR MANUSIA';
+              return renderCard(m, list, subIdx, colLabel, idx);
+            }).join('')}
           </div>
 
-          <!-- KOLOM KANAN: 2 MISI ULAH MANUSIA -->
-          <div class="mcol">
-            <div class="mcol-header manusia">
-              ${ic('users', 26)} <span>⚠️ TANTANGAN ULAH MANUSIA (2 KASUS)</span>
-            </div>
-            ${manusiaMissions.map((m, idx) => renderCard(m, manusiaMissions, idx, 'FAKTOR MANUSIA')).join('')}
-          </div>
+          <button class="btn" id="car-next" style="width:80px;height:80px;border-radius:50%;font-size:36px;background:var(--forest);color:#fff;border:none;box-shadow:0 6px 16px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;">▶</button>
         </div>
-
+        
+        <div class="carousel-dots" style="display:flex;gap:14px;margin-top:32px;">
+          ${sortedMissions.map((_, i) => `<div class="cdot" data-idx="${i}" style="width:16px;height:16px;border-radius:50%;background:${i === 0 ? 'var(--gold)' : 'rgba(255,255,255,0.2)'};cursor:pointer;"></div>`).join('')}
+        </div>
+        
         <!-- FOOTER PROGRES INVESTIGASI -->
-        <div class="mprog">
+        <div class="mprog" style="position:absolute;bottom:0px;">
           Progres Investigasi ${team.name}: <b>${groupStars}/12 Bintang</b> • Total Seluruh Kelompok: <b>${totStars()}/48 ⭐</b>
         </div>
       </div>
     </div>
   `;
 
-  // Back button navigates to Team Selection Screen (Switch Active Detective Group)
-  el('#m-back').onclick = () => {
+  let curSlide = 0;
+  let carCooldown = false; // BUG FIX #5: Debounce carousel
+  const slides = el('#scr-mission').querySelectorAll('.carousel-slide');
+  const dots = el('#scr-mission').querySelectorAll('.cdot');
+  
+  function updateCar() {
+    slides.forEach((s, i) => s.style.display = i === curSlide ? 'flex' : 'none');
+    dots.forEach((d, i) => d.style.background = i === curSlide ? 'var(--gold)' : 'rgba(255,255,255,0.2)');
+  }
+  
+  el('#car-prev').onclick = () => {
+    if(carCooldown) return;
+    carCooldown = true; setTimeout(() => carCooldown = false, 300);
     sfx.click();
-    buildTeam();
-    go('team');
+    curSlide = (curSlide - 1 + slides.length) % slides.length;
+    updateCar();
   };
-
-  // Kamus Alam Modal
-  el('#m-kamus').onclick = () => {
+  
+  el('#car-next').onclick = () => {
+    if(carCooldown) return;
+    carCooldown = true; setTimeout(() => carCooldown = false, 300);
     sfx.click();
-    kamusModal(b);
+    curSlide = (curSlide + 1) % slides.length;
+    updateCar();
   };
-
-  // Click on active mission CTA buttons
-  els('.mcard .go[data-id]').forEach(btn => {
-    btn.onclick = () => {
+  
+  dots.forEach((d, i) => {
+    d.onclick = () => {
       sfx.click();
-      const missionId = btn.dataset.id;
-      const targetMission = MISSIONS.find(m => m.id === missionId);
-      if (targetMission) openMission(targetMission);
+      curSlide = i;
+      updateCar();
+    };
+  });
+
+  el('#m-back').onclick = () => { sfx.back(); buildTeam(); go('team'); };
+  el('#m-kamus').onclick = () => { sfx.click(); kamusModal(b); };
+
+  el('#scr-mission').querySelectorAll('.go').forEach(btn => {
+    btn.onclick = () => {
+      // BUG FIX #6: Validasi ulang gembok saat klik (anti DevTools bypass)
+      const mId = btn.dataset.id;
+      if(!mId) return; // tombol disabled (locked)
+      const targetM = bMissions.find(m => m.id === mId);
+      if(targetM) {
+        const mList = bMissions.filter(m => m.type === targetM.type);
+        const mIdx = mList.indexOf(targetM);
+        if(!isUnlocked(targetM, mList, mIdx)) {
+          sfx.deny(); toast('Misi ini masih terkunci! Selesaikan kasus sebelumnya dulu.'); return;
+        }
+        sfx.success();
+        openMission(targetM);
+      }
     };
   });
 }
 
 function openMission(m) {
+  if (!m) return;
   const r = modal(`
     <h2>${m.title}</h2>
     <p><b style="color:#fef08a;font-size:26px">${m.headline}</b></p>
@@ -181,11 +218,22 @@ function openMission(m) {
     </div>
   `);
 
-  r.querySelector('#mf-go').onclick = () => {
-    sfx.click();
-    closeModal();
-    startSim(m);
-  };
+  if (r) {
+    const btnGo = r.querySelector('#mf-go');
+    if (btnGo) {
+      btnGo.onclick = () => {
+        sfx.click();
+        closeModal();
+        startSim(m);
+      };
+    }
+  }
 
   speak('Misi dimulai. ' + m.task);
 }
+
+function startMission(mOrId) {
+  const m = typeof mOrId === 'string' ? (typeof MISSIONS !== 'undefined' ? MISSIONS.find(x => x.id === mOrId) : null) : mOrId;
+  if (m) openMission(m);
+}
+

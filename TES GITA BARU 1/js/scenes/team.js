@@ -90,8 +90,7 @@ function buildTeam() {
 
   // Navigation handlers
   el('#t-back').onclick = () => {
-    sfx.click();
-    titleBubble();
+    sfx.back();
     go('title');
   };
 
@@ -169,7 +168,6 @@ function renderTeam(dir) {
         <span class="dt-num">0${i + 1}</span>
         <span class="dt-name">${tm.name}</span>
       </div>
-      <span class="dt-role">${tm.role}</span>
     </div>
   `).join('');
 

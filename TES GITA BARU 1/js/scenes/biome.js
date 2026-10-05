@@ -14,7 +14,7 @@ function drawPreview(p, t) {
   const oy = (p.h - 1080 * s) / 2;
   p.ctx.save();
   p.ctx.clearRect(0, 0, p.w, p.h);
-  p.ctx.fillStyle = '#03211a';
+  p.ctx.fillStyle = PAL.panelDeep;
   p.ctx.fillRect(0, 0, p.w, p.h);
   p.ctx.translate(ox, oy);
   p.ctx.scale(s, s);
@@ -90,7 +90,7 @@ function buildBiome() {
 
   // Topbar Handlers
   el('#b-back').onclick = () => {
-    sfx.click();
+    sfx.back();
     buildTeam();
     go('team');
   };

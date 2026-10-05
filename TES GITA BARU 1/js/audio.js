@@ -52,14 +52,23 @@ function noiseHit(d, vol, fc) {
   } catch (e) {}
 }
 
+let lastClickTime = 0;
+
 const sfx = {
   click() {
-    tone(660, 0.07, 'square', 0.05);
-    tone(880, 0.06, 'square', 0.04, 0.05);
+    const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+    if (now - lastClickTime < 80) return;
+    lastClickTime = now;
+    tone(640, 0.05, 'triangle', 0.08);
+  },
+  back() {
+    const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+    if (now - lastClickTime < 80) return;
+    lastClickTime = now;
+    tone(480, 0.06, 'triangle', 0.08);
   },
   pop() {
-    tone(500, 0.09, 'sine', 0.1);
-    tone(760, 0.08, 'sine', 0.07, 0.06);
+    tone(560, 0.06, 'sine', 0.1);
   },
   chime() {
     tone(880, 0.5, 'sine', 0.1);
@@ -82,6 +91,19 @@ const sfx = {
   whoosh() {
     tone(440, 0.1, 'sine', 0.08);
     tone(660, 0.08, 'sine', 0.06, 0.03);
+  },
+  grow() {
+    [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.28, 'sine', 0.05, i * 0.08));
+  },
+  flee() {
+    tone(700, 0.08, 'triangle', 0.04);
+    tone(850, 0.08, 'triangle', 0.04, 0.07);
+    tone(1000, 0.1, 'triangle', 0.03, 0.14);
+  },
+  wither() {
+    tone(440, 0.35, 'sawtooth', 0.03);
+    tone(370, 0.4, 'sawtooth', 0.03, 0.12);
+    tone(293, 0.45, 'sine', 0.04, 0.26);
   }
 };
 
@@ -105,7 +127,8 @@ function bgmStart() {
 }
 
 function speak(txt) {
-  if (!soundOn || !('speechSynthesis' in window)) return;
+  if (!soundOn || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+
   try {
     speechSynthesis.cancel();
     const clean = String(txt)
