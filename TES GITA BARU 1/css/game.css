@@ -2577,3 +2577,63 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
   0% { opacity: 0; transform: scale(0.95) translateY(-5px); }
   100% { opacity: 1; transform: scale(1) translateY(-10px); }
 }
+
+/* ============================================================
+   ECO-EXPLORER — ANDROID, PWA, & MOBILE LANDSCAPE CONTROLS
+   ============================================================ */
+.fs-btn{
+  background:rgba(255,255,255,.12);border-color:rgba(254,240,138,.35);
+  color:var(--gold);font-size:24px;padding:0 16px;
+  transition:all .15s ease;
+}
+.fs-btn:hover{background:rgba(255,255,255,.22);border-color:var(--gold)}
+
+.orient-overlay{
+  position:fixed;inset:0;z-index:99999;
+  background:radial-gradient(circle at 50% 50%, rgba(6,78,59,.96) 0%, rgba(1,26,20,.98) 100%);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  display:none;align-items:center;justify-content:center;
+  padding:24px;color:#fff;text-align:center;
+}
+.orient-card{
+  max-width:440px;width:100%;
+  background:linear-gradient(180deg, rgba(6,56,44,.85) 0%, rgba(2,34,26,.95) 100%);
+  border:3px solid rgba(254,240,138,.45);
+  border-radius:32px;padding:36px 26px;
+  display:flex;flex-direction:column;align-items:center;gap:18px;
+  box-shadow:0 24px 60px rgba(0,0,0,.85), inset 0 0 30px rgba(254,240,138,.1);
+}
+.orient-phone-anim{
+  position:relative;width:96px;height:96px;
+  color:var(--gold);display:flex;align-items:center;justify-content:center;
+  animation:phoneRotateAnim 2.5s ease-in-out infinite;
+}
+.orient-rotate-arrow{
+  position:absolute;font-size:32px;font-weight:900;
+  color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.6);
+  pointer-events:none;
+}
+@keyframes phoneRotateAnim{
+  0%, 15% { transform: rotate(0deg); }
+  50%, 75% { transform: rotate(90deg); }
+  90%, 100% { transform: rotate(0deg); }
+}
+.orient-card h2{
+  font-family:var(--font-fun);font-size:26px;
+  color:var(--gold);line-height:1.25;margin:0;
+}
+.orient-card p{
+  font-size:18px;color:var(--cream);line-height:1.55;
+  margin:0;font-family:var(--font-body);
+}
+.btn-fullscreen-req{
+  font-size:22px;padding:12px 28px;min-height:56px;
+  border-radius:20px;margin-top:6px;width:100%;
+}
+
+/* Otomatis aktifkan overlay jika layar HP vertikal/portrait */
+@media screen and (orientation: portrait) and (max-width: 900px){
+  #orient-hint{
+    display:flex !important;
+  }
+}

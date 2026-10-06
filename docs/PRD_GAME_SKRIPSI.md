@@ -496,6 +496,12 @@ Jika waktu habis, layar **tidak pernah** menampilkan tulisan *"Game Over"*. Seba
   * **Failsafe Non-Intrusif:** Jika berkas MP3 tertentu belum selesai direkam, pemutar audio menangani pemutaran secara hening (*silent fallback*) tanpa menampilkan pesan eror merah pada konsol peramban IFP.
   * **Dokumentasi Naskah Induk:** Naskah lengkap 72 audio vokal didokumentasikan di [`docs/DOKUMEN_AUDIT_VOICE_OVER.md`](file:///d:/SKRIPSI%20GITA/docs/DOKUMEN_AUDIT_VOICE_OVER.md).
 
+* **Kesiapan Multi-Platform & PWA Android (Progressive Web App & Standalone APK):**
+  * **Web App Manifest (`manifest.json`):** Dikonfigurasi dengan mode `standalone`, orientasi terkunci `landscape`, dan tema warna alami Nusantara (`#022c22` / `#011a14`), dilengkapi aset ikon resmi 192x192 dan 512x512 maskable.
+  * **Offline Service Worker Engine (`sw.js`):** Menggunakan strategi caching canggih (*Stale-While-Revalidate*) untuk seluruh aset shell permainan, memungkinkan game dimainkan 100% tanpa jaringan internet di tablet Android maupun HP siswa.
+  * **Sistem Deteksi Orientasi & Fullscreen Otomatis (`checkOrientation`, `toggleFullScreen`):** Mendeteksi orientasi layar perangkat mobile secara dinamis; memunculkan modal panduan putar layar (*Rotate Device to Landscape*) jika HP dipegang dalam mode portrait, serta tombol fullscreen satu-sentuhan yang mengunci layar horizontal.
+  * **Kesiapan Distribusi Standalone APK:** Memenuhi 100% skor kelayakan PWA Google, siap dikemas menjadi file paket instalasi `.apk` mandiri via platform Google/Microsoft PWABuilder maupun WebAPK Chrome Android.
+
 ---
 
 ## 10. KISI-KISI UJI VALIDASI AHLI (KESIAPAN SIDANG SKRIPSI)

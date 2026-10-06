@@ -13,6 +13,13 @@ function fit(){
       const s = Math.min(innerWidth / 1920, innerHeight / 1080);
       const st = el('#stage');
       if(st) st.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+
+      // Cek otomatis orientasi layar (tampilkan prompt putar layar jika vertikal di ponsel)
+      const hint = el('#orient-hint');
+      if(hint){
+        const isPortrait = window.innerHeight > window.innerWidth && window.innerWidth <= 900;
+        hint.style.display = isPortrait ? 'flex' : 'none';
+      }
     } catch(e) {}
   });
 }
@@ -87,7 +94,44 @@ function init(){
   el('#t-snd').onclick = toggleSound;
 
   addEventListener('resize', fit);
-  addEventListener('orientationchange', fit);
+  addEventListener('orientationchange', () => { setTimeout(fit, 200); });
+
+  // Kontrol Layar Penuh (Fullscreen) untuk Android & Desktop
+  function toggleFullScreen() {
+    const doc = document;
+    const docEl = doc.documentElement;
+    const isFS = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
+    if (!isFS) {
+      const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+      if (req) req.call(docEl).catch(() => {});
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {});
+      }
+    } else {
+      const ex = doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen;
+      if (ex) ex.call(doc).catch(() => {});
+    }
+  }
+
+  const fsBtn = el('#t-fs');
+  if (fsBtn) fsBtn.onclick = toggleFullScreen;
+
+  const forceLandscapeBtn = el('#btn-force-landscape');
+  if (forceLandscapeBtn) {
+    forceLandscapeBtn.onclick = () => {
+      toggleFullScreen();
+      const hint = el('#orient-hint');
+      if (hint) hint.style.display = 'none';
+    };
+  }
+
+  // Registrasi Service Worker PWA untuk offline play di Android
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    navigator.serviceWorker.register('./sw.js').catch(err => {
+      console.warn('[PWA] SW register error:', err);
+    });
+  }
+
   function unlockAudio() {
     if(audioReady) return;
     audioReady = true;
