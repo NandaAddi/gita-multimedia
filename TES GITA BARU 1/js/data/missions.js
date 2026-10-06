@@ -659,7 +659,7 @@ const MISSIONS = [
     headline: 'Alat setrum aki dan racun tuba mematikan semua benih ikan dan anak katak!',
     task: 'Sita alat setrum listrik, netralkan racun air, lepas bibit ikan gabus!',
     story: 'Detektif! Orang-orang tidak bertanggung jawab menangkap ikan memakai setrum listrik dan racun tuba. Bukan cuma ikan besar, benih ikan kecil dan anak katak mati mengambang. Hentikan perusakan ini!',
-    init: { prod: 28, herb: 10, pred: 2, poison: 52, trap: 60 },
+    init: { prod: 28, herb: 10, pred: 2, poison: 52, trap: 60, water: 45 },
     tick(S) {
       S.trap = cl(S.trap + 0.8, 0, 100);
       S.herb = cl(S.herb - (S.trap > 20 ? 1.2 : -0.4));

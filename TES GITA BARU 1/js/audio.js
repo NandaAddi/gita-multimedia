@@ -4,24 +4,24 @@
    100% Offline & Pure Synthesis (Pop-Free & Zero BGM Clash)
    ============================================================ */
 
-let AC = null, audioReady = false, soundOn = true;
+let AC = null, audioReady = false, soundOn = true, acResuming = false;
 
 function ac() {
   if (!AC) {
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     if (AudioCtx) AC = new AudioCtx();
   }
-  if (AC && AC.state === 'suspended') {
-    AC.resume().catch(() => {});
+  if (AC && AC.state === 'suspended' && !acResuming) {
+    acResuming = true;
+    AC.resume().then(() => { acResuming = false; }).catch(() => { acResuming = false; });
   }
   return AC;
 }
 
 function tone(f, d, type = 'sine', vol = 0.1, dl = 0) {
-  if (!soundOn || !audioReady) return;
+  if (!soundOn || !audioReady || !AC || AC.state !== 'running') return;
   try {
-    const a = ac();
-    if (!a) return;
+    const a = AC;
 
     const t0 = a.currentTime + Math.max(0, dl || 0);
     const o = a.createOscillator();
@@ -46,10 +46,9 @@ function tone(f, d, type = 'sine', vol = 0.1, dl = 0) {
 }
 
 function noiseHit(d, vol, fc) {
-  if (!soundOn || !audioReady) return;
+  if (!soundOn || !audioReady || !AC || AC.state !== 'running') return;
   try {
-    const a = ac();
-    if (!a) return;
+    const a = AC;
 
     const n = Math.floor(a.sampleRate * d),
           b = a.createBuffer(1, n, a.sampleRate),
@@ -61,7 +60,8 @@ function noiseHit(d, vol, fc) {
     f.type = 'lowpass';
     f.frequency.value = fc;
     const g = a.createGain();
-    g.gain.value = vol;
+    g.gain.setValueAtTime(vol, a.currentTime);
+    g.gain.linearRampToValueAtTime(0, a.currentTime + d);
     s.connect(f);
     f.connect(g);
     g.connect(a.destination);
@@ -125,10 +125,9 @@ const sfx = {
     tone(293, 0.4, 'sine', 0.04, 0.22);
   },
   spray() {
-    if (!soundOn || !audioReady) return;
+    if (!soundOn || !audioReady || !AC || AC.state !== 'running') return;
     try {
-      const a = ac();
-      if (!a) return;
+      const a = AC;
       const d = 0.55;
       const n = Math.floor(a.sampleRate * d);
       const b = a.createBuffer(1, n, a.sampleRate);
@@ -157,9 +156,40 @@ const sfx = {
   }
 };
 
-// BGM No-Op: Meniadakan interval chiptune otomatis yang menumpuk di latar belakang
-function bgmStart() {}
-function bgmStop() {}
+// BGM Engine
+let bgmAudio = null;
+let bgmInitialized = false;
+
+function initBGM() {
+  if (!bgmInitialized && typeof window !== 'undefined') {
+    bgmInitialized = true;
+    try {
+      bgmAudio = new Audio('backsound/bg-music.mp3');
+      bgmAudio.loop = true;
+      bgmAudio.volume = typeof G !== 'undefined' && G.bgmVol !== undefined ? G.bgmVol : 0.5;
+    } catch(e) {}
+  }
+}
+
+function bgmStart() {
+  if (typeof window === 'undefined') return;
+  initBGM();
+  if (bgmAudio && bgmAudio.paused) {
+    bgmAudio.play().catch(e => console.log('BGM wait interaction'));
+  }
+}
+
+function bgmStop() {
+  if (bgmAudio) bgmAudio.pause();
+}
+
+function setBgmVolume(val) {
+  if (typeof G !== 'undefined') {
+    G.bgmVol = Math.max(0, Math.min(1, val));
+    if(typeof saveG === 'function') saveG();
+  }
+  if (bgmAudio) bgmAudio.volume = G.bgmVol;
+}
 
 /* ================= VOICE-OVER (VO) PLAYER ENGINE =================
    Memutar file audio MP3 rekaman vokal manusia dari assets/audio/vo/
@@ -229,18 +259,43 @@ function syncSound() {
 }
 
 function toggleSound() {
-  soundOn = !soundOn;
-  syncSound();
-  saveG();
-  if (!soundOn) {
-    stopVO();
-    try {
-      speechSynthesis.cancel();
-      if (AC && AC.state === 'running') AC.suspend();
-    } catch (e) {}
-  } else {
-    try {
-      if (AC && AC.state === 'suspended') AC.resume();
-    } catch (e) {}
-  }
+  openAudioSettings();
+}
+
+function openAudioSettings() {
+  sfx.click();
+  const r = modal('<h2>' + ic('sound', 34) + ' Pengaturan Audio</h2>'
+    + '<div style="margin:24px 0; text-align:left;">'
+    + '<label style="display:block;margin-bottom:8px;font-size:20px;color:#fff;">Volume Musik (BGM):</label>'
+    + '<input type="range" id="bgm-slider" min="0" max="1" step="0.05" value="'+(typeof G!=='undefined'?G.bgmVol:0.5)+'" style="width:100%; height:12px; accent-color:var(--gold);cursor:pointer;">'
+    + '</div>'
+    + '<div style="margin:24px 0; text-align:left;">'
+    + '<label style="display:block;margin-bottom:8px;font-size:20px;color:#fff;">Suara Efek (SFX & VO):</label>'
+    + '<button class="btn '+(soundOn?'btn-gold':'btn-ruby')+'" id="btn-toggle-sfx" style="width:100%;font-size:24px;padding:16px;">'
+    + ic(soundOn ? 'sound' : 'mute', 24) + (soundOn ? ' Nyala' : ' Bisu') + '</button>'
+    + '</div>'
+    + '<div class="mrow"><button class="btn btn-gold" data-close>Tutup</button></div>'
+  );
+  
+  const sl = r.querySelector('#bgm-slider');
+  sl.oninput = (e) => {
+    setBgmVolume(e.target.value);
+  };
+  
+  const btn = r.querySelector('#btn-toggle-sfx');
+  btn.onclick = () => {
+    soundOn = !soundOn;
+    syncSound();
+    if(typeof saveG==='function') saveG();
+    btn.innerHTML = ic(soundOn ? 'sound' : 'mute', 24) + (soundOn ? ' Nyala' : ' Bisu');
+    btn.className = 'btn ' + (soundOn ? 'btn-gold' : 'btn-ruby');
+    if (!soundOn) {
+      stopVO();
+      try { speechSynthesis.cancel(); if (AC && AC.state === 'running') AC.suspend(); } catch(e){}
+    } else {
+      bgmStart();
+      try { if (AC && AC.state === 'suspended') AC.resume(); } catch(e){}
+      sfx.click();
+    }
+  };
 }

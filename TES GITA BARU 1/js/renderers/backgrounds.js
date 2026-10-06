@@ -8,6 +8,100 @@ function skyPaint(c,top,bot,hor){c.fillStyle=LG(c,0,0,0,hor,top,bot);c.fillRect(
    (tile noise dibuat sekali & di-cache) + pusaran plasma animasi + sinar.
    Signature sama seperti sunDraw lama sehingga 3 biome tak perlu diubah. */
 var SUNNOISE=null;
+
+function lerpColor(c1, c2, t) {
+  const r1 = parseInt(c1.substr(1,2),16), g1 = parseInt(c1.substr(3,2),16), b1 = parseInt(c1.substr(5,2),16);
+  const r2 = parseInt(c2.substr(1,2),16), g2 = parseInt(c2.substr(3,2),16), b2 = parseInt(c2.substr(5,2),16);
+  const r = Math.round(r1 + (r2-r1)*t), g = Math.round(g1 + (g2-g1)*t), b = Math.round(b1 + (b2-b1)*t);
+  return `rgb(${r},${g},${b})`;
+}
+
+const SKY_STOPS = [
+  {p: 0.0, top: '#3b82f6', bot: '#bae6fd', sunY: -20}, 
+  {p: 0.3, top: '#0ea5e9', bot: '#e0f2fe', sunY: 40},  
+  {p: 0.5, top: '#6366f1', bot: '#fde047', sunY: 100}, 
+  {p: 0.55, top: '#f43f5e', bot: '#fb923c', sunY: 220}, 
+  {p: 0.6, top: '#1e1b4b', bot: '#4c1d95', sunY: 450}, 
+  {p: 0.8, top: '#020617', bot: '#0f172a', sunY: 450}, 
+  {p: 0.95, top: '#312e81', bot: '#f472b6', sunY: 300}, 
+  {p: 1.0, top: '#3b82f6', bot: '#bae6fd', sunY: -20}  
+];
+
+function getSkyState(t) {
+  const cycle = (t % 60000) / 60000;
+  let s1 = SKY_STOPS[0], s2 = SKY_STOPS[1];
+  for (let i=0; i<SKY_STOPS.length-1; i++) {
+    if (cycle >= SKY_STOPS[i].p && cycle <= SKY_STOPS[i+1].p) {
+      s1 = SKY_STOPS[i]; s2 = SKY_STOPS[i+1]; break;
+    }
+  }
+  const factor = (cycle - s1.p) / (s2.p - s1.p);
+  return {
+    top: lerpColor(s1.top, s2.top, factor),
+    bot: lerpColor(s1.bot, s2.bot, factor),
+    sunY: s1.sunY + (s2.sunY - s1.sunY) * factor,
+    isNight: cycle > 0.55 && cycle < 0.95,
+    nightFade: cycle > 0.55 && cycle < 0.6 ? (cycle-0.55)/0.05 : (cycle > 0.9 && cycle < 0.95 ? 1-(cycle-0.9)/0.05 : (cycle >= 0.6 && cycle <= 0.9 ? 1 : 0))
+  };
+}
+
+function chunkyCloud(c, x, y, scale) {
+  c.save();
+  c.translate(x, y);
+  c.scale(scale, scale);
+  c.fillStyle = 'rgba(0,0,0,0.08)';
+  c.beginPath(); c.arc(0, 0, 40, 0, 7); c.arc(30, -10, 30, 0, 7); c.arc(-30, 5, 25, 0, 7); c.fill();
+  c.fillStyle = '#e2e8f0';
+  c.beginPath(); c.arc(0, -5, 40, 0, 7); c.arc(30, -15, 30, 0, 7); c.arc(-30, 0, 25, 0, 7); c.fill();
+  c.fillStyle = '#ffffff';
+  c.beginPath(); c.arc(0, -10, 38, 0, 7); c.arc(30, -20, 28, 0, 7); c.arc(-30, -5, 23, 0, 7); c.fill();
+  c.restore();
+}
+
+function drawCloudLayer(c, t, speed, scale, yOff, yVar, count) {
+  const w = 1920;
+  for (let i=0; i<count; i++) {
+    const space = (w + 600) / count;
+    let x = (i * space + (t * speed)) % (w + 600) - 300;
+    let y = yOff + pr(i*7.7) * yVar;
+    chunkyCloud(c, x, y, scale * (0.8 + pr(i*5)*0.4));
+  }
+}
+
+function drawDynamicSky(c, hor, t, sunX) {
+  const st = getSkyState(t);
+  c.fillStyle = LG(c, 0, 0, 0, hor, st.top, st.bot);
+  c.fillRect(0, 0, 1920, hor);
+
+  if (st.nightFade > 0) {
+    c.save();
+    c.fillStyle = '#fff';
+    for (let i=0; i<150; i++) {
+      const sx = pr(i*1.1)*1920;
+      const sy = pr(i*2.2)*hor;
+      const r = pr(i*3.3)*2 + 0.5;
+      c.globalAlpha = st.nightFade * (0.2 + 0.8 * Math.abs(Math.sin(t/800 + i)));
+      c.beginPath(); c.arc(sx, sy, r, 0, 7); c.fill();
+    }
+    c.restore();
+  }
+
+  if (st.sunY < hor + 120) {
+    c.save();
+    c.beginPath();
+    c.rect(0, 0, 1920, hor);
+    c.clip();
+    sunDraw(c, sunX, st.sunY, t);
+    c.restore();
+  }
+
+  c.globalAlpha = 1.0 - (st.nightFade * 0.7);
+  drawCloudLayer(c, t, 0.02, 0.5, 30, hor * 0.3, 5);
+  drawCloudLayer(c, t, 0.04, 0.8, 120, hor * 0.5, 4);
+  drawCloudLayer(c, t, 0.07, 1.2, 50, hor * 0.2, 3);
+  c.globalAlpha = 1.0;
+}
+
 function sunNoise(){if(SUNNOISE)return SUNNOISE;
   const n=document.createElement('canvas');n.width=n.height=128;
   const g=n.getContext('2d');g.clearRect(0,0,128,128);
@@ -217,7 +311,7 @@ function updateOrganismPool(S, dt = 16.7) {
 
 function sceneSawah(c,t,S){
  c.fillStyle='#6a9e6e';c.fillRect(0,0,1920,1080);
- skyPaint(c,'#aee3f5','#eaf7df',360);sunDraw(c,1620,120,t);cloudsDraw(c,t);
+ drawDynamicSky(c, 360, t, 1620);
  texRidge(c,[[0,360],[300,240],[640,360]],'#96b98d',11);
  texRidge(c,[[420,360],[820,200],[1240,360]],'#7fae7c',23);
  texRidge(c,[[200,360],[560,280],[980,360],[1500,300],[1920,360]],'#6a9e6e',37);
@@ -351,12 +445,12 @@ function sceneSawah(c,t,S){
     c.restore();
   });
 
-  for(let i=0;i<3;i++)butterfly(c,300+pr(i*23)*1300+Math.sin(t/700+i*2)*60,320+pr(i*29)*160+Math.cos(t/900+i)*40,t);
+  for(let i=0;i<3;i++)butterfly(c,300+pr(i*23)*1300+Math.sin(t/700+i*2)*60,320+pr(i*29)*160+Math.cos(t/900+i)*40,t,i);
   if(S.poison>15){c.fillStyle='rgba(96,60,130,'+(c01(S.poison/150)*.5).toFixed(3)+')';c.fillRect(0,360,1920,720);}}
 
 function sceneHutan(c,t,S){
  c.fillStyle='#5e8f63';c.fillRect(0,0,1920,1080);
- skyPaint(c,'#aee3f5','#e8f4d8',380);sunDraw(c,300,130,t);cloudsDraw(c,t);
+ drawDynamicSky(c, 380, t, 300);
  texRidge(c,[[0,380],[340,250],[720,380]],'#8fb996',51);
  texRidge(c,[[520,380],[960,210],[1400,380]],'#79a87f',63);
  texRidge(c,[[0,380],[500,300],[1000,380],[1500,310],[1920,380]],'#5e8f63',77);
@@ -444,7 +538,7 @@ function sceneHutan(c,t,S){
    c.beginPath();c.moveTo(x-16,y-12);c.lineTo(x+16,y+12);c.moveTo(x+16,y-12);c.lineTo(x-16,y+12);c.stroke();}}
  if(S.trap>15){c.fillStyle='rgba(30,26,18,'+(c01(S.trap/160)*.45).toFixed(3)+')';c.fillRect(0,0,1920,1080);}}
 function sceneSungai(c,t,S){
- skyPaint(c,'#b8e6f0','#eef8e2',340);sunDraw(c,1500,110,t);cloudsDraw(c,t);
+ drawDynamicSky(c, 340, t, 1500);
  texRidge(c,[[0,340],[500,240],[1100,340],[1700,260],[1920,340]],'#6f9e68',91);
  c.fillStyle='rgba(255,255,255,.08)';c.fillRect(0,200,1920,120);
  texSoilSungai(c, t, S);

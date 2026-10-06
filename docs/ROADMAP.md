@@ -101,14 +101,15 @@ Penelitian ini menggunakan model **Alessi & Trollip (2001)** yang dirancang khus
   14. **Integrasi Sistem Voice-Over (VO) Vokal Mandiri Ramah Anak (Mayer's Voice Principle):** Menggantikan sintesis suara robotik TTS dengan arsitektur audio rekaman vokal asli peneliti sebagai "Kakak Gita" (`playVO`, `stopVO`), menyusun inventaris master 72 berkas naskah vokal terstruktur (sistem navigasi, bridging dialog krisis 16 misi, panggilan musyawarah CSCL, pembacaan soal kuis C2, dan selebrasi bintang), serta menyiapkan pipeline folder `assets/audio/vo/` dengan penanganan *failsafe non-intrusive* (hening mulus jika file belum direkam).
   15. **Penyelarasan Matematis Kaskade Trofik Misi Rimba (`hutan-4` Jerat Kawat Harimau):** Memperbaiki anomali dinamika kaskade trofik di mana kesehatan hutan tertahan (*stuck*) di 63%–70% akibat pohon rimba mengalami degradasi permanen tanpa regenerasi alami. Memperbarui formula `tick()` dengan regenerasi tunas pohon (+1.4/hari) saat rusa terkendali oleh harimau ($\le 24$), memperkuat aksi patroli kamera trap untuk konservasi tegakan rimba (+6 Pohon), serta menormalisasi pembagi kesehatan (`health()`), menjamin ketercapaian target 75% di hari ke-10 saat intervensi ekologis siswa dijalankan secara tepat.
   16. **Audit Komprehensif 4 Pilar & Resolusi Keseimbangan Global (`sawah-4`, `hutan-2`, & Tipografi IFP):** Menjalankan automated solver & stress-test pada seluruh 16 misi Nusantara; menyelesaikan anomali *unwinnable* pada `sawah-4` (regenerasi tunas padi saat tikus terkendali $\le 25$, perlindungan sarang burung hantu +8 padi) dan `hutan-2` (regenerasi tunas pohon saat api padam $\le 20$, target realistis pohon rimba 35); serta merapikan 100% tipografi antarmuka dock aksi (`simulation.js`), kartu misi (`mission-menu.js`), dan modal guru (`teacher.js`) memenuhi standar IFP $\ge 24$ px.
-* **Target Output:** Master Media Versi Beta tervalidasi 100%, sistem animasi natural organisme berbasis state machine 4 bioma, arsitektur vokal mandiri 72 audio tracks, keseimbangan matematis kaskade trofik 16 misi tervalidasi 100% winnable, standar tipografi IFP $\ge 24$ px absolut di seluruh game, pohon rimba tropis realistis berakar banir & kanopi bertingkat, tekstur tanah daratan multi-bioma kaya detail & responsif kondisi krisis, sistem reaksi semprotan pestisida & rontok hama wereng, antarmuka pemilihan tim hero slider ramah anak, portal riset modern, dokumen akademik tersinkronisasi, dan hasil tes teknis IFP.
+  17. **Revamp Tata Letak Menu Misi (Mission Menu) Gaya Glassmorphism Premium:** Merombak tampilan menu pemilihan misi dari kotak flat menjadi kartu 3D *floating* transparan (Glassmorphism) berbalut efek *blur* dan *border glow* dinamis (hijau untuk tantangan alam, oranye untuk tantangan manusia). Menyelaraskan tata letak carousel dengan tombol navigasi arkade absolut di sisi layar, membersihkan teks progres ganda di area *footer*, menyempurnakan estetika *carousel dots*, serta merender animasi ekosistem bioma nyata sebagai *background* tembus pandang di belakang layar misi.
+* **Target Output:** Master Media Versi Beta tervalidasi 100%, sistem animasi natural organisme berbasis state machine 4 bioma, tata letak menu misi Glassmorphism premium tembus pandang, arsitektur vokal mandiri 72 audio tracks, keseimbangan matematis kaskade trofik 16 misi tervalidasi 100% winnable, standar tipografi IFP $\ge 24$ px absolut di seluruh game, pohon rimba tropis realistis berakar banir & kanopi bertingkat, tekstur tanah daratan multi-bioma kaya detail & responsif kondisi krisis, sistem reaksi semprotan pestisida & rontok hama wereng, antarmuka pemilihan tim hero slider ramah anak, portal riset modern, dokumen akademik tersinkronisasi, dan hasil tes teknis IFP.
 
 * **Koordinasi:** Koordinasi teknis pelaksanaan pembelajaran bersama Guru Kelas 5A dan persiapan instrumen uji coba lapangan.
 
 #### Pekan 12: Uji Coba Lapangan dengan 25 Siswa (Beta Testing) - [MILESTONE 2]
 * **Kegiatan:** Melaksanakan pembelajaran di kelas 5A SDN Percobaan 2 Malang:
   1. Pelaksanaan **Pretest 20 Butir Soal C2** sebelum pembelajaran untuk memetakan kemampuan awal siswa pada 4 TP.
-  2. Implementasi pembelajaran berbantuan media simulasi *Eco-Explorer* di layar sentuh IFP (pembagian 5 kelompok Jigsaw, penyelidikan 8 misi, pengisian LKPD, dan voting kartu warna).
+  2. Implementasi pembelajaran berbantuan media simulasi *Eco-Explorer* di layar sentuh IFP (pembagian 5 kelompok Jigsaw, penyelidikan 16 misi, pengisian LKPD, dan voting kartu warna).
   3. Pelaksanaan **Posttest 20 Butir Soal C2** pasca-pembelajaran untuk mengukur peningkatan pemahaman siswa.
   4. Pengisian angket respon kepraktisan media oleh siswa dan guru.
 * **Target Output:** 25 lembar pretest, 25 lembar posttest, 25 berkas angket respon siswa, 1 berkas angket guru, dokumentasi foto/video interaksi IFP, dan Surat Keterangan Selesai Penelitian.
@@ -172,3 +173,17 @@ Penelitian ini menggunakan model **Alessi & Trollip (2001)** yang dirancang khus
 1. **Format Media Aman:** Siapkan media dalam bentuk tautan/folder **Web HTML5** (bisa dibuka langsung lewat browser Google Chrome di IFP) dan bentuk aplikasi mandiri **(.exe)** agar tidak terkendala jenis sistem operasi IFP sekolah.
 2. **Kunci Jadwal:** Pastikan hari dan jam penggunaan IFP di kelas 5A sudah dipesan dengan guru minimal 2 minggu sebelum uji coba lapangan (Pekan 12).
 3. **Belajar Kolaboratif:** Agar 25 siswa tetap tertib dan tidak berebut maju ke IFP, gunakan **Lembar Kerja Siswa (LKS) per kelompok**. Siswa berdiskusi menebak jawaban di meja masing-masing terlebih dahulu, baru kemudian perwakilan maju untuk mencoba simulasi di layar sentuh IFP.
+
+> **Update Log (Otomatis):** Implementasi engine BGM dengan Modal Pengaturan Volume dan pembersihan deskripsi berlebih pada Tombol Utama (Penyederhanaan UI untuk layar IFP).
+
+> **Update Log (Otomatis):** Implementasi Sistem Siklus Waktu Dinamis (Pagi-Malam 60 detik) dan Awan Volumetrik Parallax bergaya Jelly pada Background (Peningkatan Realisme Lingkungan).
+
+> **Update Log (Otomatis):** Peningkatan render Kupu-kupu menjadi lebih realistis: anatomi sayap terpisah (bezier curves), variasi 3 spesies warna (Monarch, Morpho, Emerald), dan penambahan sistem partikel jejak serbuk sari bercahaya (Pollen Trail).
+
+> **Update Log (Otomatis):** Peningkatan render Ular Sawah: animasi gerak menjalar kinematik (traveling sine wave) dan penambahan tekstur corak sisik berlian 3D pada punggungnya.
+
+> **Update Log (Otomatis):** Optimasi UI Gameplay: Pengurangan skala panel (HUD Kiri & Kanan), pengecilan font, dan penerapan efek kaca transparan (Glassmorphism + Blur) untuk melebarkan *viewport* permainan anak-anak tanpa menghilangkan informasi penting.
+
+> **Update Log (Otomatis):** Lanjutan Optimasi UI: Pemangkasan dimensi Action Cards (Kartu Aksi di bawah layar) dan elemen teks penunjangnya untuk memaksimalkan ruang pandang area simulasi.
+
+> **Update Log (Otomatis):** Peningkatan render Tanah & Rumput: Penambahan hembusan angin organik dan variasi bunga ilalang liar pada rumput, serta penambahan genangan air reflektif transparan pada lumpur sawah yang terlihat saat kadar air normal/tinggi.

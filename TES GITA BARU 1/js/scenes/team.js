@@ -106,19 +106,22 @@ function buildTeam() {
 
   // Swipe gesture handlers for IFP Touchscreen
   const stage = el('#team-stage');
-  let startX = 0, startY = 0;
-  stage.addEventListener('pointerdown', (e) => {
-    startX = e.clientX;
-    startY = e.clientY;
-  });
-  stage.addEventListener('pointerup', (e) => {
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx < 0) navigateTeam(1);
-      else navigateTeam(-1);
-    }
-  });
+  if (!stage.hasAttribute('data-swipe-bound')) {
+    stage.setAttribute('data-swipe-bound', 'true');
+    let startX = 0, startY = 0;
+    stage.addEventListener('pointerdown', (e) => {
+      startX = e.clientX;
+      startY = e.clientY;
+    });
+    stage.addEventListener('pointerup', (e) => {
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) navigateTeam(1);
+        else navigateTeam(-1);
+      }
+    });
+  }
 
   // Global Keyboard Navigation (Arrow Keys)
   if (!teamKeyBound) {
@@ -204,7 +207,15 @@ function renderTeam(dir) {
   };
 }
 
-function drawPodiumAndMascot(t, theme) {
+window.animateTeamMascot = function(timeMs) {
+  if (CUR !== 'team') return;
+  const teamObj = TEAMS[teamIdx];
+  if (!teamObj) return;
+  const theme = TEAM_THEMES[teamObj.biome] || TEAM_THEMES.sawah;
+  drawPodiumAndMascot(teamObj, theme, timeMs);
+};
+
+function drawPodiumAndMascot(teamObj, theme, timeMs = 0) {
   const cv = el('#t-mascot');
   if (!cv) return;
   const c = cv.getContext('2d');
@@ -259,8 +270,8 @@ function drawPodiumAndMascot(t, theme) {
   c.save();
   c.translate(200, 205);
   c.scale(1.15, 1.15);
-  if (MASC[t.mascot]) {
-    MASC[t.mascot](c);
+  if (MASC[teamObj.mascot]) {
+    MASC[teamObj.mascot](c, timeMs);
   }
   c.restore();
 }

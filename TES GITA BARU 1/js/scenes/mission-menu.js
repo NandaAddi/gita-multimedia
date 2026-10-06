@@ -44,6 +44,7 @@ function kamusModal(pre) {
 
 /* ================= LAYAR: MENU 4 MISI (GRID KOMPARATIF 2x2) ================= */
 function buildMissionMenu(biomeKey) {
+  el('#scr-mission').style.background = 'transparent'; // Enable glassmorphism background
   const b = biomeKey || NAV.biome || G.team || 'sawah';
   NAV.biome = b;
 
@@ -67,34 +68,35 @@ function buildMissionMenu(biomeKey) {
     const badgeColor = m.type === 'alam' ? '#047857' : '#b45309';
     const badgeIcon = m.type === 'alam' ? '🍃' : '⚠️';
     const badgeText = m.type === 'alam' ? 'TANTANGAN ALAM' : 'TANTANGAN MANUSIA';
+    const glowColor = m.type === 'alam' ? 'rgba(4, 120, 87, 0.6)' : 'rgba(180, 83, 9, 0.6)';
 
     return `
-      <div class="mcard panel-deep carousel-slide ${un ? '' : 'locked'}" id="mcard-${globalIdx}" style="display:${globalIdx === 0 ? 'flex' : 'none'};flex-direction:column;width:100%;height:100%;justify-content:center;padding:32px;">
-        <div class="mcard-badge" style="background:${badgeColor};color:#fff;padding:6px 20px;border-radius:16px;font-family:var(--font-fun);align-self:center;margin-bottom:24px;font-size:24px;box-shadow:0 4px 10px rgba(0,0,0,0.3);">
+      <div class="mcard carousel-slide ${un ? '' : 'locked'}" id="mcard-${globalIdx}" style="display:${globalIdx === 0 ? 'flex' : 'none'};flex-direction:column;width:100%;height:auto;padding:32px;border-radius:24px;background:rgba(15, 35, 25, 0.85);backdrop-filter:blur(16px);border:3px solid ${badgeColor};box-shadow:0 16px 40px ${glowColor}, inset 0 0 20px ${glowColor};transform:translateY(-10px);transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+        <div class="mcard-badge" style="margin-top:-54px;background:${badgeColor};color:#fff;padding:8px 24px;border-radius:20px;font-family:var(--font-fun);align-self:center;margin-bottom:16px;font-size:24px;box-shadow:0 6px 12px rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.2);">
            ${badgeIcon} ${badgeText}
         </div>
-        <div class="mcard-header" style="flex-direction:column;text-align:center;gap:12px;margin-bottom:20px;">
-          <div class="micon ${m.type}" style="width:100px;height:100px;margin:0 auto;font-size:48px;">${ic(m.type === 'manusia' ? 'users' : BICON[m.biome], 54)}</div>
+        <div class="mcard-header" style="flex-direction:column;text-align:center;gap:8px;margin-bottom:16px;">
+          <div class="micon ${m.type}" style="width:90px;height:90px;margin:0 auto;font-size:48px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);border:2px solid ${badgeColor};">${ic(m.type === 'manusia' ? 'users' : BICON[m.biome], 48)}</div>
           <div class="mtype-wrap" style="align-items:center;">
-            <div class="mcard-subnum" style="font-size:24px;">${colLabel} • KASUS 0${subIdx + 1}</div>
-            <div class="mtitle" style="font-size:36px;margin-top:8px;">${m.title}</div>
+            <div class="mcard-subnum" style="font-size:22px;color:rgba(255,255,255,0.7);letter-spacing:1px;text-transform:uppercase;margin-top:12px;">${colLabel} • KASUS 0${subIdx + 1}</div>
+            <div class="mtitle" style="font-size:38px;margin-top:6px;text-shadow:0 2px 4px rgba(0,0,0,0.5);">${m.title}</div>
           </div>
-          <div class="mstars" style="font-size:40px;justify-content:center;margin-top:12px;">
+          <div class="mstars" style="font-size:40px;justify-content:center;margin-top:12px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));">
             ${[0, 1, 2].map(k => `<span class="${k < st ? '' : 'off'}">★</span>`).join('')}
           </div>
         </div>
 
-        <div class="mbody" style="text-align:center;font-size:24px;margin-bottom:32px;flex:1;">
-          <div class="mhead" style="margin-bottom:16px;color:#fff;">${m.headline}</div>
-          <div class="mtask" style="color:#9fd8c3;background:rgba(0,0,0,0.2);padding:16px;border-radius:12px;"><b>Tugas:</b> ${m.task}</div>
+        <div class="mbody" style="text-align:center;font-size:24px;margin-bottom:24px;flex:1;">
+          <div class="mhead" style="margin-bottom:16px;color:#fff;line-height:1.4;">${m.headline}</div>
+          <div class="mtask" style="color:#9fd8c3;background:rgba(0,0,0,0.3);padding:16px;border-radius:16px;border-left:6px solid ${badgeColor};text-align:left;line-height:1.4;"><b>Tugas:</b> ${m.task}</div>
         </div>
 
         <div class="mcard-action" style="margin-top:auto;">
           ${un
-            ? `<button class="btn btn-gold go" style="width:100%;font-size:26px;padding:20px;border-radius:16px;" data-id="${m.id}">
+            ? `<button class="btn btn-gold go" style="width:100%;font-size:26px;padding:20px;border-radius:20px;box-shadow:0 8px 16px rgba(0,0,0,0.4);" data-id="${m.id}">
                  ${st ? 'Ulangi Kasus Ini' : 'Mulai Investigasi!'} 🚀
                </button>`
-            : `<button class="btn go" disabled style="width:100%;font-size:26px;padding:20px;border-radius:16px;">
+            : `<button class="btn go" disabled style="width:100%;font-size:24px;padding:20px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);border:2px dashed rgba(255,255,255,0.2);">
                  ${ic('lock', 24)} Selesaikan Kasus 0${subIdx} (Min. 1⭐)
                </button>`
           }
@@ -108,19 +110,19 @@ function buildMissionMenu(biomeKey) {
       <!-- TOPBAR KOMANDO DETEKTIF -->
       <div class="topbar">
         <button class="btn tb-btn" id="m-back">${ic('back', 24)} Ganti Kelompok</button>
-        <div class="plaque">${team.name} — Markas 4 Misi</div>
+        <div class="plaque">${team.name} - Markas 4 Misi</div>
         <div class="spacer"></div>
         <button class="btn tb-btn" id="m-kamus">${ic('book', 24)} Kamus Alam</button>
         <div class="tb-stars">${ic('star', 24)} <b>${groupStars}/12 ⭐</b></div>
       </div>
 
       <!-- MAIN CAROUSEL -->
-      <div class="mmenu" style="display:flex;align-items:center;justify-content:center;height:calc(100vh - 180px);position:relative;flex-direction:column;">
+      <div class="mmenu" style="display:flex;align-items:center;justify-content:center;height:calc(100vh - 180px);margin-top:140px;position:relative;flex-direction:column;width:100%;">
         
         <div style="display:flex;align-items:center;justify-content:center;width:100%;gap:40px;">
-          <button class="btn" id="car-prev" style="width:80px;height:80px;border-radius:50%;font-size:36px;background:var(--forest);color:#fff;border:none;box-shadow:0 6px 16px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;">◀</button>
+          <button class="btn btn-gold" id="car-prev" style="width:90px;height:90px;border-radius:50%;font-size:36px;padding:0;z-index:20;flex-shrink:0;">◀</button>
           
-          <div class="carousel-track" style="width:800px;min-height:560px;display:flex;">
+          <div class="carousel-track" style="width:840px;min-height:600px;display:flex;align-items:center;z-index:10;perspective:1000px;flex-shrink:0;">
             ${sortedMissions.map((m, idx) => {
               const list = m.type === 'alam' ? alamMissions : manusiaMissions;
               const subIdx = list.indexOf(m);
@@ -129,16 +131,11 @@ function buildMissionMenu(biomeKey) {
             }).join('')}
           </div>
 
-          <button class="btn" id="car-next" style="width:80px;height:80px;border-radius:50%;font-size:36px;background:var(--forest);color:#fff;border:none;box-shadow:0 6px 16px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;">▶</button>
+          <button class="btn btn-gold" id="car-next" style="width:90px;height:90px;border-radius:50%;font-size:36px;padding:0;z-index:20;flex-shrink:0;">▶</button>
         </div>
         
-        <div class="carousel-dots" style="display:flex;gap:14px;margin-top:32px;">
-          ${sortedMissions.map((_, i) => `<div class="cdot" data-idx="${i}" style="width:16px;height:16px;border-radius:50%;background:${i === 0 ? 'var(--gold)' : 'rgba(255,255,255,0.2)'};cursor:pointer;"></div>`).join('')}
-        </div>
-        
-        <!-- FOOTER PROGRES INVESTIGASI -->
-        <div class="mprog" style="position:absolute;bottom:0px;">
-          Progres Investigasi ${team.name}: <b>${groupStars}/12 Bintang</b> • Total Seluruh Kelompok: <b>${totStars()}/48 ⭐</b>
+        <div class="carousel-dots" style="display:flex;gap:16px;margin-top:40px;background:rgba(0,0,0,0.4);padding:12px 24px;border-radius:30px;backdrop-filter:blur(8px);">
+          ${sortedMissions.map((_, i) => `<div class="cdot" data-idx="${i}" style="width:20px;height:20px;border-radius:50%;background:${i === 0 ? 'var(--gold)' : 'rgba(255,255,255,0.3)'};cursor:pointer;transition:all 0.3s;box-shadow:0 2px 4px rgba(0,0,0,0.5);"></div>`).join('')}
         </div>
       </div>
     </div>
@@ -150,8 +147,21 @@ function buildMissionMenu(biomeKey) {
   const dots = el('#scr-mission').querySelectorAll('.cdot');
   
   function updateCar() {
-    slides.forEach((s, i) => s.style.display = i === curSlide ? 'flex' : 'none');
-    dots.forEach((d, i) => d.style.background = i === curSlide ? 'var(--gold)' : 'rgba(255,255,255,0.2)');
+    slides.forEach((s, i) => {
+      if (i === curSlide) {
+        s.style.display = 'flex';
+        // Add a micro-animation pop-in
+        s.style.animation = 'none';
+        s.offsetHeight; /* trigger reflow */
+        s.style.animation = 'popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+      } else {
+        s.style.display = 'none';
+      }
+    });
+    dots.forEach((d, i) => {
+      d.style.background = i === curSlide ? 'var(--gold)' : 'rgba(255,255,255,0.3)';
+      d.style.transform = i === curSlide ? 'scale(1.2)' : 'scale(1)';
+    });
   }
   
   el('#car-prev').onclick = () => {

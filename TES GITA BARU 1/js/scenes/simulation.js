@@ -122,14 +122,14 @@ function buildSimUI(){const m=SIM.m;
  +'<div class="hud-left">'
  +'<div class="panel-deep gita-card"><div class="gita-plaque">'+gitaSVG(66,'happy')+'<span class="tag">GITA</span></div>'
  +'<div class="gita-txt" id="gita-txt"></div></div>'
- +'<div class="panel-deep targets-card"><h3>'+ic('target',24)+' Target Misi</h3><div id="tgt-list"></div></div></div>'
+ +'<div class="panel-deep targets-card"><h3>'+ic('target',18)+' Target Misi</h3><div id="tgt-list"></div></div></div>'
  +'<div class="hud-right panel-deep"><div class="panel-title">'+ic('mag',24)+' Kondisi Ekosistem</div>'
  +'<div id="stat-rows"></div></div>'
  +'<div class="sim-dock"><div class="dock-ribbon">Pilih aksi — perhatikan kuota & masa istirahat. Klik baris kondisi untuk penjelasan!</div>'
- +'<div class="dock-slider-wrap" style="position:relative;display:flex;align-items:center;gap:18px;">'
- +'<button class="btn sim-arr left-arr" style="width:76px;height:120px;flex:none;border-radius:24px;font-size:36px;padding:0;z-index:10">◀</button>'
- +'<div class="dock-grid" id="dock-grid" style="flex:1;overflow:hidden;padding:12px;scroll-behavior:smooth;display:flex;gap:24px;"></div>'
- +'<button class="btn sim-arr right-arr" style="width:76px;height:120px;flex:none;border-radius:24px;font-size:36px;padding:0;z-index:10">▶</button>'
+ +'<div class="dock-slider-wrap" style="position:relative;display:flex;align-items:center;gap:18px;justify-content:center;">'
+ +(m.actions.length > 4 ? '<button class="btn sim-arr left-arr" style="width:56px;height:90px;flex:none;border-radius:20px;font-size:24px;padding:0;z-index:10">◀</button>' : '')
+ +'<div class="dock-grid" id="dock-grid" style="flex:auto;max-width:1400px;overflow:hidden;padding:12px;scroll-behavior:smooth;display:flex;gap:16px;justify-content:center;"></div>'
+ +(m.actions.length > 4 ? '<button class="btn sim-arr right-arr" style="width:56px;height:90px;flex:none;border-radius:20px;font-size:24px;padding:0;z-index:10">▶</button>' : '')
  +'</div></div></div>';
  el('#sim-back').onclick=()=>{sfx.click();
   const r=modal('<h2>'+ic('back',34)+' Berhenti dari misi?</h2><p>Progres misi ini akan hilang dan kamu kembali ke peta misi.</p>'
@@ -144,39 +144,7 @@ function buildSimUI(){const m=SIM.m;
   +'<div class="mrow"><button class="btn btn-gold" data-close>Mengerti!</button></div>');};
  el('#sim-kamus').onclick=()=>{sfx.click();kamusModal(SIM.m.biome);};
  el('#sim-ui .snd-btn').onclick=toggleSound;
- let dragProxy = null;
- let activeDragIndex = -1;
- function moveProxy(e) {
-  if(!dragProxy) return;
-  dragProxy.style.left = e.clientX + 'px';
-  dragProxy.style.top = e.clientY + 'px';
- }
- function onDragMove(e) { moveProxy(e); }
- function onDragEnd(e) {
-  window.removeEventListener('pointermove', onDragMove);
-  window.removeEventListener('pointerup', onDragEnd);
-  if(dragProxy) { dragProxy.remove(); dragProxy = null; }
-  if(activeDragIndex > -1) {
-   const dockRect = document.querySelector('.sim-dock').getBoundingClientRect();
-   // BUG FIX #3: Validasi X+Y — harus di area canvas, bukan di panel UI
-   var simCv = document.querySelector('#cv-sim');
-   var validDrop = false;
-   if(simCv) {
-     var cr = simCv.getBoundingClientRect();
-     validDrop = e.clientX >= cr.left && e.clientX <= cr.right
-              && e.clientY >= cr.top && e.clientY < dockRect.top;
-   } else {
-     validDrop = e.clientY < dockRect.top;
-   }
-   if(validDrop) {
-    doAction(activeDragIndex, e.clientX, e.clientY);
-   } else {
-    sfx.click();
-    toast('Jatuhkan kartu di area pemandangan alam, bukan di panel!');
-   }
-   activeDragIndex = -1;
-  }
- }
+  // drag proxy globals extracted
  el('#dock-grid').addEventListener('pointerdown', e => {
   // BUG FIX #2: Cegah multi-touch
   if(activeDragIndex > -1) return;
@@ -215,16 +183,7 @@ function buildSimUI(){const m=SIM.m;
   window.addEventListener('pointermove', onDragMove);
   window.addEventListener('pointerup', onDragEnd);
  });
- // BUG FIX #1: Failsafe — bersihkan proxy jika pointer hilang (keluar jendela)
- window.addEventListener('pointercancel', onDragEnd);
- window.addEventListener('blur', function(){
-   if(dragProxy) onDragEnd(new PointerEvent('pointerup', {clientX:0, clientY:9999}));
- });
- document.addEventListener('visibilitychange', function(){
-   if(document.hidden && dragProxy){
-     onDragEnd(new PointerEvent('pointerup', {clientX:0, clientY:9999}));
-   }
- });
+  // (Global pointer listeners dihapus dari sini agar tidak menumpuk, lihat akhir file)
  el('#stat-rows').addEventListener('click',e=>{const r=e.target.closest('.srow');if(!r||!SIM)return;
   const s=SIM.m.stats.find(x=>x[0]===r.dataset.k);if(s){sfx.pop();toast('<b>'+s[1]+'</b> — '+s[4],3600);}});
  syncSound();buildHUD();updateHUD();}
@@ -266,13 +225,13 @@ function buildHUD(){if(!SIM)return;const m=SIM.m;
  const dg=el('#dock-grid');dg.innerHTML='';dg.style.justifyContent='center';dg.style.alignItems='center';H.dockCard=[];H.dockBtn=[];H.dockQ=[];H.dockCd=[];
    m.actions.forEach((a,i)=>{const per=SIM.team.perk.ids.includes(a.id);
    const d=document.createElement('div');d.className='dock-card';
-   d.style.cssText = 'width:260px;min-width:260px;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;gap:8px;padding:18px;border-radius:24px;flex:none;cursor:grab;scroll-snap-align:center';
-   d.innerHTML=(per?'<div class="perk-badge" style="position:absolute;top:-8px;right:-8px;background:var(--gold-btn);font-size:24px;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.5)">⭐</div>':'')
-    +ic(a.ic,48)
-    +'<div class="dc-tt" style="font-size:24px;line-height:1.15;margin-bottom:2px;font-weight:700">'+a.label+'</div>'
-    +'<div class="dc-quota" style="justify-content:center;font-size:24px;gap:6px;margin-top:2px">'+ic('target',24)+'<span class="q-n"></span></div>'
+   d.style.cssText = 'width:190px;min-width:190px;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;gap:4px;padding:14px;border-radius:20px;flex:none;cursor:grab;scroll-snap-align:center';
+   d.innerHTML=(per?'<div class="perk-badge" style="position:absolute;top:-8px;right:-8px;background:var(--gold-btn);font-size:16px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.5)">⭐</div>':'')
+    +ic(a.ic,32)
+    +'<div class="dc-tt" style="font-size:18px;line-height:1.15;margin-bottom:2px;font-weight:700">'+a.label+'</div>'
+    +'<div class="dc-quota" style="justify-content:center;font-size:16px;gap:6px;margin-top:2px">'+ic('target',18)+'<span class="q-n"></span></div>'
     +'<div class="mini-cd" style="width:100%"><i></i></div>'
-    +'<div class="dc-btn" style="height:auto;font-size:24px;font-family:var(--font-fun);white-space:nowrap;margin-top:4px;min-height:28px"></div>';
+    +'<div class="dc-btn" style="height:auto;font-size:18px;font-family:var(--font-fun);white-space:nowrap;margin-top:4px;min-height:24px"></div>';
   dg.appendChild(d);
   H.dockCard.push(d);H.dockBtn.push(d.querySelector('.dc-btn'));
   H.dockQ.push(d.querySelector('.q-n'));H.dockCd.push(d.querySelector('.mini-cd i'));});
@@ -559,3 +518,48 @@ function finishSim(){const m=SIM.m,S=SIM.S,days=S.day;
 function leaveSim(){if(SIM&&SIM.timer)clearInterval(SIM.timer);SIM=null;
  try{if(CTX.sim)CTX.sim.clearRect(0,0,1920,1080);}catch(e){}}
 
+/* ================== GLOBAL DRAG PROXY (Mencegah Memory Leak) ================== */
+let dragProxy = null;
+let activeDragIndex = -1;
+
+function moveProxy(e) {
+  if(!dragProxy) return;
+  dragProxy.style.left = e.clientX + 'px';
+  dragProxy.style.top = e.clientY + 'px';
+}
+function onDragMove(e) { moveProxy(e); }
+function onDragEnd(e) {
+  window.removeEventListener('pointermove', onDragMove);
+  window.removeEventListener('pointerup', onDragEnd);
+  if(dragProxy) { dragProxy.remove(); dragProxy = null; }
+  if(activeDragIndex > -1) {
+    const dockRect = document.querySelector('.sim-dock').getBoundingClientRect();
+    var simCv = document.querySelector('#cv-sim');
+    var validDrop = false;
+    if(simCv) {
+      var cr = simCv.getBoundingClientRect();
+      validDrop = e.clientX >= cr.left && e.clientX <= cr.right
+               && e.clientY >= cr.top && e.clientY < dockRect.top;
+    } else {
+      validDrop = e.clientY < dockRect.top;
+    }
+    if(validDrop) {
+      if(typeof doAction === 'function') doAction(activeDragIndex, e.clientX, e.clientY);
+    } else {
+      sfx.click();
+      toast('Jatuhkan kartu di area pemandangan alam, bukan di panel!');
+    }
+    activeDragIndex = -1;
+  }
+}
+
+// Global failsafe listeners — didaftarkan SEKALI SAJA untuk menghindari leak.
+window.addEventListener('pointercancel', onDragEnd);
+window.addEventListener('blur', function() {
+  if(dragProxy) onDragEnd(new PointerEvent('pointerup', {clientX:0, clientY:9999}));
+});
+document.addEventListener('visibilitychange', function() {
+  if(document.hidden && dragProxy){
+    onDragEnd(new PointerEvent('pointerup', {clientX:0, clientY:9999}));
+  }
+});

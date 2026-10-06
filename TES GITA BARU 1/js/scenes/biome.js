@@ -37,7 +37,7 @@ function buildBiome() {
         <div class="plaque">Pilih Ekosistem Nusantara</div>
         <div class="spacer"></div>
         <button class="btn tb-btn" id="b-kamus">${ic('book', 24)} Kamus Alam</button>
-        <div class="tb-stars">${ic('star', 24)} <b>${totStars()}/24</b></div>
+        <div class="tb-stars">${ic('star', 24)} <b>${totStars()}/48</b></div>
       </div>
 
       <!-- MAIN HERO BIOME SHOWCASE STAGE -->
@@ -107,19 +107,22 @@ function buildBiome() {
 
   // Swipe Gesture for IFP Touchscreen
   const stage = el('#biome-stage');
-  let startX = 0, startY = 0;
-  stage.addEventListener('pointerdown', (e) => {
-    startX = e.clientX;
-    startY = e.clientY;
-  });
-  stage.addEventListener('pointerup', (e) => {
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx < 0) navigateBiome(1);
-      else navigateBiome(-1);
-    }
-  });
+  if (!stage.hasAttribute('data-swipe-bound')) {
+    stage.setAttribute('data-swipe-bound', 'true');
+    let startX = 0, startY = 0;
+    stage.addEventListener('pointerdown', (e) => {
+      startX = e.clientX;
+      startY = e.clientY;
+    });
+    stage.addEventListener('pointerup', (e) => {
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) navigateBiome(1);
+        else navigateBiome(-1);
+      }
+    });
+  }
 
   // Global Keyboard Navigation
   if (!biomeKeyBound) {

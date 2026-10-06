@@ -1,6 +1,6 @@
 # 🛡️ PANDUAN & MASTER PROMPT AUDIT BUG OTOMATIS (ECO-EXPLORER)
 
-Dokumen ini berisi template **Master Prompt Investigasi & Penemuan Bug Sistem** yang dirancang khusus untuk diinstruksikan kepada AI Coding Agent (Antigravity). Prompt ini memandu AI untuk melakukan audit menyeluruh secara otomatis pada 4 pilar utama game simulasi pembelajaran *Eco-Explorer*.
+Dokumen ini berisi template **Master Prompt Investigasi & Penemuan Bug Sistem** yang dirancang khusus untuk diinstruksikan kepada AI Coding Agent (Antigravity). Prompt ini memandu AI untuk melakukan audit menyeluruh secara otomatis pada 5 pilar utama game simulasi pembelajaran *Eco-Explorer*.
 
 ---
 
@@ -15,7 +15,7 @@ Cukup salin teks di dalam blok kuotasi **MASTER PROMPT** di bawah ini dan kirimk
 ```markdown
 Tolong lakukan audit menyeluruh (deep automated bug hunting & stress testing) pada proyek game "Eco-Explorer" (folder `TES GITA BARU 1`) untuk mendeteksi potensi bug, inkonsistensi logika, dan ketidakseimbangan sistemik.
 
-Lakukan audit berdasar 4 PILAR UTAMA berikut:
+Lakukan audit berdasar 5 PILAR UTAMA berikut:
 
 ### 1. PILAR 1: KESEIMBANGAN MATEMATIS & KASKADE TROFIK 16 MISI (`js/data/missions.js`)
 - Simulasikan logika matematika perputaran harian `tick(S)`, formula kesehatan `health(S)`, efek aksi intervensi `actions[i].fx`, dan kondisi target `targets` untuk seluruh 16 misi (4 Bioma: Sawah, Hutan, Sungai, Laut).
@@ -37,6 +37,11 @@ Lakukan audit berdasar 4 PILAR UTAMA berikut:
 - Periksa kelengkapan 4 simpul kausalitas rantai makanan pada sesi debriefing.
 - Pastikan status penyimpanan LocalStorage (`ProgressManager`) tidak corrupt saat reset atau ganti kelompok.
 
+### 5. PILAR 5: CODE QUALITY & PERFORMANCE (MEMORY & RENDERING)
+- Audit potensi **Memory Leaks & Event Listener Accumulation**: pastikan setiap perpindahan layar (`scene.js` / IFP UI swap) melakukan *cleanup* (pembersihan) DOM event listener yang tidak terpakai (seperti `onclick`, `addEventListener`) agar tidak ganda dan menyebabkan FPS drop atau *double-trigger*.
+- Verifikasi *Global Variable Pollution*: pastikan state tersentralisasi dengan baik (`G`, `SIM`) dan terbebas dari kebocoran variabel tak terduga (*undeclared variable in global scope*).
+- Analisis *Canvas Rendering Bottlenecks*: pastikan siklus *requestAnimationFrame* berjalan stabil di **60 FPS** tanpa terhalang *blocking operations* saat animasi kaskade trofik berjalan.
+
 ---
 
 ### ⚠️ PROTOKOL EKSEKUSI (WORKFLOW AGENT):
@@ -44,7 +49,7 @@ Lakukan audit berdasar 4 PILAR UTAMA berikut:
 2. **Sajikan Tabel Diagnosis Temuan:** SEBELUM melakukan perubahan pada kode, sajikan laporan temuan bug terstruktur dalam format tabel:
    | No | Pilar | Tingkat Keparahan (Critical/Major/Minor) | File & Baris | Gejala / Indikasi Bug | Akar Masalah Matematis/Teknis | Rekomendasi Solusi |
 3. **Minta Konfirmasi:** Tunggu persetujuan pengguna sebelum mengeksekusi perbaikan kode.
-4. **Verifikasi & Sinkronisasi Dokumen:** Setelah perbaikan disetujui, jalankan seluruh test suite (`validate_16_missions.js`, `run.js`, `verify_vo_match.js`) dan sinkronkan dokumen pendamping di folder `docs/` (`PRD_GAME_SKRIPSI.md`, `ROADMAP.md`) sesuai aturan wajib `GEMINI.md`.
+4. **Verifikasi & Sinkronisasi Dokumen:** Setelah perbaikan disetujui, jalankan seluruh test suite (`validate_16_missions.js`, `run.js`, `verify_vo_match.js`, `audit_deep_all_pillars.js`) dan sinkronkan dokumen pendamping di folder `docs/` (`PRD_GAME_SKRIPSI.md`, `ROADMAP.md`) sesuai aturan wajib `GEMINI.md`.
 ```
 
 ---
@@ -61,6 +66,9 @@ Jika Anda ingin mengaudit bagian tertentu saja, gunakan salah satu variasi di ba
 
 ### 🔹 Variasi C: Khusus Verifikasi Jalur Audio & Voice-Over
 > *"Tolong audit pemanggilan audio di `js/audio.js` dan scene-scene permainan. Pastikan seluruh 72 suara Kakak Gita terpanggil pada momen yang tepat tanpa ada delay berlebih atau tumpang tindih dengan efek suara SFX."*
+
+### 🔹 Variasi D: Khusus Audit Performa, Memory Leak & Event Listeners
+> *"Tolong jalankan deep inspection pada seluruh file `js/scenes/*.js` untuk mencari kebocoran memori (memory leak) atau penumpukan Event Listener. Analisis bagaimana fungsi `go()` melakukan transisi layar, dan pastikan tidak ada `onclick` yang menumpuk ganda setiap kali layar dirender ulang, agar game berjalan stabil di 60 FPS pada layar IFP."*
 
 ---
 

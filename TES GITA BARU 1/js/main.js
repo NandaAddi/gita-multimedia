@@ -17,17 +17,23 @@ function fit(){
   });
 }
 
+const TITLE_S = {prod: 48, water: 68, herb: 12, pred: 6, poison: 0};
 let loopN = 0;
 function loop(t){
   try {
     if(!document.hidden){
       loopN++;
-      if(CUR === 'title'){
-        sceneSawah(CTX.title, t, {prod: 48, water: 68, herb: 12, pred: 6, poison: 0});
+      if(CUR === 'title' || CUR === 'mission'){
+        if(el('#cv-title')) el('#cv-title').style.filter = CUR === 'mission' ? 'blur(16px) brightness(0.4)' : 'none';
+        const b = (CUR === 'mission' && NAV.biome) ? NAV.biome : 'sawah';
+        const s = (CUR === 'mission' && NAV.biome && typeof FAKE !== 'undefined') ? FAKE[NAV.biome] : TITLE_S;
+        if(typeof SCENE !== 'undefined' && SCENE[b]) SCENE[b](CTX.title, t, s);
       } else if(CUR === 'sim' && SIM){
         SCENE[SIM.m.biome](CTX.sim, t, SIM.S);
       } else if(CUR === 'biome' && loopN % 6 === 0){
         PREVS.forEach(p => drawPreview(p, t));
+      } else if(CUR === 'team'){
+        if(typeof animateTeamMascot === 'function') animateTeamMascot(t);
       } else if(CUR === 'victory'){
         renderConfetti(t);
       }
@@ -82,10 +88,18 @@ function init(){
 
   addEventListener('resize', fit);
   addEventListener('orientationchange', fit);
-  addEventListener('pointerdown', function once(){
+  function unlockAudio() {
+    if(audioReady) return;
     audioReady = true;
     try { ac(); } catch(e) {}
-  }, {once: true});
+    if (typeof bgmStart === 'function') bgmStart();
+    removeEventListener('pointerdown', unlockAudio);
+    removeEventListener('click', unlockAudio);
+    removeEventListener('keydown', unlockAudio);
+  }
+  addEventListener('pointerdown', unlockAudio);
+  addEventListener('click', unlockAudio);
+  addEventListener('keydown', unlockAudio);
 
   document.addEventListener('visibilitychange', () => {
     try {

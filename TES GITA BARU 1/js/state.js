@@ -3,7 +3,7 @@
    State Global, Penyimpanan LocalStorage, Modal, & Toast
    ============================================================ */
 
-const G = { team: null, stars: {}, sound: true };
+const G = { team: null, stars: {}, sound: true, bgmVol: 0.5 };
 let NAV = { biome: 'sawah' };
 
 function loadG() {
@@ -21,6 +21,7 @@ function loadG() {
         });
       }
       G.sound = d.sound !== false;
+      G.bgmVol = typeof d.bgmVol === 'number' ? d.bgmVol : 0.5;
     }
   } catch (e) {
     console.error('[Eco-Explorer] load save gagal', e);
@@ -31,7 +32,7 @@ function saveG() {
   try {
     localStorage.setItem(
       'eco.save',
-      JSON.stringify({ team: G.team, stars: G.stars, sound: typeof soundOn !== 'undefined' ? soundOn : true })
+      JSON.stringify({ team: G.team, stars: G.stars, sound: typeof soundOn !== 'undefined' ? soundOn : true, bgmVol: G.bgmVol })
     );
   } catch (e) {}
 }

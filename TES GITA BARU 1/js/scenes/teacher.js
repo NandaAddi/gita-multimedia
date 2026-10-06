@@ -256,7 +256,7 @@ function bindTeacherSlideActions(){
         <div class="t-modal-confirm">
           <div class="t-modal-h">${ic('bin', 32)} Konfirmasi Reset Progres Kelas</div>
           <p class="t-modal-p">
-            Apakah Ibu/Bapak Guru yakin ingin menghapus seluruh perolehan bintang (<b>${starsNow} dari 24 bintang</b>) dan memulai sesi kelas dari awal?
+            Apakah Ibu/Bapak Guru yakin ingin menghapus seluruh perolehan bintang (<b>${starsNow} dari 48 bintang</b>) dan memulai sesi kelas dari awal?
           </p>
           <p class="t-modal-sub">
             Tindakan ini akan mengosongkan riwayat misi yang telah diselesaikan kelompok siswa.
