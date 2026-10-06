@@ -16,7 +16,8 @@ function titleBubble(){const n=totStars();
  el('#bubble-title').innerHTML=n>0
   ?'Selamat datang kembali, <b>Detektif Alam</b>! Kamu sudah mengumpulkan <b>'+n+' dari 48 bintang</b>. Siap melanjutkan menyelamatkan ekosistem Indonesia?'
   :'Hai, aku <b>Gita</b>! Ekosistem Indonesia sedang kesusahan. Jadilah <b>Detektif Alam</b>, pilih kelompokmu, dan selesaikan 16 misi penyelamatan. Siap?';
- if(el('#foot-stars')) el('#foot-stars').textContent=n;
+ const footStars = el('#foot-stars');
+ if (footStars) footStars.textContent = n;
  const voKey = n > 0 ? 'vo_title_welcome_back' : 'vo_title_welcome';
  if (typeof playVO === 'function') playVO(voKey);
  el('#bubble-title').onclick = () => {
