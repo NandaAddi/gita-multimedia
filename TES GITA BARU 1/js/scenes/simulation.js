@@ -37,9 +37,9 @@ function showBridgeDialog(m, team){
         ext: '.png',
         frames: 120,
         fps: 24,
-        size: 140,
+        size: 210,
         showLoading: false,
-        fallbackSVG: () => gitaSVG(130, expr)
+        fallbackSVG: () => gitaSVG(200, expr)
       });
     } else {
       el('#bridge-gita-box').innerHTML = gitaSVG(130, expr);
