@@ -89,6 +89,70 @@ Character expression sheet of a cute chibi Indonesian girl named Gita wearing a 
 
 ---
 
+### C. FORMAT AVATAR DIALOG BOX (2D PNG TRANSPARAN CLOSE-UP BUST PORTRAIT)
+*(Digunakan untuk Avatar Dialog Box Misi Penyelidikan / Bridge Dialog di Layar Game)*
+
+#### 1.8.1 Avatar Dialog: Pose Bicara / Penjelasan Misi (`gita_dialog_talk.png`)
+* **Lokasi Simpan:** `assets/characters/gita_dialog_talk.png`
+* **Gaya:** Clean 2D Chibi Vector Art, Soft Round Shapes, 2.5-Head Proportions
+* **Palet:** Hijab `#282828`, Jaket `#2E5A59`, Kaos `#E04F5F`, Kulit `#F7E3C6`, Pipi `#E6A6A6`
+* **Rasio:** 1:1 (Square)
+* **Prompt Google Flow / ImageFX / Imagen:**
+```text
+Clean 2D digital anime chibi vector art illustration of a cute young Muslim girl character, head and shoulders bust portrait, wearing a neat smooth charcoal black hijab (#282828) framing her round friendly face, open dark navy blue cardigan jacket (#2E5A59) over a vibrant coral red inner shirt (#E04F5F). Big glossy dark cartoon eyes with white light reflections, soft rosy pink blushing oval cheeks (#E6A6A6) on warm peach skin (#F7E3C6), cheerful open-mouth talking expression (Excited expression from character sheet), friendly and supportive companion, simple clean bold outlines, soft gentle shading, minimal details for UI readability, centered dialogue avatar, isolated on solid pure white background, no text, square 1:1 aspect ratio.
+```
+
+#### 1.8.2 Avatar Dialog: Pose Khawatir / Tanggap Krisis (`gita_dialog_worried.png`)
+* **Lokasi Simpan:** `assets/characters/gita_dialog_worried.png`
+* **Konteks Game:** Langkah 1 Dialog "Krisis Air: Tanah Retak & Padi Layu / Waduh teman-teman!"
+* **Gaya:** Clean 2D Chibi Vector Art, Soft Round Shapes, 2.5-Head Proportions
+* **Palet:** Hijab `#282828`, Jaket `#2E5A59`, Kaos `#E04F5F`, Kulit `#F7E3C6`, Pipi `#E6A6A6`
+* **Rasio:** 1:1 (Square)
+* **Prompt Google Flow / ImageFX / Imagen:**
+```text
+Clean 2D digital anime chibi vector art illustration of a cute young Muslim girl character, head and shoulders bust portrait, wearing a smooth charcoal black hijab (#282828) neatly framing her round face, open dark navy blue cardigan jacket (#2E5A59) over a coral red inner shirt (#E04F5F). Worried and concerned expression matching character sheet, cute furrowed eyebrows, anxious small mouth ("Waduh teman-teman!"), caring empathetic glossy dark eyes, soft rosy pink blushing cheeks (#E6A6A6), warm peach skin tone (#F7E3C6), soft round shapes, clean clear outlines, game dialogue box avatar icon, centered, isolated on solid pure white background, high quality, square 1:1 aspect ratio.
+```
+
+#### 1.8.3 Avatar Dialog: Pose Ramah / Senyum Manis (`gita_dialog_happy.png`)
+* **Lokasi Simpan:** `assets/characters/gita_dialog_happy.png`
+* **Gaya:** Clean 2D Chibi Vector Art, Soft Round Shapes, 2.5-Head Proportions
+* **Palet:** Hijab `#282828`, Jaket `#2E5A59`, Kaos `#E04F5F`, Kulit `#F7E3C6`, Pipi `#E6A6A6`
+* **Rasio:** 1:1 (Square)
+* **Prompt Google Flow / ImageFX / Imagen:**
+```text
+Clean 2D digital anime chibi vector art illustration of a cute young Muslim girl character, head and shoulders bust portrait, wearing a neat charcoal black hijab (#282828) framing her round cute face, open dark navy blue cardigan jacket (#2E5A59) over a coral red inner shirt (#E04F5F). Sweet gentle smiling expression (Happy expression from character sheet), big warm dark sparkling eyes, round rosy pink blushing cheeks (#E6A6A6), warm peach skin (#F7E3C6), simple clean vector lines, soft aesthetic, centered avatar sticker, isolated on solid pure white background, square 1:1 aspect ratio.
+```
+
+---
+
+### D. FORMAT ANIMASI LOOPING IMAGE SEQUENCE (UNTUK PLAYER GitaSeq DI DIALOG BOX)
+*(Dijalankan via engine `GitaSeq.play()`: 24–48 frame @12fps WebP/PNG loop di dalam `#bridge-gita-box`)*
+
+#### 1.9.1 Prompt Motion Image-to-Video: Looping Bicara & Memandu (*Talking Loop*)
+* **Input Image:** Avatar PNG statis Gita hasil prompt 1.8.1
+* **Target Output:** Video 3–4 detik seamless loop -> Ekstrak ke `g000.png` ... `g023.png`
+* **Prompt Google VideoFX / Veo / Runway / Kling:**
+```text
+Seamless looping 2D animated chibi illustration, stationary bust portrait of the character. The cute young girl is talking enthusiastically and explaining, gentle opening and closing mouth movements, friendly speech expressions, soft natural eye blinking twice, subtle rhythmic breathing motion of shoulders, slight cute head tilt and nodding. Locked camera, perfectly static solid white background, high consistency with source image, no camera movement, no perspective shift, zero morphing, perfectly seamless beginning and end frame loop.
+```
+
+#### 1.9.2 Prompt Motion Image-to-Video: Looping Khawatir / Krisis (*Worried Loop*)
+* **Input Image:** Avatar PNG statis Gita hasil prompt 1.8.2
+* **Konteks Game:** Dialog Langkah 1 Krisis Alam Sawah
+* **Target Output:** Video 3–4 detik seamless loop -> Ekstrak ke `g000.png` ... `g023.png`
+* **Prompt Google VideoFX / Veo / Runway / Kling:**
+```text
+Seamless looping 2D animated chibi illustration, stationary close-up bust portrait of the character. Mildly worried and caring expression, gentle subtle breathing motion, soft empathetic eye blinking, small anxious lip movement murmuring concerned words, gentle head sway with worried empathy, hands gesturing gently near upper chest. Locked static camera, pure solid white background, zero camera drift, no background warping, perfectly seamless loop from start to finish.
+```
+
+#### 1.9.3 Prompt Text-to-Video Looping (Tanpa Gambar Awal)
+* **Prompt Google VideoFX / Veo:**
+```text
+Seamless looping 2D flat vector anime animation, cute 10-year-old Indonesian Muslim girl chibi character bust portrait, wearing charcoal black hijab (#282828) and open dark navy blue jacket (#2E5A59) over red shirt (#E04F5F). Gentle breathing idle motion, soft natural blinking, sweet smiling mouth gently speaking and pausing, locked static camera, completely static pure white background, perfectly seamless loopable 4-second video, high frame rate, crisp 2D line art, no 3D rendering.
+```
+
+---
+
 ## 2. ORGANISME & KOMPONEN RANTAI MAKANAN SAWAH
 
 ### 2.1 Tanaman Padi Subur (`padi_subur.png`)

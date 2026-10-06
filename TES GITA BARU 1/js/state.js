@@ -67,6 +67,7 @@ function go(id) {
         if(typeof titleBubble === 'function') titleBubble();
       } else {
         GitaSeq.stop('#gita-title');
+        if(id !== 'sim') GitaSeq.stop('#bridge-gita-box');
       }
     }
   }catch(e){}

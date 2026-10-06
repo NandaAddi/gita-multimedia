@@ -16,11 +16,32 @@ function showBridgeDialog(m, team){
   
   const box = el('#sim-bridge');
   if(!box) return;
-  box.style.display = 'flex';
-  
+  // Preload kedua sequence animasi Gita di latar belakang
+  if (typeof GitaSeq !== 'undefined' && GitaSeq.preload) {
+    GitaSeq.preload({ folder: 'worried_loop', prefix: 'Comp 1_', pad: 5, ext: '.png', frames: 120, fps: 24 });
+    GitaSeq.preload({ folder: 'talking_loop', prefix: 'Comp 1_', pad: 5, ext: '.png', frames: 120, fps: 24 });
+  }
+
   function renderBridgeStep(){
     const cur = bridgeStep === 1 ? bdata.step1 : bdata.step2;
-    el('#bridge-gita-box').innerHTML = gitaSVG(130, cur.gitaExpr || (bridgeStep === 1 ? 'worried' : 'talk'));
+    const expr = cur.gitaExpr || (bridgeStep === 1 ? 'worried' : 'talk');
+    const seqFolder = (expr === 'worried') ? 'worried_loop' : 'talking_loop';
+
+    if (typeof GitaSeq !== 'undefined' && GitaSeq.play) {
+      GitaSeq.play('#bridge-gita-box', {
+        folder: seqFolder,
+        prefix: 'Comp 1_',
+        pad: 5,
+        ext: '.png',
+        frames: 120,
+        fps: 24,
+        size: 140,
+        showLoading: false,
+        fallbackSVG: () => gitaSVG(130, expr)
+      });
+    } else {
+      el('#bridge-gita-box').innerHTML = gitaSVG(130, expr);
+    }
     el('#bridge-step-pill').innerHTML = 'Petunjuk Awal Misi &bull; Langkah ' + bridgeStep + ' dari 2';
     el('#bridge-title').textContent = cur.title;
     el('#bridge-text').innerHTML = cur.text;
@@ -81,6 +102,7 @@ function showBridgeDialog(m, team){
 
 function closeBridgeDialog(){
   if (typeof stopVO === 'function') stopVO();
+  if (typeof GitaSeq !== 'undefined' && GitaSeq.stop) GitaSeq.stop('#bridge-gita-box');
   const box = el('#sim-bridge');
   if(box) box.style.display = 'none';
   // BUG FIX #7: Cegah timer bocor jika SIM sudah null/done
