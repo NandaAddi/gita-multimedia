@@ -61,7 +61,8 @@ function buildTeacher() {
   // Bind Back Button
   const backBtn = el('#teacher-back');
   if (backBtn) {
-    backBtn.onclick = () => {
+    backBtn.onclick = (e) => {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
       sfx.back();
       go('title');
     };
@@ -318,7 +319,7 @@ function renderAssessmentModalContent() {
           <div class="t-assess-title">Bank Instrumen Pretest &amp; Posttest IPAS Fase C</div>
           <div class="t-assess-sub">SDN Percobaan 2 Malang &bull; 20 Butir Soal Pilihan Ganda &bull; Level Kognitif C1–C4</div>
         </div>
-        <button class="btn btn-secondary" id="tam-close" style="height:50px;font-size:22px;padding:0 22px">✕ Tutup</button>
+        <button class="btn btn-secondary" id="tam-close" style="height:52px;font-size:24px;padding:0 24px">✕ Tutup</button>
       </div>
 
       <!-- Filters & Controls Bar -->
@@ -330,7 +331,7 @@ function renderAssessmentModalContent() {
           <button class="t-assess-filter-btn ${filter === 3 ? 'active' : ''}" data-f="3">TP 3: Dinamika C2 (4)</button>
           <button class="t-assess-filter-btn ${filter === 4 ? 'active' : ''}" data-f="4">TP 4: Keseimbangan (5)</button>
         </div>
-        <button class="btn btn-gold" id="tam-toggle-keys" style="height:50px;font-size:22px;padding:0 24px">
+        <button class="btn btn-gold" id="tam-toggle-keys" style="height:52px;font-size:24px;padding:0 24px">
           ${showAssessmentKeys ? 'Sembunyikan Kunci' : 'Tampilkan Kunci'}
         </button>
       </div>
@@ -358,7 +359,7 @@ function renderAssessmentModalContent() {
                     <div class="${optClass}">
                       <span class="t-qopt-key">${letters[oi]}</span>
                       <span>${opt}</span>
-                      ${(showAssessmentKeys && isCorrect) ? '<span style="margin-left:auto;font-size:20px;color:#34d399">✓ KUNCI</span>' : ''}
+                      ${(showAssessmentKeys && isCorrect) ? '<span style="margin-left:auto;font-size:24px;font-weight:700;color:#34d399">✓ KUNCI</span>' : ''}
                     </div>
                   `;
                 }).join('')}

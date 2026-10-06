@@ -89,10 +89,17 @@ function buildTeam() {
   `;
 
   // Navigation handlers
-  el('#t-back').onclick = () => {
-    sfx.back();
-    go('title');
-  };
+  const tBackBtn = el('#t-back');
+  if (tBackBtn) {
+    tBackBtn.onclick = (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      sfx.back();
+      go('title');
+    };
+  }
 
   el('#t-prev').onclick = () => navigateTeam(-1);
   el('#t-next').onclick = () => navigateTeam(1);
@@ -124,6 +131,7 @@ function buildTeam() {
   }
 
   renderTeam('init');
+  if (typeof playVO === 'function') playVO('vo_team_intro');
 }
 
 function navigateTeam(delta) {
@@ -190,7 +198,7 @@ function renderTeam(dir) {
     saveG();
     sfx.success();
     toast('Kelompokmu bertugas sebagai ' + t.name + '! Menuju Markas Misi...');
-    speak('Hebat! Kelompokmu bertugas sebagai ' + t.name + '.');
+    if (typeof playVO === 'function') playVO('vo_team_' + t.id);
     if (typeof buildMissionMenu === 'function') buildMissionMenu();
     go('mission');
   };

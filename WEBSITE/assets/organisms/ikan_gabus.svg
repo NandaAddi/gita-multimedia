@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 130">
+    <g transform="translate(10, 15)">
+      <!-- Torpedo body -->
+      <path d="M20 50 Q60 32 105 45 Q125 50 130 52 L140 38 Q136 52 140 66 L130 54 Q105 68 60 65 Q35 62 20 50 Z" fill="#3f6212" stroke="#1a2e05" stroke-width="3"/>
+      <!-- Yellow fins -->
+      <path d="M55 35 Q75 28 95 38 Z" fill="#eab308" stroke="#854d0e" stroke-width="2"/>
+      <path d="M60 66 Q80 72 95 65 Z" fill="#eab308" stroke="#854d0e" stroke-width="2"/>
+      <!-- Scales pattern -->
+      <circle cx="65" cy="48" r="3" fill="#65a30d"/>
+      <circle cx="80" cy="50" r="3" fill="#65a30d"/>
+      <circle cx="95" cy="52" r="3" fill="#65a30d"/>
+      <!-- Eye -->
+      <circle cx="32" cy="46" r="5" fill="#ffffff" stroke="#0f172a" stroke-width="1.5"/>
+      <circle cx="30" cy="46" r="3" fill="#0f172a"/>
+      <circle cx="29" cy="45" r="1" fill="#ffffff"/>
+    </g>
+  </svg>

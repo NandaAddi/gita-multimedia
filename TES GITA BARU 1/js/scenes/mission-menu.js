@@ -70,13 +70,13 @@ function buildMissionMenu(biomeKey) {
 
     return `
       <div class="mcard panel-deep carousel-slide ${un ? '' : 'locked'}" id="mcard-${globalIdx}" style="display:${globalIdx === 0 ? 'flex' : 'none'};flex-direction:column;width:100%;height:100%;justify-content:center;padding:32px;">
-        <div class="mcard-badge" style="background:${badgeColor};color:#fff;padding:6px 20px;border-radius:16px;font-family:var(--font-fun);align-self:center;margin-bottom:24px;font-size:22px;box-shadow:0 4px 10px rgba(0,0,0,0.3);">
+        <div class="mcard-badge" style="background:${badgeColor};color:#fff;padding:6px 20px;border-radius:16px;font-family:var(--font-fun);align-self:center;margin-bottom:24px;font-size:24px;box-shadow:0 4px 10px rgba(0,0,0,0.3);">
            ${badgeIcon} ${badgeText}
         </div>
         <div class="mcard-header" style="flex-direction:column;text-align:center;gap:12px;margin-bottom:20px;">
           <div class="micon ${m.type}" style="width:100px;height:100px;margin:0 auto;font-size:48px;">${ic(m.type === 'manusia' ? 'users' : BICON[m.biome], 54)}</div>
           <div class="mtype-wrap" style="align-items:center;">
-            <div class="mcard-subnum" style="font-size:18px;">${colLabel} • KASUS 0${subIdx + 1}</div>
+            <div class="mcard-subnum" style="font-size:24px;">${colLabel} • KASUS 0${subIdx + 1}</div>
             <div class="mtitle" style="font-size:36px;margin-top:8px;">${m.title}</div>
           </div>
           <div class="mstars" style="font-size:40px;justify-content:center;margin-top:12px;">
@@ -178,7 +178,12 @@ function buildMissionMenu(biomeKey) {
     };
   });
 
-  el('#m-back').onclick = () => { sfx.back(); buildTeam(); go('team'); };
+  el('#m-back').onclick = (e) => {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    sfx.back();
+    buildTeam();
+    go('team');
+  };
   el('#m-kamus').onclick = () => { sfx.click(); kamusModal(b); };
 
   el('#scr-mission').querySelectorAll('.go').forEach(btn => {
@@ -228,12 +233,9 @@ function openMission(m) {
       };
     }
   }
-
-  speak('Misi dimulai. ' + m.task);
 }
 
 function startMission(mOrId) {
   const m = typeof mOrId === 'string' ? (typeof MISSIONS !== 'undefined' ? MISSIONS.find(x => x.id === mOrId) : null) : mOrId;
   if (m) openMission(m);
-}
-
+}

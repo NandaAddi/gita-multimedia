@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 160">
+    <g transform="translate(10, 10)">
+      <!-- Long Stilt Legs -->
+      <line x1="68" y1="95" x2="65" y2="145" stroke="#d97706" stroke-width="4" stroke-linecap="round"/>
+      <line x1="82" y1="95" x2="84" y2="145" stroke="#d97706" stroke-width="4" stroke-linecap="round"/>
+      <!-- White Feather Body -->
+      <ellipse cx="75" cy="78" rx="28" ry="20" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+      <!-- Black wingtips -->
+      <path d="M85 75 Q105 80 108 92 Q95 90 85 85 Z" fill="#1e293b"/>
+      <!-- S-Shaped Graceful Neck -->
+      <path d="M55 75 Q42 55 48 35 Q52 24 62 25" stroke="#ffffff" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <path d="M55 75 Q42 55 48 35 Q52 24 62 25" stroke="#cbd5e1" stroke-width="2" fill="none"/>
+      <!-- Head & Long Yellow Bill -->
+      <circle cx="62" cy="25" r="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <polygon points="68,23 105,28 68,31" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
+      <circle cx="60" cy="24" r="2.5" fill="#0f172a"/>
+    </g>
+  </svg>

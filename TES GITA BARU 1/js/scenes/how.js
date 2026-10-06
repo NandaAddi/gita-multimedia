@@ -111,7 +111,10 @@ function renderHowStep(silent){
   if(next) next.innerHTML = howStep === steps.length - 1
     ? 'Mulai Petualangan ' + ic('arrowR', 24)
     : 'Lanjut ' + ic('arrowR', 24);
-  if(!silent) sfx.click();
+  if(!silent) {
+    sfx.click();
+    if(typeof playVO === 'function') playVO('vo_how_step' + (howStep + 1));
+  }
 }
 
 function buildHow() {
@@ -180,7 +183,8 @@ function buildHow() {
   // Bind Buttons
   const backBtn = el('#how-back');
   if (backBtn) {
-    backBtn.onclick = () => {
+    backBtn.onclick = (e) => {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
       sfx.back();
       go('title');
     };
@@ -194,6 +198,15 @@ function buildHow() {
     };
   }
 
+  const gitaBanner = root.querySelector('.how-gita-banner');
+  if (gitaBanner) {
+    gitaBanner.onclick = () => {
+      sfx.click();
+      if(typeof playVO === 'function') playVO('vo_how_intro');
+    };
+  }
+
   renderHowStep(true);
+  if(typeof playVO === 'function') playVO('vo_how_intro');
   syncSound();
 }

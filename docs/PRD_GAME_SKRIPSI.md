@@ -196,10 +196,10 @@ Sebagai pembeda mendasar antara dokumen akademik skripsi (untuk penguji/dosen) d
         - **Sisi Kiri:** Tombol Keluar (`🚪 KELUAR`, $X = 85$, $130 \times 48$ px), Lencana Pahlawan & Nama Tim ($X = 185, 220$), dan Kapsul Timer giliran kelompok berbingkai emas (`⏱️ WAKTU: 07:00`, $X = 510$, $240 \times 48$ px).
         - **Pusat Monitor (Tepat di Sumbu $X = 960$ px):** *Health Meter Pod* dua baris vertikal ($460 \times 58$ px, *Dark Glassmorphism* berbingkai *Emerald* `0x10b981`). Baris atas memisahkan label nama ekosistem rata-kiri dengan teks emosi/persentase reaktif rata-kanan (`😱 BAHAYA / 😊 SEHAT (xx%)`). Baris bawah menampung lintasan progress bar dinamis selebar 424 px. Meniadakan 100% risiko tumpang tindih (*overlap collision*).
         - **Sisi Kanan:** Tombol kolaborasi Penasihat Meja (`📢 TANYA TEMAN`, $X = 1330$, $210 \times 48$ px), ensiklopedia (`📖 KAMUS ALAM`, $X = 1565$, $210 \times 48$ px), tombol toggle audio (`🔊 Suara`, $X = 1735$, $90 \times 48$ px), dan toggle layar penuh (`⛶ Layar`, $X = 1835$, $90 \times 48$ px). Seluruh bentang 1920px terisi seimbang tanpa ruang kosong asimetris.
-      - **Balanced 4-Column Touch Action Dock (Zona Bawah IFP):** Panel sentuh kuadran bawah (1880 $\times$ 224 px) membagi 3 kartu aksi dan 1 kartu verifikasi selesai ke dalam kisi 4 kolom simetris matematika:
-        - Tiap kolom berdimensi seragam $420 \times 155$ px dengan jarak sela antarkartu tepat 50 px dan margin kiri-kanan tepat 45 px ($X = 255, 725, 1195, 1665$).
-        - Kolom 1–3 menampung kartu aksi berundak 3 tingkat (ikon & judul 24px di baris atas, tombol sentuh taktil $390 \times 44$ px dengan label 24px di baris tengah, dan lencana status kuota 24px di baris bawah).
-        - Kolom 4 menampung Kartu Selesai Misi ($X = 1665$) berbingkai emas 3px dengan tombol verifikasi `✅ CEK HASIL 🔍` ($390 \times 44$ px) dan status evaluasi C2.
+      - **Horizontal Slider Action Dock (Zona Bawah IFP):** Panel aksi sentuh kuadran bawah (lebar 1600 px) diubah menjadi kisi korsel horizontal interaktif (*horizontal slider carousel*) untuk mengatasi masalah kepadatan/bertumpuknya elemen:
+        - Menampilkan kartu-kartu aksi secara berjajar (lebar masing-masing 260 px, margin antar kartu 24 px) dilengkapi tombol panah arkade besar (`◀` dan `▶`) di sisi kiri dan kanan.
+        - Memanfaatkan mekanisme `scroll-snap` dan navigasi gulir mulus (`smooth scrolling`), sehingga siswa tidak perlu memaksakan sentuhan pada ruang yang sempit (*anti-fat-finger*).
+        - Kartu aksi (memulihkan tanaman, menambah pemangsa) memiliki tinggi proporsional dengan ikon vektor tebal dan teks berukuran lega, memudahkan interaksi layar IFP.
       - **Enclosed Mascot Speech Banner (Gita Scaffolding):** Balon dialog Gita diperluas menjadi lebar 630 px ($X = 450, Y = 160$) lengkap dengan plakat identitas `👧 GITA (PANDUAN DETEKTIF):` (24px) di bagian atas teks, serta tombol narasi suara audio (`🔊`, $X = 680$) dan tombol perancah kognitif ZPD (`💡`, $X = 735$) yang terlindungi di dalam ornamen batas panel tanpa terpotong.
       - **Terminal Quest Checklist Real-Time (Kanan Atas):** Widget checklist ($560 \times 205$ px, $X = 1615, Y = 185$) dilengkapi plakat kapsul header emas-zamrud `📋 TARGET MISI DETEKTIF` (24px) dan 3 strip baris target 24px untuk keterbacaan maksimal dari meja kelas.
        - **Chunky 3D Solid Tiles & Anti-Glare Visual Standard (Zero Outline/Stroke):** Seluruh kartu antarmuka (TeamSelectScene, MissionMenuScene, how.js, 	eacher.js, dsb.) menggunakan kontur *rounded rect* berenamel zamrud tua murni **tanpa garis tepi kawat (Zero Outline/Stroke)**. Pemisahan visual kartu mengandalkan kontras warna latar, bayangan bevel bawah 3D setebal 4–14px netral (
@@ -208,7 +208,7 @@ gba(0,0,0,.35) hingga .55), serta kilau tepi atas halus (inset 0 1px 0 rgba(255,
      - **Isolasi Kedalaman Layer Modal Anti-Tumpuk (Z-Index Isolation):** Seluruh jendela pop-up briefing kasus dan modal voting kelas dibungkus dalam *container* khusus berkedalaman tinggi (`setDepth(201)` dan *dimmer backdrop* `setDepth(200)`), menjamin kartu menu di latar belakang tidak lagi menembus ke depan modal saat disentuh siswa.
      - **Aktivasi 100% Aset Visual Nyata:**
        - **8 Kartu Ensiklopedia & Kamus Sawah:** Pop-up interaktif berbasis Piaget Concrete Operational (`kamus_pematang`, `kamus_wereng`, `kamus_irigasi`, `kamus_pengurai`, `kamus_pemangsa`, `kamus_hama`, `kamus_gulma`, `kamus_limbah`) dengan tampilan dua tingkat (kisi 4x2 dan tampilan detail sains lengkap serta relevansi SDN Percobaan 2).
-       - **3 Kartu Voting CSCL Fisik:** Kartu voting hijau, kuning, dan merah (`card_voting_hijau`, `card_voting_kuning`, `card_voting_merah`) dirender langsung secara konkret pada modal "Tanya Teman", menyelaraskan kartu digital dengan kartu fisik di meja siswa.
+       - **3 Kartu Voting CSCL Fisik & Modal Musyawarah Kelas:** Tiga kartu voting digital mengadopsi gaya visual taktil 3D berkontur enamel solid (*Zero Outline/Stroke*) yang dipadukan dengan chip penanda kartu fisik (`🟢 KARTU HIJAU`, `🟡 KARTU KUNING`, `🔴 KARTU MERAH`), lingkaran ikon aksi timbul (`ic(a.ic, 44)`), judul tebal Playful Kids (`Fredoka`), badge gratis emas, serta animasi melesak 6px saat disentuh. Modal dilengkapi *kicker* peran CSCL (`🤝 CSCL • KOLABORASI KELAS 5A • PENASIHAT MEJA & PETUGAS LAYAR`) dan kapsul timer hitung mundur 15 detik dinamis (`.vote-timer-pill`) yang berdenyut peringatan pada 5 detik terakhir serta beralih ke plakat penanda waktu habis saat diskusi berakhir.
        - **Embodiment Maskot Gita Dinamis:** Sprite ekspresi wajah Gita berganti secara reaktif (`gita_talk` saat bersuara, `gita_think` saat bahaya/berpikir, `gita_thumbsup` saat sawah sehat, dan `gita_cheer` saat menang di layar evaluasi).
        - **Ikon Organisme Kontekstual & HUD Bar Skin:** Tombol aksi bawah menampilkan sprite visual asli (`ular`, `padi_subur`, `katak`, `jamur`, `icon_pestisida`, `icon_kemarau`, dsb.) serta frame visual `hud_cooldown_bar`.
       - **Mascot Speech Bar:** Dialog pemandu Gita si Detektif Cilik diformat sebagai bilah panel zamrud berbingkai emas dengan avatar Gita *close-up* berbingkai lingkaran, tag identitas kapsul emas hangat, teks sapaan kontras tinggi, dan tombol audio `🔊 DENGARKAN`.
@@ -280,7 +280,19 @@ Jika semua kelompok memainkan misi yang sama berulang kali, siswa di meja akan b
 
 ---
 
+### 4.2 Sistem Animasi Natural Organisme Berbasis State Machine & Web Audio (CTML Mayer & Piaget C2)
+Untuk memperjelas pemahaman hubungan kausalitas (C2) dan menghindari kemunculan/penghilangan objek secara mendadak (*abrupt apparition/disappearance*), antarmuka simulasi 4 bioma menerapkan **Organism Lifecycle State Machine**:
+1. **Prinsip Keterpaduan Temporal & Modalitas (Mayer CTML):**
+   - **Tunas Bertumbuh (*Spawning In*):** Padi, pohon rimba, gulma air, dan terumbu karang bertumbuh perlahan dari tunas kecil ke atas (~1.5–1.7 detik, `scaleY` 0.1 $\to$ 1.0) dengan warna hijau cerah segar dan diiringi efek nada arpeggio naik (`sfx.grow()`).
+   - **Hewan Masuk Lincah:** Tikus, katak, rusa, harimau, bangau, dan ikan bergerak/melompat masuk dari balik pematang, semak, atau aliran air menuju titik habitatnya.
+2. **Kausalitas Kontekstual Konkret (Piaget Operasional Konkret - C2):**
+   - **Melayu di Tempat (*Withering Out*):** Jika populasi berkurang akibat racun pestisida, kekeringan, limbah detergen, atau pemanasan suhu (*coral bleaching*), organisme mengalami pelayuan di tempat (warna menguning/cokelat kusam, dahan rebah terkulai miring, atau karang memutih pucat) sebelum meluruh perlahan dengan efek suara nada turun (`sfx.wither()`). Memberikan konfirmasi visual konkret bahwa racun/polusi merusak tubuh organisme.
+   - **Lari/Kabur Menghindar (*Fleeing Out*):** Jika populasi berkurang karena interaksi rantai makanan alami (dimangsa predator), hewan berlari/berenang lincah menjauhi area krisis ke tepi layar/semak dengan efek suara derap lincah (`sfx.flee()`).
+
+---
+
 ## 5. SKENARIO 16 MISI PADA 4 EKOSISTEM NUSANTARA (4 BIOMA × 4 MISI)
+
 
 ```
 +------------------------------------------------------------------------------------------------------------------------------------+
@@ -467,6 +479,22 @@ Jika waktu habis, layar **tidak pernah** menampilkan tulisan *"Game Over"*. Seba
   * Seluruh naskah narasi, instruksi 4 slide panduan, dialog interaktif Gita, scaffolding ZPD, panggilan voting Penasihat Meja, bank soal teka-teki C2, dan selebrasi estafet telah diekstrak dan didokumentasikan lengkap pada berkas pendamping: [`docs/NASKAH_KONTEN_GAME_GITA.md`](file:///d:/SKRIPSI%20GITA/docs/NASKAH_KONTEN_GAME_GITA.md).
 * **Dokumentasi Generator Aset Visual AI Terstruktur:**
   * Seluruh prompt citra Google Gemini / Imagen 3 untuk karakter maskot Gita, organisme sawah, organisme multi-bioma (laut, hutan, danau), 8 kartu pop-up Kamus Kata konkret, kartu voting CSCL Penasihat Meja, dan antarmuka IFP didokumentasikan lengkap beserta negative prompt di [`docs/PROMPT_ASSET_GEMINI.md`](file:///d:/SKRIPSI%20GITA/docs/PROMPT_ASSET_GEMINI.md).
+* **Arsitektur Rendering Prosedural Flora Tropis Realistis (`treeDraw`):**
+  * Engine kanvas dilengkapi algoritma rendering flora prosedural multi-layer untuk Hutan Rimba: kanopi awan organik bertingkat 3D (*organic cloud-cluster lobes*) dengan pencahayaan gradasi pucuk muda, batang berakar banir (*buttress roots*) dengan serat guratan kulit kayu vertikal dan lumut pangkal akar, percabangan dahan alami, sulur liana tropis, animasi hembusan angin multi-frekuensi (*wind sway*), serta transisi meranggas (*wither*) saat degradasi ekosistem. Lapisan pohon juga membedakan depth of field melalui perspektif atmosferik (*aerial haze*) pada layer latar belakang.
+* **Arsitektur Rendering Prosedural Tekstur Tanah Daratan (`texSoilSawah`, `texSoilHutan`, `texSoilSungai`):**
+  * **Sawah (`texSoilSawah`):** Menggantikan coretan garis primitif dengan pematang lumpur bertingkat (*terraced mud bunds/galengan*), partikel endapan aluvial mineral, dan sistem rekahan tanah kemarau poligonal dinamis saat `S.water < 32` serta diskolorasi tanah kimiawi saat `S.poison > 20`.
+  * **Hutan Rimba (`texSoilHutan`):** Menggantikan poligon flat satu warna dengan tanah humus gelap bergradasi organik, bantalan lumut beludru tebal (*velvety moss pads*), taburan serasah dedaunan gugur & ranting lapuk, serta bercak abu/arang dan kerlip bara api saat krisis kebakaran (`S.api > 10`).
+  * **Sungai (`texSoilSungai`):** Menggantikan balok datar dengan bantalan tanah lereng bergradasi, garis lumpur basah pasang-surut (*wet mud waterline*), kelompok bebatuan kerikil bulat halus (*riverbed pebbles & granite*), dan lumut basah tepi air.
+* **Sistem Reaksi Partikel & Kausalitas Biologis Semprotan (`showSprayEffect`, `sfx.spray`, `spWereng`):**
+  * **Aerosol Mist Particle Emitter:** Animasi botol sprayer bertekanan yang menyemburkan kerucut 30 partikel aerosol berwarna kontekstual (hijau-emas mimba, biru padam api, cyan bilas air) disertai kilau embun (*dew sparkles*) dan lencana dampak melayang.
+  * **Sintesis Audio Web Audio API (`sfx.spray()`):** Simulasi desis semprotan bertekanan menggunakan filter bandpass sweeping 2.8kHz $\rightarrow$ 1.1kHz dan attenuating tone.
+  * **Visualisasi & Reaksi Kausalitas Hama Wereng (`spWereng`):** Populasi hama wereng cokelat (*Nilaparvata lugens*) tampak nyata berkerumun di rumpun padi, dan seketika berputar pusing (*tumble rotation*) lalu jatuh berguguran ke lumpur sawah saat disemprot, memperjelas kausalitas intervensi manusia terhadap dinamika hama secara konkret bagi siswa kelas 5 SD.
+
+* **Arsitektur Audio Voice-Over (VO) Vokal Mandiri (`playVO`, `stopVO`):**
+  * **Prinsip Suara Manusiawi (Mayer's Voice Principle):** Menggantikan suara sintetis TTS robotik dengan rekaman vokal manusia asli peneliti sebagai "Kakak Gita" (`assets/audio/vo/*.mp3`), mencakup 72 naskah rekaman vokal terstruktur (sistem umum, bridging krisis 16 misi, musyawarah CSCL, hingga pembacaan soal kuis C2).
+  * **Lifecycle Audio Bersih & Pop-Free:** Dilengkapi fungsi `stopVO()` pada transisi antar-layar (`go(screenId)`) dan jeda dialog untuk mencegah kebocoran suara.
+  * **Failsafe Non-Intrusif:** Jika berkas MP3 tertentu belum selesai direkam, pemutar audio menangani pemutaran secara hening (*silent fallback*) tanpa menampilkan pesan eror merah pada konsol peramban IFP.
+  * **Dokumentasi Naskah Induk:** Naskah lengkap 72 audio vokal didokumentasikan di [`docs/DOKUMEN_AUDIT_VOICE_OVER.md`](file:///d:/SKRIPSI%20GITA/docs/DOKUMEN_AUDIT_VOICE_OVER.md).
 
 ---
 

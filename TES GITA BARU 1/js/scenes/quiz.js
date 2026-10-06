@@ -15,12 +15,27 @@ function startQuiz(m,simStars,days){QUIZ={m,simStars,days,ok:false,answered:fals
  +'<div class="chain-row">'+m.chain.map(x=>'<span class="chain-pill">'+x+'</span>').join('<span class="chain-ar">→</span>')+'</div></div>'
  +'<div class="mrow" id="q-next" style="display:none"><button class="btn btn-gold" id="q-go" style="font-size:27px;padding:18px 46px">Lihat Hasil!</button></div>'
  +'</div></div>';
- go('quiz');sfx.chime();speak(m.quiz.q);
+ go('quiz');sfx.chime();
+ const qVoKey = 'vo_quiz_' + m.id.replace('-', '');
+ if(typeof playVO === 'function') {
+   playVO('vo_quiz_intro', () => {
+     playVO(qVoKey);
+   });
+ }
+ const qTextEl = el('#scr-quiz .qtext');
+ if (qTextEl) {
+   qTextEl.style.cursor = 'pointer';
+   qTextEl.title = 'Ketuk untuk mendengarkan ulang soal';
+   qTextEl.onclick = () => {
+     sfx.click();
+     if(typeof playVO === 'function') playVO(qVoKey);
+   };
+ }
  els('#q-opts .opt').forEach(o=>o.onclick=()=>{
   if(QUIZ.answered)return;QUIZ.answered=true;const i=+o.dataset.i,ok=i===m.quiz.correct;QUIZ.ok=ok;
   els('#q-opts .opt').forEach(x=>x.classList.add('off'));
-  if(ok){o.classList.add('right');sfx.success();}
-  else{o.classList.add('wrong');sfx.wrong();setTimeout(()=>{els('#q-opts .opt')[m.quiz.correct].classList.add('right');sfx.chime();},450);}
+  if(ok){o.classList.add('right');sfx.success();if(typeof playVO === 'function') playVO('vo_quiz_correct');}
+  else{o.classList.add('wrong');sfx.wrong();if(typeof playVO === 'function') playVO('vo_quiz_wrong');setTimeout(()=>{els('#q-opts .opt')[m.quiz.correct].classList.add('right');sfx.chime();},450);}
   el('#q-fh').textContent=ok?'Benar sekali, Detektif!':'Belum tepat, tapi sekarang kamu tahu!';
   el('#q-fp').textContent=m.quiz.explain;
   el('#q-feed').classList.add('show');

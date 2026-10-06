@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140">
+    <g transform="translate(10, 15)">
+      <!-- Giant Lily Pad -->
+      <ellipse cx="60" cy="78" rx="48" ry="24" fill="#15803d" stroke="#14532d" stroke-width="3"/>
+      <!-- Lily pad notch -->
+      <polygon points="60,78 95,65 105,85" fill="#0284c7"/>
+      <!-- Pink Lotus Petals -->
+      <path d="M60 40 C45 55 48 72 60 76 C72 72 75 55 60 40 Z" fill="#ec4899" stroke="#be185d" stroke-width="2"/>
+      <path d="M42 50 C32 60 38 72 50 75 C56 68 52 56 42 50 Z" fill="#f472b6" stroke="#be185d" stroke-width="2"/>
+      <path d="M78 50 C88 60 82 72 70 75 C64 68 68 56 78 50 Z" fill="#f472b6" stroke="#be185d" stroke-width="2"/>
+      <!-- Lotus Center -->
+      <circle cx="60" cy="68" r="6" fill="#fde047" stroke="#ca8a04" stroke-width="1.5"/>
+    </g>
+  </svg>

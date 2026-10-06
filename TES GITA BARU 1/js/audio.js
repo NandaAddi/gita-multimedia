@@ -1,40 +1,57 @@
 /* ============================================================
    ECO-EXPLORER — js/audio.js
-   Web Audio API Synthesizer, Sound Effects, BGM, & TTS speak()
+   Web Audio API Synthesizer, Sound Effects, & TTS speak()
+   100% Offline & Pure Synthesis (Pop-Free & Zero BGM Clash)
    ============================================================ */
 
 let AC = null, audioReady = false, soundOn = true;
 
 function ac() {
-  if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
-  if (AC.state === 'suspended') AC.resume();
+  if (!AC) {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtx) AC = new AudioCtx();
+  }
+  if (AC && AC.state === 'suspended') {
+    AC.resume().catch(() => {});
+  }
   return AC;
 }
 
-function tone(f, d, type = 'sine', vol = 0.12, dl = 0) {
+function tone(f, d, type = 'sine', vol = 0.1, dl = 0) {
   if (!soundOn || !audioReady) return;
   try {
-    const a = ac(),
-          o = a.createOscillator(),
-          g = a.createGain();
+    const a = ac();
+    if (!a) return;
+
+    const t0 = a.currentTime + Math.max(0, dl || 0);
+    const o = a.createOscillator();
+    const g = a.createGain();
+
     o.type = type;
-    o.frequency.value = f;
-    const t0 = a.currentTime + dl;
+    o.frequency.setValueAtTime(f, t0);
+
+    // Mencegah pop 1.0 default: inisialisasi gain langsung ke 0
+    g.gain.value = 0;
     g.gain.setValueAtTime(0, t0);
-    g.gain.linearRampToValueAtTime(vol, t0 + 0.02);
+    g.gain.linearRampToValueAtTime(vol, t0 + 0.008);
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + d);
+    g.gain.setValueAtTime(0, t0 + d + 0.005);
+
     o.connect(g);
     g.connect(a.destination);
+
     o.start(t0);
-    o.stop(t0 + d + 0.05);
+    o.stop(t0 + d + 0.01);
   } catch (e) {}
 }
 
 function noiseHit(d, vol, fc) {
   if (!soundOn || !audioReady) return;
   try {
-    const a = ac(),
-          n = Math.floor(a.sampleRate * d),
+    const a = ac();
+    if (!a) return;
+
+    const n = Math.floor(a.sampleRate * d),
           b = a.createBuffer(1, n, a.sampleRate),
           ch = b.getChannelData(0);
     for (let i = 0; i < n; i++) ch[i] = (Math.random() * 2 - 1) * (1 - i / n);
@@ -52,48 +69,50 @@ function noiseHit(d, vol, fc) {
   } catch (e) {}
 }
 
-let lastClickTime = 0;
+let lastSfxTime = 0;
+function allowSfx(cooldown = 280) {
+  const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+  if (now - lastSfxTime < cooldown) return false;
+  lastSfxTime = now;
+  return true;
+}
 
 const sfx = {
   click() {
-    const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-    if (now - lastClickTime < 80) return;
-    lastClickTime = now;
-    tone(640, 0.05, 'triangle', 0.08);
+    if (!allowSfx(280)) return;
+    tone(560, 0.06, 'triangle', 0.08);
   },
   back() {
-    const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-    if (now - lastClickTime < 80) return;
-    lastClickTime = now;
-    tone(480, 0.06, 'triangle', 0.08);
+    if (!allowSfx(280)) return;
+    tone(420, 0.07, 'triangle', 0.08);
   },
   pop() {
     tone(560, 0.06, 'sine', 0.1);
   },
   chime() {
-    tone(880, 0.5, 'sine', 0.1);
-    tone(1318, 0.7, 'sine', 0.05, 0.06);
+    tone(880, 0.45, 'sine', 0.1);
+    tone(1318, 0.6, 'sine', 0.05, 0.07);
   },
   success() {
-    [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.22, 'triangle', 0.09, i * 0.1));
+    [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.2, 'triangle', 0.09, i * 0.09));
   },
   wrong() {
-    tone(300, 0.2, 'sawtooth', 0.05);
-    tone(220, 0.26, 'sawtooth', 0.05, 0.13);
+    tone(300, 0.18, 'sawtooth', 0.05);
+    tone(220, 0.24, 'sawtooth', 0.05, 0.12);
   },
   star() {
-    tone(1568, 0.24, 'triangle', 0.08);
-    tone(2093, 0.3, 'triangle', 0.05, 0.09);
+    tone(1568, 0.22, 'triangle', 0.08);
+    tone(2093, 0.28, 'triangle', 0.05, 0.08);
   },
   deny() {
-    tone(180, 0.14, 'square', 0.06);
+    tone(180, 0.12, 'square', 0.06);
   },
   whoosh() {
-    tone(440, 0.1, 'sine', 0.08);
-    tone(660, 0.08, 'sine', 0.06, 0.03);
+    if (!allowSfx(200)) return;
+    tone(460, 0.09, 'sine', 0.08);
   },
   grow() {
-    [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.28, 'sine', 0.05, i * 0.08));
+    [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.25, 'sine', 0.05, i * 0.08));
   },
   flee() {
     tone(700, 0.08, 'triangle', 0.04);
@@ -101,34 +120,94 @@ const sfx = {
     tone(1000, 0.1, 'triangle', 0.03, 0.14);
   },
   wither() {
-    tone(440, 0.35, 'sawtooth', 0.03);
-    tone(370, 0.4, 'sawtooth', 0.03, 0.12);
-    tone(293, 0.45, 'sine', 0.04, 0.26);
+    tone(440, 0.3, 'sawtooth', 0.03);
+    tone(370, 0.35, 'sawtooth', 0.03, 0.1);
+    tone(293, 0.4, 'sine', 0.04, 0.22);
+  },
+  spray() {
+    if (!soundOn || !audioReady) return;
+    try {
+      const a = ac();
+      if (!a) return;
+      const d = 0.55;
+      const n = Math.floor(a.sampleRate * d);
+      const b = a.createBuffer(1, n, a.sampleRate);
+      const ch = b.getChannelData(0);
+      for (let i = 0; i < n; i++) {
+        const env = Math.min(1, i / (a.sampleRate * 0.03)) * Math.pow(1 - i / n, 1.5);
+        ch[i] = (Math.random() * 2 - 1) * env;
+      }
+      const s = a.createBufferSource();
+      s.buffer = b;
+      const f = a.createBiquadFilter();
+      f.type = 'bandpass';
+      f.frequency.setValueAtTime(2800, a.currentTime);
+      f.frequency.exponentialRampToValueAtTime(1100, a.currentTime + d);
+      f.Q.value = 1.4;
+      const g = a.createGain();
+      g.gain.setValueAtTime(0.09, a.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + d);
+      s.connect(f);
+      f.connect(g);
+      g.connect(a.destination);
+      s.start();
+      tone(1600, 0.1, 'sine', 0.025);
+      tone(1100, 0.2, 'sine', 0.018, 0.06);
+    } catch (e) {}
   }
 };
 
-let bgmTimer = null, bgmStep = 0;
-const MELODY = [523, 659, 784, 880, 784, 659, 523, 0, 587, 784, 1046, 880, 784, 659, 587, 0];
-const BASS = [131, 0, 98, 0, 131, 0, 98, 0, 110, 0, 131, 0, 110, 0, 98, 0];
+// BGM No-Op: Meniadakan interval chiptune otomatis yang menumpuk di latar belakang
+function bgmStart() {}
+function bgmStop() {}
 
-function bgmStart() {
-  if (bgmTimer) return;
-  bgmTimer = setInterval(() => {
-    if (!soundOn) {
-      bgmStep++;
-      return;
-    }
-    const m = MELODY[bgmStep % 16],
-          b = BASS[bgmStep % 16];
-    bgmStep++;
-    if (m) tone(m, 0.2, 'triangle', 0.03);
-    if (b) tone(b, 0.32, 'sine', 0.045);
-  }, 230);
+/* ================= VOICE-OVER (VO) PLAYER ENGINE =================
+   Memutar file audio MP3 rekaman vokal manusia dari assets/audio/vo/
+   Pop-Free & Non-Intrusive: jika file belum ada/belum direkam, hening tanpa error konsol.
+*/
+let currentVO = null;
+
+function stopVO() {
+  if (currentVO) {
+    try {
+      currentVO.pause();
+      currentVO.currentTime = 0;
+    } catch (e) {}
+    currentVO = null;
+  }
+}
+
+function playVO(key, onEnd) {
+  if (!soundOn || typeof window === 'undefined') return;
+  stopVO();
+  try {
+    const audio = new Audio('voice-over/' + key + '.mp3');
+    currentVO = audio;
+    audio.play().catch(() => {
+      // Fallback ke assets/audio/vo/ jika path relatif berbeda
+      const fallback = new Audio('assets/audio/vo/' + key + '.mp3');
+      currentVO = fallback;
+      fallback.play().catch(() => {
+        if (currentVO === fallback) currentVO = null;
+        if (typeof onEnd === 'function') onEnd();
+      });
+      fallback.onended = () => {
+        if (currentVO === fallback) currentVO = null;
+        if (typeof onEnd === 'function') onEnd();
+      };
+    });
+    audio.onended = () => {
+      if (currentVO === audio) currentVO = null;
+      if (typeof onEnd === 'function') onEnd();
+    };
+  } catch (e) {
+    currentVO = null;
+  }
 }
 
 function speak(txt) {
+  // Fallback opsional jika TTS diperlukan secara eksplisit
   if (!soundOn || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-
   try {
     speechSynthesis.cancel();
     const clean = String(txt)
@@ -154,8 +233,14 @@ function toggleSound() {
   syncSound();
   saveG();
   if (!soundOn) {
+    stopVO();
     try {
       speechSynthesis.cancel();
+      if (AC && AC.state === 'running') AC.suspend();
+    } catch (e) {}
+  } else {
+    try {
+      if (AC && AC.state === 'suspended') AC.resume();
     } catch (e) {}
   }
 }

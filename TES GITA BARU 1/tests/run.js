@@ -37,6 +37,10 @@ function mockEl() {
 // ---- sandbox mirip browser ----
 const sandbox = {
   console,
+  setInterval,
+  clearInterval,
+  setTimeout,
+  clearTimeout,
   document: {
     querySelector: () => null,
     querySelectorAll: () => [],
@@ -65,10 +69,12 @@ const sfxObj = grab('sfx');
 ok('sfx.grow terdefinisi', typeof sfxObj.grow === 'function');
 ok('sfx.flee terdefinisi', typeof sfxObj.flee === 'function');
 ok('sfx.wither terdefinisi', typeof sfxObj.wither === 'function');
+ok('sfx.spray terdefinisi', typeof sfxObj.spray === 'function');
 
 
 console.log('[2] renderers/characters.js');
 load('js/renderers/characters.js');
+ok('spWereng terdefinisi', typeof sandbox.spWereng === 'function');
 const c = mockCtx();
 for (let f = 0; f < 8; f++) sandbox.spFrog(c, 220 + f * 150, 880, f * 613);
 ok('spFrog 8 fase', true);
@@ -135,7 +141,7 @@ const ricesCleaned = testS._orgPool['rice'] || [];
 ok('setelah wither selesai, entitas mati dibersihkan', ricesCleaned.length === 1);
 
 
-console.log('[4] scenes/simulation.js (toggle minimize)');
+console.log('[4] scenes/simulation.js (toggle minimize & showVote CSCL modal)');
 sandbox.document.querySelector = () => mockEl();
 load('js/state.js');
 load('js/scenes/simulation.js');
@@ -148,6 +154,35 @@ sandbox.toggleUIPanel('top');
 ok('top restore', getSIM().ui.top === true);
 sandbox.toggleUIPanel('left');
 ok('left tetap jalan', getSIM().ui.left === false);
+
+let voteHtmlCaptured = '';
+sandbox.modal = (html) => {
+  voteHtmlCaptured = html;
+  return {
+    querySelector: () => mockEl(),
+    querySelectorAll: () => []
+  };
+};
+setSIM({ m: { actions: [
+  { id: 'air', label: 'Alirkan Air Irigasi', role: 'Air adalah kebutuhan hidup padi', ic: 'drop', fx: () => {} },
+  { id: 'padi', label: 'Tanam Tunas Padi', role: 'Padi: produsen sumber energi', ic: 'sprout', fx: () => {} },
+  { id: 'jamur', label: 'Urai Sisa Jerami', role: 'Jamur: pengurai jadi pupuk alami', ic: 'mushroom', fx: () => {} }
+]}, S: {} });
+sandbox.showVote();
+ok('showVote terdefinisi', typeof sandbox.showVote === 'function');
+ok('showVote render 3 kartu voting fisik (hijau, kuning, merah)', 
+  voteHtmlCaptured.includes('vote-hijau') && 
+  voteHtmlCaptured.includes('vote-kuning') && 
+  voteHtmlCaptured.includes('vote-merah') &&
+  voteHtmlCaptured.includes('KARTU HIJAU') &&
+  voteHtmlCaptured.includes('KARTU KUNING') &&
+  voteHtmlCaptured.includes('KARTU MERAH')
+);
+ok('showVote render CSCL kicker & timer pill',
+  voteHtmlCaptured.includes('vote-kicker') &&
+  voteHtmlCaptured.includes('vote-timer-pill')
+);
+if (typeof sandbox.closeModal === 'function') sandbox.closeModal();
 
 console.log('[5] scenes/mission-menu.js (openMission & startMission)');
 let modalBtnClick = null;

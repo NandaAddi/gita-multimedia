@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+    <g transform="translate(10, 10)">
+      <!-- Legs -->
+      <line x1="45" y1="90" x2="40" y2="135" stroke="#92400e" stroke-width="5" stroke-linecap="round"/>
+      <line x1="58" y1="90" x2="55" y2="135" stroke="#92400e" stroke-width="5" stroke-linecap="round"/>
+      <line x1="85" y1="88" x2="88" y2="135" stroke="#92400e" stroke-width="5" stroke-linecap="round"/>
+      <line x1="98" y1="88" x2="102" y2="135" stroke="#92400e" stroke-width="5" stroke-linecap="round"/>
+      <!-- Body -->
+      <ellipse cx="72" cy="78" rx="34" ry="22" fill="#b45309" stroke="#78350f" stroke-width="3"/>
+      <!-- White Spots on Deer -->
+      <circle cx="65" cy="70" r="3" fill="#fef3c7"/>
+      <circle cx="78" cy="72" r="3" fill="#fef3c7"/>
+      <circle cx="88" cy="76" r="3" fill="#fef3c7"/>
+      <circle cx="70" cy="82" r="3" fill="#fef3c7"/>
+      <!-- Neck & Head -->
+      <path d="M42 75 L30 45 Q36 30 50 35 L54 65 Z" fill="#b45309" stroke="#78350f" stroke-width="2.5"/>
+      <ellipse cx="32" cy="38" rx="14" ry="10" fill="#b45309" stroke="#78350f" stroke-width="2.5"/>
+      <!-- Cute Big Eye -->
+      <circle cx="28" cy="36" r="4.5" fill="#0f172a"/>
+      <circle cx="26" cy="34" r="1.5" fill="#ffffff"/>
+      <!-- Antlers -->
+      <path d="M38 28 L42 12 M40 18 L48 16" stroke="#78350f" stroke-width="3" stroke-linecap="round"/>
+      <!-- Cute Ears -->
+      <ellipse cx="46" cy="32" rx="8" ry="4" transform="rotate(30 46 32)" fill="#d97706"/>
+    </g>
+  </svg>

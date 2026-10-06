@@ -229,19 +229,19 @@ const MISSIONS = [
     story: 'Detektif, gawat! Warga memburu semua ular sawah karena takut, dan memasang kawat jerat listrik berbahaya. Sekarang tikus tidak punya musuh alami dan berpesta memakan habis bulir padi petani!',
     init: { prod: 38, herb: 65, pred: 2, trap: 58 },
     tick(S) {
-      S.prod = cl(S.prod - S.herb * 0.22);
+      S.prod = cl(S.prod + (S.herb <= 25 ? 1.8 : -S.herb * 0.15), 0, 100);
       S.herb = cl(S.herb + 1.8 - S.pred * 0.85);
       S.pred = cl(S.pred + (S.herb > 15 ? 0.35 : -0.45) - (S.trap > 15 ? S.trap * 0.025 : 0));
       S.trap = cl(S.trap + 0.6, 0, 100);
       if (S.trap < 20) S.pred = cl(S.pred + 0.8);
     },
     health(S) {
-      return Math.round(100 * (0.32 * c01(S.prod / 55) + 0.26 * c01(1 - S.trap / 65) + 0.22 * c01(S.pred / 7) + 0.2 * c01(1 - S.herb / 70)));
+      return Math.round(100 * (0.32 * c01(S.prod / 48) + 0.26 * c01(1 - S.trap / 65) + 0.22 * c01(S.pred / 6) + 0.2 * c01(1 - S.herb / 60)));
     },
     actions: [
       { id: 'sita', label: 'Sita Kawat Jerat Liar', role: 'Singkirkan jerat kawat berbahaya', ic: 'net', quota: 3, fx: S => S.trap = cl(S.trap - 35, 0, 100) },
       { id: 'ular', label: 'Lepas Ular Sawah', role: 'Ular pemangsa alami tikus', ic: 'snake', quota: 4, fx: S => { S.pred = cl(S.pred + 3); S.herb = cl(S.herb - 18, 0, 100); } },
-      { id: 'burung', label: 'Pasang Sarang Burung Hantu', role: 'Tyto alba pemburu tikus malam', ic: 'tree', quota: 3, fx: S => { S.pred = cl(S.pred + 2); S.herb = cl(S.herb - 20, 0, 100); } }
+      { id: 'burung', label: 'Pasang Sarang Burung Hantu', role: 'Tyto alba pemburu tikus malam (+8 Padi)', ic: 'tree', quota: 3, fx: S => { S.pred = cl(S.pred + 2); S.herb = cl(S.herb - 20, 0, 100); S.prod = cl(S.prod + 8); } }
     ],
     stats: [
       ['trap', 'Jerat Liar', 'net', -1, 'Jerat kawat melukai hewan pemangsa sahabat petani. Sita segera!'],
@@ -339,12 +339,12 @@ const MISSIONS = [
     init: { prod: 30, api: 64, herb: 14, pred: 3 },
     tick(S) {
       S.api = cl(S.api + 1.2, 0, 100);
-      S.prod = cl(S.prod - S.api * 0.18);
-      S.herb = cl(S.herb - (S.api > 20 ? 0.8 : 0));
-      S.pred = cl(S.pred - (S.api > 30 ? 0.3 : 0));
+      S.prod = cl(S.prod + (S.api <= 20 ? 1.2 : -S.api * 0.12), 0, 100);
+      S.herb = cl(S.herb - (S.api > 20 ? 0.8 : -0.2));
+      S.pred = cl(S.pred - (S.api > 30 ? 0.3 : -0.1));
     },
     health(S) {
-      return Math.round(100 * (0.35 * c01(S.prod / 50) + 0.35 * c01(1 - S.api / 70) + 0.15 * c01(S.herb / 20) + 0.15 * c01(S.pred / 4)));
+      return Math.round(100 * (0.35 * c01(S.prod / 40) + 0.35 * c01(1 - S.api / 70) + 0.15 * c01(S.herb / 18) + 0.15 * c01(S.pred / 3.5)));
     },
     actions: [
       { id: 'padam', label: 'Padamkan Titik Api', role: 'Semprot air padamkan bara api', ic: 'drop', quota: 4, fx: S => S.api = cl(S.api - 32, 0, 100) },
@@ -359,7 +359,7 @@ const MISSIONS = [
     ],
     targets: [
       { l: 'Titik api padam sampai 15', c: S => S.api <= 15 },
-      { l: 'Pohon rimba pulih (45)', c: S => S.prod >= 45 },
+      { l: 'Pohon rimba pulih (35)', c: S => S.prod >= 35 },
       { l: 'Kesehatan hutan 75%', c: S => S.health >= 75 }
     ],
     tips: [
@@ -446,17 +446,17 @@ const MISSIONS = [
     init: { prod: 35, herb: 26, pred: 2, trap: 65 },
     tick(S) {
       S.trap = cl(S.trap + 0.8, 0, 100);
-      S.pred = cl(S.pred - (S.trap > 20 ? 0.35 : -0.1));
-      S.herb = cl(S.herb + (S.pred < 3 ? 1.0 : -0.5));
-      S.prod = cl(S.prod - (S.herb > 22 ? 0.8 : 0));
+      S.pred = cl(S.pred - (S.trap > 20 ? 0.35 : -0.15));
+      S.herb = cl(S.herb + (S.pred < 3 ? 1.0 : -0.7));
+      S.prod = cl(S.prod + (S.herb <= 24 ? 1.4 : -0.8), 0, 100);
     },
     health(S) {
-      return Math.round(100 * (0.3 * c01(S.prod / 50) + 0.3 * c01(1 - S.trap / 70) + 0.24 * c01(S.pred / 5) + 0.16 * c01(1 - S.herb / 35)));
+      return Math.round(100 * (0.3 * c01(S.prod / 48) + 0.3 * c01(1 - S.trap / 70) + 0.24 * c01(S.pred / 4.5) + 0.16 * c01(1 - S.herb / 35)));
     },
     actions: [
       { id: 'jerat', label: 'Sita Jerat Kawat Baja', role: 'Lepaskan jerat jebakan maut', ic: 'net', quota: 3, fx: S => S.trap = cl(S.trap - 35, 0, 100) },
       { id: 'harimau', label: 'Obati & Lindungi Harimau', role: 'Perawatan medis satwa pemangsa', ic: 'paw', quota: 4, fx: S => { S.pred = cl(S.pred + 3); S.trap = cl(S.trap - 8, 0, 100); } },
-      { id: 'edukasi', label: 'Pasang Kamera Trap Patroli', role: 'Pantau jalur satwa terlindungi', ic: 'mag', quota: 3, fx: S => S.trap = cl(S.trap - 20, 0, 100) }
+      { id: 'edukasi', label: 'Pasang Kamera Trap Patroli', role: 'Pantau jalur satwa terlindungi (+6 Pohon)', ic: 'mag', quota: 3, fx: S => { S.trap = cl(S.trap - 25, 0, 100); S.prod = cl(S.prod + 6); } }
     ],
     stats: [
       ['trap', 'Jerat Pemburu', 'net', -1, 'Jerat kawat baja melukai kaki harimau dan rusa. Singkirkan!'],

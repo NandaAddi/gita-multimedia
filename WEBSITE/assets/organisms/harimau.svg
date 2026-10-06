@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 150">
+    <g transform="translate(10, 10)">
+      <!-- Sumatran Tiger Apex Predator -->
+      <!-- Tail -->
+      <path d="M125 78 Q152 75 146 48" stroke="#ea580c" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M125 78 Q152 75 146 48" stroke="#1c1917" stroke-width="7" stroke-dasharray="8 8" fill="none" stroke-linecap="round"/>
+      <!-- Legs -->
+      <line x1="48" y1="88" x2="45" y2="128" stroke="#ea580c" stroke-width="7" stroke-linecap="round"/>
+      <line x1="64" y1="88" x2="62" y2="128" stroke="#ea580c" stroke-width="7" stroke-linecap="round"/>
+      <line x1="98" y1="86" x2="100" y2="128" stroke="#ea580c" stroke-width="7" stroke-linecap="round"/>
+      <line x1="114" y1="86" x2="118" y2="128" stroke="#ea580c" stroke-width="7" stroke-linecap="round"/>
+      <!-- Body -->
+      <ellipse cx="85" cy="78" rx="42" ry="24" fill="#ea580c" stroke="#9a3412" stroke-width="3.5"/>
+      <!-- Stripes on Body -->
+      <path d="M72 60 L75 75 M85 58 L88 76 M98 60 L100 75 M78 82 L80 96 M92 82 L94 96" stroke="#1c1917" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Underbelly -->
+      <ellipse cx="85" cy="94" rx="30" ry="8" fill="#fef3c7"/>
+      <!-- Head -->
+      <circle cx="42" cy="54" r="22" fill="#ea580c" stroke="#9a3412" stroke-width="3.5"/>
+      <!-- Tiger Ears -->
+      <circle cx="26" cy="36" r="7" fill="#ea580c" stroke="#1c1917" stroke-width="2.5"/>
+      <circle cx="26" cy="36" r="3.5" fill="#fef3c7"/>
+      <circle cx="58" cy="36" r="7" fill="#ea580c" stroke="#1c1917" stroke-width="2.5"/>
+      <circle cx="58" cy="36" r="3.5" fill="#fef3c7"/>
+      <!-- Head Stripes -->
+      <path d="M42 34 L42 44 M34 40 L38 46 M50 40 L46 46" stroke="#1c1917" stroke-width="3" stroke-linecap="round"/>
+      <!-- Muzzle -->
+      <ellipse cx="42" cy="64" rx="11" ry="8" fill="#ffffff" stroke="#1c1917" stroke-width="1.5"/>
+      <polygon points="39,60 45,60 42,64" fill="#1c1917"/>
+      <path d="M37 66 Q42 70 47 66" stroke="#1c1917" stroke-width="2" fill="none"/>
+      <!-- Glowing Eyes -->
+      <circle cx="34" cy="50" r="4.5" fill="#fde047" stroke="#0f172a" stroke-width="1.5"/>
+      <circle cx="34" cy="50" r="2" fill="#0f172a"/>
+      <circle cx="50" cy="50" r="4.5" fill="#fde047" stroke="#0f172a" stroke-width="1.5"/>
+      <circle cx="50" cy="50" r="2" fill="#0f172a"/>
+    </g>
+  </svg>

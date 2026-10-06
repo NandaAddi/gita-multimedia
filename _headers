@@ -28,5 +28,12 @@
 /docs/lib/*
   Cache-Control: public, max-age=31536000, immutable
 
-/raw-assets/*
+/TES%20GITA%20BARU%201/voice-over/*
   Cache-Control: public, max-age=31536000, immutable
+
+/TES%20GITA%20BARU%201/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/TES%20GITA%20BARU%201/js/*
+  Cache-Control: public, max-age=31536000, immutable
+

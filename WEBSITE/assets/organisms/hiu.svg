@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 140">
+    <g transform="translate(10, 15)">
+      <!-- Dorsal Fin -->
+      <path d="M65 42 Q75 10 92 18 Q82 38 78 44 Z" fill="#0284c7" stroke="#0369a1" stroke-width="3"/>
+      <!-- Body -->
+      <path d="M15 62 Q35 38 75 42 Q115 46 135 62 Q110 82 65 80 Q35 78 15 62 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="3.5"/>
+      <!-- Underbelly -->
+      <path d="M18 64 Q45 80 85 78 Q118 76 130 65 Q95 72 45 68 Z" fill="#f0f9ff"/>
+      <!-- Tail -->
+      <path d="M130 60 L148 35 Q140 60 148 85 L130 64 Z" fill="#0284c7" stroke="#0369a1" stroke-width="3"/>
+      <!-- Side Fin -->
+      <path d="M48 68 Q58 92 72 88 Q65 72 58 68 Z" fill="#0284c7" stroke="#0369a1" stroke-width="2.5"/>
+      <!-- Gills -->
+      <path d="M48 55 Q46 62 48 66 M54 55 Q52 62 54 66 M60 55 Q58 62 60 66" stroke="#0369a1" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Cartoon Eye -->
+      <circle cx="30" cy="54" r="5" fill="#ffffff" stroke="#0f172a" stroke-width="1.5"/>
+      <circle cx="28" cy="54" r="3" fill="#0f172a"/>
+      <circle cx="27" cy="53" r="1.2" fill="#ffffff"/>
+      <!-- Mouth & Sharp Teeth -->
+      <path d="M22 66 Q30 72 38 66" stroke="#0f172a" stroke-width="2.5" fill="none"/>
+      <polygon points="26,67 29,71 32,67" fill="#ffffff"/>
+      <polygon points="32,67 35,71 38,67" fill="#ffffff"/>
+    </g>
+  </svg>

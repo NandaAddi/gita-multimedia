@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140">
+    <g transform="translate(10, 10)">
+      <!-- Bleached grey dead coral -->
+      <path d="M60 110 C40 110 30 90 35 70 C38 55 48 50 48 40 C48 30 38 25 40 15 C42 8 52 8 55 16 C58 26 52 35 60 42 C68 35 62 20 68 12 C72 6 82 8 82 16 C82 28 72 35 76 46 C80 55 92 60 90 75 C88 95 78 110 60 110 Z" fill="#94a3b8" stroke="#475569" stroke-width="3"/>
+      <path d="M25 105 C15 95 18 80 25 72 C32 64 42 75 48 85 Z" fill="#cbd5e1" stroke="#64748b" stroke-width="2.5"/>
+      <path d="M92 105 C102 95 98 78 92 70 C85 62 76 74 72 85 Z" fill="#64748b" stroke="#334155" stroke-width="2.5"/>
+      <!-- Cracks -->
+      <path d="M55 45 L62 55 L58 68 L66 80" stroke="#334155" stroke-width="2" fill="none"/>
+    </g>
+  </svg>

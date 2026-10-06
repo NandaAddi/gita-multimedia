@@ -55,7 +55,6 @@ function init(){
         console.warn('[Eco-Explorer] canvas ' + id + ' berukuran ' + cv.width + 'x' + cv.height + ', seharusnya 1920x1080');
       }
     });
-    console.log('[Eco-Explorer] init OK, DPR=' + (window.devicePixelRatio || 1));
   } catch(e) {}
 
   titleBubble();
@@ -86,7 +85,6 @@ function init(){
   addEventListener('pointerdown', function once(){
     audioReady = true;
     try { ac(); } catch(e) {}
-    bgmStart();
   }, {once: true});
 
   document.addEventListener('visibilitychange', () => {

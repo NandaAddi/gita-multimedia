@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140">
+    <g transform="translate(10, 20)">
+      <!-- Clownfish body -->
+      <ellipse cx="60" cy="50" rx="36" ry="24" fill="#f97316" stroke="#c2410c" stroke-width="3"/>
+      <!-- Tail fin -->
+      <path d="M92 50 L114 32 Q110 50 114 68 Z" fill="#ea580c" stroke="#c2410c" stroke-width="2.5"/>
+      <!-- White stripes -->
+      <path d="M48 28 C48 28 42 42 48 72 C53 72 55 60 55 28 Z" fill="#ffffff" stroke="#c2410c" stroke-width="1.5"/>
+      <path d="M70 30 C70 30 65 42 70 70 C74 70 76 60 76 30 Z" fill="#ffffff" stroke="#c2410c" stroke-width="1.5"/>
+      <!-- Fins -->
+      <path d="M50 27 Q65 14 75 27 Z" fill="#ea580c" stroke="#c2410c" stroke-width="2"/>
+      <path d="M52 73 Q62 82 72 73 Z" fill="#ea580c" stroke="#c2410c" stroke-width="2"/>
+      <path d="M44 55 Q56 50 52 64 Z" fill="#fdba74" stroke="#ea580c" stroke-width="2"/>
+      <!-- Big Cute Cartoon Eye -->
+      <circle cx="34" cy="44" r="8" fill="#ffffff" stroke="#0f172a" stroke-width="1.5"/>
+      <circle cx="32" cy="44" r="4.5" fill="#0f172a"/>
+      <circle cx="30" cy="42" r="2" fill="#ffffff"/>
+      <!-- Smiling mouth -->
+      <path d="M22 52 Q28 58 32 53" stroke="#0f172a" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+  </svg>

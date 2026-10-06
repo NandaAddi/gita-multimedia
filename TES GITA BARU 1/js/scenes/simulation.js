@@ -55,9 +55,10 @@ function showBridgeDialog(m, team){
       btnNext.className = 'btn btn-gold';
     }
     
-    // Audio: chime + speak
+    // Audio: chime + playVO bridging dialog vokal asli Gita
     sfx.chime();
-    speak(cur.title + '. ' + cur.text.replace(/<[^>]*>/g, ''));
+    const voKey = 'vo_bridge_' + m.id.replace('-', '') + '_s' + bridgeStep;
+    if (typeof playVO === 'function') playVO(voKey);
   }
 
   el('#bridge-btn-next').onclick = () => {
@@ -79,9 +80,11 @@ function showBridgeDialog(m, team){
 }
 
 function closeBridgeDialog(){
+  if (typeof stopVO === 'function') stopVO();
   const box = el('#sim-bridge');
   if(box) box.style.display = 'none';
-  if(SIM){
+  // BUG FIX #7: Cegah timer bocor jika SIM sudah null/done
+  if(SIM && !SIM.done){
     SIM.paused = false;
     SIM.bridging = false;
     if(SIM.timer) clearInterval(SIM.timer);
@@ -98,7 +101,7 @@ function startSim(m){
   quota:m.actions.map(a=>a.quota+(team.perk.ids.includes(a.id)?1:0)),
   cdi:m.actions.map(a=>team.perk.ids.includes(a.id)?2:3),
   cool:m.actions.map(()=>0),paused:true,mp:0,done:false,voted:0,voteAt:[6,14,22],limit:m.par+18,
-   ui:{left:true,right:true,top:true,leftDot:false},bridging:true};
+   ui:{left:false,right:false,top:true,leftDot:false},bridging:true};
  SIM.S.health=m.health(SIM.S);
  buildSimUI();go('sim');updateHUD();
  showBridgeDialog(m,team);}
@@ -112,7 +115,7 @@ function buildSimUI(){const m=SIM.m;
  +'<button class="btn tb-btn" id="sim-help">'+ic('mag',24)+' Tips</button>'
  +'<button class="btn tb-btn" id="sim-kamus">'+ic('book',24)+' Kamus</button>'
  +'<button class="btn tb-btn snd-btn"></button>'
-  +'<div class="tb-stars">'+ic('star',24)+' <b>'+totStars()+'/24</b></div>'
+  +'<div class="tb-stars">'+ic('star',24)+' <b>'+totStars()+'/48</b></div>'
   +'<button class="btn tb-btn" id="sim-top-hide" title="Sembunyikan panel atas">▲</button></div>'
  +'<div class="hpod"><div class="r1"><span>Kesehatan Ekosistem</span><span class="st" id="hp-val"></span></div>'
  +'<div class="hbar"><div id="hp-bar"></div></div></div>'
@@ -123,7 +126,11 @@ function buildSimUI(){const m=SIM.m;
  +'<div class="hud-right panel-deep"><div class="panel-title">'+ic('mag',24)+' Kondisi Ekosistem</div>'
  +'<div id="stat-rows"></div></div>'
  +'<div class="sim-dock"><div class="dock-ribbon">Pilih aksi — perhatikan kuota & masa istirahat. Klik baris kondisi untuk penjelasan!</div>'
- +'<div class="dock-grid" id="dock-grid"></div></div></div>';
+ +'<div class="dock-slider-wrap" style="position:relative;display:flex;align-items:center;gap:18px;">'
+ +'<button class="btn sim-arr left-arr" style="width:76px;height:120px;flex:none;border-radius:24px;font-size:36px;padding:0;z-index:10">◀</button>'
+ +'<div class="dock-grid" id="dock-grid" style="flex:1;overflow:hidden;padding:12px;scroll-behavior:smooth;display:flex;gap:24px;"></div>'
+ +'<button class="btn sim-arr right-arr" style="width:76px;height:120px;flex:none;border-radius:24px;font-size:36px;padding:0;z-index:10">▶</button>'
+ +'</div></div></div>';
  el('#sim-back').onclick=()=>{sfx.click();
   const r=modal('<h2>'+ic('back',34)+' Berhenti dari misi?</h2><p>Progres misi ini akan hilang dan kamu kembali ke peta misi.</p>'
    +'<div class="mrow"><button class="btn btn-ruby" id="ab-y">'+ic('back',24)+' Ya, Berhenti</button><button class="btn btn-gold" id="ab-n">'+ic('play',24)+' Lanjut Main</button></div>',true);
@@ -137,8 +144,87 @@ function buildSimUI(){const m=SIM.m;
   +'<div class="mrow"><button class="btn btn-gold" data-close>Mengerti!</button></div>');};
  el('#sim-kamus').onclick=()=>{sfx.click();kamusModal(SIM.m.biome);};
  el('#sim-ui .snd-btn').onclick=toggleSound;
- el('#dock-grid').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!SIM)return;
-  if(b.dataset.i==='fin'){sfx.click();finishSim();return;}doAction(+b.dataset.i);});
+ let dragProxy = null;
+ let activeDragIndex = -1;
+ function moveProxy(e) {
+  if(!dragProxy) return;
+  dragProxy.style.left = e.clientX + 'px';
+  dragProxy.style.top = e.clientY + 'px';
+ }
+ function onDragMove(e) { moveProxy(e); }
+ function onDragEnd(e) {
+  window.removeEventListener('pointermove', onDragMove);
+  window.removeEventListener('pointerup', onDragEnd);
+  if(dragProxy) { dragProxy.remove(); dragProxy = null; }
+  if(activeDragIndex > -1) {
+   const dockRect = document.querySelector('.sim-dock').getBoundingClientRect();
+   // BUG FIX #3: Validasi X+Y — harus di area canvas, bukan di panel UI
+   var simCv = document.querySelector('#cv-sim');
+   var validDrop = false;
+   if(simCv) {
+     var cr = simCv.getBoundingClientRect();
+     validDrop = e.clientX >= cr.left && e.clientX <= cr.right
+              && e.clientY >= cr.top && e.clientY < dockRect.top;
+   } else {
+     validDrop = e.clientY < dockRect.top;
+   }
+   if(validDrop) {
+    doAction(activeDragIndex, e.clientX, e.clientY);
+   } else {
+    sfx.click();
+    toast('Jatuhkan kartu di area pemandangan alam, bukan di panel!');
+   }
+   activeDragIndex = -1;
+  }
+ }
+ el('#dock-grid').addEventListener('pointerdown', e => {
+  // BUG FIX #2: Cegah multi-touch
+  if(activeDragIndex > -1) return;
+  const card = e.target.closest('.dock-card');
+  if(!card || !SIM) return;
+  if(card.classList.contains('finish')){
+   const b = e.target.closest('button');
+   if(b) { sfx.click(); finishSim(); }
+   return;
+  }
+  const hint = card.querySelector('.dc-btn');
+  const allCards = Array.from(document.querySelectorAll('.dock-grid .dock-card:not(.finish)'));
+  let i = allCards.indexOf(card);
+  if(i === -1) return;
+  toast('<b>'+SIM.m.actions[i].label+'</b>: '+SIM.m.actions[i].role, 3500);
+  
+  if(SIM.done) { toast('Misi sudah selesai! Tekan tombol emas.'); return; }
+  if(SIM.cool[i] > 0) { sfx.deny(); toast('Aksi masih istirahat.'); return; }
+  if(SIM.quota[i] <= 0) { sfx.deny(); toast('Kuota sudah habis.'); return; }
+  
+  activeDragIndex = i;
+  dragProxy = document.createElement('div');
+  dragProxy.className = 'drag-proxy dock-card'; // Reuse dock-card styles if any
+  dragProxy.style.cssText = card.style.cssText; // Copy the square styles
+  dragProxy.innerHTML = card.innerHTML;
+  dragProxy.style.position = 'fixed';
+  dragProxy.style.pointerEvents = 'none';
+  dragProxy.style.zIndex = '99999';
+  dragProxy.style.transform = 'translate(-50%, -50%)';
+  dragProxy.style.opacity = '0.9';
+  dragProxy.style.boxShadow = '0 12px 30px rgba(0,0,0,0.5)';
+  
+  document.body.appendChild(dragProxy);
+  moveProxy(e);
+  
+  window.addEventListener('pointermove', onDragMove);
+  window.addEventListener('pointerup', onDragEnd);
+ });
+ // BUG FIX #1: Failsafe — bersihkan proxy jika pointer hilang (keluar jendela)
+ window.addEventListener('pointercancel', onDragEnd);
+ window.addEventListener('blur', function(){
+   if(dragProxy) onDragEnd(new PointerEvent('pointerup', {clientX:0, clientY:9999}));
+ });
+ document.addEventListener('visibilitychange', function(){
+   if(document.hidden && dragProxy){
+     onDragEnd(new PointerEvent('pointerup', {clientX:0, clientY:9999}));
+   }
+ });
  el('#stat-rows').addEventListener('click',e=>{const r=e.target.closest('.srow');if(!r||!SIM)return;
   const s=SIM.m.stats.find(x=>x[0]===r.dataset.k);if(s){sfx.pop();toast('<b>'+s[1]+'</b> — '+s[4],3600);}});
  syncSound();buildHUD();updateHUD();}
@@ -177,19 +263,20 @@ function buildHUD(){if(!SIM)return;const m=SIM.m;
   const d=document.createElement('div');d.className='q-strip';
   d.innerHTML='<div class="b">'+(i+1)+'</div><span>'+t.l+'</span>';
   tl.appendChild(d);H.tgtRow.push(d);H.tgtB.push(d.querySelector('.b'));});
- const dg=el('#dock-grid');dg.innerHTML='';H.dockCard=[];H.dockBtn=[];H.dockQ=[];H.dockCd=[];
+ const dg=el('#dock-grid');dg.innerHTML='';dg.style.justifyContent='center';dg.style.alignItems='center';H.dockCard=[];H.dockBtn=[];H.dockQ=[];H.dockCd=[];
    m.actions.forEach((a,i)=>{const per=SIM.team.perk.ids.includes(a.id);
    const d=document.createElement('div');d.className='dock-card';
-   d.innerHTML='<div class="dc-top">'+ic(a.ic,36)+'<div style="flex:1;min-width:0"><div class="dc-tt">'+a.label+'</div>'
-    +(per?'<span class="boost-badge" style="display:inline-block;margin-top:4px">Keahlian Tim</span>':'')+'</div></div>'
-    +'<div class="dc-role">'+a.role+'</div>'
-    +'<button class="btn dc-btn" data-i="'+i+'">Lakukan!</button>'
-    +'<div class="dc-quota">'+ic('target',24)+' Sisa: <span class="q-n"></span></div>'
-    +'<div class="mini-cd"><i></i></div>';
+   d.style.cssText = 'width:260px;min-width:260px;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;gap:8px;padding:18px;border-radius:24px;flex:none;cursor:grab;scroll-snap-align:center';
+   d.innerHTML=(per?'<div class="perk-badge" style="position:absolute;top:-8px;right:-8px;background:var(--gold-btn);font-size:24px;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.5)">⭐</div>':'')
+    +ic(a.ic,48)
+    +'<div class="dc-tt" style="font-size:24px;line-height:1.15;margin-bottom:2px;font-weight:700">'+a.label+'</div>'
+    +'<div class="dc-quota" style="justify-content:center;font-size:24px;gap:6px;margin-top:2px">'+ic('target',24)+'<span class="q-n"></span></div>'
+    +'<div class="mini-cd" style="width:100%"><i></i></div>'
+    +'<div class="dc-btn" style="height:auto;font-size:24px;font-family:var(--font-fun);white-space:nowrap;margin-top:4px;min-height:28px"></div>';
   dg.appendChild(d);
-  H.dockCard.push(d);H.dockBtn.push(d.querySelector('button'));
+  H.dockCard.push(d);H.dockBtn.push(d.querySelector('.dc-btn'));
   H.dockQ.push(d.querySelector('.q-n'));H.dockCd.push(d.querySelector('.mini-cd i'));});
- const fin=document.createElement('div');fin.className='dock-card finish';fin.style.display='none';
+ const fin=document.createElement('div');fin.className='dock-card finish';fin.style.display='none';fin.style.flex='none';fin.style.width='400px';
  fin.innerHTML='<div class="dc-top">'+ic('medal',32)
   +'<div><div class="dc-tt">Semua target tercapai!</div><div class="dc-role">Selesaikan misi & ikuti kuis</div></div></div>'
   +'<button class="btn btn-gold dc-btn" data-i="fin">Selesaikan Misi!</button>';
@@ -204,6 +291,10 @@ function buildHUD(){if(!SIM)return;const m=SIM.m;
  const hl=ui.querySelector('.hud-left'),hr=ui.querySelector('.hud-right');
  if(hl&&!hl.querySelector('.panel-x')){const x=document.createElement('button');x.className='panel-x';x.textContent='×';x.onclick=()=>toggleUIPanel('left');hl.appendChild(x);}
  if(hr&&!hr.querySelector('.panel-x')){const x=document.createElement('button');x.className='panel-x';x.textContent='×';x.onclick=()=>toggleUIPanel('right');hr.appendChild(x);}
+  const lArr = ui.querySelector('.left-arr');
+  const rArr = ui.querySelector('.right-arr');
+  if(lArr) lArr.onclick = () => { sfx.click(); el('#dock-grid').scrollBy({left: -284, behavior: 'smooth'}); };
+  if(rArr) rArr.onclick = () => { sfx.click(); el('#dock-grid').scrollBy({left: 284, behavior: 'smooth'}); };
  syncUITabs();}
 function syncUITabs(){if(!SIM||!SIM.ui)return;
  const L=document.querySelector('#sim-ui .hud-left'),R=document.querySelector('#sim-ui .hud-right');
@@ -238,40 +329,220 @@ function updateHUD(){if(!SIM)return;const m=SIM.m,S=SIM.S;
  simExpr(SIM.done?'cheer':h<45?'worried':'happy');
  m.actions.forEach((a,i)=>{const cd=SIM.cool[i],q=SIM.quota[i];
   H.dockCard[i].classList.toggle('cooling',cd>0);
-  const btn=H.dockBtn[i],dis=q<=0||cd>0;
-  if(btn.disabled!==dis)btn.disabled=dis;
-  const lbl=q<=0?'Kuota Habis':cd>0?'Istirahat ('+cd+' hari)':'Lakukan!';
-  if(btn.textContent!==lbl)btn.textContent=lbl;
+   const hint=H.dockBtn[i];
+   if(hint){
+    const lbl = q<=0?'❌ Kuota Habis':cd>0?'⏳ Istirahat ('+cd+' hari)':'';
+    if(hint.textContent!==lbl) hint.textContent=lbl;
+    hint.style.color = '#f87171';
+   }
   H.dockQ[i].textContent=q;
   H.dockCd[i].style.width=(cd>0?Math.round((1-cd/SIM.cdi[i])*100):100)+'%';});
  H.finishCard.style.display=SIM.done?'':'none';}
 function simUpdate(){if(!SIM)return;const m=SIM.m,S=SIM.S;
  S.health=m.health(S);
  m.targets.forEach((t,i)=>{const ok=t.c(S);
-  if(ok&&!SIM.tgt[i]){sfx.chime();toast('Target tercapai: '+t.l);speak('Target tercapai!');
+  if(ok&&!SIM.tgt[i]){sfx.chime();toast('Target tercapai: '+t.l);if(typeof playVO === 'function') playVO('vo_sim_target_ok');
    if(SIM.ui&&!SIM.ui.left)SIM.ui.leftDot=true;}
   SIM.tgt[i]=ok;});
  syncUITabs();
  if(S.health<=6){simFail(false);return;}
  if(S.day>SIM.limit){simFail(true);return;}
  if(!SIM.done&&SIM.tgt.every(Boolean)){SIM.done=true;sfx.success();
-  toast('Semua target tercapai! Tekan tombol emas untuk menyelesaikan misi.');simExpr('cheer');}
+  toast('Semua target tercapai! Tekan tombol emas untuk menyelesaikan misi.');simExpr('cheer');if(typeof playVO === 'function') playVO('vo_sim_all_targets');}
  if(!SIM.done&&SIM.voted<SIM.voteAt.length&&S.day>=SIM.voteAt[SIM.voted]){SIM.voted++;showVote();}
  updateHUD();}
-function doAction(i){const m=SIM.m,a=m.actions[i],S=SIM.S;
+function showDropEffect(x, y, iconName) {
+  const fx = document.createElement('div');
+  fx.innerHTML = ic(iconName, 64);
+  fx.style.position = 'fixed';
+  fx.style.left = x + 'px';
+  fx.style.top = y + 'px';
+  fx.style.transform = 'translate(-50%, -50%)';
+  fx.style.pointerEvents = 'none';
+  fx.style.zIndex = '9999';
+  fx.style.transition = 'all 1s ease-out';
+  document.body.appendChild(fx);
+  requestAnimationFrame(() => {
+    fx.style.transform = 'translate(-50%, -150px) scale(1.5)';
+    fx.style.opacity = '0';
+  });
+  setTimeout(() => fx.remove(), 1000);
+}
+
+/* ================= EFEK REAKSI SEMPROTAN PESTISIDA / AIR =================
+   - Botol Sprayer dengan animasi pompa bertekanan
+   - Kerucut kabut aerosol partikel menyebar ke petak tanah/tanaman
+   - Kilau embun & respon gugur hama wereng
+   - Lencana dampak melayang & ekspresi Gita ceria
+*/
+function showSprayEffect(x, y, actionId, label) {
+  const container = document.createElement('div');
+  container.className = 'spray-fx-container';
+  container.style.cssText = 'position:fixed;left:' + x + 'px;top:' + y + 'px;transform:translate(-50%,-50%);pointer-events:none;z-index:10000';
+
+  const isMimba = actionId === 'mimba';
+  const isFire = actionId === 'padam';
+  const mistColors = isMimba
+    ? ['#a7f3d0', '#6ee7b7', '#34d399', '#fef08a', '#bbf7d0']
+    : isFire
+    ? ['#bae6fd', '#7dd3fc', '#38bdf8', '#ffffff', '#e0f2fe']
+    : ['#93c5fd', '#60a5fa', '#3b82f6', '#dbeafe', '#ffffff'];
+
+  const badgeIcon = isMimba ? '🍃' : isFire ? '💧' : '🌊';
+  const badgeText = isMimba
+    ? 'Semprot Pestisida Mimba! (Wereng -26)'
+    : isFire
+    ? 'Semprotan Air Padamkan Bara Api!'
+    : 'Bilas Saluran Air Sawah!';
+
+  // 1. Botol Sprayer Animasi Pompa
+  const sprayer = document.createElement('div');
+  sprayer.style.cssText = 'position:absolute;left:0;top:0;transform-origin:30% 70%;transform:scale(0.6) rotate(-15deg);transition:transform 0.28s cubic-bezier(0.175,0.885,0.32,1.275);filter:drop-shadow(0 8px 18px rgba(0,0,0,0.55))';
+  sprayer.innerHTML = '<div style="background:linear-gradient(135deg,#064e3b,#022c22);border:3px solid #fde047;border-radius:22px;padding:12px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 2px 6px rgba(255,255,255,0.4)">'
+    + ic(isFire ? 'drop' : 'bottle', 62)
+    + '</div>';
+  container.appendChild(sprayer);
+
+  requestAnimationFrame(() => {
+    sprayer.style.transform = 'scale(0.88) rotate(-32deg) translate(-12px,-10px)';
+  });
+
+  // 2. Kerucut Partikel Kabut Aerosol Menembak Keluar
+  const numParticles = 30;
+  for (let i = 0; i < numParticles; i++) {
+    const p = document.createElement('div');
+    const col = mistColors[i % mistColors.length];
+    const size = 6 + Math.random() * 14;
+    p.style.cssText = 'position:absolute;left:20px;top:-10px;width:' + size + 'px;height:' + size + 'px;background:radial-gradient(circle,' + col + ' 40%,rgba(255,255,255,0) 80%);border-radius:50%;opacity:0.95;transform:translate(0,0) scale(0.5);transition:all ' + (0.55 + Math.random() * 0.45) + 's cubic-bezier(0.1,0.7,0.1,1)';
+    container.appendChild(p);
+
+    const angle = (Math.random() - 0.5) * 0.95 + (Math.PI * 0.15);
+    const dist = 90 + Math.random() * 250;
+    const targetX = Math.cos(angle) * dist + (Math.random() - 0.5) * 40;
+    const targetY = Math.sin(angle) * dist + 35 + Math.random() * 65;
+
+    requestAnimationFrame(() => {
+      p.style.transform = 'translate(' + targetX + 'px,' + targetY + 'px) scale(' + (1.6 + Math.random() * 1.3) + ')';
+      p.style.opacity = '0';
+    });
+  }
+
+  // 3. Kilau Embun (Dew Sparkles)
+  for (let s = 0; s < 7; s++) {
+    const spk = document.createElement('div');
+    spk.textContent = '✨';
+    spk.style.cssText = 'position:absolute;left:' + (60 + (Math.random() - 0.5) * 220) + 'px;top:' + (50 + Math.random() * 150) + 'px;font-size:' + (18 + Math.random() * 14) + 'px;opacity:0;transform:scale(0.3);transition:all 0.5s ease-out;text-shadow:0 0 10px #fef08a';
+    container.appendChild(spk);
+    setTimeout(() => {
+      spk.style.opacity = '1';
+      spk.style.transform = 'scale(1.3) rotate(20deg)';
+      setTimeout(() => {
+        spk.style.opacity = '0';
+        spk.style.transform = 'scale(0.5) translateY(20px)';
+      }, 350);
+    }, 180 + s * 50);
+  }
+
+  // 4. Lencana Dampak Melayang (Floating Impact Badge)
+  const badge = document.createElement('div');
+  badge.style.cssText = 'position:absolute;left:0;top:-65px;transform:translate(-50%,0) scale(0.7);background:linear-gradient(135deg,rgba(6,78,59,0.95),rgba(2,44,34,0.95));border:2px solid #fde047;border-radius:20px;padding:8px 18px;color:#fff;font-family:var(--font-fun);font-size:24px;font-weight:700;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,0.6),0 0 15px rgba(253,224,71,0.4);opacity:0;transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);display:flex;align-items:center;gap:8px';
+  badge.innerHTML = '<span style="font-size:24px">' + badgeIcon + '</span> <span>' + badgeText + '</span>';
+  container.appendChild(badge);
+
+  requestAnimationFrame(() => {
+    badge.style.opacity = '1';
+    badge.style.transform = 'translate(-50%,-40px) scale(1)';
+  });
+
+  document.body.appendChild(container);
+
+  setTimeout(() => {
+    container.style.transition = 'opacity 0.4s ease-out';
+    container.style.opacity = '0';
+    setTimeout(() => container.remove(), 400);
+  }, 1100);
+
+  simExpr('cheer');
+}
+
+function doAction(i, dropX, dropY){const m=SIM.m,a=m.actions[i],S=SIM.S;
  if(SIM.done){toast('Misi sudah selesai! Tekan tombol emas.');return;}
  if(SIM.cool[i]>0){sfx.deny();toast('"'+a.label+'" masih istirahat ('+SIM.cool[i]+' hari lagi).');return;}
  if(SIM.quota[i]<=0){sfx.deny();toast('Kuota "'+a.label+'" sudah habis.');return;}
- SIM.quota[i]--;SIM.cool[i]=SIM.cdi[i];a.fx(S);sfx.pop();simUpdate();}
+ SIM.quota[i]--;SIM.cool[i]=SIM.cdi[i];a.fx(S);
+ const isSpray = a.id === 'mimba' || a.id === 'padam' || a.id === 'bilas' || a.ic === 'bottle';
+ if(isSpray){
+   if(sfx.spray) sfx.spray();
+   else sfx.pop();
+   showSprayEffect(dropX || window.innerWidth / 2, dropY || window.innerHeight * 0.45, a.id, a.label);
+ } else {
+   sfx.pop();
+   if(dropX && dropY) showDropEffect(dropX, dropY, a.ic);
+ }
+ simUpdate();}
 function showVote(){const m=SIM.m;
- const r=modal('<h2>Musyawarah Kelas!</h2>'
-  +'<p>Hari musyawarah telah tiba! Berdiskusilah dengan teman-teman: aksi <b>gratis</b> mana yang akan kita lakukan bersama untuk ekosistem ini?</p>'
+ let voteTime=15, voteTimer;
+ // BUG FIX #4: Simpan referensi closeModal asli agar timer bisa di-clear saat modal ditutup via dim
+ var _origCloseModal = closeModal;
+ closeModal = function(){
+   clearInterval(voteTimer);
+   _origCloseModal();
+   closeModal = _origCloseModal;
+ };
+ const chips = ['🟢 KARTU HIJAU', '🟡 KARTU KUNING', '🔴 KARTU MERAH'];
+ const r=modal(
+   '<div style="text-align:center">'
+  +'<div class="vote-kicker">🤝 CSCL &bull; KOLABORASI KELAS 5A &bull; PENASIHAT MEJA &amp; PETUGAS LAYAR</div>'
+  +'<h2 class="vote-header">Musyawarah Kelas! <span id="vote-timer" class="vote-timer-pill">⏱️ 15s</span></h2>'
+  +'</div>'
+  +'<div class="vote-desc-box">'
+  +'<p>Hari musyawarah telah tiba! Berdiskusilah dengan <b>Penasihat Meja</b> selama 15 detik: angkat kartu voting fisik (<b>🟢 Hijau</b>, <b>🟡 Kuning</b>, atau <b>🔴 Merah</b>) untuk menentukan aksi <b>gratis</b> yang akan kita lakukan bersama!</p>'
+  +'</div>'
   +'<div class="vote-bar">'+m.actions.map((a,i)=>'<div class="vote-card vote-'+['hijau','kuning','merah'][i]+'" data-v="'+i+'">'
-   +'<h3>'+a.label+'</h3><p>'+a.role+'</p><p style="font-family:Fredoka">GRATIS — tanpa kuota!</p></div>').join('')+'</div>');
- r.querySelectorAll('.vote-card').forEach(cd=>cd.onclick=()=>{const a=m.actions[+cd.dataset.v];
-  sfx.success();a.fx(SIM.S);toast('Hasil musyawarah: '+a.label+' (gratis)!');speak('Hasil musyawarah: '+a.label);
+   +'<div class="vote-chip">'+chips[i]+'</div>'
+   +'<div class="vote-ic-circle">'+ic(a.ic, 44)+'</div>'
+   +'<h3 class="vote-card-title">'+a.label+'</h3>'
+   +'<p class="vote-card-role">'+a.role+'</p>'
+   +'<div class="vote-free-tag">⭐ GRATIS &bull; Tanpa Kuota!</div>'
+   +'<div class="vote-tap-cue">Ketuk untuk Memilih ❯❯</div>'
+   +'</div>').join('')+'</div>');
+ if(typeof playVO === 'function') playVO('vo_sim_vote_call');
+ const vt = r.querySelector('#vote-timer');
+ voteTimer = setInterval(()=>{
+  voteTime--;
+  if(vt) {
+    if(voteTime > 5) {
+      vt.innerHTML = '⏱️ ' + voteTime + 's';
+    } else if(voteTime > 0) {
+      vt.className = 'vote-timer-pill warning';
+      vt.innerHTML = '⚠️ ' + voteTime + 's';
+      sfx.pop();
+    }
+  }
+  if(voteTime <= 0){
+   clearInterval(voteTimer);
+   sfx.wrong();
+   if(vt) {
+     vt.className = 'vote-timer-pill timeout';
+     vt.innerHTML = '⏰ Waktu Habis — Silakan Pilih!';
+   }
+   toast('Waktu musyawarah habis! Silakan eksekusi keputusan kelas.');
+  }
+ }, 1000);
+ r.querySelectorAll('.vote-card').forEach(cd=>cd.onclick=()=>{
+  clearInterval(voteTimer);
+  const a=m.actions[+cd.dataset.v];
+  sfx.success();
+  const isSpray = a.id === 'mimba' || a.id === 'padam' || a.id === 'bilas' || a.ic === 'bottle';
+  if (isSpray) {
+    setTimeout(() => {
+      if (sfx.spray) sfx.spray();
+      showSprayEffect(window.innerWidth / 2, window.innerHeight * 0.45, a.id, a.label);
+    }, 250);
+  }
+  a.fx(SIM.S);toast('Hasil musyawarah: '+a.label+' (gratis)!');if(typeof playVO === 'function') playVO('vo_sim_vote_done');
   closeModal();simUpdate();});}
-function simFail(timeout){if(!SIM)return;clearInterval(SIM.timer);SIM.timer=null;SIM.done=true;sfx.wrong();
+function simFail(timeout){if(!SIM)return;clearInterval(SIM.timer);SIM.timer=null;SIM.done=true;sfx.wrong();if(typeof playVO === 'function') playVO(timeout ? 'vo_sim_fail_time' : 'vo_sim_fail_health');
  const m=SIM.m;
    const r=modal('<h2 style="color:#fca5a5">'+ic('clock',34)+' '+(timeout?'Waktu Telah Habis!':'Ekosistem Rusak Berat!')+'</h2>'
   +'<p>'+(timeout?'Hari telah habis, tetapi target misi belum tercapai. Jangan menyerah — ekosistem ini masih membutuhkanmu!'

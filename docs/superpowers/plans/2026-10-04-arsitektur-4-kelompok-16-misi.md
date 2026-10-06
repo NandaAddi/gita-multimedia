@@ -158,18 +158,18 @@
 - Modify: `docs/ROADMAP.md`
 - Run: `python tools/exporters/build_docs_web.py`
 
-- [ ] **Step 1: Sinkronkan `docs/PRD_GAME_SKRIPSI.md`**
+- [x] **Step 1: Sinkronkan `docs/PRD_GAME_SKRIPSI.md`**
   - Perbarui Ringkasan Produk: 4 Kelompok Detektif Ekosistem, 16 Misi Total.
   - Perbarui Sub-bab 4.1: Orkestrasi Kelas 25 Siswa terbagi dalam 4 Kelompok Ahli (Jigsaw Model).
   - Perbarui Bab 5: Dokumentasi lengkap matriks 16 Skenario Misi.
 
-- [ ] **Step 2: Sinkronkan `docs/LKPD_DETEKTIF_SAWAH.md`**
+- [x] **Step 2: Sinkronkan `docs/LKPD_DETEKTIF_SAWAH.md`**
   - Perluas LKPD menjadi Lembar Kerja 4 Kelompok Detektif (Sawah, Hutan, Sungai, Laut), memuat panduan pengamatan untuk 4 misi per kelompok.
 
-- [ ] **Step 3: Sinkronkan `docs/SKRIPSI.md` & `docs/ROADMAP.md`**
+- [x] **Step 3: Sinkronkan `docs/SKRIPSI.md` & `docs/ROADMAP.md`**
   - Catat penyesuaian sintaks pembelajaran Jigsaw 4 Kelompok pada naskah skripsi dan milestone roadmap.
 
-- [ ] **Step 4: Rebuild Web Docs Bundle**
+- [x] **Step 4: Rebuild Web Docs Bundle**
   - Jalankan `python tools/exporters/build_docs_web.py` dan pastikan `docs/docs-data.js` ter-update tanpa error.
 
 ---

@@ -27,5 +27,11 @@ scratch/
 node_modules/
 dist/
 
-# Large media source files (optional ignore if tracked elsewhere)
-# raw-assets/**/*.psd
+# Large media & project source files
+*.aep
+*.aepx
+*.prproj
+*.psd
+raw-assets/
+tmp/
+

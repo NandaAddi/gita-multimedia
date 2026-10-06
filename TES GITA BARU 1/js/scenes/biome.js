@@ -89,7 +89,8 @@ function buildBiome() {
   `;
 
   // Topbar Handlers
-  el('#b-back').onclick = () => {
+  el('#b-back').onclick = (e) => {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
     sfx.back();
     buildTeam();
     go('team');

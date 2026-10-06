@@ -155,6 +155,14 @@ Character expression sheet of a cute chibi Indonesian girl named Gita wearing a 
 16-bit pixel art sprite of a bundle of dry agricultural rice straw and decomposed organic foliage pile, earthy golden-tan and olive hues, agricultural compost pile ready to be recycled by mushrooms, retro RPG environment prop, clean pixel edges, isolated on solid pure white background, square 1:1 aspect ratio.
 ```
 
+### 2.9 Pohon Meranti Raksasa / Pohon Rimba Tropis (`pohon_rimba.png`)
+* **Lokasi Simpan:** `assets/organisms/pohon_rimba.png`
+* **Peran:** Produsen Utama & Habitat Satwa Hutan Hujan Tropis (Dipterocarpaceae)
+* **Prompt:**
+```text
+High quality 2D game asset illustration of a majestic ancient Meranti rainforest canopy tree (Shorea Dipterocarpaceae) from Indonesian tropical rainforest, sturdy tall textured wooden bark trunk with prominent flared buttress roots (akar banir) at the ground, moss patches at root base, organic sprawling thick branches visible between lush layered cloud-shaped emerald canopy lobes, subtle hanging tropical lianas and vines, sunlit golden-green leaf highlights on upper crown, deep emerald green shade underneath, crisp transparent background PNG asset, isolated on pure white background, centered, full tree view from roots to emergent crown, square 1:1 aspect ratio.
+```
+
 ---
 
 ## 3. LATAR BELAKANG SAWAH PANORAMA 16:9 (`background_sawah.png`)

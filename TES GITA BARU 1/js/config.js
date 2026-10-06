@@ -20,6 +20,30 @@ function mixc(a, b, t) {
   return 'rgb(' + r + ',' + g + ',' + bl + ')';
 }
 
+/* ================= COLOR SYSTEM (cermin :root CSS — nilai hex sama) ================= */
+const PAL = {
+  gold:'#fef08a', goldHi:'#fde047', goldBtn:'#f5a30b', goldDeep:'#b45309', goldInk:'#3a2c07',
+  panel:'#022c22', panelDeep:'#011a14', forest:'#064e3b', leaf:'#10b981', mint:'#a7f3d0', cream:'#eafff3',
+  sky:'#7fd4e8', skyHi:'#38bdf8', skyPale:'#e0f2fe',
+  good:'#2ec98b', warn:'#f5c445', danger:'#ff5c4d', dangerDeep:'#b03a3a'
+};
+
+/* ================= CANVAS HELPERS (satu sumber utk renderers) ================= */
+function CIRC(c,x,y,r,col){c.beginPath();c.arc(x,y,r,0,7);c.fillStyle=col;c.fill();}
+function O(c,x,y,rx,ry,col){c.beginPath();c.ellipse(x,y,rx,ry,0,0,7);c.fillStyle=col;c.fill();}
+function F(c,pts,col){c.beginPath();c.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)c.lineTo(pts[i][0],pts[i][1]);c.closePath();c.fillStyle=col;c.fill();}
+function LG(c,x0,y0,x1,y1,s0,s1){return gradMemo(c,'L'+gq(x0)+','+gq(y0)+','+gq(x1)+','+gq(y1)+'|'+s0+'|'+s1,
+ ()=>{const g=c.createLinearGradient(x0,y0,x1,y1);g.addColorStop(0,s0);g.addColorStop(1,s1);return g;});}
+function RG(c,x,y,r,s0,s1){return gradMemo(c,'R'+gq(x)+','+gq(y)+','+gq(r)+'|'+s0+'|'+s1,
+ ()=>{const g=c.createRadialGradient(x,y,1,x,y,r);g.addColorStop(0,s0);g.addColorStop(1,s1);return g;});}
+const GRADCACHE=new Map();
+function gq(v){return Math.round(v*2)/2;}
+function gradMemo(c,key,mk){let g=GRADCACHE.get(key);if(!g){if(GRADCACHE.size>240)GRADCACHE.clear();g=mk();GRADCACHE.set(key,g);}return g;}
+function OG(c,x,y,rx,ry,fill){c.beginPath();c.ellipse(x,y,rx,ry,0,0,7);c.fillStyle=fill;c.fill();}
+function CG(c,x,y,r,fill){c.beginPath();c.arc(x,y,r,0,7);c.fillStyle=fill;c.fill();}
+function SH(c,x,y,rx){c.beginPath();c.ellipse(x,y,rx,Math.max(2,rx*.26),0,0,7);c.fillStyle='rgba(15,35,25,.28)';c.fill();}
+function EB(c,x,y,r,dx,dy){dx=dx||0;dy=dy||0;CIRC(c,x,y,r,'#fff');CIRC(c,x+dx,y+dy,r*.55,'#241c16');CIRC(c,x+dx+r*.22,y+dy-r*.22,r*.2,'#fff');}
+
 /* ================= IKON SVG ================= */
 const ICONS = {
   drop: '<path d="M12 3C12 3 5 11 5 15a7 7 0 0 0 14 0C19 11 12 3 12 3Z"/>',
@@ -59,5 +83,5 @@ const ic = (n, s = 26) =>
   (ICONS[n] || '') +
   '</svg>';
 
-let CUR = 'title';
+let CUR = null;
 const CTX = {};

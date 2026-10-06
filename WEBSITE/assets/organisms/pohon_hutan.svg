@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 160">
+    <g transform="translate(10, 10)">
+      <!-- Tree Trunk with buttress roots -->
+      <path d="M55 90 L50 140 Q40 145 30 148 L100 148 Q90 145 80 140 L75 90 Z" fill="#78350f" stroke="#451a03" stroke-width="3.5"/>
+      <!-- Giant Tiered Canopy -->
+      <ellipse cx="65" cy="88" rx="46" ry="24" fill="#15803d" stroke="#14532d" stroke-width="3"/>
+      <ellipse cx="65" cy="62" rx="40" ry="22" fill="#16a34a" stroke="#14532d" stroke-width="3"/>
+      <ellipse cx="65" cy="38" rx="32" ry="20" fill="#22c55e" stroke="#15803d" stroke-width="3"/>
+      <!-- Vine / Liana -->
+      <path d="M45 40 Q35 75 55 95 Q65 115 55 140" stroke="#84cc16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <!-- Tropical Red Berries -->
+      <circle cx="50" cy="55" r="4.5" fill="#ef4444"/>
+      <circle cx="78" cy="48" r="4.5" fill="#ef4444"/>
+      <circle cx="85" cy="75" r="4.5" fill="#ef4444"/>
+      <circle cx="42" cy="80" r="4.5" fill="#ef4444"/>
+    </g>
+  </svg>

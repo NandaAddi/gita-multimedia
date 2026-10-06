@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="46" fill="#450a0a" stroke="#ef4444" stroke-width="3"/>
+    <rect x="36" y="32" width="28" height="42" rx="4" fill="#dc2626" stroke="#991b1b" stroke-width="2"/>
+    <text x="50" y="58" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14" fill="#fef08a">TNT</text>
+    <path d="M50 32 Q54 18 64 22" stroke="#f59e0b" stroke-width="3" fill="none"/>
+    <text x="66" y="24" font-size="16">💥</text>
+  </svg>

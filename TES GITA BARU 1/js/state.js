@@ -47,11 +47,28 @@ function unlocked(i) {
   return (G.stars[MISSIONS[i - 1].id] || 0) > 0;
 }
 
+let lastNavTime = 0;
 function go(id) {
+  const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+  const currentSc = el('#scr-' + id);
+  if (CUR === id && currentSc && currentSc.classList.contains('active') && now - lastNavTime < 250) return;
+  lastNavTime = now;
+  if (typeof stopVO === 'function') stopVO();
   els('.screen').forEach(s => s.classList.remove('active'));
-  const sc = el('#scr-' + id);
+  const sc = currentSc || el('#scr-' + id);
   if (sc) sc.classList.add('active');
   CUR = id;
+  // Gita image-sequence lifecycle (pilot title): hemat CPU saat pindah screen,
+  // replay otomatis saat kembali ke title.
+  try{
+    if(typeof GitaSeq !== 'undefined'){
+      if(id === 'title'){
+        if(typeof titleBubble === 'function') titleBubble();
+      } else {
+        GitaSeq.stop('#gita-title');
+      }
+    }
+  }catch(e){}
 }
 
 let toastT1 = null, toastT2 = null;
