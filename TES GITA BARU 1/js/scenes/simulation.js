@@ -16,6 +16,8 @@ function showBridgeDialog(m, team){
   
   const box = el('#sim-bridge');
   if(!box) return;
+  box.style.display = 'flex';
+
   // Preload kedua sequence animasi Gita di latar belakang
   if (typeof GitaSeq !== 'undefined' && GitaSeq.preload) {
     GitaSeq.preload({ folder: 'worried_loop', prefix: 'Comp 1_', pad: 5, ext: '.png', frames: 120, fps: 24 });
