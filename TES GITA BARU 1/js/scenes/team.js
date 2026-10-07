@@ -104,22 +104,36 @@ function buildTeam() {
   el('#t-prev').onclick = () => navigateTeam(-1);
   el('#t-next').onclick = () => navigateTeam(1);
 
-  // Swipe gesture handlers for IFP Touchscreen
+  // Swipe gesture handlers for IFP Touchscreen (Pointer Lock & Gesture Isolation)
   const stage = el('#team-stage');
-  if (!stage.hasAttribute('data-swipe-bound')) {
+  if (stage && !stage.hasAttribute('data-swipe-bound')) {
     stage.setAttribute('data-swipe-bound', 'true');
+    // Proteksi debounce swipe carousel dan single-pointer tracking IFP
+    stage.style.touchAction = 'pan-y';
+    stage.style.userSelect = 'none';
     let startX = 0, startY = 0;
+    let activeSwipePointerId = null;
+
     stage.addEventListener('pointerdown', (e) => {
+      if (activeSwipePointerId !== null) return;
+      activeSwipePointerId = e.pointerId;
       startX = e.clientX;
       startY = e.clientY;
     });
+
     stage.addEventListener('pointerup', (e) => {
+      if (e.pointerId !== activeSwipePointerId) return;
+      activeSwipePointerId = null;
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
       if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
         if (dx < 0) navigateTeam(1);
         else navigateTeam(-1);
       }
+    });
+
+    stage.addEventListener('pointercancel', (e) => {
+      if (e.pointerId === activeSwipePointerId) activeSwipePointerId = null;
     });
   }
 
@@ -231,10 +245,7 @@ function drawPodiumAndMascot(teamObj, theme, timeMs = 0) {
 
   // 2. 3D Cylindrical Podium Base (Bevel & Depth)
   c.save();
-  const gradSide = c.createLinearGradient(0, 290, 0, 335);
-  gradSide.addColorStop(0, theme.podiumSide);
-  gradSide.addColorStop(1, PAL.panelDeep);
-  c.fillStyle = gradSide;
+  c.fillStyle = LG(c, 0, 290, 0, 335, theme.podiumSide, PAL.panelDeep);
 
   c.beginPath();
   c.moveTo(65, 300);
@@ -248,12 +259,7 @@ function drawPodiumAndMascot(teamObj, theme, timeMs = 0) {
 
   // 3. Podium Top Surface
   c.save();
-  const gradTop = c.createRadialGradient(200, 295, 20, 200, 295, 135);
-  gradTop.addColorStop(0, theme.podiumTop);
-  gradTop.addColorStop(0.85, theme.podiumSide);
-  gradTop.addColorStop(1, PAL.panelDeep);
-  c.fillStyle = gradTop;
-
+  c.fillStyle = RG(c, 200, 295, 135, theme.podiumTop, theme.podiumSide);
   c.beginPath();
   c.ellipse(200, 300, 135, 26, 0, 0, Math.PI * 2);
   c.fill();

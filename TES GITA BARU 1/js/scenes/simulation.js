@@ -168,10 +168,12 @@ function buildSimUI(){const m=SIM.m;
   +'<div class="mrow"><button class="btn btn-gold" data-close>Mengerti!</button></div>');};
  el('#sim-kamus').onclick=()=>{sfx.click();kamusModal(SIM.m.biome);};
  el('#sim-ui .snd-btn').onclick=toggleSound;
-  // drag proxy globals extracted
+  // IFP Touchscreen & Pointer Management: Single Active Pointer Lock + Tap-to-Place
+  clearCardSelection();
+  resetTouchLock();
  el('#dock-grid').addEventListener('pointerdown', e => {
-  // BUG FIX #2: Cegah multi-touch
-  if(activeDragIndex > -1) return;
+  // Palm rejection / multi-touch lock: abaikan jika ada pointer lain yang aktif
+  if(activePointerId !== null && e.pointerId !== activePointerId) return;
   const card = e.target.closest('.dock-card');
   if(!card || !SIM) return;
   if(card.classList.contains('finish')){
@@ -179,38 +181,59 @@ function buildSimUI(){const m=SIM.m;
    if(b) { sfx.click(); finishSim(); }
    return;
   }
-  const hint = card.querySelector('.dc-btn');
   const allCards = Array.from(document.querySelectorAll('.dock-grid .dock-card:not(.finish)'));
   let i = allCards.indexOf(card);
   if(i === -1) return;
-  toast('<b>'+SIM.m.actions[i].label+'</b>: '+SIM.m.actions[i].role, 3500);
   
   if(SIM.done) { toast('Misi sudah selesai! Tekan tombol emas.'); return; }
   if(SIM.cool[i] > 0) { sfx.deny(); toast('Aksi masih istirahat.'); return; }
   if(SIM.quota[i] <= 0) { sfx.deny(); toast('Kuota sudah habis.'); return; }
   
+  activePointerId = e.pointerId;
   activeDragIndex = i;
-  dragProxy = document.createElement('div');
-  dragProxy.className = 'drag-proxy dock-card'; // Reuse dock-card styles if any
-  dragProxy.style.cssText = card.style.cssText; // Copy the square styles
-  dragProxy.innerHTML = card.innerHTML;
-  dragProxy.style.position = 'fixed';
-  dragProxy.style.pointerEvents = 'none';
-  dragProxy.style.zIndex = '99999';
-  dragProxy.style.transform = 'translate(-50%, -50%)';
-  dragProxy.style.opacity = '0.9';
-  dragProxy.style.boxShadow = '0 12px 30px rgba(0,0,0,0.5)';
-  
-  document.body.appendChild(dragProxy);
-  moveProxy(e);
-  
+  dragStartX = e.clientX;
+  dragStartY = e.clientY;
+  isDragging = false;
+
+  try {
+    if(card.setPointerCapture) card.setPointerCapture(e.pointerId);
+  } catch(err) {}
+
+  if(pointerLockTimeout) clearTimeout(pointerLockTimeout);
+  pointerLockTimeout = setTimeout(() => { resetTouchLock(); }, 8000);
+
   window.addEventListener('pointermove', onDragMove);
   window.addEventListener('pointerup', onDragEnd);
  });
-  // (Global pointer listeners dihapus dari sini agar tidak menumpuk, lihat akhir file)
- el('#stat-rows').addEventListener('click',e=>{const r=e.target.closest('.srow');if(!r||!SIM)return;
-  const s=SIM.m.stats.find(x=>x[0]===r.dataset.k);if(s){sfx.pop();toast('<b>'+s[1]+'</b> — '+s[4],3600);}});
- syncSound();buildHUD();updateHUD();}
+
+  // Tap-to-Place pada area pemandangan alam (#scr-sim di atas dock)
+  const simScreen = el('#scr-sim');
+  if(!simScreen.hasAttribute('data-touch-tap-bound')){
+    simScreen.setAttribute('data-touch-tap-bound', 'true');
+    simScreen.addEventListener('pointerdown', e => {
+      if(selectedCardIndex === -1 || !SIM) return;
+      if(e.target.closest('.sim-dock, .hud-left, .hud-right, .sim-top, #sim-bridge, .edge-tab, .modal, .modal-dim')) return;
+      const dock = document.querySelector('.sim-dock');
+      const dockTop = dock ? dock.getBoundingClientRect().top : window.innerHeight - 200;
+      if(e.clientY < dockTop) {
+        const actIdx = selectedCardIndex;
+        clearCardSelection();
+        if(typeof doAction === 'function') {
+          doAction(actIdx, e.clientX, e.clientY);
+        }
+      }
+    });
+  }
+  const statRowsEl = el('#stat-rows');
+  if (statRowsEl) {
+    statRowsEl.onclick = e => {
+      const r = e.target.closest('.srow');
+      if (!r || !SIM) return;
+      const s = SIM.m.stats.find(x => x[0] === r.dataset.k);
+      if (s) { sfx.pop(); toast('<b>' + s[1] + '</b> — ' + s[4], 3600); }
+    };
+  }
+  syncSound();buildHUD();updateHUD();}
 function simTick(){if(!SIM||SIM.paused||SIM.mp>0||SIM.done)return;
  SIM.cool=SIM.cool.map(x=>Math.max(0,x-1));
  if(SIM.S.day>2&&Math.random()<.16){const ev=pick(EVENTS[SIM.m.biome]);ev.fx(SIM.S);toast('Peristiwa: '+ev.t);}
@@ -249,13 +272,13 @@ function buildHUD(){if(!SIM)return;const m=SIM.m;
  const dg=el('#dock-grid');dg.innerHTML='';dg.style.justifyContent='center';dg.style.alignItems='center';H.dockCard=[];H.dockBtn=[];H.dockQ=[];H.dockCd=[];
    m.actions.forEach((a,i)=>{const per=SIM.team.perk.ids.includes(a.id);
    const d=document.createElement('div');d.className='dock-card';
-   d.style.cssText = 'width:190px;min-width:190px;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;gap:4px;padding:14px;border-radius:20px;flex:none;cursor:grab;scroll-snap-align:center';
-   d.innerHTML=(per?'<div class="perk-badge" style="position:absolute;top:-8px;right:-8px;background:var(--gold-btn);font-size:16px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.5)">⭐</div>':'')
+   d.style.cssText = 'width:190px;min-width:190px;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;gap:4px;padding:14px;border-radius:20px;flex:none;cursor:grab;scroll-snap-align:center;touch-action:none;-webkit-user-drag:none;user-select:none;';
+   d.innerHTML=(per?'<div class="perk-badge" style="position:absolute;top:-8px;right:-8px;background:var(--gold-btn);font-size:24px;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.5)">⭐</div>':'')
     +ic(a.ic,32)
-    +'<div class="dc-tt" style="font-size:18px;line-height:1.15;margin-bottom:2px;font-weight:700">'+a.label+'</div>'
-    +'<div class="dc-quota" style="justify-content:center;font-size:16px;gap:6px;margin-top:2px">'+ic('target',18)+'<span class="q-n"></span></div>'
+    +'<div class="dc-tt" style="font-size:24px;line-height:1.2;margin-bottom:2px;font-weight:700">'+a.label+'</div>'
+    +'<div class="dc-quota" style="justify-content:center;font-size:24px;gap:6px;margin-top:2px;font-weight:700">'+ic('target',22)+'<span class="q-n"></span></div>'
     +'<div class="mini-cd" style="width:100%"><i></i></div>'
-    +'<div class="dc-btn" style="height:auto;font-size:18px;font-family:var(--font-fun);white-space:nowrap;margin-top:4px;min-height:24px"></div>';
+    +'<div class="dc-btn" style="height:auto;font-size:24px;font-family:var(--font-fun);white-space:nowrap;margin-top:4px;min-height:28px"></div>';
   dg.appendChild(d);
   H.dockCard.push(d);H.dockBtn.push(d.querySelector('.dc-btn'));
   H.dockQ.push(d.querySelector('.q-n'));H.dockCd.push(d.querySelector('.mini-cd i'));});
@@ -453,6 +476,7 @@ function doAction(i, dropX, dropY){const m=SIM.m,a=m.actions[i],S=SIM.S;
  if(SIM.cool[i]>0){sfx.deny();toast('"'+a.label+'" masih istirahat ('+SIM.cool[i]+' hari lagi).');return;}
  if(SIM.quota[i]<=0){sfx.deny();toast('Kuota "'+a.label+'" sudah habis.');return;}
  SIM.quota[i]--;SIM.cool[i]=SIM.cdi[i];a.fx(S);
+ if (a.id === 'air' || a.id === 'irigasi') S._irrigationFlowTimer = 180;
  const isSpray = a.id === 'mimba' || a.id === 'padam' || a.id === 'bilas' || a.ic === 'bottle';
  if(isSpray){
    if(sfx.spray) sfx.spray();
@@ -523,7 +547,9 @@ function showVote(){const m=SIM.m;
       showSprayEffect(window.innerWidth / 2, window.innerHeight * 0.45, a.id, a.label);
     }, 250);
   }
-  a.fx(SIM.S);toast('Hasil musyawarah: '+a.label+' (gratis)!');if(typeof playVO === 'function') playVO('vo_sim_vote_done');
+  a.fx(SIM.S);
+  if (a.id === 'air' || a.id === 'irigasi') SIM.S._irrigationFlowTimer = 180;
+  toast('Hasil musyawarah: '+a.label+' (gratis)!');if(typeof playVO === 'function') playVO('vo_sim_vote_done');
   closeModal();simUpdate();});}
 function simFail(timeout){if(!SIM)return;clearInterval(SIM.timer);SIM.timer=null;SIM.done=true;sfx.wrong();if(typeof playVO === 'function') playVO(timeout ? 'vo_sim_fail_time' : 'vo_sim_fail_health');
  const m=SIM.m;
@@ -540,50 +566,173 @@ function finishSim(){const m=SIM.m,S=SIM.S,days=S.day;
  const simStars=(S.health>=85&&days<=m.par)?3:2;
  sfx.success();SIM=null;startQuiz(m,simStars,days);}
 function leaveSim(){if(SIM&&SIM.timer)clearInterval(SIM.timer);SIM=null;
- try{if(CTX.sim)CTX.sim.clearRect(0,0,1920,1080);}catch(e){}}
+ try{if(CTX.sim)CTX.sim.clearRect(0,0,1920,1080);}catch(e){}
+ clearCardSelection();
+ resetTouchLock();
+}
 
-/* ================== GLOBAL DRAG PROXY (Mencegah Memory Leak) ================== */
+/* ================== GLOBAL DRAG PROXY & TOUCH MANAGEMENT (IFP DUAL-MODE) ==================
+   Proteksi debounce multi-click, single-pointer capture, & anti-double-trigger */
 let dragProxy = null;
 let activeDragIndex = -1;
+let activePointerId = null;
+let dragStartX = 0;
+let dragStartY = 0;
+let isDragging = false;
+let selectedCardIndex = -1;
+let pointerLockTimeout = null;
+
+function resetTouchLock() {
+  if(pointerLockTimeout) {
+    clearTimeout(pointerLockTimeout);
+    pointerLockTimeout = null;
+  }
+  if(dragProxy) {
+    dragProxy.remove();
+    dragProxy = null;
+  }
+  activePointerId = null;
+  activeDragIndex = -1;
+  isDragging = false;
+}
+
+function clearCardSelection() {
+  selectedCardIndex = -1;
+  document.querySelectorAll('.dock-grid .dock-card.selected').forEach(c => c.classList.remove('selected'));
+}
+
+function selectCard(idx) {
+  if(!SIM || !SIM.m || !SIM.m.actions[idx]) return;
+  selectedCardIndex = idx;
+  const allCards = Array.from(document.querySelectorAll('.dock-grid .dock-card:not(.finish)'));
+  allCards.forEach((c, i) => {
+    c.classList.toggle('selected', i === idx);
+  });
+  sfx.pop();
+  const act = SIM.m.actions[idx];
+  toast('<b>' + act.label + '</b> dipilih! Ketuk area pemandangan alam untuk menerapkan.', 4000);
+}
+
+function handleCardTapSelect(idx) {
+  if(!SIM || !SIM.m || !SIM.m.actions[idx]) return;
+  if(selectedCardIndex === idx) {
+    clearCardSelection();
+    sfx.click();
+    toast('Pilihan dibatalkan.');
+  } else {
+    selectCard(idx);
+  }
+}
 
 function moveProxy(e) {
   if(!dragProxy) return;
   dragProxy.style.left = e.clientX + 'px';
-  dragProxy.style.top = e.clientY + 'px';
+  dragProxy.style.top = (e.clientY - 35) + 'px';
 }
-function onDragMove(e) { moveProxy(e); }
-function onDragEnd(e) {
-  window.removeEventListener('pointermove', onDragMove);
-  window.removeEventListener('pointerup', onDragEnd);
-  if(dragProxy) { dragProxy.remove(); dragProxy = null; }
-  if(activeDragIndex > -1) {
-    const dockRect = document.querySelector('.sim-dock').getBoundingClientRect();
-    var simCv = document.querySelector('#cv-sim');
-    var validDrop = false;
-    if(simCv) {
-      var cr = simCv.getBoundingClientRect();
-      validDrop = e.clientX >= cr.left && e.clientX <= cr.right
-               && e.clientY >= cr.top && e.clientY < dockRect.top;
-    } else {
-      validDrop = e.clientY < dockRect.top;
-    }
-    if(validDrop) {
-      if(typeof doAction === 'function') doAction(activeDragIndex, e.clientX, e.clientY);
-    } else {
+
+function onDragMove(e) {
+  if(activePointerId !== null && e.pointerId !== undefined && e.pointerId !== activePointerId) return;
+  if(activeDragIndex === -1) return;
+
+  const dx = e.clientX - dragStartX;
+  const dy = e.clientY - dragStartY;
+  const dist = Math.hypot(dx, dy);
+
+  if(!isDragging && dist > 12) {
+    isDragging = true;
+    clearCardSelection();
+
+    const allCards = Array.from(document.querySelectorAll('.dock-grid .dock-card:not(.finish)'));
+    const card = allCards[activeDragIndex];
+    if(card) {
+      dragProxy = document.createElement('div');
+      dragProxy.className = 'drag-proxy dock-card';
+      dragProxy.style.cssText = card.style.cssText;
+      dragProxy.innerHTML = card.innerHTML;
+      dragProxy.style.position = 'fixed';
+      dragProxy.style.pointerEvents = 'none';
+      dragProxy.style.touchAction = 'none';
+      dragProxy.style.userSelect = 'none';
+      dragProxy.style.zIndex = '99999';
+      dragProxy.style.transform = 'translate(-50%, -75%)';
+      dragProxy.style.opacity = '0.92';
+      dragProxy.style.boxShadow = '0 16px 36px rgba(0,0,0,0.6)';
+
+      document.body.appendChild(dragProxy);
+      moveProxy(e);
       sfx.click();
-      toast('Jatuhkan kartu di area pemandangan alam, bukan di panel!');
     }
-    activeDragIndex = -1;
+  }
+
+  if(isDragging && dragProxy) {
+    moveProxy(e);
   }
 }
 
-// Global failsafe listeners — didaftarkan SEKALI SAJA untuk menghindari leak.
-window.addEventListener('pointercancel', onDragEnd);
-window.addEventListener('blur', function() {
-  if(dragProxy) onDragEnd(new PointerEvent('pointerup', {clientX:0, clientY:9999}));
-});
-document.addEventListener('visibilitychange', function() {
-  if(document.hidden && dragProxy){
-    onDragEnd(new PointerEvent('pointerup', {clientX:0, clientY:9999}));
+function onDragEnd(e) {
+  if(activePointerId !== null && e.pointerId !== undefined && e.pointerId !== activePointerId) return;
+
+  window.removeEventListener('pointermove', onDragMove);
+  window.removeEventListener('pointerup', onDragEnd);
+  if(pointerLockTimeout) {
+    clearTimeout(pointerLockTimeout);
+    pointerLockTimeout = null;
   }
-});
+
+  const currentIdx = activeDragIndex;
+  const wasDragging = isDragging;
+
+  if(dragProxy) {
+    dragProxy.remove();
+    dragProxy = null;
+  }
+
+  if(currentIdx > -1 && SIM) {
+    if(wasDragging) {
+      const dockEl = document.querySelector('.sim-dock');
+      const dockRect = dockEl ? dockEl.getBoundingClientRect() : { top: window.innerHeight - 180 };
+      const simCv = document.querySelector('#cv-sim');
+      let validDrop = false;
+      if(simCv) {
+        const cr = simCv.getBoundingClientRect();
+        validDrop = e.clientX >= cr.left && e.clientX <= cr.right
+                 && e.clientY >= cr.top && e.clientY < dockRect.top;
+      } else {
+        validDrop = e.clientY < dockRect.top;
+      }
+
+      if(validDrop) {
+        if(typeof doAction === 'function') doAction(currentIdx, e.clientX, e.clientY);
+        clearCardSelection();
+      } else {
+        sfx.click();
+        toast('Jatuhkan kartu di area pemandangan alam, bukan di panel!');
+      }
+    } else {
+      handleCardTapSelect(currentIdx);
+    }
+  }
+
+  activePointerId = null;
+  activeDragIndex = -1;
+  isDragging = false;
+}
+
+// Global failsafe listeners — didaftarkan SEKALI SAJA untuk menghindari leak.
+if(typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+  window.addEventListener('pointercancel', function(e) {
+    if(activePointerId !== null && e.pointerId !== undefined && e.pointerId === activePointerId) {
+      resetTouchLock();
+    }
+  });
+  window.addEventListener('blur', function() {
+    resetTouchLock();
+  });
+}
+if(typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+  document.addEventListener('visibilitychange', function() {
+    if(document.hidden) {
+      resetTouchLock();
+    }
+  });
+}

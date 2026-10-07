@@ -91,6 +91,7 @@ function init(){
     go('teacher');
   };
 
+  // Proteksi debounce multi-click untuk layar sentuh IFP
   el('#t-snd').onclick = toggleSound;
 
   addEventListener('resize', fit);

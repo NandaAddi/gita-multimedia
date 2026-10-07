@@ -207,29 +207,47 @@ function stopVO() {
   }
 }
 
+const VO_POOL = new Map();
+
 function playVO(key, onEnd) {
   if (!soundOn || typeof window === 'undefined') return;
   stopVO();
   try {
-    const audio = new Audio('voice-over/' + key + '.mp3');
+    let audio = VO_POOL.get(key);
+    if (!audio) {
+      if (VO_POOL.size >= 40) {
+        const oldestKey = VO_POOL.keys().next().value;
+        const oldAudio = VO_POOL.get(oldestKey);
+        if (oldAudio && typeof oldAudio.pause === 'function') oldAudio.pause();
+        VO_POOL.delete(oldestKey);
+      }
+      audio = new Audio('voice-over/' + key + '.mp3');
+      VO_POOL.set(key, audio);
+    }
     currentVO = audio;
-    audio.play().catch(() => {
-      // Fallback ke assets/audio/vo/ jika path relatif berbeda
-      const fallback = new Audio('assets/audio/vo/' + key + '.mp3');
-      currentVO = fallback;
-      fallback.play().catch(() => {
-        if (currentVO === fallback) currentVO = null;
-        if (typeof onEnd === 'function') onEnd();
-      });
-      fallback.onended = () => {
-        if (currentVO === fallback) currentVO = null;
-        if (typeof onEnd === 'function') onEnd();
-      };
-    });
+    try { audio.currentTime = 0; } catch (e) {}
     audio.onended = () => {
       if (currentVO === audio) currentVO = null;
       if (typeof onEnd === 'function') onEnd();
     };
+    audio.play().catch(() => {
+      // Fallback ke assets/audio/vo/ jika path relatif berbeda
+      let fallback = VO_POOL.get('fb_' + key);
+      if (!fallback) {
+        fallback = new Audio('assets/audio/vo/' + key + '.mp3');
+        VO_POOL.set('fb_' + key, fallback);
+      }
+      currentVO = fallback;
+      try { fallback.currentTime = 0; } catch (e) {}
+      fallback.onended = () => {
+        if (currentVO === fallback) currentVO = null;
+        if (typeof onEnd === 'function') onEnd();
+      };
+      fallback.play().catch(() => {
+        if (currentVO === fallback) currentVO = null;
+        if (typeof onEnd === 'function') onEnd();
+      });
+    });
   } catch (e) {
     currentVO = null;
   }
@@ -266,11 +284,11 @@ function openAudioSettings() {
   sfx.click();
   const r = modal('<h2>' + ic('sound', 34) + ' Pengaturan Audio</h2>'
     + '<div style="margin:24px 0; text-align:left;">'
-    + '<label style="display:block;margin-bottom:8px;font-size:20px;color:#fff;">Volume Musik (BGM):</label>'
+    + '<label style="display:block;margin-bottom:8px;font-size:24px;font-weight:700;color:#fff;">Volume Musik (BGM):</label>'
     + '<input type="range" id="bgm-slider" min="0" max="1" step="0.05" value="'+(typeof G!=='undefined'?G.bgmVol:0.5)+'" style="width:100%; height:12px; accent-color:var(--gold);cursor:pointer;">'
     + '</div>'
     + '<div style="margin:24px 0; text-align:left;">'
-    + '<label style="display:block;margin-bottom:8px;font-size:20px;color:#fff;">Suara Efek (SFX & VO):</label>'
+    + '<label style="display:block;margin-bottom:8px;font-size:24px;font-weight:700;color:#fff;">Suara Efek (SFX & VO):</label>'
     + '<button class="btn '+(soundOn?'btn-gold':'btn-ruby')+'" id="btn-toggle-sfx" style="width:100%;font-size:24px;padding:16px;">'
     + ic(soundOn ? 'sound' : 'mute', 24) + (soundOn ? ' Nyala' : ' Bisu') + '</button>'
     + '</div>'

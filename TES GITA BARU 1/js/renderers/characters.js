@@ -28,19 +28,134 @@ function simExpr(e){const g=el('#sim-ui .gita');if(g){g.classList.remove('happy'
 /* skyPaint/sunDraw/cloud(s) hidup di backgrounds.js (satu sumber — dimuat setelah file ini) */
 
 /* ================= KANVAS: SATWA ================= */
-function spRice(c,x,y,hgt,col,sw){c.lineCap='round';
- const dk=mixc(col,'#1e4028',.3),lt='#9ed07a';
- for(let i=-2;i<=2;i++){const bx=x+i*5+sw*.5,tx=x+i*8+sw,ty=y-hgt;
-  c.strokeStyle=dk;c.lineWidth=3.5;c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(bx,y-hgt*.55,tx,ty);c.stroke();
-  c.strokeStyle=i%2?'#63c06a':lt;c.lineWidth=1.6;c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(bx,y-hgt*.55,tx,ty);c.stroke();
-  const g2=i%2?'#63c06a':col;
-  for(let k=0;k<3;k++)O(c,tx,ty+k*7+3,2.6,4.5,g2);}
- // anakan melengkung + titik tumbuh + kilau
- c.strokeStyle=lt;c.lineWidth=1.8;
- c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x-14+sw*.5,y-hgt*.3,x-20+sw,y-hgt*.55);c.stroke();
- c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x+14+sw*.5,y-hgt*.3,x+20+sw,y-hgt*.55);c.stroke();
- CIRC(c,x,y-2,2,lt);
- O(c,x+6+sw,y-hgt*.5,1.6,2.6,'rgba(255,255,220,.6)');}
+/* Rumpun Padi Lebat Terasering Nusantara:
+   - 7–9 helai daun lentur menjuntai melengkung alami (arching flexible leaves)
+   - Respon gelombang angin nyata (undulating wind wave)
+   - Malai bulir padi (drooping golden panicles) saat subur (prod tinggi)
+   - Bercak hangus/kering saat wereng (hopperburn) atau kekeringan
+*/
+function spRice(c, x, y, hgt, col, sw, options = {}) {
+  c.save();
+  c.lineCap = 'round';
+  c.lineJoin = 'round';
+  
+  const dk = mixc(col, '#1a3b22', 0.4);
+  const lt = '#9ed07a';
+  const isGolden = options.isGolden || false;
+  const hopperburn = options.hopperburn || 0;
+  const drought = options.drought || 0;
+  
+  // Warna daun dengan efek hopperburn / kekeringan jika ada
+  let leafBaseCol = col;
+  let leafMidCol = '#52b55f';
+  let leafTipCol = lt;
+  if (hopperburn > 0) {
+    leafBaseCol = mixc(leafBaseCol, '#6e4a21', Math.min(1, hopperburn * 1.2));
+    leafMidCol = mixc(leafMidCol, '#9e7332', Math.min(1, hopperburn * 1.1));
+    leafTipCol = mixc(leafTipCol, '#c9984b', Math.min(1, hopperburn * 1.0));
+  } else if (drought > 0) {
+    leafBaseCol = mixc(leafBaseCol, '#5c4826', drought * 0.8);
+    leafMidCol = mixc(leafMidCol, '#8f773b', drought * 0.9);
+    leafTipCol = mixc(leafTipCol, '#bfa85c', drought * 1.0);
+  } else if (isGolden) {
+    leafMidCol = '#74ba4c';
+    leafTipCol = '#c2db56';
+  }
+
+  // 1. Bayangan pangkal rumpun di lumpur/air
+  c.fillStyle = 'rgba(25, 18, 10, 0.35)';
+  c.beginPath();
+  c.ellipse(x, y + 2, 9, 3.5, 0, 0, Math.PI * 2);
+  c.fill();
+
+  // 2. Anakan rumpun bawah (dense tiller base)
+  c.strokeStyle = dk;
+  c.lineWidth = 4.2;
+  c.beginPath();
+  c.moveTo(x - 6, y);
+  c.lineTo(x, y - hgt * 0.28);
+  c.lineTo(x + 6, y);
+  c.stroke();
+
+  // 3. 7 Helai Daun Padi Melengkung Lentur (Arching Flexible Blades)
+  const blades = [
+    { spread: -1.0, curveX: -18, tipX: -26, tipY: -0.65, thick: 2.4, lag: 0.75 },
+    { spread: -0.6, curveX: -12, tipX: -18, tipY: -0.85, thick: 2.2, lag: 0.85 },
+    { spread: -0.25, curveX: -5, tipX: -8, tipY: -0.98, thick: 2.0, lag: 0.95 },
+    { spread: 0.0, curveX: 0, tipX: 0, tipY: -1.05, thick: 2.1, lag: 1.0 },
+    { spread: 0.25, curveX: 5, tipX: 8, tipY: -0.98, thick: 2.0, lag: 0.95 },
+    { spread: 0.6, curveX: 12, tipX: 18, tipY: -0.85, thick: 2.2, lag: 0.85 },
+    { spread: 1.0, curveX: 18, tipX: 26, tipY: -0.65, thick: 2.4, lag: 0.75 }
+  ];
+
+  blades.forEach((b, bi) => {
+    const bladeSway = sw * b.lag;
+    const bx = x + b.curveX * (hgt / 45) + bladeSway * 0.45;
+    const by = y + b.tipY * hgt * 0.52;
+    const tx = x + b.tipX * (hgt / 45) + bladeSway;
+    const ty = y + b.tipY * hgt;
+
+    c.strokeStyle = bi % 2 === 0 ? leafBaseCol : dk;
+    c.lineWidth = b.thick * 1.35;
+    c.beginPath();
+    c.moveTo(x + b.spread * 4, y);
+    c.quadraticCurveTo(bx, by, tx, ty);
+    c.stroke();
+
+    c.strokeStyle = bi % 2 === 0 ? leafMidCol : leafTipCol;
+    c.lineWidth = b.thick * 0.75;
+    c.beginPath();
+    c.moveTo(x + b.spread * 3, y - 2);
+    c.quadraticCurveTo(bx, by, tx, ty);
+    c.stroke();
+  });
+
+  // 4. Malai Bulir Padi (Panicles with Grains)
+  const grainCount = isGolden ? 6 : 4;
+  const grainCol = isGolden ? '#f0d048' : (hopperburn > 0.4 ? '#8a6530' : mixc(col, '#c7e67a', 0.5));
+  const grainStroke = isGolden ? '#96741c' : '#284f22';
+
+  [-0.45, 0.0, 0.45].forEach((offsetAngle, pi) => {
+    const panSway = sw * (1.05 + pi * 0.1);
+    const startX = x + offsetAngle * 8 + panSway * 0.6;
+    const startY = y - hgt * 0.78;
+    const bendX = startX + offsetAngle * 16 + panSway * 1.2;
+    const bendY = y - hgt * 1.02;
+    const endX = startX + offsetAngle * 26 + panSway * 1.5;
+    const endY = y - hgt * 0.88;
+
+    c.strokeStyle = grainStroke;
+    c.lineWidth = 1.3;
+    c.beginPath();
+    c.moveTo(startX, startY);
+    c.quadraticCurveTo(bendX, bendY, endX, endY);
+    c.stroke();
+
+    c.fillStyle = grainCol;
+    c.strokeStyle = grainStroke;
+    c.lineWidth = 0.8;
+    for (let g = 0; g < grainCount; g++) {
+      const gf = (g + 1) / (grainCount + 1);
+      const gx = (1 - gf) * (1 - gf) * startX + 2 * (1 - gf) * gf * bendX + gf * gf * endX;
+      const gy = (1 - gf) * (1 - gf) * startY + 2 * (1 - gf) * gf * bendY + gf * gf * endY;
+      const grainAngle = Math.atan2(endY - startY, endX - startX) + (g % 2 === 0 ? 0.4 : -0.4);
+      
+      c.save();
+      c.translate(gx, gy);
+      c.rotate(grainAngle);
+      c.beginPath();
+      c.ellipse(0, 0, 3.2, 1.6, 0, 0, Math.PI * 2);
+      c.fill();
+      c.stroke();
+      c.fillStyle = 'rgba(255, 255, 220, 0.7)';
+      c.fillRect(-1, -0.8, 1.8, 1);
+      c.restore();
+    }
+  });
+
+  CIRC(c, x, y - 2, 2.5, leafTipCol);
+  c.restore();
+}
 /* Rumput tepi ladang: 7 helai tinggi acak deterministik + biji pucat + goyang angin.
    Posisi & tinggi statis per seed (tidak flicker); hanya goyang yang animasi. */
 function spGrass(c,x,y,s,seed,t){
@@ -583,26 +698,273 @@ function texRidge(c,pts,col,seed){
    - Sistem retakan tanah kemarau poligonal organik saat S.water < 32
    - Respon tanah tercemar pestisida saat S.poison > 20
 */
+/* ================= TEKSTUR TANAH SAWAH BERUNDAK & ALIRAN ALUVIAL =================
+   - Pematang terasering 3D berundak (terrace bunds/galengan) dengan lengkungan alami
+   - Lumpur sawah aluvial kaya hara & butiran mineral tanah basah
+   - Parit irigasi batu kali & pintu air kayu tradisional (tulakan) dengan animasi aliran
+   - Jaringan rekahan lempeng tanah liat poligonal 3D saat kemarau (S.water < 32)
+   - Cermin pantulan langit & kilau air genangan sawah saat S.water >= 32
+   - Respon tanah tercemar pestisida saat S.poison > 20
+*/
+
+// Fungsi pembantu kurva pematang terasering sawah organik
+function getTerraceBundY(tier, x) {
+  if (tier === 0) return 420 + Math.sin(x * 0.0028 + 0.1) * 10;
+  if (tier === 1) return 590 + Math.sin(x * 0.0025 + 0.4) * 16;
+  if (tier === 2) return 775 + Math.sin(x * 0.0022 + 0.9) * 20;
+  return 970 + Math.sin(x * 0.0018 + 1.4) * 24;
+}
+
+// Jaringan Rekahan Lempeng Tanah Liat Poligonal Realistis (Mud Desiccation Fissures)
+function drawPolygonalMudCracks(c, droughtSeverity, t) {
+  const crackAlpha = Math.min(0.95, 0.45 + droughtSeverity * 0.5);
+  c.save();
+  c.lineCap = 'round';
+  c.lineJoin = 'round';
+
+  // Grid titik-titik simpul rekahan tanah lempeng poligonal
+  const cols = 9;
+  const rows = 6;
+  const startX = 140, endX = 1780;
+  const startY = 440, endY = 1040;
+
+  // Bangun simpul yang terperturbasi secara deterministik
+  const nodes = [];
+  for (let r = 0; r <= rows; r++) {
+    nodes[r] = [];
+    const fy = r / rows;
+    const baseY = startY + (endY - startY) * fy;
+    for (let col = 0; col <= cols; col++) {
+      const fx = col / cols;
+      const baseX = startX + (endX - startX) * fx;
+      const seed = r * 37 + col * 19;
+      // Pergeseran acak alami untuk membentuk sel poligonal non-simetris
+      const jx = (pr(seed) - 0.5) * ((endX - startX) / cols * 0.65);
+      const jy = (pr(seed + 101) - 0.5) * ((endY - startY) / rows * 0.55);
+      nodes[r][col] = { x: baseX + jx, y: baseY + jy };
+    }
+  }
+
+  // 1. Gambar celah bayangan gelap dasar rekahan (deep shadow trench)
+  c.strokeStyle = 'rgba(28, 16, 8, ' + crackAlpha.toFixed(3) + ')';
+  c.lineWidth = (2.6 + droughtSeverity * 3.2);
+
+  // Rusuk horizontal & diagonal
+  for (let r = 0; r <= rows; r++) {
+    for (let col = 0; col <= cols; col++) {
+      const curr = nodes[r][col];
+      // Hubungkan ke kanan
+      if (col < cols) {
+        const right = nodes[r][col + 1];
+        c.beginPath();
+        c.moveTo(curr.x, curr.y);
+        const midX = (curr.x + right.x) * 0.5 + (pr(r * 23 + col * 7) - 0.5) * 16 * droughtSeverity;
+        const midY = (curr.y + right.y) * 0.5 + (pr(r * 29 + col * 11) - 0.5) * 12 * droughtSeverity;
+        c.quadraticCurveTo(midX, midY, right.x, right.y);
+        c.stroke();
+      }
+      // Hubungkan ke bawah
+      if (r < rows) {
+        const down = nodes[r + 1][col];
+        c.beginPath();
+        c.moveTo(curr.x, curr.y);
+        const midX = (curr.x + down.x) * 0.5 + (pr(r * 31 + col * 13) - 0.5) * 14 * droughtSeverity;
+        const midY = (curr.y + down.y) * 0.5 + (pr(r * 17 + col * 5) - 0.5) * 10 * droughtSeverity;
+        c.quadraticCurveTo(midX, midY, down.x, down.y);
+        c.stroke();
+      }
+    }
+  }
+
+  // 2. Garis inti celah retakan terdalam (inner dark chasm)
+  c.strokeStyle = 'rgba(12, 6, 2, ' + Math.min(1.0, crackAlpha * 1.25).toFixed(3) + ')';
+  c.lineWidth = Math.max(1.2, (1.3 + droughtSeverity * 1.6));
+  for (let r = 0; r <= rows; r++) {
+    for (let col = 0; col < cols; col += 2) {
+      const curr = nodes[r][col];
+      const right = nodes[r][col + 1];
+      c.beginPath();
+      c.moveTo(curr.x, curr.y);
+      c.lineTo(right.x, right.y);
+      c.stroke();
+      if (r < rows && (col + r) % 2 === 0) {
+        const down = nodes[r + 1][col];
+        c.beginPath();
+        c.moveTo(curr.x, curr.y);
+        c.lineTo(down.x, down.y);
+        c.stroke();
+      }
+    }
+  }
+
+  // 3. Beveled highlight tepian lempeng tanah liat yang terkena terik matahari (3D clay plate edges)
+  c.strokeStyle = 'rgba(215, 180, 125, ' + (crackAlpha * 0.38).toFixed(3) + ')';
+  c.lineWidth = 1.2;
+  for (let r = 0; r < rows; r++) {
+    for (let col = 0; col < cols; col++) {
+      const curr = nodes[r][col];
+      const right = nodes[r][col + 1];
+      c.beginPath();
+      c.moveTo(curr.x, curr.y - 1.8);
+      c.lineTo(right.x, right.y - 1.8);
+      c.stroke();
+    }
+  }
+
+  // 4. Serak serasah jerami kering (dry straw mulch) di celah retakan
+  c.strokeStyle = 'rgba(175, 145, 80, ' + (0.5 + droughtSeverity * 0.4).toFixed(3) + ')';
+  c.lineWidth = 1.4;
+  for (let s = 0; s < 36; s++) {
+    const sx = startX + 60 + pr(s * 19.3) * (endX - startX - 120);
+    const sy = startY + 40 + pr(s * 27.7) * (endY - startY - 80);
+    const sAng = pr(s * 11) * Math.PI;
+    const sLen = 8 + pr(s * 7) * 14;
+    c.beginPath();
+    c.moveTo(sx, sy);
+    c.lineTo(sx + Math.cos(sAng) * sLen, sy + Math.sin(sAng) * sLen);
+    c.stroke();
+  }
+
+  // Kabut terik kemarau tipis
+  c.fillStyle = 'rgba(195, 155, 95, ' + (droughtSeverity * 0.22).toFixed(3) + ')';
+  c.fillRect(0, 420, 1920, 660);
+
+  c.restore();
+}
+
+// Parit Irigasi Batu Kali & Pintu Air Kayu (Tulakan Sawah)
+function drawIrrigationCanal(c, t, S) {
+  c.save();
+  const isSurging = S && S._irrigationFlowTimer !== undefined && S._irrigationFlowTimer > 0;
+  const waterLevel = S && S.water !== undefined ? S.water : 50;
+
+  // Jalur parit batu di sisi kiri pematang atas: dari (270, 420) meliuk ke (180, 710)
+  const canalPath = [
+    { x: 280, y: 418, r: 18 },
+    { x: 250, y: 470, r: 20 },
+    { x: 220, y: 535, r: 23 },
+    { x: 195, y: 610, r: 25 },
+    { x: 165, y: 690, r: 28 }
+  ];
+
+  // 1. Dasar parit dan bebatuan kali abu-abu alami
+  canalPath.forEach((pt, i) => {
+    // Batu-batu pembatas parit di kiri dan kanan
+    [-1, 1].forEach(side => {
+      const bx = pt.x + side * (pt.r + 8);
+      const by = pt.y + (side === 1 ? 4 : -4);
+      c.fillStyle = i % 2 === 0 ? '#545852' : '#6b7068';
+      c.strokeStyle = '#323630';
+      c.lineWidth = 1.5;
+      c.beginPath();
+      c.ellipse(bx, by, 11 + (i % 3) * 2, 7 + (i % 2) * 2, side * 0.2, 0, Math.PI * 2);
+      c.fill();
+      c.stroke();
+
+      // Lumut basah batu kali
+      c.fillStyle = 'rgba(65, 105, 45, 0.65)';
+      c.beginPath();
+      c.arc(bx, by - 3, 4.5, 0, Math.PI * 2);
+      c.fill();
+    });
+  });
+
+  // 2. Aliran air parit
+  c.beginPath();
+  c.moveTo(canalPath[0].x, canalPath[0].y);
+  for (let i = 1; i < canalPath.length; i++) {
+    c.lineTo(canalPath[i].x, canalPath[i].y);
+  }
+  const waterCol = isSurging ? 'rgba(215, 245, 255, 0.92)' : (waterLevel > 20 ? 'rgba(100, 185, 215, 0.65)' : 'rgba(120, 105, 80, 0.4)');
+  c.strokeStyle = waterCol;
+  c.lineWidth = isSurging ? 22 : 14;
+  c.lineCap = 'round';
+  c.lineJoin = 'round';
+  c.stroke();
+
+  // Riak & buih air mengalir aktif jika sedang irigasi
+  if (isSurging || waterLevel > 40) {
+    c.strokeStyle = 'rgba(255, 255, 255, ' + (isSurging ? '0.85' : '0.45') + ')';
+    c.lineWidth = isSurging ? 4 : 2;
+    for (let k = 0; k < canalPath.length - 1; k++) {
+      const p1 = canalPath[k], p2 = canalPath[k + 1];
+      const waveOffset = Math.sin(t * 0.008 + k * 1.5) * 4;
+      c.beginPath();
+      c.moveTo(p1.x + waveOffset, p1.y);
+      c.lineTo(p2.x - waveOffset, p2.y);
+      c.stroke();
+    }
+  }
+
+  // 3. Pintu Air Kayu Tradisional (Tulakan Sawah) di titik temu terasering (x: 220, y: 535)
+  const gx = 222, gy = 530;
+  // Tiang kayu vertikal kiri & kanan
+  c.fillStyle = '#4a3018';
+  c.strokeStyle = '#2b1a0a';
+  c.lineWidth = 1.6;
+  [-9, 9].forEach(dx => {
+    c.fillRect(gx + dx - 2.5, gy - 26, 5, 34);
+    c.strokeRect(gx + dx - 2.5, gy - 26, 5, 34);
+  });
+  // Balok palang kayu atas
+  c.fillStyle = '#6b4724';
+  c.fillRect(gx - 13, gy - 28, 26, 6);
+  c.strokeRect(gx - 13, gy - 28, 26, 6);
+  // Papan sekat geser (sluice gate board)
+  const gateOpenY = isSurging ? -14 : (waterLevel > 35 ? -6 : 0);
+  c.fillStyle = '#82592e';
+  c.fillRect(gx - 7, gy - 18 + gateOpenY, 14, 20);
+  c.strokeRect(gx - 7, gy - 18 + gateOpenY, 14, 20);
+  // Gagang penarik papan tulakan
+  c.fillStyle = '#2b1a0a';
+  c.fillRect(gx - 1.5, gy - 36 + gateOpenY, 3, 16);
+
+  // Jika sedang surge (Alirkan Air Irigasi): semburan air berbuih keluar dari tulakan
+  if (isSurging) {
+    c.fillStyle = 'rgba(255, 255, 255, 0.88)';
+    for (let sp = 0; sp < 14; sp++) {
+      const sprayX = gx + 10 + pr(sp * 7 + (t % 100)) * 90;
+      const sprayY = gy + 4 + pr(sp * 13 + (t % 100)) * 45;
+      const sr = 2 + pr(sp * 3) * 4.5;
+      c.beginPath();
+      c.arc(sprayX, sprayY, sr, 0, Math.PI * 2);
+      c.fill();
+    }
+    // Riak air menyebar ke petak terasering
+    c.strokeStyle = 'rgba(220, 248, 255, 0.75)';
+    c.lineWidth = 2.5;
+    for (let rk = 1; rk <= 3; rk++) {
+      const rw = 25 * rk + (t * 0.08) % 30;
+      c.beginPath();
+      c.ellipse(gx + 40, gy + 15, rw, rw * 0.35, 0.1, 0, Math.PI * 2);
+      c.stroke();
+    }
+  }
+
+  c.restore();
+}
+
 function texSoilSawah(c, t, S) {
   S = S || {};
   const isDrought = S.water !== undefined && S.water < 32;
   const droughtSeverity = isDrought ? (32 - S.water) / 32 : 0;
   const isPoisoned = S.poison !== undefined && S.poison > 20;
+  const waterLevel = S.water !== undefined ? S.water : 50;
 
   c.save();
-  // Area tanah sawah di-clip pada poligon sawah: [[0,1080],[380,420],[1560,420],[1920,1080]]
+  // Area tanah sawah di-clip pada poligon sawah organik: [[0,1080],[280,420],[1640,420],[1920,1080]]
   c.beginPath();
   c.moveTo(0, 1080);
-  c.lineTo(380, 420);
-  c.lineTo(1560, 420);
+  c.lineTo(280, 420);
+  c.lineTo(1640, 420);
   c.lineTo(1920, 1080);
   c.closePath();
   c.clip();
 
-  // 1. BUTIRAN PARTIKEL LUMPUR & SEDIMEN TANAH
-  for (let k = 0; k < 42; k++) {
-    const px = 200 + pr(k * 7.1) * 1520;
-    const py = 450 + pr(k * 13.3) * 580;
+  // 1. BUTIRAN PARTIKEL LUMPUR & SEDIMEN TANAH ALUVIAL
+  for (let k = 0; k < 54; k++) {
+    const px = 180 + pr(k * 7.1) * 1560;
+    const py = 440 + pr(k * 13.3) * 600;
     const r = 2 + pr(k * 3.7) * 4.5;
     const col = k % 2 === 0 ? 'rgba(75, 48, 22, 0.28)' : 'rgba(125, 90, 45, 0.22)';
     c.fillStyle = isPoisoned ? 'rgba(80, 70, 95, 0.3)' : col;
@@ -611,125 +973,108 @@ function texSoilSawah(c, t, S) {
     c.fill();
   }
 
-  // 2. PEMATANG SAWAH BERUNDAK (Terraced Mud Bunds / Galengan)
+  // 2. PEMATANG SAWAH BERUNDAK ORGANIK (3-Tier Terraced Mud Bunds / Galengan)
   const bundTiers = [
-    { y: 590, wL: 320, wR: 1600, thick: 5.5, shade: 'rgba(55, 38, 18, 0.45)', grass: 'rgba(92, 138, 52, 0.6)' },
-    { y: 760, wL: 220, wR: 1700, thick: 7.0, shade: 'rgba(50, 34, 16, 0.50)', grass: 'rgba(84, 128, 46, 0.65)' },
-    { y: 940, wL: 100, wR: 1820, thick: 8.5, shade: 'rgba(45, 30, 14, 0.55)', grass: 'rgba(76, 118, 40, 0.7)' }
+    { tier: 1, wL: 290, wR: 1630, thick: 7.0, shade: 'rgba(50, 32, 14, 0.55)', grass: 'rgba(92, 142, 50, 0.7)' },
+    { tier: 2, wL: 190, wR: 1730, thick: 9.0, shade: 'rgba(45, 28, 12, 0.60)', grass: 'rgba(84, 134, 44, 0.75)' },
+    { tier: 3, wL: 80,  wR: 1840, thick: 11.5, shade: 'rgba(40, 24, 10, 0.65)', grass: 'rgba(76, 124, 38, 0.8)' }
   ];
 
   bundTiers.forEach((b, idx) => {
-    // Bayangan sisi bawah galengan pematang
+    const midY = getTerraceBundY(b.tier, 960);
+    // a. Bayangan tebal bawah pematang (galengan earthen drop shadow)
     c.strokeStyle = b.shade;
-    c.lineWidth = b.thick;
+    c.lineWidth = b.thick * 1.25;
     c.lineCap = 'round';
     c.beginPath();
-    c.moveTo(b.wL, b.y);
-    c.quadraticCurveTo(960, b.y + 22, b.wR, b.y);
+    c.moveTo(b.wL, getTerraceBundY(b.tier, b.wL) + b.thick * 0.4);
+    c.quadraticCurveTo(960, midY + 24 + b.thick * 0.4, b.wR, getTerraceBundY(b.tier, b.wR) + b.thick * 0.4);
     c.stroke();
 
-    // Sisi atas pematang (tumbuh rumput/lumut galengan)
-    c.strokeStyle = isDrought ? 'rgba(140, 115, 65, 0.5)' : b.grass;
+    // b. Tubuh pematang tanah liat padat (packed earthen bund wall)
+    c.strokeStyle = isDrought ? 'rgba(130, 95, 52, 0.85)' : 'rgba(88, 60, 30, 0.85)';
+    c.lineWidth = b.thick;
+    c.beginPath();
+    c.moveTo(b.wL, getTerraceBundY(b.tier, b.wL));
+    c.quadraticCurveTo(960, midY + 22, b.wR, getTerraceBundY(b.tier, b.wR));
+    c.stroke();
+
+    // c. Sisi atas pematang berumput galengan (creeping terrace grass)
+    c.strokeStyle = isDrought ? 'rgba(150, 125, 70, 0.6)' : b.grass;
     c.lineWidth = b.thick * 0.55;
     c.beginPath();
-    c.moveTo(b.wL, b.y - b.thick * 0.35);
-    c.quadraticCurveTo(960, b.y + 22 - b.thick * 0.35, b.wR, b.y - b.thick * 0.35);
+    c.moveTo(b.wL, getTerraceBundY(b.tier, b.wL) - b.thick * 0.35);
+    c.quadraticCurveTo(960, midY + 22 - b.thick * 0.35, b.wR, getTerraceBundY(b.tier, b.wR) - b.thick * 0.35);
     c.stroke();
 
-    // Rumpun rumput kecil di sepanjang pematang
-    const numTufts = 8;
+    // d. Rumpun rumput galengan yang bergoyang tertiup angin
+    const numTufts = 10;
     for (let j = 0; j < numTufts; j++) {
-      const tx = b.wL + 80 + (j + pr(idx * 17 + j)) * ((b.wR - b.wL - 160) / numTufts);
-      const ty = b.y + Math.sin((tx - 960) / 400) * 10;
-      c.strokeStyle = isDrought ? '#8c7642' : '#5a9638';
-      c.lineWidth = 1.8;
+      const tx = b.wL + 70 + (j + pr(idx * 17 + j)) * ((b.wR - b.wL - 140) / numTufts);
+      const ty = getTerraceBundY(b.tier, tx) - b.thick * 0.25;
+      const windSway = Math.sin(t * 0.003 + tx * 0.005) * 3;
+      c.strokeStyle = isDrought ? '#8f7943' : '#5fa438';
+      c.lineWidth = 2.0;
       c.beginPath();
       c.moveTo(tx, ty);
-      c.lineTo(tx - 4, ty - 8 - pr(j * 3) * 5);
+      c.lineTo(tx - 4 + windSway, ty - 8 - pr(j * 3) * 6);
       c.moveTo(tx, ty);
-      c.lineTo(tx + 4, ty - 9 - pr(j * 5) * 5);
+      c.lineTo(tx + 4 + windSway, ty - 9 - pr(j * 5) * 6);
       c.stroke();
+
+      // Bebatuan kali pembatas galengan
+      if (j % 3 === 0) {
+        c.fillStyle = '#656b62';
+        c.strokeStyle = '#3e423c';
+        c.lineWidth = 1.2;
+        c.beginPath();
+        c.ellipse(tx + 12, ty + 2, 7, 4.5, 0.1, 0, Math.PI * 2);
+        c.fill();
+        c.stroke();
+      }
     }
   });
 
-  // 2.5. GENANGAN AIR REFLEKTIF (Reflective Puddles)
+  // 3. GENANGAN AIR REFLEKTIF CERMIN SAWAH (Flooded Mirror Paddy Reflection)
   if (!isDrought) {
-    const waterLevel = S.water !== undefined ? S.water / 100 : 0.6;
-    c.globalAlpha = 0.15 + (waterLevel * 0.2);
-    for (let p = 0; p < 12; p++) {
-      const px = 400 + pr(p * 2.1) * 1100;
-      const py = 480 + pr(p * 5.5) * 500;
-      const rx = 80 + pr(p * 3.3) * 120;
-      const ry = 12 + pr(p * 4.4) * 18;
+    const wNorm = Math.min(1.0, waterLevel / 75);
+    c.globalAlpha = 0.20 + wNorm * 0.35;
+    for (let p = 0; p < 14; p++) {
+      const px = 340 + pr(p * 2.3) * 1240;
+      const py = 460 + pr(p * 5.7) * 520;
+      const rx = 100 + pr(p * 3.1) * 160;
+      const ry = 16 + pr(p * 4.2) * 26;
       const grad = c.createLinearGradient(0, py - ry, 0, py + ry);
-      grad.addColorStop(0, 'rgba(200, 230, 255, 0.8)');
-      grad.addColorStop(1, 'rgba(100, 160, 200, 0.1)');
+      grad.addColorStop(0, isPoisoned ? 'rgba(160, 180, 140, 0.6)' : 'rgba(210, 240, 255, 0.85)');
+      grad.addColorStop(0.5, isPoisoned ? 'rgba(90, 110, 100, 0.4)' : 'rgba(120, 195, 230, 0.55)');
+      grad.addColorStop(1, 'rgba(80, 140, 180, 0.15)');
       c.fillStyle = grad;
       c.beginPath();
       c.ellipse(px, py, rx, ry, 0, 0, Math.PI * 2);
       c.fill();
+
+      // Riak air halus
+      c.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+      c.lineWidth = 1.2;
+      c.beginPath();
+      const rSway = Math.sin(t * 0.003 + p) * 8;
+      c.ellipse(px + rSway, py, rx * 0.6, ry * 0.45, 0, 0, Math.PI * 2);
+      c.stroke();
     }
     c.globalAlpha = 1.0;
   }
 
-  // 3. RETAKAN KEMARAU POLIGONAL ORGANIK (Drought Clay Fissures) saat S.water < 32
+  // 4. RETAKAN KEMARAU POLIGONAL ORGANIK (Mud Desiccation Fissures) saat S.water < 32
   if (isDrought) {
-    const crackAlpha = Math.min(0.9, 0.4 + droughtSeverity * 0.5);
-    c.strokeStyle = 'rgba(42, 26, 12, ' + crackAlpha + ')';
-    c.lineWidth = 2.2 + droughtSeverity * 2.0;
-    c.lineCap = 'round';
-    c.lineJoin = 'round';
-
-    const fissureCenters = [
-      { x: 520, y: 550, s: 70 },
-      { x: 960, y: 530, s: 85 },
-      { x: 1400, y: 560, s: 75 },
-      { x: 420, y: 710, s: 95 },
-      { x: 820, y: 720, s: 110 },
-      { x: 1220, y: 690, s: 105 },
-      { x: 1560, y: 730, s: 90 },
-      { x: 340, y: 910, s: 125 },
-      { x: 740, y: 920, s: 140 },
-      { x: 1180, y: 930, s: 135 },
-      { x: 1620, y: 900, s: 120 }
-    ];
-
-    fissureCenters.forEach((fc, fi) => {
-      const numBranches = 5;
-      for (let b = 0; b < numBranches; b++) {
-        const ang = (b / numBranches) * Math.PI * 2 + pr(fi * 11 + b) * 0.6;
-        const len = fc.s * (0.6 + pr(fi * 7 + b * 3) * 0.6) * droughtSeverity;
-        const x1 = fc.x + Math.cos(ang) * (len * 0.45);
-        const y1 = fc.y + Math.sin(ang) * (len * 0.45);
-        const x2 = fc.x + Math.cos(ang + (pr(b * 5) - 0.5) * 0.5) * len;
-        const y2 = fc.y + Math.sin(ang + (pr(b * 5) - 0.5) * 0.5) * len;
-
-        c.beginPath();
-        c.moveTo(fc.x, fc.y);
-        c.lineTo(x1, y1);
-        c.lineTo(x2, y2);
-        c.stroke();
-
-        if (droughtSeverity > 0.4 && b % 2 === 0) {
-          const x3 = x1 + Math.cos(ang + 0.8) * (len * 0.4);
-          const y3 = y1 + Math.sin(ang + 0.8) * (len * 0.4);
-          c.lineWidth = Math.max(1.2, (2.2 + droughtSeverity * 2.0) * 0.6);
-          c.beginPath();
-          c.moveTo(x1, y1);
-          c.lineTo(x3, y3);
-          c.stroke();
-          c.lineWidth = 2.2 + droughtSeverity * 2.0;
-        }
-      }
-    });
-
-    c.fillStyle = 'rgba(180, 140, 85, ' + (droughtSeverity * 0.28).toFixed(3) + ')';
-    c.fillRect(0, 420, 1920, 660);
+    drawPolygonalMudCracks(c, droughtSeverity, t);
   }
 
-  // 4. EFEK CEMAR PESTISIDA KIMIAWI (Toxic Soil Discoloration)
+  // 5. PARIT IRIGASI BATU KALI & PINTU AIR KAYU (Tulakan)
+  drawIrrigationCanal(c, t, S);
+
+  // 6. EFEK CEMAR PESTISIDA KIMIAWI (Toxic Chemical Discoloration)
   if (isPoisoned) {
-    const pAlpha = Math.min(0.45, (S.poison - 20) / 100);
+    const pAlpha = Math.min(0.48, (S.poison - 20) / 100);
     c.fillStyle = 'rgba(95, 65, 120, ' + pAlpha.toFixed(3) + ')';
     for (let k = 0; k < 6; k++) {
       const cx = 350 + pr(k * 23) * 1200;
@@ -918,86 +1263,166 @@ function texSoilHutan(c, t, S) {
   c.restore();
 }
 
-/* ================= TEKSTUR BANTARAN SUNGAI & KERIKIL ENDAPAN =================
-   - Bantaran atas (upper bank) & bantaran bawah (lower bank) dengan lereng tanah
-   - Garis lumpur basah pasang-surut di bibir aliran air (wet mud waterline)
-   - Kelompok bebatuan kerikil bulat halus (riverbed pebbles & granite stones)
-   - Sedimen lumpur halus & lumut basah tepi air
+/* ================= MATEMATIKA KURVA MEANDER BIBIR SUNGAI ORGANIK =================
+   Memastikan bantaran tanah dan permukaan air menyatu 100% tanpa celah.
 */
-function texSoilSungai(c, t, S) {
+function getRiverBankTop(x) {
+  return 460 + Math.sin(x * 0.0032 + 0.45) * 15 + Math.cos(x * 0.0068 + 1.2) * 8;
+}
+function getRiverBankBottom(x) {
+  return 806 + Math.sin(x * 0.0028 + 1.1) * 16 + Math.cos(x * 0.0062 + 0.5) * 8;
+}
+
+/* ================= BEBATUAN KALI GRANIT 3D & LUMUT BASAH ================= */
+function drawRiverBoulder(c, x, y, rx, ry, baseCol, hasMoss, rot) {
+  rot = rot || 0;
+  c.save();
+  c.translate(x, y);
+  if (rot) c.rotate(rot);
+
+  // 1. Ambient drop shadow (bayangan lembut di tanah/dasar air)
+  c.fillStyle = 'rgba(12, 18, 14, 0.45)';
+  c.beginPath();
+  c.ellipse(2, ry * 0.45, rx * 1.08, ry * 0.65, 0, 0, Math.PI * 2);
+  c.fill();
+
+  // 2. Badan batu granit berlapis (radial gradient 3D)
+  const bg = c.createRadialGradient(-rx * 0.25, -ry * 0.3, ry * 0.15, 0, 0, rx);
+  bg.addColorStop(0, '#a39c92');
+  bg.addColorStop(0.5, baseCol || '#6b655c');
+  bg.addColorStop(1, '#3e3a34');
+  c.fillStyle = bg;
+  c.beginPath();
+  c.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+  c.fill();
+
+  // 3. Highlight tepi atas (cahaya langit)
+  c.fillStyle = 'rgba(255, 255, 255, 0.28)';
+  c.beginPath();
+  c.ellipse(-rx * 0.2, -ry * 0.35, rx * 0.55, ry * 0.35, 0, 0, Math.PI * 2);
+  c.fill();
+
+  // 4. Aksen lumut basah (jika berbatu kali alami)
+  if (hasMoss) {
+    c.fillStyle = 'rgba(56, 108, 42, 0.75)';
+    c.beginPath();
+    c.ellipse(-rx * 0.15, -ry * 0.2, rx * 0.6, ry * 0.4, 0, 0, Math.PI * 2);
+    c.fill();
+
+    c.fillStyle = 'rgba(110, 185, 75, 0.6)';
+    c.beginPath();
+    c.ellipse(-rx * 0.1, -ry * 0.25, rx * 0.35, ry * 0.22, 0, 0, Math.PI * 2);
+    c.fill();
+  }
+
+  c.restore();
+}
+
+/* ================= VEGETASI RUMPUN GELAGAH / RUMPUT AIR TEPIAN ================= */
+function drawRiverReeds(c, x, y, t, count, seed) {
+  count = count || 6;
+  seed = seed || 0;
+  c.save();
+  c.translate(x, y);
+  c.lineCap = 'round';
+
+  for (let i = 0; i < count; i++) {
+    const bladeSeed = seed * 10 + i;
+    const h = 42 + pr(bladeSeed * 1.7) * 36;
+    const bend = Math.sin(t / 900 + bladeSeed * 2.3) * (8 + i * 2);
+    const bladeW = 3.5 + pr(bladeSeed) * 1.5;
+    const xOff = (i - count / 2) * 6;
+
+    // Batang rumput gelagah
+    c.strokeStyle = i % 2 ? '#4d7a36' : '#6b9644';
+    c.lineWidth = bladeW;
+    c.beginPath();
+    c.moveTo(xOff, 0);
+    c.quadraticCurveTo(xOff + bend * 0.5, -h * 0.6, xOff + bend, -h);
+    c.stroke();
+
+    // Ujung bunga bulir cokelat (cattail head) pada beberapa batang tinggi
+    if (i === 1 || i === count - 2) {
+      c.fillStyle = '#4a321a';
+      c.beginPath();
+      c.ellipse(xOff + bend * 0.85, -h * 0.75, 3.5, 9, bend * 0.03, 0, Math.PI * 2);
+      c.fill();
+    }
+  }
+  c.restore();
+}
+
+/* ================= TEKSTUR BANTARAN SUNGAI & KERIKIL ENDAPAN =================
+   Arsitektur Layered Painter:
+   - texSoilSungaiTop: Bantaran atas (Background) di belakang aliran air sungai
+   - texSoilSungaiBottom: Bantaran bawah (Foreground) di depan aliran air sungai
+   - texSoilSungai: Komposit keduanya untuk backward compatibility
+*/
+function texSoilSungaiTop(c, t, S) {
   S = S || {};
   const isPoisoned = S.poison !== undefined && S.poison > 15;
 
   c.save();
 
-  // 1. BANTARAN ATAS (Upper Bank: y = 340 to 470, height 130px)
-  const upGrad = c.createLinearGradient(0, 340, 0, 470);
-  upGrad.addColorStop(0, '#5d9455');
-  upGrad.addColorStop(0.65, '#4a7d43');
-  upGrad.addColorStop(1, '#3a5932');
+  // 1. BANTARAN ATAS ORGANIK (Upper Bank: y = 340 to getRiverBankTop(x))
+  const upGrad = c.createLinearGradient(0, 340, 0, 480);
+  upGrad.addColorStop(0, '#588a4c');
+  upGrad.addColorStop(0.65, '#45733d');
+  upGrad.addColorStop(1, '#34572e');
   c.fillStyle = upGrad;
-  c.fillRect(0, 340, 1920, 130);
+  c.beginPath();
+  c.moveTo(0, 340);
+  c.lineTo(1920, 340);
+  c.lineTo(1920, getRiverBankTop(1920));
+  for (let x = 1920; x >= 0; x -= 30) {
+    c.lineTo(x, getRiverBankTop(x));
+  }
+  c.closePath();
+  c.fill();
 
-  // Garis lumpur basah bibir sungai atas
-  c.fillStyle = 'rgba(32, 24, 15, 0.45)';
-  c.fillRect(0, 462, 1920, 8);
-  c.fillStyle = 'rgba(255, 255, 255, 0.18)';
-  c.fillRect(0, 468, 1920, 2);
+  // Bibir lumpur basah & endapan pasir sungai atas
+  c.strokeStyle = 'rgba(28, 20, 12, 0.65)';
+  c.lineWidth = 8;
+  c.beginPath();
+  c.moveTo(0, getRiverBankTop(0));
+  for (let x = 30; x <= 1920; x += 30) {
+    c.lineTo(x, getRiverBankTop(x));
+  }
+  c.stroke();
 
-  // 2. BANTARAN BAWAH (Lower Bank: y = 810 to 1080, height 270px)
-  const lowGrad = c.createLinearGradient(0, 810, 0, 1080);
-  lowGrad.addColorStop(0, '#2e452a');
-  lowGrad.addColorStop(0.12, '#3c6239');
-  lowGrad.addColorStop(0.5, '#4c7a50');
-  lowGrad.addColorStop(1, '#3b613e');
-  c.fillStyle = lowGrad;
-  c.fillRect(0, 810, 1920, 270);
+  c.strokeStyle = 'rgba(195, 175, 130, 0.28)';
+  c.lineWidth = 3;
+  c.beginPath();
+  c.moveTo(0, getRiverBankTop(0) - 3);
+  for (let x = 30; x <= 1920; x += 30) {
+    c.lineTo(x, getRiverBankTop(x) - 3);
+  }
+  c.stroke();
 
-  // Garis lumpur basah bibir sungai bawah
-  c.fillStyle = 'rgba(28, 20, 12, 0.55)';
-  c.fillRect(0, 810, 1920, 10);
-  c.fillStyle = 'rgba(255, 255, 255, 0.22)';
-  c.fillRect(0, 810, 1920, 2.5);
-
-  // 3. BEBATUAN KERIKIL SUNGAI HALUS (Riverbed Pebbles & Granite Stones)
-  const pebblesUpper = [
-    { x: 180, y: 464, r: 5.5, col: '#7a766f' },
-    { x: 194, y: 466, r: 4.0, col: '#9c978f' },
-    { x: 520, y: 465, r: 6.5, col: '#6b6660' },
-    { x: 536, y: 467, r: 4.5, col: '#8a857d' },
-    { x: 910, y: 464, r: 7.0, col: '#5c5852' },
-    { x: 928, y: 466, r: 5.0, col: '#969086' },
-    { x: 1340, y: 465, r: 6.0, col: '#7d7870' },
-    { x: 1358, y: 467, r: 4.2, col: '#a39d93' },
-    { x: 1720, y: 464, r: 5.8, col: '#69645e' }
+  // 2. BEBATUAN KALI ATAS 3D BERLUMUT
+  const bouldersTop = [
+    { x: 120, y: getRiverBankTop(120) + 2, rx: 22, ry: 13, col: '#625b52', moss: true },
+    { x: 155, y: getRiverBankTop(155) - 6, rx: 14, ry: 9, col: '#7a736a', moss: false },
+    { x: 460, y: getRiverBankTop(460) + 3, rx: 26, ry: 15, col: '#58524a', moss: true },
+    { x: 880, y: getRiverBankTop(880) - 2, rx: 20, ry: 12, col: '#68625a', moss: true },
+    { x: 1380, y: getRiverBankTop(1380) + 4, rx: 28, ry: 16, col: '#5c564e', moss: true },
+    { x: 1750, y: getRiverBankTop(1750) - 4, rx: 19, ry: 11, col: '#726b62', moss: false }
   ];
-
-  pebblesUpper.forEach(p => {
-    c.fillStyle = 'rgba(15, 20, 16, 0.5)';
-    c.beginPath();
-    c.ellipse(p.x, p.y + 1.5, p.r * 1.1, p.r * 0.6, 0, 0, Math.PI * 2);
-    c.fill();
-
-    c.fillStyle = p.col;
-    c.beginPath();
-    c.ellipse(p.x, p.y, p.r, p.r * 0.7, 0, 0, Math.PI * 2);
-    c.fill();
-
-    c.fillStyle = 'rgba(255, 255, 255, 0.35)';
-    c.beginPath();
-    c.ellipse(p.x - p.r * 0.25, p.y - p.r * 0.25, p.r * 0.45, p.r * 0.3, 0, 0, Math.PI * 2);
-    c.fill();
+  bouldersTop.forEach(b => {
+    drawRiverBoulder(c, b.x, b.y, b.rx, b.ry, b.col, b.moss);
   });
 
-  for (let k = 0; k < 22; k++) {
-    const px = 100 + pr(k * 23.3) * 1720;
-    const py = 818 + pr(k * 17.7) * 45;
-    const prx = 5 + pr(k * 7.1) * 9.5;
-    const pry = prx * (0.6 + pr(k * 3.3) * 0.25);
+  // 3. KERIKIL KALI ATAS
+  for (let k = 0; k < 10; k++) {
+    const px = 80 + pr(k * 29.3) * 1760;
+    const baseBankY = getRiverBankTop(px) - 2;
+    const py = baseBankY - pr(k * 13.7) * 14;
+    const prx = 4 + pr(k * 5.1) * 6;
+    const pry = prx * 0.65;
     const pCols = ['#6e6a64', '#8a857d', '#5a554f', '#9e9990', '#7d7468'];
     const pCol = pCols[k % pCols.length];
 
-    c.fillStyle = 'rgba(12, 18, 14, 0.45)';
+    c.fillStyle = 'rgba(12, 18, 14, 0.4)';
     c.beginPath();
     c.ellipse(px + 1, py + pry * 0.35, prx * 1.1, pry * 0.7, 0, 0, Math.PI * 2);
     c.fill();
@@ -1013,25 +1438,145 @@ function texSoilSungai(c, t, S) {
     c.fill();
   }
 
-  // 4. BERCAT LUMUT BASAH & RUMPUT TEPI AIR
-  for (let k = 0; k < 12; k++) {
-    const mx = 120 + pr(k * 37.1) * 1680;
-    const my = 824 + pr(k * 19.3) * 35;
-    c.fillStyle = 'rgba(54, 102, 42, 0.55)';
-    c.beginPath();
-    c.ellipse(mx, my, 18 + pr(k) * 16, 7 + pr(k * 2) * 5, 0, 0, Math.PI * 2);
-    c.fill();
-  }
+  // 4. RUMPUN GELAGAH AIR BANTARAN ATAS
+  const reedClustersTop = [
+    { x: 70, y: getRiverBankTop(70) - 4, count: 6, seed: 1 },
+    { x: 340, y: getRiverBankTop(340) - 6, count: 7, seed: 2 },
+    { x: 720, y: getRiverBankTop(720) - 5, count: 8, seed: 3 },
+    { x: 1160, y: getRiverBankTop(1160) - 4, count: 6, seed: 4 },
+    { x: 1540, y: getRiverBankTop(1540) - 6, count: 7, seed: 5 },
+    { x: 1840, y: getRiverBankTop(1840) - 5, count: 8, seed: 6 }
+  ];
+  reedClustersTop.forEach(r => {
+    drawRiverReeds(c, r.x, r.y, t, r.count, r.seed);
+  });
 
-  // 5. RESPON PENCEMARAN LIMBAH DETERGEN (S.poison > 15)
+  // Respon racun atas
   if (isPoisoned) {
     const poisonAlpha = Math.min(0.55, (S.poison - 15) / 80);
     c.fillStyle = 'rgba(110, 80, 140, ' + poisonAlpha.toFixed(3) + ')';
-    c.fillRect(0, 460, 1920, 14);
-    c.fillRect(0, 808, 1920, 16);
+    c.beginPath();
+    c.moveTo(0, getRiverBankTop(0) - 8);
+    for (let x = 30; x <= 1920; x += 30) c.lineTo(x, getRiverBankTop(x) - 8);
+    for (let x = 1920; x >= 0; x -= 30) c.lineTo(x, getRiverBankTop(x) + 8);
+    c.closePath();
+    c.fill();
   }
 
   c.restore();
+}
+
+function texSoilSungaiBottom(c, t, S) {
+  S = S || {};
+  const isPoisoned = S.poison !== undefined && S.poison > 15;
+
+  c.save();
+
+  // 1. BANTARAN BAWAH ORGANIK (Lower Bank: getRiverBankBottom(x) to y = 1080)
+  const lowGrad = c.createLinearGradient(0, 800, 0, 1080);
+  lowGrad.addColorStop(0, '#2e4a28');
+  lowGrad.addColorStop(0.15, '#3b6235');
+  lowGrad.addColorStop(0.5, '#4a7542');
+  lowGrad.addColorStop(1, '#365930');
+  c.fillStyle = lowGrad;
+  c.beginPath();
+  c.moveTo(0, getRiverBankBottom(0));
+  for (let x = 30; x <= 1920; x += 30) {
+    c.lineTo(x, getRiverBankBottom(x));
+  }
+  c.lineTo(1920, 1080);
+  c.lineTo(0, 1080);
+  c.closePath();
+  c.fill();
+
+  // Bibir lumpur basah pasang-surut sungai bawah
+  c.strokeStyle = 'rgba(22, 16, 10, 0.7)';
+  c.lineWidth = 9;
+  c.beginPath();
+  c.moveTo(0, getRiverBankBottom(0));
+  for (let x = 30; x <= 1920; x += 30) {
+    c.lineTo(x, getRiverBankBottom(x));
+  }
+  c.stroke();
+
+  c.strokeStyle = 'rgba(195, 175, 130, 0.32)';
+  c.lineWidth = 3.5;
+  c.beginPath();
+  c.moveTo(0, getRiverBankBottom(0) + 3.5);
+  for (let x = 30; x <= 1920; x += 30) {
+    c.lineTo(x, getRiverBankBottom(x) + 3.5);
+  }
+  c.stroke();
+
+  // 2. BEBATUAN KALI BAWAH 3D BERLUMUT (Berada di depan air)
+  const bouldersBottom = [
+    { x: 260, y: getRiverBankBottom(260) + 4, rx: 25, ry: 15, col: '#5e574f', moss: true },
+    { x: 740, y: getRiverBankBottom(740) + 12, rx: 32, ry: 18, col: '#524c44', moss: true },
+    { x: 785, y: getRiverBankBottom(785) + 16, rx: 16, ry: 10, col: '#756e65', moss: false },
+    { x: 1220, y: getRiverBankBottom(1220) + 8, rx: 24, ry: 14, col: '#625b52', moss: true },
+    { x: 1580, y: getRiverBankBottom(1580) + 6, rx: 34, ry: 19, col: '#4f4942', moss: true },
+    { x: 1630, y: getRiverBankBottom(1630) + 14, rx: 18, ry: 11, col: '#787168', moss: false }
+  ];
+  bouldersBottom.forEach(b => {
+    drawRiverBoulder(c, b.x, b.y, b.rx, b.ry, b.col, b.moss);
+  });
+
+  // 3. KERIKIL KALI BAWAH
+  for (let k = 10; k < 20; k++) {
+    const px = 80 + pr(k * 29.3) * 1760;
+    const baseBankY = getRiverBankBottom(px) + 6;
+    const py = baseBankY + pr(k * 13.7) * 28;
+    const prx = 4 + pr(k * 5.1) * 6;
+    const pry = prx * 0.65;
+    const pCols = ['#6e6a64', '#8a857d', '#5a554f', '#9e9990', '#7d7468'];
+    const pCol = pCols[k % pCols.length];
+
+    c.fillStyle = 'rgba(12, 18, 14, 0.4)';
+    c.beginPath();
+    c.ellipse(px + 1, py + pry * 0.35, prx * 1.1, pry * 0.7, 0, 0, Math.PI * 2);
+    c.fill();
+
+    c.fillStyle = pCol;
+    c.beginPath();
+    c.ellipse(px, py, prx, pry, 0, 0, Math.PI * 2);
+    c.fill();
+
+    c.fillStyle = 'rgba(255, 255, 255, 0.28)';
+    c.beginPath();
+    c.ellipse(px - prx * 0.25, py - pry * 0.25, prx * 0.4, pry * 0.35, 0, 0, Math.PI * 2);
+    c.fill();
+  }
+
+  // 4. RUMPUN GELAGAH AIR BANTARAN BAWAH (Menghadap ke atas di depan air, bebas dari crop!)
+  const reedClustersBottom = [
+    { x: 160, y: getRiverBankBottom(160) + 18, count: 7, seed: 7 },
+    { x: 540, y: getRiverBankBottom(540) + 22, count: 8, seed: 8 },
+    { x: 990, y: getRiverBankBottom(990) + 16, count: 6, seed: 9 },
+    { x: 1410, y: getRiverBankBottom(1410) + 24, count: 8, seed: 10 },
+    { x: 1780, y: getRiverBankBottom(1780) + 20, count: 7, seed: 11 }
+  ];
+  reedClustersBottom.forEach(r => {
+    drawRiverReeds(c, r.x, r.y, t, r.count, r.seed);
+  });
+
+  // Respon racun bawah
+  if (isPoisoned) {
+    const poisonAlpha = Math.min(0.55, (S.poison - 15) / 80);
+    c.fillStyle = 'rgba(110, 80, 140, ' + poisonAlpha.toFixed(3) + ')';
+    c.beginPath();
+    c.moveTo(0, getRiverBankBottom(0) - 8);
+    for (let x = 30; x <= 1920; x += 30) c.lineTo(x, getRiverBankBottom(x) - 8);
+    for (let x = 1920; x >= 0; x -= 30) c.lineTo(x, getRiverBankBottom(x) + 8);
+    c.closePath();
+    c.fill();
+  }
+
+  c.restore();
+}
+
+function texSoilSungai(c, t, S) {
+  texSoilSungaiTop(c, t, S);
+  texSoilSungaiBottom(c, t, S);
 }
 function spDeer(c,x,y,t){c.save();c.translate(x,y);const b=Math.sin(t/700)*1.5;
  SH(c,0,2,26);
@@ -1146,11 +1691,90 @@ function spBag(c,x,y,t){c.save();c.translate(x,y+Math.sin(t/800+x)*4);
  c.fillStyle='rgba(235,235,235,.85)';c.beginPath();c.moveTo(-10,-8);c.quadraticCurveTo(-14,4,-8,8);
  c.quadraticCurveTo(0,12,8,8);c.quadraticCurveTo(14,4,10,-8);c.quadraticCurveTo(6,-14,3,-8);
  c.quadraticCurveTo(0,-12,-3,-8);c.quadraticCurveTo(-6,-14,-10,-8);c.fill();c.restore();}
-function gulmaPatch(c,x,y,s,t){c.save();c.translate(x+Math.sin(t/1700+x)*6,y);
- for(let i=0;i<5;i++){O(c,(i-2)*16*s,(pr(i+x)*14-7)*s,15*s,9*s,i%2?'#3f8a4a':'#57a54a');
-  c.strokeStyle='rgba(20,60,25,.5)';c.lineWidth=1.5*s;c.beginPath();c.moveTo((i-2)*16*s-10*s,(pr(i+x)*14-7)*s);c.lineTo((i-2)*16*s+10*s,(pr(i+x)*14-7)*s);c.stroke();}
- CIRC(c,10*s,-6*s,3.5*s,'#c95f8a');CIRC(c,9*s,-7*s,1.2*s,'#f7d4e4');CIRC(c,12*s,-4*s,2*s,'#e89ac0');
- c.restore();}
+function gulmaPatch(c, x, y, s, t) {
+  c.save();
+  // Floating bobbing & tilt dinamis mengikuti arus air
+  const bobY = Math.sin(t / 800 + x * 0.05) * 5;
+  const bobX = Math.sin(t / 1700 + x) * 6;
+  const tilt = Math.sin(t / 1100 + x * 0.03) * 0.045;
+  c.translate(x + bobX, y + bobY);
+  c.rotate(tilt);
+
+  // 1. Bayangan bawah air lembut (subsurface shadow)
+  c.fillStyle = 'rgba(10, 35, 20, 0.28)';
+  c.beginPath();
+  c.ellipse(0, 8 * s, 36 * s, 14 * s, 0, 0, Math.PI * 2);
+  c.fill();
+
+  // 2. Tangkai daun menggembung (bulbous petioles) di pangkal rumpun
+  const petioleCols = ['#2e5927', '#3d6e32', '#4c823f'];
+  for (let p = 0; p < 4; p++) {
+    const px = (p - 1.5) * 10 * s;
+    const py = (2 + (p % 2) * 3) * s;
+    c.fillStyle = petioleCols[p % petioleCols.length];
+    c.beginPath();
+    c.ellipse(px, py, 7 * s, 5 * s, (p - 1.5) * 0.2, 0, Math.PI * 2);
+    c.fill();
+  }
+
+  // 3. Daun roset mengembang (lebar, hijau mengkilap khas eceng gondok)
+  for (let i = 0; i < 6; i++) {
+    const leafX = (i - 2.5) * 14 * s;
+    const leafY = (pr(i + x) * 10 - 7) * s;
+    const leafRot = (i - 2.5) * 0.16;
+    c.save();
+    c.translate(leafX, leafY);
+    c.rotate(leafRot);
+
+    // Daun oval mengkilap
+    O(c, 0, 0, 16 * s, 10 * s, i % 2 ? '#2e6b30' : '#418a3e');
+    // Tulang daun melengkung
+    c.strokeStyle = 'rgba(15, 45, 18, 0.45)';
+    c.lineWidth = 1.6 * s;
+    c.beginPath();
+    c.moveTo(-11 * s, 0);
+    c.quadraticCurveTo(0, -2 * s, 11 * s, 0);
+    c.stroke();
+    // Kilau lilin daun (cuticle gloss)
+    c.fillStyle = 'rgba(255, 255, 255, 0.22)';
+    c.beginPath();
+    c.ellipse(-3 * s, -3 * s, 7 * s, 3 * s, -0.2, 0, Math.PI * 2);
+    c.fill();
+
+    c.restore();
+  }
+
+  // 4. Bunga Eceng Gondok Khas (Kelopak Lavender-Violet dengan bintik kuning emas)
+  c.save();
+  c.translate(8 * s, -10 * s);
+  // Tangkai bunga tegak
+  c.strokeStyle = '#39632f';
+  c.lineWidth = 2.5 * s;
+  c.beginPath();
+  c.moveTo(0, 8 * s);
+  c.lineTo(0, 0);
+  c.stroke();
+
+  // Kelopak lavender melingkar
+  const petalCols = ['#9c88d9', '#b39ddb', '#7e57c2', '#d1c4e9'];
+  for (let k = 0; k < 5; k++) {
+    const ang = (k * Math.PI * 2) / 5 - Math.PI / 2;
+    const px = Math.cos(ang) * 5 * s;
+    const py = Math.sin(ang) * 5 * s;
+    CIRC(c, px, py, 3.5 * s, petalCols[k % petalCols.length]);
+  }
+  // Kelopak atas dominan dengan semburat ungu pekat
+  CIRC(c, 0, -5.5 * s, 4 * s, '#673ab7');
+  // Bintik biru muda di kelopak atas
+  CIRC(c, 0, -5.5 * s, 2.5 * s, '#80d8ff');
+  // Bintik kuning emas khas di tengah kelopak atas (nectar guide)
+  CIRC(c, 0, -5.5 * s, 1.3 * s, '#ffd600');
+  // Pusat bunga
+  CIRC(c, 0, 0, 1.8 * s, '#fff9c4');
+  c.restore();
+
+  c.restore();
+}
 
 /* ================= KANVAS: ADEGAN ================= */
 

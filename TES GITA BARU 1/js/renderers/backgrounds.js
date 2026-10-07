@@ -9,6 +9,17 @@ function skyPaint(c,top,bot,hor){c.fillStyle=LG(c,0,0,0,hor,top,bot);c.fillRect(
    Signature sama seperti sunDraw lama sehingga 3 biome tak perlu diubah. */
 var SUNNOISE=null;
 
+function parseHexRgb(hex) {
+  return [parseInt(hex.substr(1,2),16), parseInt(hex.substr(3,2),16), parseInt(hex.substr(5,2),16)];
+}
+
+function fastLerpColor(rgb1, rgb2, t) {
+  const r = Math.round(rgb1[0] + (rgb2[0]-rgb1[0])*t),
+        g = Math.round(rgb1[1] + (rgb2[1]-rgb1[1])*t),
+        b = Math.round(rgb1[2] + (rgb2[2]-rgb1[2])*t);
+  return `rgb(${r},${g},${b})`;
+}
+
 function lerpColor(c1, c2, t) {
   const r1 = parseInt(c1.substr(1,2),16), g1 = parseInt(c1.substr(3,2),16), b1 = parseInt(c1.substr(5,2),16);
   const r2 = parseInt(c2.substr(1,2),16), g2 = parseInt(c2.substr(3,2),16), b2 = parseInt(c2.substr(5,2),16);
@@ -27,6 +38,11 @@ const SKY_STOPS = [
   {p: 1.0, top: '#3b82f6', bot: '#bae6fd', sunY: -20}  
 ];
 
+SKY_STOPS.forEach(s => {
+  s.topRgb = parseHexRgb(s.top);
+  s.botRgb = parseHexRgb(s.bot);
+});
+
 function getSkyState(t) {
   const cycle = (t % 60000) / 60000;
   let s1 = SKY_STOPS[0], s2 = SKY_STOPS[1];
@@ -37,8 +53,8 @@ function getSkyState(t) {
   }
   const factor = (cycle - s1.p) / (s2.p - s1.p);
   return {
-    top: lerpColor(s1.top, s2.top, factor),
-    bot: lerpColor(s1.bot, s2.bot, factor),
+    top: (s1.topRgb && s2.topRgb) ? fastLerpColor(s1.topRgb, s2.topRgb, factor) : lerpColor(s1.top, s2.top, factor),
+    bot: (s1.botRgb && s2.botRgb) ? fastLerpColor(s1.botRgb, s2.botRgb, factor) : lerpColor(s1.bot, s2.bot, factor),
     sunY: s1.sunY + (s2.sunY - s1.sunY) * factor,
     isNight: cycle > 0.55 && cycle < 0.95,
     nightFade: cycle > 0.55 && cycle < 0.6 ? (cycle-0.55)/0.05 : (cycle > 0.9 && cycle < 0.95 ? 1-(cycle-0.9)/0.05 : (cycle >= 0.6 && cycle <= 0.9 ? 1 : 0))
@@ -309,61 +325,182 @@ function updateOrganismPool(S, dt = 16.7) {
 
 
 
+/* ================= LANSKAP SAWAH TERASERING NUSANTARA ================= */
+
+// Pegunungan Suasana Hutan Tropis (texRidge berlapis dengan vegetasi & kabut lembah persis seperti sceneHutan)
+function drawSawahMountains(c, t) {
+  texRidge(c, [[0, 380], [340, 250], [720, 380]], '#8fb996', 51);
+  texRidge(c, [[520, 380], [960, 210], [1400, 380]], '#7fae7c', 63);
+  texRidge(c, [[0, 380], [500, 300], [1000, 380], [1500, 310], [1920, 380]], '#5e8f63', 77);
+  c.fillStyle = 'rgba(255,255,255,.10)';
+  c.fillRect(0, 230, 1920, 150);
+}
+
+// Capung Sawah Lincah (Dragonfly hovering & darting)
+function drawDragonfly(c, x, y, t, seed) {
+  c.save();
+  c.translate(x, y);
+  const hoverSway = Math.sin(t * 0.005 + seed * 2.3) * 0.12;
+  c.rotate(hoverSway);
+
+  const col = seed % 2 === 0 ? '#1f7a6c' : '#bd7824';
+  c.strokeStyle = col;
+  c.lineWidth = 2.0;
+  c.beginPath();
+  c.moveTo(-10, 0);
+  c.lineTo(12, 0);
+  c.stroke();
+
+  c.fillStyle = '#183832';
+  c.beginPath();
+  c.arc(-11, 0, 2.5, 0, Math.PI * 2);
+  c.fill();
+
+  const wingBeat = Math.sin(t * 0.08 + seed * 1.7) * 7;
+  c.fillStyle = 'rgba(215, 245, 255, 0.65)';
+  c.strokeStyle = 'rgba(180, 220, 240, 0.85)';
+  c.lineWidth = 0.8;
+
+  [-1, 1].forEach(side => {
+    c.beginPath();
+    c.ellipse(-2, side * (8 + wingBeat * 0.3), 11, 3.2, side * 0.25, 0, Math.PI * 2);
+    c.fill();
+    c.stroke();
+
+    c.beginPath();
+    c.ellipse(4, side * (7 - wingBeat * 0.3), 9, 2.8, side * -0.2, 0, Math.PI * 2);
+    c.fill();
+    c.stroke();
+  });
+
+  c.restore();
+}
+
+// Burung Pipit / Sriti Melayang di Angkasa Bukit
+function drawSawahBirds(c, t) {
+  c.save();
+  const birds = [
+    { bx: 460 + ((t * 0.065) % 2100) - 100, by: 195 + Math.sin(t * 0.003) * 18, s: 0.9 },
+    { bx: 510 + ((t * 0.065) % 2100) - 100, by: 215 + Math.sin(t * 0.003 + 0.8) * 16, s: 0.75 },
+    { bx: 1350 + (((t + 4000) * 0.055) % 2100) - 100, by: 180 + Math.cos(t * 0.0028) * 20, s: 0.85 }
+  ];
+
+  birds.forEach((b, bi) => {
+    const flap = Math.sin(t * 0.012 + bi * 1.5) * 5 * b.s;
+    c.strokeStyle = '#2b3834';
+    c.lineWidth = 1.6 * b.s;
+    c.beginPath();
+    c.moveTo(b.bx - 9 * b.s, b.by - flap);
+    c.quadraticCurveTo(b.bx - 4 * b.s, b.by, b.bx, b.by + 2 * b.s);
+    c.quadraticCurveTo(b.bx + 4 * b.s, b.by, b.bx + 9 * b.s, b.by - flap);
+    c.stroke();
+  });
+  c.restore();
+}
+
 function sceneSawah(c,t,S){
- c.fillStyle='#6a9e6e';c.fillRect(0,0,1920,1080);
- drawDynamicSky(c, 360, t, 1620);
- texRidge(c,[[0,360],[300,240],[640,360]],'#96b98d',11);
- texRidge(c,[[420,360],[820,200],[1240,360]],'#7fae7c',23);
- texRidge(c,[[200,360],[560,280],[980,360],[1500,300],[1920,360]],'#6a9e6e',37);
- c.fillStyle='rgba(255,255,255,.10)';c.fillRect(0,220,1920,150);
- const wv=wdisp(S),wf=c01(wv/75);
- const wg=c.createLinearGradient(0,420,0,1080);
- wg.addColorStop(0,mixc('#c9a86a','#bfe3ef',wf));
- wg.addColorStop(.45,mixc('#c9a86a','#4f9ab8',wf));
- wg.addColorStop(1,mixc('#a8895a','#2e6b8a',wf));
- F(c,[[0,1080],[380,420],[1560,420],[1920,1080]],wg);
- // riak + kilau + bibir lumpur (ter-clip poligon air)
- c.save();c.beginPath();c.moveTo(0,1080);c.lineTo(380,420);c.lineTo(1560,420);c.lineTo(1920,1080);c.closePath();c.clip();
- c.strokeStyle='rgba(255,255,255,'+(.08+.16*wf).toFixed(3)+')';c.lineWidth=3;c.lineCap='round';
- for(let i=0;i<4;i++){const ry=540+i*130+Math.sin(t/700+i*1.7)*10;
-  c.beginPath();c.moveTo(300+i*40,ry);c.quadraticCurveTo(960,ry+40+Math.sin(t/900+i)*14,1620-i*40,ry);c.stroke();}
- c.fillStyle='rgba(255,250,220,'+(.10+.20*wf).toFixed(3)+')';
- for(let i=0;i<8;i++){const gx=(pr(i*29)*1680+240+Math.sin(t/800+i*2.3)*30),gy=500+pr(i*13)*480;
-  c.beginPath();c.arc(gx,gy,1.5+Math.abs(Math.sin(t/450+i))*2.2,0,7);c.fill();}
- c.strokeStyle='rgba(120,95,60,'+((1-wf)*.55).toFixed(3)+')';c.lineWidth=30;
- c.beginPath();c.moveTo(0,1080);c.lineTo(380,420);c.lineTo(1560,420);c.lineTo(1920,1080);c.stroke();
- c.restore();
- texSoilSawah(c, t, S);
- for(let k=0;k<12;k++){const f=k/11,ly=1080+(420-1080)*f,s=.5+f*.9;
-  spGrass(c,0+(380-0)*f-40-pr(7+k*1.3)*60,ly,s,7+k,t);
-  spGrass(c,1920+(1560-1920)*f+40+pr(47+k*1.3)*60,ly,s,47+k,t);}
+  S = S || {};
+  // 1. Decrement irrigation flow timer
+  if (S._irrigationFlowTimer !== undefined && S._irrigationFlowTimer > 0) {
+    S._irrigationFlowTimer--;
+  }
+
+  // 2. Latar Belakang & Langit Dinamis
+  c.fillStyle = '#5c8a58';
+  c.fillRect(0, 0, 1920, 1080);
+  drawDynamicSky(c, 370, t, 1620);
+  drawSawahMountains(c, t);
+  drawSawahBirds(c, t);
+
+  // 3. Dasar Petak Terasering Sawah Organik
+  const wv = wdisp(S), wf = c01(wv / 75);
+  const isDrought = S.water !== undefined && S.water < 32;
+  const wg = c.createLinearGradient(0, 420, 0, 1080);
+  if (isDrought) {
+    wg.addColorStop(0, '#c79d62');
+    wg.addColorStop(0.45, '#997444');
+    wg.addColorStop(1, '#75542e');
+  } else {
+    wg.addColorStop(0, mixc('#876136', '#b5e1ef', wf * 0.85));
+    wg.addColorStop(0.45, mixc('#664422', '#4b98b7', wf * 0.85));
+    wg.addColorStop(1, mixc('#4f3216', '#2b6988', wf * 0.85));
+  }
+
+  c.save();
+  c.beginPath();
+  c.moveTo(0, 1080);
+  c.quadraticCurveTo(140, 720, 280, 420);
+  c.lineTo(1640, 420);
+  c.quadraticCurveTo(1780, 720, 1920, 1080);
+  c.closePath();
+  c.fillStyle = wg;
+  c.fill();
+  c.restore();
+
+  // 4. Lapisan Tanah, Pematang 3D, Retakan Poligonal, & Pintu Air Tulakan
+  texSoilSawah(c, t, S);
+
+  // 5. Rerumputan & Vegetasi Tepi Lereng Sawah
+  for (let k = 0; k < 12; k++) {
+    const f = k / 11, ly = 1080 + (420 - 1080) * f, s = 0.5 + f * 0.9;
+    spGrass(c, 0 + (280 - 0) * f - 40 - pr(7 + k * 1.3) * 60, ly, s, 7 + k, t);
+    spGrass(c, 1920 + (1640 - 1920) * f + 40 + pr(47 + k * 1.3) * 60, ly, s, 47 + k, t);
+  }
   updateOrganismPool(S, 16.7);
 
-  // 1. PADI (Tunas Bertumbuh & Melayu Anggun)
-  const rows = [[540, 1], [690, .82], [860, .62], [1050, .46]];
+  // 1. PADI (Tunas Bertumbuh, Rumpun Lebat, & Padi Menari Bergelombang Angin)
+  const rows = [
+    { y: 535, scale: 0.60, tier: 1 },
+    { y: 680, scale: 0.78, tier: 1 },
+    { y: 835, scale: 0.94, tier: 2 },
+    { y: 995, scale: 1.10, tier: 3 }
+  ];
+
   rows.forEach((r, ri) => {
-    const n = Math.max(0, Math.round(S.prod / 6));
+    // Pola Jajar Legowo: kepadatan teratur sejak awal (min 9 rumpun per baris saat Hari 1, hingga 13 saat subur agar total entitas <= 60)
+    const n = Math.min(13, Math.max(9, Math.round((S.prod || 30) / 4.6)));
     syncOrganismPool(S, 'sawah_rice_' + ri, n, (i, seed) => {
-      const x = 120 + (i + .5) * (1680 / Math.max(1, n)) + (ri % 2) * 34;
-      return { x, y: r[0], r1: r[1], ri, i, seed };
+      const x = 180 + (i + 0.5) * (1560 / Math.max(1, n)) + (ri % 2) * 32;
+      return { x, y: r.y, r1: r.scale, ri, i, seed };
     }, { isPlant: true, durationIn: 1600, durationOut: 1400 });
 
     const rices = (S._orgPool && S._orgPool['sawah_rice_' + ri]) || [];
     rices.forEach(ent => {
       c.save();
       c.globalAlpha = ent.fade !== undefined ? ent.fade : 1;
-      const baseCol = '#3f9a4e';
+
+      // Kematangan & warna dinamis
+      const isGolden = (S.prod || 0) > 46;
+      const baseCol = isGolden ? '#5fa848' : '#3f9a4e';
       const witherCol = '#8c6c38';
       const col = ent.wither > 0 ? mixc(baseCol, witherCol, ent.wither) : baseCol;
-      const r1 = ent.extra ? ent.extra.r1 : r[1];
-      const hgt = 46 * r1 * (0.8 + pr(ri * 40 + (ent.extra ? ent.extra.i : 0)) * 0.4) * (ent.scaleY || 1.0);
-      
+      const r1 = ent.extra ? ent.extra.r1 : r.scale;
+      const hgt = (34 + (S.prod || 30) * 0.32) * r1 * (0.85 + pr(ri * 40 + (ent.extra ? ent.extra.i : 0)) * 0.3) * (ent.scaleY || 1.0);
+
+      // Krisis wereng (hopperburn) & kekeringan
+      const hopperburn = (S.wereng && S.wereng > 15) ? Math.min(1.0, (S.wereng - 15) / 50) : 0;
+      const droughtSeverity = (S.water !== undefined && S.water < 32) ? (32 - S.water) / 32 : 0;
+
+      // Algoritma Gelombang Angin Menjalar Semilir Alami ("Padi Menari" - Halus & Proporsional)
+      const windWave1 = Math.sin(t * 0.0013 - ent.x * 0.0018 + ri * 0.65);
+      const windWave2 = Math.cos(t * 0.0022 + ent.x * 0.0035) * 0.3;
+      // Reduksi ~60% ke kisaran sepoi-sepoi tenang 6 - 11px
+      const baseSway = (windWave1 + windWave2) * (3.2 + r1 * 4.8);
+      // Damped sway: tanaman layu atau krisis berayun lebih kaku dan lunglai alami
+      const swayDamp = Math.max(0.18, 1.0 - (ent.wither || 0) * 0.75 - droughtSeverity * 0.45 - hopperburn * 0.45);
+      const sway = baseSway * swayDamp;
+
       if (ent.wither > 0) {
         c.translate(ent.x, ent.y);
         c.rotate(ent.wither * 0.38);
         c.translate(-ent.x, -ent.y);
       }
-      spRice(c, ent.x, ent.y, hgt, col, Math.sin(t / 600 + ent.seed) * 2);
+
+      spRice(c, ent.x, ent.y, hgt, col, sway, {
+        isGolden,
+        hopperburn,
+        drought: droughtSeverity
+      });
       c.restore();
     });
   });
@@ -445,6 +582,12 @@ function sceneSawah(c,t,S){
     c.restore();
   });
 
+  // Capung Sawah Melayang di Atas Padi & Air
+  for (let d = 0; d < 3; d++) {
+    const dfx = 350 + pr(d * 19) * 1200 + Math.sin(t * 0.0018 + d * 2.2) * 120;
+    const dfy = 480 + pr(d * 31) * 380 + Math.cos(t * 0.0025 + d * 1.7) * 45;
+    drawDragonfly(c, dfx, dfy, t, d);
+  }
   for(let i=0;i<3;i++)butterfly(c,300+pr(i*23)*1300+Math.sin(t/700+i*2)*60,320+pr(i*29)*160+Math.cos(t/900+i)*40,t,i);
   if(S.poison>15){c.fillStyle='rgba(96,60,130,'+(c01(S.poison/150)*.5).toFixed(3)+')';c.fillRect(0,360,1920,720);}}
 
@@ -537,75 +680,221 @@ function sceneHutan(c,t,S){
   for(let i=0;i<nx;i++){const x=180+((i*397)%1560),y=560+((i*211)%380);
    c.beginPath();c.moveTo(x-16,y-12);c.lineTo(x+16,y+12);c.moveTo(x+16,y-12);c.lineTo(x-16,y+12);c.stroke();}}
  if(S.trap>15){c.fillStyle='rgba(30,26,18,'+(c01(S.trap/160)*.45).toFixed(3)+')';c.fillRect(0,0,1920,1080);}}
-function sceneSungai(c,t,S){
- drawDynamicSky(c, 340, t, 1500);
- texRidge(c,[[0,340],[500,240],[1100,340],[1700,260],[1920,340]],'#6f9e68',91);
- c.fillStyle='rgba(255,255,255,.08)';c.fillRect(0,200,1920,120);
- texSoilSungai(c, t, S);
- {const wv2=wdisp(S),wf2=c01(wv2/80);
- const sg=c.createLinearGradient(0,470,0,810);
- sg.addColorStop(0,mixc('#4fa08a','#8fd8c4',wf2));sg.addColorStop(1,mixc('#2e6b62','#4fa8a0',wf2));
- c.fillStyle=sg;c.fillRect(0,470,1920,340);
- // buih tepi bank
- c.fillStyle='rgba(255,255,255,'+(.14+.16*wf2).toFixed(3)+')';
- for(let i=0;i<24;i++){const bx=(i+.5)*80+Math.sin(t/600+i)*10;
-  c.beginPath();c.arc(bx,474+Math.sin(t/500+i*1.3)*3,2+pr(i*3)*2.5,0,7);c.fill();
-  c.beginPath();c.arc(bx+30,806+Math.cos(t/550+i)*3,2+pr(i*7)*2.5,0,7);c.fill();}
- // riak 2 lapis mengalir
- c.lineCap='round';
- c.strokeStyle='rgba(255,255,255,.14)';c.lineWidth=3;
- for(let i=0;i<5;i++){const ry=515+i*62+Math.sin(t/700+i*2)*8;
-  c.beginPath();c.moveTo(-20,ry);
-  for(let x=0;x<=1920;x+=240)c.quadraticCurveTo(x+60,ry+Math.sin(t/700+x/160+i)*10,x+120,ry);
-  c.stroke();}
- c.strokeStyle='rgba(10,60,55,.18)';c.lineWidth=2;
- for(let i=0;i<4;i++){const ry=545+i*70+Math.cos(t/900+i*1.5)*8;
-  c.beginPath();c.moveTo(-20,ry);
-  for(let x=0;x<=1920;x+=300)c.quadraticCurveTo(x+75,ry+Math.cos(t/900+x/200+i)*12,x+150,ry);
-  c.stroke();}}
- c.strokeStyle='rgba(255,255,255,.28)';c.lineWidth=4;c.setLineDash([46,34]);c.lineDashOffset=-t/12;
- for(let i=0;i<5;i++){c.beginPath();c.moveTo(0,515+i*62);c.lineTo(1920,515+i*62);c.stroke();}
- c.setLineDash([]);
- c.fillStyle='#fff';
- for(let i=0;i<10;i++){const x=(pr(i*13)*1920+t/14*(1+(i%3)*.3))%1920;
-  c.globalAlpha=.18+.3*Math.abs(Math.sin(t/500+i*2));
-  c.beginPath();c.arc(x,500+pr(i*7)*280,1.5+Math.abs(Math.sin(t/400+i))*2,0,7);c.fill();}
- c.globalAlpha=1;
+function sceneSungai(c, t, S) {
+  // 1. LANGIT & PERBUKITAN TROPIS BERLAPIS (Layered Tropical Hills & Atmospheric Fog)
+  drawDynamicSky(c, 340, t, 1500);
+
+  // Bukit jauh berselimut kabut lembah
+  texRidge(c, [[-40, 340], [380, 200], [860, 260], [1340, 195], [1780, 250], [1960, 340]], '#527b60', 104);
+  const valleyMist = c.createLinearGradient(0, 200, 0, 340);
+  valleyMist.addColorStop(0, 'rgba(215, 240, 230, 0)');
+  valleyMist.addColorStop(1, 'rgba(215, 240, 230, 0.32)');
+  c.fillStyle = valleyMist;
+  c.fillRect(0, 200, 1920, 140);
+
+  // Bukit tengah dengan kanopi hutan hujan
+  texRidge(c, [[-30, 340], [260, 250], [700, 220], [1140, 265], [1580, 230], [1950, 340]], '#3c6c42', 91);
+  c.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  c.fillRect(0, 260, 1920, 80);
+
+  // 2. BANTARAN ATAS (Background Bank: Tanah, Batu Kali & Gelagah Atas)
+  if (typeof texSoilSungaiTop === 'function') texSoilSungaiTop(c, t, S);
+  else texSoilSungai(c, t, S);
+
+  // 3. BADAN AIR ORGANIK & GRADASI KEDALAMAN (Organic Meander Water Body)
+  const wv2 = wdisp(S);
+  const wf2 = c01(wv2 / 80);
+  const poisonFactor = c01((S.poison || 0) / 70);
+  const mudFactor = c01(((S.lumpur || 0) + (S.trash || 0) * 0.4) / 60);
+
+  // Warna dinamis air sungai:
+  // Normal jernih: hijau zamrud toska nusantara
+  let bankColTop = mixc('#3fa38f', '#6dd5be', wf2);
+  let deepCol    = mixc('#1b5a50', '#2d8274', wf2);
+  let bankColBot = mixc('#2d7366', '#4fa899', wf2);
+
+  // Respon erosi & lumpur (aluvial cokelat)
+  if (mudFactor > 0) {
+    bankColTop = mixc(bankColTop, '#8c704f', mudFactor * 0.85);
+    deepCol    = mixc(deepCol,    '#5c452c', mudFactor * 0.9);
+    bankColBot = mixc(bankColBot, '#735738', mudFactor * 0.85);
+  }
+
+  // Respon racun/limbah industri (toska berminyak keabuan kusam)
+  if (poisonFactor > 0) {
+    bankColTop = mixc(bankColTop, '#5c6f6c', poisonFactor * 0.8);
+    deepCol    = mixc(deepCol,    '#3c4a47', poisonFactor * 0.85);
+    bankColBot = mixc(bankColBot, '#495956', poisonFactor * 0.8);
+  }
+
+  // Gambar permukaan air mengikuti kurva organik getRiverBankTop & getRiverBankBottom
+  c.save();
+  c.beginPath();
+  c.moveTo(0, getRiverBankTop(0));
+  for (let x = 30; x <= 1920; x += 30) {
+    c.lineTo(x, getRiverBankTop(x));
+  }
+  c.lineTo(1920, getRiverBankBottom(1920));
+  for (let x = 1920; x >= 0; x -= 30) {
+    c.lineTo(x, getRiverBankBottom(x));
+  }
+  c.closePath();
+
+  const sg = c.createLinearGradient(0, 450, 0, 830);
+  sg.addColorStop(0, bankColTop);
+  sg.addColorStop(0.38, deepCol);
+  sg.addColorStop(0.68, deepCol);
+  sg.addColorStop(1, bankColBot);
+  c.fillStyle = sg;
+  c.fill();
+
+  // 4. BUIH ALAMI BIBIR SUNGAI (Natural Shoreline Foam)
+  const foamAlpha = (0.22 + 0.18 * wf2 - 0.08 * mudFactor).toFixed(3);
+  c.fillStyle = 'rgba(255, 255, 255, ' + foamAlpha + ')';
+  for (let i = 0; i < 32; i++) {
+    const bx = (i + 0.5) * 60 + Math.sin(t / 600 + i * 1.7) * 8;
+    const byTop = getRiverBankTop(bx) + 2 + Math.sin(t / 450 + i * 2.1) * 2;
+    c.beginPath();
+    c.ellipse(bx, byTop, 3.5 + pr(i * 3) * 3, 1.8 + pr(i * 5) * 1.5, 0, 0, Math.PI * 2);
+    c.fill();
+
+    const byBot = getRiverBankBottom(bx) - 2 - Math.cos(t / 500 + i * 1.9) * 2;
+    c.beginPath();
+    c.ellipse(bx + 15, byBot, 4 + pr(i * 7) * 3.5, 2 + pr(i * 11) * 1.5, 0, 0, Math.PI * 2);
+    c.fill();
+  }
+
+  // 5. RIAK ARUS MULTI-LAYER SINUSOIDAL (HAPUS TOTAL GARIS JALAN RAYA)
+  // Menghasilkan 5 lapisan arus fluida yang mengikuti lekukan alami sungai
+  c.lineCap = 'round';
+  const currentRatios = [0.18, 0.35, 0.52, 0.68, 0.84];
+  currentRatios.forEach((ratio, layerIdx) => {
+    const isBright = layerIdx % 2 === 0;
+    c.strokeStyle = isBright
+      ? 'rgba(255, 255, 255, ' + (0.12 + 0.08 * wf2).toFixed(3) + ')'
+      : 'rgba(10, 45, 38, ' + (0.15 + 0.1 * (1 - mudFactor)).toFixed(3) + ')';
+    c.lineWidth = 2.4 + layerIdx * 0.4;
+    c.beginPath();
+
+    for (let x = 0; x <= 1920; x += 40) {
+      const topY = getRiverBankTop(x);
+      const botY = getRiverBankBottom(x);
+      const flowWave = Math.sin(t / (600 + layerIdx * 100) + x / (160 + layerIdx * 30) + layerIdx * 1.6) * (6 + layerIdx * 1.5);
+      const currY = topY + (botY - topY) * ratio + flowWave;
+      if (x === 0) c.moveTo(x, currY);
+      else c.lineTo(x, currY);
+    }
+    c.stroke();
+  });
+
+  // 6. KILAU CAHAYA MATAHARI TROPIS DI PERMUKAAN AIR (Specular Sun Glints)
+  c.fillStyle = '#ffffff';
+  for (let i = 0; i < 16; i++) {
+    const glintX = (pr(i * 17.3) * 1920 + (t / 16) * (1 + (i % 3) * 0.25)) % 1920;
+    const ratio = 0.15 + pr(i * 7.9) * 0.7;
+    const glintY = getRiverBankTop(glintX) + (getRiverBankBottom(glintX) - getRiverBankTop(glintX)) * ratio;
+    const pulse = Math.abs(Math.sin(t / 420 + i * 1.9));
+    c.globalAlpha = 0.2 + pulse * 0.45;
+    c.beginPath();
+    c.arc(glintX, glintY, 1.2 + pulse * 2.2, 0, Math.PI * 2);
+    c.fill();
+  }
+  c.globalAlpha = 1;
+
+  c.restore();
+
+  // 7. SINKRONISASI ORGANISME AIR SUNGAI
   updateOrganismPool(S, 16.7);
 
-  // 1. IKAN SUNGAI (Berenang Masuk & Menyelam/Lemas)
+  // IKAN SUNGAI (Subsurface Blending & Bayangan Bawah Air)
   const nf = Math.min(7, Math.round(S.herb / 4));
   syncOrganismPool(S, 'sungai_fish', nf, (i) => {
     const dir = i % 2 ? 1 : -1;
-    return { x: 500 + pr(i * 17) * 900, y: 530 + pr(i * 3) * 240, s: .8 + pr(i) * .5, col: i % 2 ? '#ffd24a' : '#7ac0e8', dir: dir, seed: i };
+    return { x: 500 + pr(i * 17) * 900, y: 540 + pr(i * 3) * 220, s: 0.8 + pr(i) * 0.5, col: i % 2 ? '#ffd24a' : '#7ac0e8', dir: dir, seed: i };
   }, { isPlant: false, durationIn: 1100, durationOut: 900 });
 
   const fishes = (S._orgPool && S._orgPool['sungai_fish']) || [];
   fishes.forEach(ent => {
     c.save();
-    c.globalAlpha = ent.fade !== undefined ? ent.fade : 1;
+    const fadeAlpha = ent.fade !== undefined ? ent.fade : 1;
+    c.globalAlpha = fadeAlpha * 0.88; // Refraksi kedalaman air
     const dir = ent.extra ? ent.extra.dir : (ent.seed % 2 ? 1 : -1);
-    const sp = .05 + pr(ent.seed) * .05;
+    const sp = 0.05 + pr(ent.seed) * 0.05;
     let x = ent.x;
     if (ent.state === 'alive') {
       x = dir > 0 ? ((t * sp * 10 + ent.seed * 400) % 2100) - 90 : 2010 - ((t * sp * 10 + ent.seed * 400) % 2100);
     }
     const s = ent.extra ? ent.extra.s : 1;
     const col = ent.extra ? ent.extra.col : '#7ac0e8';
+
+    // Samarkan ikan di dalam batas air
+    const curTop = getRiverBankTop(x) + 30;
+    const curBot = getRiverBankBottom(x) - 30;
+    const clampedY = Math.max(curTop, Math.min(curBot, ent.y));
+
+    // Bayangan halus di dasar air
+    c.fillStyle = 'rgba(10, 35, 30, ' + (0.22 * fadeAlpha).toFixed(3) + ')';
+    c.beginPath();
+    c.ellipse(x, clampedY + 16 * s, 18 * s, 5 * s, 0, 0, Math.PI * 2);
+    c.fill();
+
     if (ent.state === 'withering') {
-      c.translate(x, ent.y);
+      c.translate(x, clampedY);
       c.rotate(ent.wither * (dir > 0 ? 0.7 : -0.7));
       spFish(c, 0, 0, t, s, col, dir);
     } else {
-      spFish(c, x, ent.y, t, s, col, dir);
+      spFish(c, x, clampedY, t, s, col, dir);
     }
     c.restore();
   });
 
-  // 2. BANGAU (Mendarat & Terbang Menjauh)
+  // GULMA AIR (Eceng Gondok Mengapung di Air)
+  const ng = S.gulma > 8 ? Math.min(7, Math.round(S.gulma / 12)) : 0;
+  syncOrganismPool(S, 'sungai_gulma', ng, (i) => {
+    const gx = 200 + pr(i * 7) * 1500;
+    const gy = getRiverBankTop(gx) + 35 + pr(i * 3) * (getRiverBankBottom(gx) - getRiverBankTop(gx) - 70);
+    return { x: gx, y: gy, s: 1 + pr(i) * 0.6, seed: i };
+  }, { isPlant: true, durationIn: 1500, durationOut: 1300 });
+
+  const gulmas = (S._orgPool && S._orgPool['sungai_gulma']) || [];
+  gulmas.forEach(ent => {
+    c.save();
+    c.globalAlpha = ent.fade !== undefined ? ent.fade : 1;
+    const s = (ent.extra ? ent.extra.s : 1) * (ent.scaleY || 1.0);
+    gulmaPatch(c, ent.x, ent.y, s, t);
+    c.restore();
+  });
+
+  // RESPON KRISIS SAMPAH & DETERGEN
+  if (S.trash > 10) {
+    const nt = Math.min(6, Math.round(S.trash / 12));
+    for (let i = 0; i < nt; i++) {
+      const bx = 150 + pr(i * 13) * 1600 + Math.sin(t / 1500 + i) * 30;
+      const by = getRiverBankTop(bx) + 30 + pr(i * 5) * (getRiverBankBottom(bx) - getRiverBankTop(bx) - 60);
+      spBag(c, bx, by, t);
+    }
+  }
+
+  if (S.poison > 15) {
+    for (let i = 0; i < 14; i++) {
+      const px = (pr(i * 11) * 1920 + t / 20) % 1920;
+      const py = getRiverBankTop(px) + 10 + pr(i) * 26;
+      CIRC(c, px, py, 4 + pr(i * 3) * 6, 'rgba(250, 252, 255, ' + (0.4 + c01(S.poison / 160) * 0.5).toFixed(2) + ')');
+    }
+  }
+
+  // 8. BANTARAN BAWAH (Foreground Bank: Tanah, Batu Kali & Gelagah Bawah di Depan Air)
+  // Dirender SETELAH air agar tanaman yang tumbuh ke atas tidak terpotong oleh air!
+  if (typeof texSoilSungaiBottom === 'function') {
+    texSoilSungaiBottom(c, t, S);
+  }
+
+  // 9. BANGAU (Bertengger Alami di Tepi Bantaran Dangkal/Batu Kali di Depan Air)
   const nstork = S.pred >= 4 ? 2 : 1;
   syncOrganismPool(S, 'sungai_stork', nstork, (i) => {
-    return { x: i === 0 ? 1450 : 600, y: i === 0 ? 900 : 920, seed: i };
+    const storkX = i === 0 ? 1450 : 600;
+    const storkY = i === 0 ? getRiverBankBottom(1450) + 20 : getRiverBankTop(600) - 6;
+    return { x: storkX, y: storkY, seed: i };
   }, { isPlant: false, durationIn: 1300, durationOut: 1100 });
 
   const storks = (S._orgPool && S._orgPool['sungai_stork']) || [];
@@ -621,26 +910,7 @@ function sceneSungai(c,t,S){
     spStork(c, ent.x, ent.y - flyY, t);
     c.restore();
   });
-
-  // 3. GULMA AIR (Eceng Gondok Bertumbuh & Menyusut)
-  const ng = S.gulma > 8 ? Math.min(7, Math.round(S.gulma / 12)) : 0;
-  syncOrganismPool(S, 'sungai_gulma', ng, (i) => {
-    return { x: 200 + pr(i * 7) * 1500, y: 500 + pr(i * 3) * 280, s: 1 + pr(i) * .6, seed: i };
-  }, { isPlant: true, durationIn: 1500, durationOut: 1300 });
-
-  const gulmas = (S._orgPool && S._orgPool['sungai_gulma']) || [];
-  gulmas.forEach(ent => {
-    c.save();
-    c.globalAlpha = ent.fade !== undefined ? ent.fade : 1;
-    const s = (ent.extra ? ent.extra.s : 1) * (ent.scaleY || 1.0);
-    gulmaPatch(c, ent.x, ent.y, s, t);
-    c.restore();
-  });
-
- if(S.trash>10){const nt=Math.min(6,Math.round(S.trash/12));
-  for(let i=0;i<nt;i++)spBag(c,150+pr(i*13)*1600+Math.sin(t/1500+i)*30,490+pr(i*5)*300,t);}
- if(S.poison>15){for(let i=0;i<12;i++){const x=(pr(i*11)*1920+t/20)%1920;
-  CIRC(c,x,478+pr(i)*22,4+pr(i*3)*6,'rgba(250,252,255,'+(.4+c01(S.poison/160)*.5).toFixed(2)+')');}}}
+}
 function sceneLaut(c,t,S){
  c.fillStyle=mixc('#1f7fae','#66c7dd',c01(hdisp(S)/100));c.fillRect(0,0,1920,1080);
  {const lg=c.createLinearGradient(0,0,0,900);

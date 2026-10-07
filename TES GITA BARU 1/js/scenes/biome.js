@@ -105,22 +105,36 @@ function buildBiome() {
   el('#b-prev').onclick = () => navigateBiome(-1);
   el('#b-next').onclick = () => navigateBiome(1);
 
-  // Swipe Gesture for IFP Touchscreen
+  // Swipe Gesture for IFP Touchscreen (Pointer Lock & Gesture Isolation)
   const stage = el('#biome-stage');
-  if (!stage.hasAttribute('data-swipe-bound')) {
+  if (stage && !stage.hasAttribute('data-swipe-bound')) {
     stage.setAttribute('data-swipe-bound', 'true');
+    // Proteksi debounce swipe gesture dan single-pointer tracking IFP
+    stage.style.touchAction = 'pan-y';
+    stage.style.userSelect = 'none';
     let startX = 0, startY = 0;
+    let activeSwipePointerId = null;
+
     stage.addEventListener('pointerdown', (e) => {
+      if (activeSwipePointerId !== null) return;
+      activeSwipePointerId = e.pointerId;
       startX = e.clientX;
       startY = e.clientY;
     });
+
     stage.addEventListener('pointerup', (e) => {
+      if (e.pointerId !== activeSwipePointerId) return;
+      activeSwipePointerId = null;
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
       if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
         if (dx < 0) navigateBiome(1);
         else navigateBiome(-1);
       }
+    });
+
+    stage.addEventListener('pointercancel', (e) => {
+      if (e.pointerId === activeSwipePointerId) activeSwipePointerId = null;
     });
   }
 

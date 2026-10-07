@@ -3,7 +3,7 @@
    Memungkinkan game dimainkan offline di HP/Tablet Android
    ============================================================ */
 
-const CACHE_NAME = 'eco-explorer-v1.1.7';
+const CACHE_NAME = 'eco-explorer-v1.2.0';
 
 const PRECACHE_ASSETS = [
   './',

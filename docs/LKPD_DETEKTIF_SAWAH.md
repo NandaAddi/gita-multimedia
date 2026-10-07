@@ -58,14 +58,18 @@ Setiap misi memberikan hingga **3 Bintang Detektif** (Maksimal 12 Bintang per Ke
 ## 🌾 BAGIAN 1: INVESTIGASI KELOMPOK 1 — DETEKTIF SAWAH
 
 ### Misi 1: Kemarau Panjang di Sawah (Faktor Ulah Alam)
-* **Kondisi Awal:** Air Sawah: ______ % | Rumpun Padi: ______ | Kesehatan: ______ %
+* **Kondisi Awal Layar IFP:** Air Sawah: ______ % | Rumpun Padi: ______ | Kesehatan: ______ %
+* **Pengamatan Visual Terasering:** Amati petak sawah berundak! Apakah tanah tampak retak-retak lempeng poligonal kering? Apa yang terjadi saat kartu kuning *"Alirkan Air Irigasi"* ditekan (amati semburan air dari pintu air tulakan)?  
+  *Catatan Pengamatan:* __________________________________________________________________
 * **Prediksi Kausalitas (C2):** Mengapa saat kemarau padi kering, tikus kelaparan dan ular sawah ikut terancam mati?  
   *Jawaban:* __________________________________________________________________________
 * **Kartu Voting Meja:** [ ] 🟢 Hijau &nbsp;&nbsp; [ ] 🟡 Kuning &nbsp;&nbsp; [ ] 🔴 Merah | Alasan: ________________________
 * **Hasil:** [ ] Seimbang (≥ 75%) | **Bintang:** [ ] ⭐1 &nbsp; [ ] ⭐⭐2 &nbsp; [ ] ⭐⭐⭐3
 
 ### Misi 2: Serbuan Hama Wereng Cokelat (Faktor Ulah Alam)
-* **Kondisi Awal:** Populasi Wereng: ______ ekor (Lonjakan Hama) | Katak: ______ ekor
+* **Kondisi Awal Layar IFP:** Populasi Wereng: ______ ekor (Lonjakan Hama) | Katak: ______ ekor
+* **Pengamatan Visual Padi Menari & Wereng:** Amati daun padi yang meliuk ditiup gelombang angin! Apakah tampak bercak daun menguning/terbakar (*hopperburn*) akibat dihisap wereng?  
+  *Catatan Pengamatan:* __________________________________________________________________
 * **Prediksi Kausalitas (C2):** Mengapa membasmi wereng dengan predator alami (katak) lebih baik daripada racun kimia keras?  
   *Jawaban:* __________________________________________________________________________
 * **Hasil:** [ ] Seimbang (≥ 75%) | **Bintang:** [ ] ⭐1 &nbsp; [ ] ⭐⭐2 &nbsp; [ ] ⭐⭐⭐3

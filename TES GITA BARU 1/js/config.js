@@ -38,7 +38,7 @@ function RG(c,x,y,r,s0,s1){return gradMemo(c,'R'+gq(x)+','+gq(y)+','+gq(r)+'|'+s
  ()=>{const g=c.createRadialGradient(x,y,1,x,y,r);g.addColorStop(0,s0);g.addColorStop(1,s1);return g;});}
 const GRADCACHE=new Map();
 function gq(v){return Math.round(v*2)/2;}
-function gradMemo(c,key,mk){let g=GRADCACHE.get(key);if(!g){if(GRADCACHE.size>240)GRADCACHE.clear();g=mk();GRADCACHE.set(key,g);}return g;}
+function gradMemo(c,key,mk){let g=GRADCACHE.get(key);if(!g){if(GRADCACHE.size>=300){const oldest=GRADCACHE.keys().next().value;GRADCACHE.delete(oldest);}g=mk();GRADCACHE.set(key,g);}return g;}
 function OG(c,x,y,rx,ry,fill){c.beginPath();c.ellipse(x,y,rx,ry,0,0,7);c.fillStyle=fill;c.fill();}
 function CG(c,x,y,r,fill){c.beginPath();c.arc(x,y,r,0,7);c.fillStyle=fill;c.fill();}
 function SH(c,x,y,rx){c.beginPath();c.ellipse(x,y,rx,Math.max(2,rx*.26),0,0,7);c.fillStyle='rgba(15,35,25,.28)';c.fill();}

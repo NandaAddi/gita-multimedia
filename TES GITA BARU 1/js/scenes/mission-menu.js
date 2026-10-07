@@ -78,7 +78,7 @@ function buildMissionMenu(biomeKey) {
         <div class="mcard-header" style="flex-direction:column;text-align:center;gap:8px;margin-bottom:16px;">
           <div class="micon ${m.type}" style="width:90px;height:90px;margin:0 auto;font-size:48px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);border:2px solid ${badgeColor};">${ic(m.type === 'manusia' ? 'users' : BICON[m.biome], 48)}</div>
           <div class="mtype-wrap" style="align-items:center;">
-            <div class="mcard-subnum" style="font-size:22px;color:rgba(255,255,255,0.7);letter-spacing:1px;text-transform:uppercase;margin-top:12px;">${colLabel} • KASUS 0${subIdx + 1}</div>
+            <div class="mcard-subnum" style="font-size:24px;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:1px;text-transform:uppercase;margin-top:12px;">${colLabel} • KASUS 0${subIdx + 1}</div>
             <div class="mtitle" style="font-size:38px;margin-top:6px;text-shadow:0 2px 4px rgba(0,0,0,0.5);">${m.title}</div>
           </div>
           <div class="mstars" style="font-size:40px;justify-content:center;margin-top:12px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));">
