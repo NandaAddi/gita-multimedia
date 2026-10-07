@@ -38,6 +38,13 @@ try:
 except ImportError:
     build_docs_data = None
 
+SCRIPTS_DIR = REPO_ROOT / "scripts"
+sys.path.insert(0, str(SCRIPTS_DIR))
+try:
+    from sync_game_to_root import sync_game
+except ImportError:
+    sync_game = None
+
 def main():
     print("=" * 60)
     print(" ECO-EXPLORER: MASTER GAME BUILD & ASSET PACKAGER")
@@ -47,21 +54,26 @@ def main():
     build_all = len(args) == 0 or "--all" in args
 
     if build_all or "--assets" in args:
-        print("\n[1/3] Baking Visual Assets into Base64 (assets-data.js)...")
+        print("\n[1/4] Baking Visual Assets into Base64 (assets-data.js)...")
         build_assets()
 
     if build_all or "--vo" in args:
-        print("\n[2/3] Baking Voice-Over Audio into Base64 (vo-data.js)...")
+        print("\n[2/4] Baking Voice-Over Audio into Base64 (vo-data.js)...")
         build_vo()
 
     if (build_all or "--docs" in args) and build_docs_data:
-        print("\n[3/3] Baking Docs Web Data Bundle (docs-data.js)...")
+        print("\n[3/4] Baking Docs Web Data Bundle (docs-data.js)...")
         build_docs_data()
+
+    if (build_all or "--sync" in args) and sync_game:
+        print("\n[4/4] Syncing Game Files to Root Domain (skripsi.agitakhairunnisa.my.id)...")
+        sync_game()
 
     print("\n" + "=" * 60)
     print(" [SUCCESS] BUILD COMPLETE: 100% Offline & CORS-Free!")
-    print(" Game Client: WEBSITE/phaser.html")
-    print(" Docs Portal: docs/index.html")
+    print(" Root Game Client : index.html (https://skripsi.agitakhairunnisa.my.id/)")
+    print(" Local Game Client: TES GITA BARU 1/index.html")
+    print(" Docs Portal      : docs/index.html")
     print("=" * 60 + "\n")
 
 if __name__ == "__main__":

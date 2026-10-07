@@ -2,170 +2,167 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0; url=TES%20GITA%20BARU%201/index.html">
-  <title>Eco-Explorer: Penjaga Keseimbangan Sawah | SDN Percobaan 2 Malang</title>
-  
-  <meta name="description" content="Multimedia Interaktif Berbasis Simulasi pada Materi Keseimbangan Ekosistem Sawah untuk Siswa Kelas V SDN Percobaan 2 Malang.">
-  
-  <!-- Immediate JavaScript redirect -->
-  <script>
-    window.location.replace("TES%20GITA%20BARU%201/index.html");
-  </script>
-
-  <!-- Google Fonts -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Eco-Explorer — Penjaga Keseimbangan Ekosistem</title>
+  <meta name="theme-color" content="#022c22">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Eco-Explorer">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <!-- GOOGLE WEB FONTS (CUTE & PLAYFUL KIDS FONTS) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #0f766e 100%);
-      color: #ffffff;
-      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .redirect-card {
-      background: rgba(255, 255, 255, 0.96);
-      color: #0f172a;
-      max-width: 520px;
-      width: 100%;
-      padding: 40px 32px;
-      border-radius: 16px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-      text-align: center;
-    }
-
-    .badge {
-      display: inline-block;
-      background: #eff6ff;
-      color: #1d4ed8;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 6px 12px;
-      border-radius: 9999px;
-      margin-bottom: 16px;
-    }
-
-    h1 {
-      font-family: 'Fredoka', 'Open Sans', sans-serif;
-      font-size: 26px;
-      font-weight: 700;
-      color: #064e3b;
-      margin-bottom: 8px;
-    }
-
-    p.subtitle {
-      font-size: 14px;
-      color: #475569;
-      line-height: 1.5;
-      margin-bottom: 24px;
-    }
-
-    .spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid #e2e8f0;
-      border-top-color: #059669;
-      border-radius: 50%;
-      margin: 0 auto 20px auto;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 12px 18px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-
-    .btn-primary {
-      background: #059669;
-      color: #ffffff;
-    }
-
-    .btn-primary:hover {
-      background: #047857;
-      transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-      background: #eff6ff;
-      color: #1d4ed8;
-    }
-
-    .btn-secondary:hover {
-      background: #dbeafe;
-    }
-
-    .btn-outline {
-      background: #f8fafc;
-      color: #475569;
-      border: 1px solid #cbd5e1;
-    }
-
-    .btn-outline:hover {
-      background: #f1f5f9;
-    }
-
-    .footer-note {
-      font-size: 12px;
-      color: #94a3b8;
-      margin-top: 24px;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/game.css?v=1.2.0">
 </head>
 <body>
-
-  <div class="redirect-card">
-    <div class="badge">Riset Skripsi R&D IPAS Fase C</div>
-    <h1>Eco-Explorer</h1>
-    <p class="subtitle">Multimedia Simulasi Keseimbangan Ekosistem Sawah<br>SDN Percobaan 2 Malang</p>
-
-    <div class="spinner" aria-label="Loading"></div>
-
-    <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">
-      Mengarahkan otomatis ke portal utama... Jika tidak beralih, klik salah satu tombol di bawah:
-    </p>
-
-    <div class="actions">
-      <a href="TES%20GITA%20BARU%201/index.html" class="btn btn-primary">🎮 Buka Game Engine IFP</a>
-      <a href="TES%20GITA%20BARU%201/index.html" class="btn btn-secondary">🌐 Portal Riset & Game</a>
-      <a href="docs/index.html" class="btn btn-outline">📄 Portal Dokumen Skripsi</a>
-    </div>
-
-    <div class="footer-note">
-      Gito — Teknologi Pendidikan • Universitas Negeri Malang
+<div id="stage">
+  <!-- PRELOADER & PENYIAPAN ASET (LOGO UM ZOOM-OUT) -->
+  <div id="preloader-overlay" class="preloader-overlay" title="Sentuh untuk langsung mulai">
+    <div class="preloader-halo"></div>
+    <div class="preloader-content">
+      <div class="preloader-logo-wrap">
+        <img id="preloader-logo" class="preloader-logo" src="assets/Lambang-UM.webp" alt="Lambang Universitas Negeri Malang">
+      </div>
+      <div class="preloader-box">
+        <div class="preloader-bar-track">
+          <div id="preloader-bar-fill" class="preloader-bar-fill"></div>
+        </div>
+        <div class="preloader-row">
+          <span id="preloader-status" class="preloader-status">Menyiapkan modul pembelajaran IPAS...</span>
+          <span id="preloader-pct" class="preloader-pct">0%</span>
+        </div>
+      </div>
     </div>
   </div>
 
+  <canvas class="cv" id="cv-title" width="1920" height="1080"></canvas>
+  <section class="screen" id="scr-title">
+    <div class="ui title-ui">
+      <div class="title-kicker">MEDIA PEMBELAJARAN INTERAKTIF IPAS &bull; FASE C &bull; KELAS 5</div>
+      <h1 class="title-logo">ECO-EXPLORER</h1>
+      <div class="title-sub">Penjaga Keseimbangan Ekosistem Nusantara</div>
+      <div class="title-gita-row">
+        <div id="gita-title"></div>
+        <div class="gita-bubble panel" id="bubble-title"></div>
+      </div>
+      <div class="title-btns">
+        <button class="menu-card green" id="btn-start">
+          <span class="menu-ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="#fff"><path d="M8 5l11 7-11 7Z"/></svg></span>
+          <span class="mc-t">MULAI<br>PETUALANGAN</span>
+        </button>
+        <button class="menu-card blue" id="btn-how">
+          <span class="menu-ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h14v18H6a2 2 0 0 1-2-2Z"/><path d="M8 3v18"/></svg></span>
+          <span class="mc-t">CARA<br>BERMAIN</span>
+        </button>
+        <button class="menu-card purple" id="btn-teacher">
+          <span class="menu-ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-4 3-6 6.5-6s6.5 2 6.5 6"/><circle cx="17.5" cy="9" r="3"/><path d="M14.5 14.5c3.5 0 6.5 2 6.5 5.5"/></svg></span>
+          <span class="mc-t">PANDUAN<br>GURU</span>
+        </button>
+      </div>
+      <button class="btn tb-btn" id="btn-about" title="Tentang Pengembang" style="position:absolute;left:30px;top:26px;font-size:24px;padding:0 24px">
+        <span>Tentang Pengembang</span>
+      </button>
+      <button class="btn tb-btn fs-btn" id="t-fs" title="Layar Penuh" style="position:absolute;right:104px;top:26px">⛶</button>
+      <button class="btn tb-btn snd-btn" id="t-snd" style="position:absolute;right:30px;top:26px"></button>
+
+    </div>
+  </section>
+  <section class="screen" id="scr-tutorial"></section>
+  <section class="screen" id="scr-how"></section>
+  <section class="screen" id="scr-teacher"></section>
+  <section class="screen" id="scr-about"></section>
+  <section class="screen" id="scr-team"></section>
+  <section class="screen" id="scr-biome"></section>
+  <section class="screen" id="scr-mission"></section>
+  <section class="screen" id="scr-sim">
+    <canvas class="cv" id="cv-sim" width="1920" height="1080"></canvas>
+    <div class="ui" id="sim-ui"></div>
+    <div id="sim-bridge" class="bridge-wrap" style="display:none">
+      <div class="bridge-panel">
+        <div class="bridge-char">
+          <div class="bridge-avatar" id="bridge-gita-box"></div>
+        </div>
+        <div class="bridge-body">
+          <div class="bridge-step-pill" id="bridge-step-pill">Petunjuk Awal Misi &bull; Langkah 1 dari 2</div>
+          <h3 class="bridge-title" id="bridge-title"></h3>
+          <p class="bridge-text" id="bridge-text"></p>
+          <div class="bridge-team-shout" id="bridge-team-shout"></div>
+        </div>
+        <div class="bridge-right">
+          <div class="bridge-team-badge">
+            <canvas id="bridge-mascot-cv" width="110" height="110"></canvas>
+            <div class="bridge-team-name" id="bridge-team-name"></div>
+            <div class="bridge-team-role" id="bridge-team-role"></div>
+          </div>
+          <div class="bridge-actions">
+            <button class="btn btn-gold" id="bridge-btn-next">Lanjut &gt;</button>
+            <button class="btn btn-secondary" id="bridge-btn-skip">Lewati</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <section class="screen" id="scr-quiz"></section>
+  <section class="screen" id="scr-victory">
+    <canvas class="cv" id="cv-confetti" width="1920" height="1080"></canvas>
+    <div class="ui vwrap" id="victory-ui"></div>
+  </section>
+  <div id="modal-root"></div>
+  <div id="toast-root"></div>
+</div>
+
+  <!-- CORE SCRIPTS & STATE -->
+  <script src="js/config.js?v=1.2.0"></script>
+  <script src="js/state.js?v=1.2.0"></script>
+  <script src="js/audio.js?v=1.2.0"></script>
+
+  <!-- DATA LAYER -->
+  <script src="js/data/ecosystems.js?v=1.2.0"></script>
+  <script src="js/data/missions.js?v=1.2.0"></script>
+  <script src="js/data/assessment.js?v=1.2.0"></script>
+
+  <!-- RENDERERS -->
+  <script src="js/renderers/characters.js?v=1.2.0"></script>
+  <script src="js/renderers/gita-sequence.js?v=1.2.0"></script>
+  <script src="js/renderers/backgrounds.js?v=1.2.0"></script>
+
+  <!-- SCENE CONTROLLERS -->
+  <script src="js/scenes/title.js?v=1.2.0"></script>
+  <script src="js/scenes/tutorial.js?v=1.2.0"></script>
+  <script src="js/scenes/how.js?v=1.2.0"></script>
+  <script src="js/scenes/teacher.js?v=1.2.0"></script>
+  <script src="js/scenes/about.js?v=1.2.0"></script>
+  <script src="js/scenes/team.js?v=1.2.0"></script>
+  <script src="js/scenes/biome.js?v=1.2.0"></script>
+  <script src="js/scenes/mission-menu.js?v=1.2.0"></script>
+  <script src="js/scenes/simulation.js?v=1.2.0"></script>
+  <script src="js/scenes/quiz.js?v=1.2.0"></script>
+  <script src="js/scenes/victory.js?v=1.2.0"></script>
+
+  <!-- ENTRY POINT -->
+  <script src="js/main.js?v=1.2.0"></script>
+
+  <!-- MOBILE / ANDROID LANDSCAPE ROTATE PROMPT -->
+  <div id="orient-hint" class="orient-overlay" style="display:none">
+    <div class="orient-card">
+      <div class="orient-phone-anim">
+        <svg width="76" height="76" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
+          <path d="M12 18h.01"/>
+        </svg>
+        <div class="orient-rotate-arrow">&#8635;</div>
+      </div>
+      <h2>Putar Layar ke Mendatar (Landscape)</h2>
+      <p>Hai Detektif Alam! Miringkan ponselmu ke posisi horizontal (mendatar) untuk pengalaman bermain terbaik.</p>
+      <button class="btn btn-gold btn-fullscreen-req" id="btn-force-landscape">
+        Masuk Layar Penuh &#9974;
+      </button>
+    </div>
+  </div>
 </body>
 </html>

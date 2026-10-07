@@ -33,5 +33,6 @@ dist/
 *.prproj
 *.psd
 raw-assets/
+ASSET_BACKUP_PNG/
 tmp/
 

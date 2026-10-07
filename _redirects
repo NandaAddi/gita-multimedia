@@ -1,9 +1,10 @@
 # Cloudflare Pages Redirect & Rewrite Rules
-# Clean aliases for game and documentation
-/game    /TES%20GITA%20BARU%201/index.html    200
-/play    /TES%20GITA%20BARU%201/index.html    200
-/docs    /docs/index.html                     302
+# Root domain is the primary game engine
+/game                           /index.html                  200
+/play                           /index.html                  200
+/docs                           /docs/index.html             302
 
-# Redirect root to main research portal
-/        /WEBSITE/index.html                  302
-
+# Backward compatibility: Redirect legacy folder requests to root
+/TES%20GITA%20BARU%201/index.html   /index.html              301
+/TES%20GITA%20BARU%201/*            /:splat                  301
+/TES%20GITA%20BARU%201              /                        301

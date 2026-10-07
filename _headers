@@ -7,27 +7,54 @@
   Permissions-Policy: geolocation=(), camera=(), microphone=()
 
 # PWA Service Worker (Always revalidate)
-/WEBSITE/sw.js
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+/TES%20GITA%20BARU%201/sw.js
   Cache-Control: public, max-age=0, must-revalidate
 
 # Web App Manifest
-/WEBSITE/manifest.json
+/manifest.json
+  Content-Type: application/manifest+json; charset=utf-8
+  Cache-Control: public, max-age=86400
+/TES%20GITA%20BARU%201/manifest.json
   Content-Type: application/manifest+json; charset=utf-8
   Cache-Control: public, max-age=86400
 
-# High-Performance Caching for JavaScript Libraries & Bundles
-/WEBSITE/js/*
+# High-Performance Caching for Game Assets (Root Domain)
+/css/*
   Cache-Control: public, max-age=31536000, immutable
 
-/WEBSITE/lib/*
+/js/*
   Cache-Control: public, max-age=31536000, immutable
 
-/WEBSITE/assets/*
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/icons/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/voice-over/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/backsound/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/gita-thinking/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/talking_loop/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/worried_loop/*
   Cache-Control: public, max-age=31536000, immutable
 
 /docs/lib/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Legacy Path Caching
 /TES%20GITA%20BARU%201/voice-over/*
   Cache-Control: public, max-age=31536000, immutable
 

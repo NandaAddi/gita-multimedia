@@ -204,4 +204,6 @@ Penelitian ini menggunakan model **Alessi & Trollip (2001)** yang dirancang khus
 
 > **Update Log (Otomatis):** Audit Penuh & Resolusi Bug Audio Bertumpuk (Zero Overlap & Auto-Ducking): Menerapkan saluran Voice-Over Monofonik Eksklusif berpelindung token asinkron (_voToken), fitur Auto-Ducking BGM dinamis (meredup ke 20% saat Kakak Gita berbicara dan pulih mulus saat hening), Global SFX Throttle Cooldown (80–350ms) untuk mengeliminasi dobel chime dan screeching organisme, serta sekuensial cerdas pada kuis dan dialog bridging.
 
+> **Update Log (Otomatis):** Deployment Root Domain Kustom (skripsi.agitakhairunnisa.my.id): Memindahkan engine game utama langsung ke root repository (/) sehingga domain dapat diakses secara langsung tanpa pengalihan URL atau subfolder `/TES GITA BARU 1/`, memperbarui aturan CNAME, Service Worker PWA (v1.2.2 precaching config.js & about.js), _headers, _redirects, dan pipeline sinkronisasi otomatis `build.py --sync`.
+
 
