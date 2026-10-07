@@ -78,8 +78,8 @@ function showBridgeDialog(m, team){
       btnNext.className = 'btn btn-gold';
     }
     
-    // Audio: chime + playVO bridging dialog vokal asli Gita
-    sfx.chime();
+    // Audio: chime pembuka hanya di langkah 1, suara Gita otomatis monofonik
+    if (bridgeStep === 1) sfx.chime();
     const voKey = 'vo_bridge_' + m.id.replace('-', '') + '_s' + bridgeStep;
     if (typeof playVO === 'function') playVO(voKey);
   }
@@ -87,6 +87,7 @@ function showBridgeDialog(m, team){
   el('#bridge-btn-next').onclick = () => {
     sfx.click();
     if(bridgeStep === 1){
+      if(typeof stopVO === 'function') stopVO();
       bridgeStep = 2;
       renderBridgeStep();
     } else {
@@ -102,6 +103,168 @@ function showBridgeDialog(m, team){
   renderBridgeStep();
 }
 
+/* ================= ONBOARDING SPOTLIGHT PANEL TOUR (STANDAR IFP) =================
+   4 Langkah Tur Interaktif: Target Misi -> Kondisi Ekosistem -> Keseimbangan Alam -> Dermaga Kartu Aksi
+*/
+let currentTourStep = 0;
+let tourOverlayEl = null;
+let tourCardEl = null;
+
+function startPanelTour(onComplete) {
+  if (!SIM) return;
+  // Pastikan panel kiri, kanan, dan atas terbuka penuh saat tur
+  SIM.ui.left = true;
+  SIM.ui.right = true;
+  SIM.ui.top = true;
+  syncUITabs();
+
+  const wasPaused = SIM.paused;
+  SIM.paused = true;
+
+  const tourSteps = [
+    {
+      target: '#sim-ui .hud-left',
+      pos: 'pos-left',
+      pill: 'Langkah 1/4',
+      title: '🎯 Target Misi & Panduan Gita',
+      body: 'Pantau sasaran yang harus kamu selesaikan di sini. <b>Gita</b> juga akan memberi arahan dan peringatan darurat jika ekosistem terancam!'
+    },
+    {
+      target: '#sim-ui .hud-right',
+      pos: 'pos-right',
+      pill: 'Langkah 2/4',
+      title: '📊 Kondisi Ekosistem',
+      body: 'Perhatikan grafik populasi dan kadar lingkungan secara langsung. Warna <b>hijau</b> berarti sehat, dan <b>merah</b> berarti bahaya!'
+    },
+    {
+      target: '#sim-ui .hpod',
+      pos: 'pos-top',
+      pill: 'Langkah 3/4',
+      title: '❤️ Keseimbangan Alam & Hari',
+      body: 'Jaga keseimbangan ekosistem agar tetap tinggi! Selesaikan misi sebelum <b>batas hari</b> berakhir agar mendapat 3 bintang.'
+    },
+    {
+      target: '#sim-ui .sim-dock',
+      pos: 'pos-bottom',
+      pill: 'Langkah 4/4',
+      title: '🃏 Dermaga Kartu Aksi',
+      body: 'Pilih dan gunakan kartu aksi untuk memulihkan alam. Perhatikan <b>kuota pemakaian</b> dan waktu istirahat setiap aksi!'
+    }
+  ];
+
+  cleanupPanelTour();
+
+  const container = el('#scr-sim') || document.body;
+  tourOverlayEl = document.createElement('div');
+  tourOverlayEl.className = 'spotlight-overlay';
+  container.appendChild(tourOverlayEl);
+
+  currentTourStep = 0;
+
+  function endTour() {
+    cleanupPanelTour();
+    if (SIM && SIM.m) {
+      if (!G.toursSeen) G.toursSeen = {};
+      G.toursSeen['tour_' + SIM.m.biome] = true;
+      saveG();
+    }
+    sfx.success();
+    if (onComplete) {
+      onComplete();
+    } else {
+      if (SIM && !wasPaused && !SIM.done) {
+        SIM.paused = false;
+      }
+    }
+  }
+
+  function renderStep(idx) {
+    document.querySelectorAll('.spotlight-highlight').forEach(e => e.classList.remove('spotlight-highlight'));
+    if (tourCardEl) {
+      tourCardEl.remove();
+      tourCardEl = null;
+    }
+
+    const step = tourSteps[idx];
+    if (!step) {
+      endTour();
+      return;
+    }
+
+    const targetEl = document.querySelector(step.target);
+    if (targetEl) {
+      targetEl.classList.add('spotlight-highlight');
+    }
+
+    tourCardEl = document.createElement('div');
+    tourCardEl.className = 'spotlight-guide-card ' + step.pos;
+    const isLast = idx === tourSteps.length - 1;
+
+    tourCardEl.innerHTML = '<div class="sgc-header">'
+      + '<div class="sgc-kicker">' + gitaSVG(36, 'happy') + ' <span>Pengenalan Panel</span></div>'
+      + '<span class="sgc-step-pill">' + step.pill + '</span>'
+      + '</div>'
+      + '<h3 class="sgc-title">' + step.title + '</h3>'
+      + '<p class="sgc-body">' + step.body + '</p>'
+      + '<div class="sgc-footer">'
+      + '<button class="sgc-skip-btn" id="tour-skip-btn">Lewati Tur</button>'
+      + '<button class="btn btn-gold sgc-next-btn" id="tour-next-btn">'
+      + (isLast ? (ic('check', 24) + ' Selesai') : ('Lanjut ' + ic('arrowR', 22)))
+      + '</button>'
+      + '</div>';
+
+    container.appendChild(tourCardEl);
+
+    if (idx === 0) sfx.chime();
+    else sfx.pop();
+
+    const skipBtn = tourCardEl.querySelector('#tour-skip-btn');
+    const nextBtn = tourCardEl.querySelector('#tour-next-btn');
+
+    if (skipBtn) {
+      skipBtn.onclick = () => {
+        sfx.click();
+        endTour();
+      };
+    }
+
+    if (nextBtn) {
+      nextBtn.onclick = () => {
+        sfx.click();
+        if (isLast) {
+          endTour();
+        } else {
+          currentTourStep++;
+          renderStep(currentTourStep);
+        }
+      };
+    }
+  }
+
+  renderStep(currentTourStep);
+}
+
+function cleanupPanelTour() {
+  document.querySelectorAll('.spotlight-highlight').forEach(e => e.classList.remove('spotlight-highlight'));
+  if (tourOverlayEl) {
+    tourOverlayEl.remove();
+    tourOverlayEl = null;
+  }
+  if (tourCardEl) {
+    tourCardEl.remove();
+    tourCardEl = null;
+  }
+}
+
+function startDaySimulation(){
+  if(!SIM || SIM.done) return;
+  SIM.paused = false;
+  if(SIM.timer) clearInterval(SIM.timer);
+  SIM.timer = setInterval(simTick, 1500);
+  sfx.success();
+  toast('Hari 1 dimulai! Pilih kartu aksi pertamamu di bawah.');
+}
+
 function closeBridgeDialog(){
   if (typeof stopVO === 'function') stopVO();
   if (typeof GitaSeq !== 'undefined' && GitaSeq.stop) GitaSeq.stop('#bridge-gita-box');
@@ -109,12 +272,15 @@ function closeBridgeDialog(){
   if(box) box.style.display = 'none';
   // BUG FIX #7: Cegah timer bocor jika SIM sudah null/done
   if(SIM && !SIM.done){
-    SIM.paused = false;
     SIM.bridging = false;
-    if(SIM.timer) clearInterval(SIM.timer);
-    SIM.timer = setInterval(simTick, 1500);
-    sfx.success();
-    toast('Hari 1 dimulai! Pilih kartu aksi pertamamu di bawah.');
+    const tourKey = 'tour_' + SIM.m.biome;
+    if(SIM.m.id.endsWith('-1') && (!G.toursSeen || !G.toursSeen[tourKey])){
+      startPanelTour(() => {
+        startDaySimulation();
+      });
+    } else {
+      startDaySimulation();
+    }
   }
 }
 
@@ -125,7 +291,7 @@ function startSim(m){
   quota:m.actions.map(a=>a.quota+(team.perk.ids.includes(a.id)?1:0)),
   cdi:m.actions.map(a=>team.perk.ids.includes(a.id)?2:3),
   cool:m.actions.map(()=>0),paused:true,mp:0,done:false,voted:0,voteAt:[6,14,22],limit:m.par+18,
-   ui:{left:false,right:false,top:true,leftDot:false},bridging:true};
+   ui:{left:true,right:true,top:true,leftDot:false},bridging:true,_cinematicLock:false};
  SIM.S.health=m.health(SIM.S);
  buildSimUI();go('sim');updateHUD();
  showBridgeDialog(m,team);}
@@ -163,9 +329,16 @@ function buildSimUI(){const m=SIM.m;
   el('#sim-pause').onclick=function(){if(!SIM)return;SIM.paused=!SIM.paused;this.classList.toggle('pause-on',SIM.paused);
    this.innerHTML=SIM.paused?ic('play',24)+' Lanjut':ic('pause',24)+' Jeda';sfx.click();};
   el('#sim-top-hide').onclick=()=>toggleUIPanel('top');
- el('#sim-help').onclick=()=>{sfx.click();modal('<h2>Tips Misi</h2>'+SIM.m.tips.map(t=>'<p>• '+t+'</p>').join('')
+ el('#sim-help').onclick=()=>{sfx.click();
+  const r=modal('<h2>Tips Misi</h2>'+SIM.m.tips.map(t=>'<p>• '+t+'</p>').join('')
   +'<p style="color:#7fd4e8;font-family:Fredoka">Target waktu: ≤ '+SIM.m.par+' hari untuk 3 bintang.</p>'
-  +'<div class="mrow"><button class="btn btn-gold" data-close>Mengerti!</button></div>');};
+  +'<div class="mrow">'
+  +'<button class="btn btn-secondary" id="sim-replay-tour" style="font-size:24px;padding:12px 24px">🔍 Putar Tur Panel</button>'
+  +'<button class="btn btn-gold" data-close>Mengerti!</button>'
+  +'</div>');
+  const repBtn = r.querySelector('#sim-replay-tour');
+  if(repBtn) repBtn.onclick = () => { closeModal(); startPanelTour(); };
+ };
  el('#sim-kamus').onclick=()=>{sfx.click();kamusModal(SIM.m.biome);};
  el('#sim-ui .snd-btn').onclick=toggleSound;
   // IFP Touchscreen & Pointer Management: Single Active Pointer Lock + Tap-to-Place
@@ -346,17 +519,29 @@ function updateHUD(){if(!SIM)return;const m=SIM.m,S=SIM.S;
  H.finishCard.style.display=SIM.done?'':'none';}
 function simUpdate(){if(!SIM)return;const m=SIM.m,S=SIM.S;
  S.health=m.health(S);
- m.targets.forEach((t,i)=>{const ok=t.c(S);
-  if(ok&&!SIM.tgt[i]){sfx.chime();toast('Target tercapai: '+t.l);if(typeof playVO === 'function') playVO('vo_sim_target_ok');
-   if(SIM.ui&&!SIM.ui.left)SIM.ui.leftDot=true;}
-  SIM.tgt[i]=ok;});
+ let anyNewTarget = false;
+ m.targets.forEach((t,i)=>{
+  const ok=t.c(S);
+  if(ok&&!SIM.tgt[i]){
+   anyNewTarget = true;
+   toast('Target tercapai: '+t.l);
+   if(SIM.ui&&!SIM.ui.left)SIM.ui.leftDot=true;
+  }
+  SIM.tgt[i]=ok;
+ });
  syncUITabs();
  if(S.health<=6){simFail(false);return;}
  if(S.day>SIM.limit){simFail(true);return;}
- if(!SIM.done&&SIM.tgt.every(Boolean)){SIM.done=true;sfx.success();
-  toast('Semua target tercapai! Tekan tombol emas untuk menyelesaikan misi.');simExpr('cheer');
-  // Antri NORMAL dulu supaya tidak tumpang tindih jika ada target_ok sedang diputar
-  if(typeof playVO === 'function') setTimeout(()=>playVO('vo_sim_all_targets'), 300);
+ if(!SIM.done&&SIM.tgt.every(Boolean)){
+  SIM.done=true;
+  sfx.success();
+  toast('Semua target tercapai! Tekan tombol emas untuk menyelesaikan misi.');
+  simExpr('cheer');
+  if(typeof playVO === 'function') playVO('vo_sim_all_targets');
+ } else if(anyNewTarget){
+  // Bunyikan chime & VO tepat 1 kali per tick meskipun beberapa target tercapai bersamaan
+  sfx.chime();
+  if(typeof playVO === 'function') playVO('vo_sim_target_ok');
  }
  if(!SIM.done&&SIM.voted<SIM.voteAt.length&&S.day>=SIM.voteAt[SIM.voted]){SIM.voted++;showVote();}
  updateHUD();}
@@ -378,6 +563,121 @@ function showDropEffect(x, y, iconName) {
     fx.style.opacity = '0';
   });
   setTimeout(() => fx.remove(), 1000);
+}
+
+/* ================= INTERAKSI SENTUHAN TAKTIL & BANNER SINEMATIK KAUSALITAS =================
+   - Tactile Action Burst: gelombang cincin energi & hamburan partikel ikon
+   - Floating Cinematic Emerald Glass Banner: kartu zamrud melayang penjelas kausalitas C2
+*/
+function showTactileActionFX(x, y, action) {
+  if (typeof document === 'undefined') return;
+  const s = (typeof window !== 'undefined' ? Math.min(window.innerWidth / 1920, window.innerHeight / 1080) : 1) || 1;
+  const container = document.createElement('div');
+  container.className = 'tactile-action-burst';
+  container.style.cssText = 'position:fixed;left:' + x + 'px;top:' + y + 'px;transform:translate(-50%,-50%) scale(' + s + ');transform-origin:center center;pointer-events:none;z-index:10001;';
+
+  // 1. Cincin Gelombang Taktil Konsentris (Zero Glow & Subtle Wave)
+  const ring1 = document.createElement('div');
+  ring1.style.cssText = 'position:absolute;left:50%;top:50%;width:80px;height:80px;margin-left:-40px;margin-top:-40px;border-radius:50%;border:2px solid rgba(255,255,255,0.4);opacity:0.8;transform:scale(0.2);transition:all 0.85s cubic-bezier(0.1, 0.8, 0.25, 1);';
+  container.appendChild(ring1);
+
+  const ring2 = document.createElement('div');
+  ring2.style.cssText = 'position:absolute;left:50%;top:50%;width:120px;height:120px;margin-left:-60px;margin-top:-60px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.25);opacity:0.6;transform:scale(0.1);transition:all 1.1s cubic-bezier(0.1, 0.7, 0.2, 1);';
+  container.appendChild(ring2);
+
+  // 2. Lencana Ikon Memantul di Tengah (Zero Outline/Stroke & White Icon)
+  const badge = document.createElement('div');
+  badge.style.cssText = 'position:absolute;left:50%;top:50%;margin-left:-45px;margin-top:-45px;width:90px;height:90px;border-radius:50%;background:#022c22;border:none;outline:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(0,0,0,0.55);transform:scale(0.4) translateY(0);opacity:0;transition:all 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275);color:#ffffff;';
+  badge.innerHTML = ic(action.ic, 54);
+  container.appendChild(badge);
+
+  // 3. Hamburan Partikel Radial Sesuai Kategori Aksi
+  const actId = action.id || '';
+  const actIc = action.ic || '';
+  let symbols = ['✨', '⭐', '🌟', '💫', '✨', '⭐'];
+  if (actId === 'air' || actId === 'irigasi' || actId === 'mata_air' || actIc === 'drop') {
+    symbols = ['💧', '🌊', '✨', '💧', '🫧', '✨'];
+  } else if (actId === 'padi' || actId === 'pohon' || actId === 'bibit' || actId === 'tanam' || actIc === 'sprout') {
+    symbols = ['🌱', '🍃', '🌿', '✨', '🌸', '🍃'];
+  } else if (['ular', 'katak', 'harimau', 'satwa', 'ikan', 'penyu', 'bangau', 'burung'].includes(actId) || actIc === 'paw' || actIc === 'snake') {
+    symbols = ['🐾', '⭐', '✨', '🐾', '🌟', '✨'];
+  } else if (actId === 'padam') {
+    symbols = ['💧', '🌧️', '✨', '💧', '🫧', '✨'];
+  } else if (['shield', 'patroli', 'sita', 'saring', 'keruk', 'bersih', 'sekat'].includes(actId) || actIc === 'shield') {
+    symbols = ['🛡️', '✨', '⭐', '🛡️', '🌟', '✨'];
+  }
+
+  const particles = [];
+  const count = 12;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.textContent = symbols[i % symbols.length];
+    p.style.cssText = 'position:absolute;left:50%;top:50%;margin-left:-16px;margin-top:-16px;font-size:32px;line-height:1;transform:translate(0,0) scale(0.4);opacity:0.95;transition:all ' + (0.7 + Math.random() * 0.45) + 's cubic-bezier(0.15, 0.85, 0.35, 1);text-shadow:0 2px 8px rgba(0,0,0,0.6);';
+    container.appendChild(p);
+    const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+    const dist = 85 + Math.random() * 110;
+    particles.push({ el: p, tx: Math.cos(angle) * dist, ty: Math.sin(angle) * dist });
+  }
+
+  document.body.appendChild(container);
+
+  requestAnimationFrame(() => {
+    ring1.style.transform = 'scale(2.6)';
+    ring1.style.opacity = '0';
+    ring2.style.transform = 'scale(3.2)';
+    ring2.style.opacity = '0';
+    badge.style.opacity = '1';
+    badge.style.transform = 'scale(1.15) translateY(-25px)';
+    particles.forEach(pt => {
+      pt.el.style.transform = 'translate(' + pt.tx + 'px, ' + pt.ty + 'px) scale(' + (1.2 + Math.random() * 0.4) + ')';
+      pt.el.style.opacity = '0';
+    });
+  });
+
+  setTimeout(() => {
+    badge.style.transition = 'all 0.35s ease-out';
+    badge.style.opacity = '0';
+    badge.style.transform = 'scale(0.8) translateY(-60px)';
+  }, 750);
+
+  setTimeout(() => {
+    container.remove();
+  }, 1250);
+}
+
+function showActionCinematicBanner(action, mission) {
+  if (typeof document === 'undefined') return;
+  const existing = document.querySelector('.sim-cinematic-banner');
+  if (existing) existing.remove();
+
+  const biomeTags = {
+    sawah: '🌾 AKSI SAWAH LESTARI',
+    hutan: '🌲 AKSI RIMBA NUSANTARA',
+    sungai: '🏞️ AKSI SUNGAI BERSIH',
+    laut: '🪸 AKSI SAMUDRA BIRU'
+  };
+  const bTag = (mission && biomeTags[mission.biome]) || '🌍 AKSI EKOSISTEM';
+
+  const banner = document.createElement('div');
+  banner.className = 'sim-cinematic-banner';
+  banner.innerHTML = '<div class="scb-icon">' + ic(action.ic, 44) + '</div>'
+    + '<div class="scb-body">'
+    + '<div class="scb-kicker">' + bTag + ' &bull; KAUSALITAS</div>'
+    + '<div class="scb-title">' + action.label + '</div>'
+    + '<div class="scb-desc">' + action.role + '</div>'
+    + '</div>';
+
+  document.body.appendChild(banner);
+
+  requestAnimationFrame(() => {
+    banner.classList.add('show');
+  });
+
+  setTimeout(() => {
+    banner.classList.remove('show');
+    banner.classList.add('hide');
+    setTimeout(() => banner.remove(), 450);
+  }, 2000);
 }
 
 /* ================= EFEK REAKSI SEMPROTAN PESTISIDA / AIR =================
@@ -477,22 +777,59 @@ function showSprayEffect(x, y, actionId, label) {
   simExpr('cheer');
 }
 
-function doAction(i, dropX, dropY){const m=SIM.m,a=m.actions[i],S=SIM.S;
- if(SIM.done){toast('Misi sudah selesai! Tekan tombol emas.');return;}
- if(SIM.cool[i]>0){sfx.deny();toast('"'+a.label+'" masih istirahat ('+SIM.cool[i]+' hari lagi).');return;}
- if(SIM.quota[i]<=0){sfx.deny();toast('Kuota "'+a.label+'" sudah habis.');return;}
- SIM.quota[i]--;SIM.cool[i]=SIM.cdi[i];a.fx(S);
- if (a.id === 'air' || a.id === 'irigasi') S._irrigationFlowTimer = 180;
- const isSpray = a.id === 'mimba' || a.id === 'padam' || a.id === 'bilas' || a.ic === 'bottle';
- if(isSpray){
-   if(sfx.spray) sfx.spray();
-   else sfx.pop();
-   showSprayEffect(dropX || window.innerWidth / 2, dropY || window.innerHeight * 0.45, a.id, a.label);
- } else {
-   sfx.pop();
-   if(dropX && dropY) showDropEffect(dropX, dropY, a.ic);
- }
- simUpdate();}
+function doAction(i, dropX, dropY){
+  const m=SIM.m, a=m.actions[i], S=SIM.S;
+  if(SIM.done){toast('Misi sudah selesai! Tekan tombol emas.');return;}
+  if(SIM._cinematicLock) return;
+  if(SIM.cool[i]>0){sfx.deny();toast('"'+a.label+'" masih istirahat ('+SIM.cool[i]+' hari lagi).');return;}
+  if(SIM.quota[i]<=0){sfx.deny();toast('Kuota "'+a.label+'" sudah habis.');return;}
+
+  // Kunci aksi selama 2.4 detik agar 28 siswa kelas 5A mengamati dampak kausalitas (C2)
+  SIM._cinematicLock = true;
+  const dg = el('#dock-grid');
+  if(dg) dg.classList.add('dock-cinematic-locked');
+  setTimeout(() => {
+    if(SIM) SIM._cinematicLock = false;
+    const grid = el('#dock-grid');
+    if(grid) grid.classList.remove('dock-cinematic-locked');
+  }, 2400);
+
+  SIM.quota[i]--;
+  SIM.cool[i]=SIM.cdi[i];
+  a.fx(S);
+
+  // Timer animasi dinamis latar Canvas 2D 60 FPS
+  if (a.id === 'air' || a.id === 'irigasi' || a.id === 'mata_air' || a.id === 'alirkan' || a.ic === 'drop') {
+    if (m.biome === 'hutan') S._springFlowTimer = 180;
+    else if (m.biome === 'sawah') S._irrigationFlowTimer = 180;
+    else if (m.biome === 'sungai') S._sluiceSurgeTimer = 180;
+    else S._irrigationFlowTimer = 180;
+  }
+  if (a.id === 'padam' || a.id === 'sekat') S._fireExtinguishTimer = 180;
+  if (a.id === 'pintu') S._sluiceSurgeTimer = 180;
+  if (a.id === 'naungan') S._reefShadeTimer = 180;
+
+  const tx = dropX || (typeof window !== 'undefined' ? window.innerWidth / 2 : 960);
+  const ty = dropY || (typeof window !== 'undefined' ? window.innerHeight * 0.45 : 480);
+
+  // Efek interaksi sentuhan partikel taktil
+  showTactileActionFX(tx, ty, a);
+
+  // Banner sinematik kausalitas zamrud melayang
+  showActionCinematicBanner(a, m);
+
+  const isSpray = (a.id === 'mimba' || a.id === 'bilas' || a.ic === 'bottle') && a.id !== 'padam';
+  if(isSpray){
+    if(sfx.spray) sfx.spray();
+    showSprayEffect(tx, ty, a.id, a.label);
+  } else {
+    // Gunakan nada pop taktil lembut untuk sentuhan aksi agar nada chime tetap eksklusif untuk target tercapai
+    if(sfx.pop) sfx.pop();
+  }
+  simExpr('cheer');
+
+  simUpdate();
+}
 function showVote(){const m=SIM.m;
  // Jeda simulasi selama musyawarah berlangsung
  if(SIM&&!SIM.done){
@@ -558,19 +895,37 @@ function showVote(){const m=SIM.m;
   clearInterval(voteTimer);
   const a=m.actions[+cd.dataset.v];
   sfx.success();
-  const isSpray = a.id === 'mimba' || a.id === 'padam' || a.id === 'bilas' || a.ic === 'bottle';
+
+  // Set timer animasi dinamis latar Canvas 2D
+  if (a.id === 'air' || a.id === 'irigasi' || a.id === 'mata_air' || a.id === 'alirkan' || a.ic === 'drop') {
+    if (m.biome === 'hutan') SIM.S._springFlowTimer = 180;
+    else if (m.biome === 'sawah') SIM.S._irrigationFlowTimer = 180;
+    else if (m.biome === 'sungai') SIM.S._sluiceSurgeTimer = 180;
+    else SIM.S._irrigationFlowTimer = 180;
+  }
+  if (a.id === 'padam' || a.id === 'sekat') SIM.S._fireExtinguishTimer = 180;
+  if (a.id === 'pintu') SIM.S._sluiceSurgeTimer = 180;
+  if (a.id === 'naungan') SIM.S._reefShadeTimer = 180;
+
+  const cx = typeof window !== 'undefined' ? window.innerWidth / 2 : 960;
+  const cy = typeof window !== 'undefined' ? window.innerHeight * 0.45 : 480;
+  showTactileActionFX(cx, cy, a);
+  showActionCinematicBanner(a, m);
+
+  const isSpray = (a.id === 'mimba' || a.id === 'bilas' || a.ic === 'bottle') && a.id !== 'padam';
   if (isSpray) {
     setTimeout(() => {
       if (sfx.spray) sfx.spray();
-      showSprayEffect(window.innerWidth / 2, window.innerHeight * 0.45, a.id, a.label);
+      showSprayEffect(cx, cy, a.id, a.label);
     }, 250);
   }
   a.fx(SIM.S);
-  if (a.id === 'air' || a.id === 'irigasi') SIM.S._irrigationFlowTimer = 180;
-  toast('Hasil musyawarah: '+a.label+' (gratis)!');
-  // Tunda VO selesai sedikit agar toast sempat render, lalu antri via HIGH priority
-  setTimeout(()=>{ if(typeof playVO === 'function') playVO('vo_sim_vote_done'); }, 200);
-  closeModal();simUpdate();});}
+  closeModal();
+  simUpdate();
+  if (SIM && !SIM.done) {
+    if (typeof playVO === 'function') playVO('vo_sim_vote_done');
+  }
+});}
 function simFail(timeout){if(!SIM)return;clearInterval(SIM.timer);SIM.timer=null;SIM.done=true;sfx.wrong();if(typeof playVO === 'function') playVO(timeout ? 'vo_sim_fail_time' : 'vo_sim_fail_health');
  const m=SIM.m;
    const r=modal('<h2 style="color:#fca5a5">'+ic('clock',34)+' '+(timeout?'Waktu Telah Habis!':'Ekosistem Rusak Berat!')+'</h2>'
@@ -586,9 +941,13 @@ function finishSim(){const m=SIM.m,S=SIM.S,days=S.day;
  const simStars=(S.health>=85&&days<=m.par)?3:2;
  sfx.success();SIM=null;startQuiz(m,simStars,days);}
 function leaveSim(){if(SIM&&SIM.timer)clearInterval(SIM.timer);SIM=null;
+ cleanupPanelTour();
  try{if(CTX.sim)CTX.sim.clearRect(0,0,1920,1080);}catch(e){}
  clearCardSelection();
  resetTouchLock();
+ if(typeof document !== 'undefined') {
+   document.querySelectorAll('.sim-cinematic-banner, .tactile-action-burst').forEach(el => el.remove());
+ }
 }
 
 /* ================== GLOBAL DRAG PROXY & TOUCH MANAGEMENT (IFP DUAL-MODE) ==================

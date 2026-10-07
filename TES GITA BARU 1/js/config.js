@@ -47,6 +47,7 @@ function EB(c,x,y,r,dx,dy){dx=dx||0;dy=dy||0;CIRC(c,x,y,r,'#fff');CIRC(c,x+dx,y+
 /* ================= IKON SVG ================= */
 const ICONS = {
   drop: '<path d="M12 3C12 3 5 11 5 15a7 7 0 0 0 14 0C19 11 12 3 12 3Z"/>',
+  cloudRain: '<path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M8 19v2M8 15v2M12 17v2M12 21v2M16 19v2M16 15v2"/>',
   sprout: '<path d="M12 21v-11"/><path d="M12 10C12 5 8 3 4 3c0 5 4 7 8 7Z"/><path d="M12 13c0-4 3-7 8-7 0 4-3 7-8 7Z"/>',
   mushroom: '<path d="M4 12a8 7 0 0 1 16 0Z"/><path d="M9 12v6a3 3 0 0 0 6 0v-6"/>',
   snake: '<path d="M4 18c2 0 2-4 5-4s3 4 6 4 3-4 5-4"/><circle cx="20" cy="14" r="1.6" fill="currentColor"/>',

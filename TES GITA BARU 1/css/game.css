@@ -1221,9 +1221,56 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 .mcard-action{
   width:100%;
 }
-.mcard-action .btn{
-  width:100%;height:56px;border-radius:16px;font-size:24px;font-family:var(--font-fun);font-weight:700;
-  display:flex;align-items:center;justify-content:center;gap:10px;border:none;
+.mcard-action .btn,
+.btn-mission-cta{
+  width:100%;
+  min-height:72px;
+  height:72px;
+  border:4px solid #4a3018;
+  border-radius:24px;
+  font-family:var(--font-fun);
+  font-weight:800;
+  font-size:27px;
+  letter-spacing:1px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  color:#ffffff;
+  -webkit-text-stroke:2px #4a3018;
+  paint-order:stroke fill;
+  cursor:pointer;
+  transition:transform .1s cubic-bezier(0.4, 0, 0.2, 1), box-shadow .1s cubic-bezier(0.4, 0, 0.2, 1), filter .2s ease;
+}
+.mcard-action .btn.btn-gold,
+.btn-mission-cta.btn-gold{
+  background:linear-gradient(180deg, #fde047 0%, #f59e0b 100%);
+  box-shadow:inset 0 6px 0 rgba(255,255,255,0.45), inset 0 -6px 0 rgba(0,0,0,0.15), 0 8px 0 #b45309, 0 8px 0 4px #4a3018, 0 18px 24px rgba(0,0,0,0.4);
+}
+.mcard-action .btn.btn-gold:hover,
+.btn-mission-cta.btn-gold:hover{
+  filter:brightness(1.08);
+}
+.mcard-action .btn.btn-gold:active,
+.btn-mission-cta.btn-gold:active{
+  transform:translateY(6px);
+  box-shadow:inset 0 3px 0 rgba(255,255,255,0.45), inset 0 -3px 0 rgba(0,0,0,0.15), 0 2px 0 #b45309, 0 2px 0 4px #4a3018, 0 6px 12px rgba(0,0,0,0.4);
+}
+.mcard-action .btn[disabled],
+.btn-mission-cta[disabled]{
+  background:rgba(255,255,255,0.08);
+  color:rgba(255,255,255,0.45);
+  border:3px dashed rgba(255,255,255,0.25);
+  -webkit-text-stroke:none;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,0.3);
+  cursor:not-allowed;
+  pointer-events:none;
+  transform:none;
+}
+.mcard-action .btn svg,
+.btn-mission-cta svg{
+  filter:drop-shadow(0px 3px 0px rgba(74,48,24,0.8));
+  margin-bottom:2px;
 }
 .mprog{
   text-align:center;font-family:var(--font-fun);font-size:25px;color:var(--cream);
@@ -2901,4 +2948,554 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
   font-variant-numeric: tabular-nums;
   margin-left: 12px;
 }
+
+/* ============================================================
+   INTERAKSI AKSI KAUSALITAS DINAMIS 4 BIOMA (IFP 65"/75")
+   - Floating Cinematic Emerald Glass Banner
+   - Dock Action Lock Visual State
+   - Tactile Particle Burst Container
+   ============================================================ */
+
+.dock-grid.dock-cinematic-locked {
+  pointer-events: none !important;
+  filter: brightness(0.92);
+  cursor: wait;
+}
+
+.dock-grid.dock-cinematic-locked .dock-card {
+  opacity: 0.88;
+  transform: scale(0.98);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.sim-cinematic-banner {
+  position: fixed;
+  top: 96px;
+  left: 50%;
+  transform: translate(-50%, -24px) scale(0.85);
+  opacity: 0;
+  z-index: 9999;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(180deg, rgba(6, 56, 44, 0.96) 0%, rgba(2, 34, 26, 0.98) 100%);
+  border: none;
+  outline: none;
+  border-radius: 28px;
+  padding: 18px 32px;
+  max-width: 920px;
+  min-width: 460px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.35s ease;
+}
+
+.sim-cinematic-banner.show {
+  transform: translate(-50%, 0) scale(1);
+  opacity: 1;
+}
+
+.sim-cinematic-banner.hide {
+  transform: translate(-50%, -36px) scale(0.95);
+  opacity: 0;
+  transition: transform 0.42s ease-in, opacity 0.42s ease-in;
+}
+
+.sim-cinematic-banner .scb-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: rgba(2, 28, 20, 0.85);
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.sim-cinematic-banner .scb-icon svg,
+.sim-cinematic-banner .scb-icon .ic,
+.sim-cinematic-banner .scb-icon svg path,
+.sim-cinematic-banner .scb-icon svg circle,
+.sim-cinematic-banner .scb-icon svg line {
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+}
+
+.sim-cinematic-banner .scb-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sim-cinematic-banner .scb-kicker {
+  font-family: var(--font-fun);
+  font-size: 24px;
+  font-weight: 700;
+  color: #a7f3d0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sim-cinematic-banner .scb-title {
+  font-family: var(--font-fun);
+  font-size: 30px;
+  font-weight: 800;
+  color: #fef08a;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.sim-cinematic-banner .scb-desc {
+  font-family: var(--font-body, system-ui);
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.3;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.tactile-action-burst {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10001;
+}
+
+/* ============================================================
+   ECO-EXPLORER — ONBOARDING SPOTLIGHT PANEL TOUR (STANDAR IFP)
+   - Dimmed backdrop overlay (z-index: 80)
+   - High-contrast Golden Pulse Spotlight (#fef08a, z-index: 85)
+   - Floating Gita Guidance Card (font >= 24px, z-index: 90)
+   ============================================================ */
+
+.spotlight-overlay {
+  position: absolute;
+  inset: 0;
+  width: 1920px;
+  height: 1080px;
+  background: rgba(0, 8, 5, 0.76);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 80;
+  pointer-events: auto;
+  animation: fadeIn 0.3s ease;
+}
+
+.spotlight-highlight {
+  z-index: 85 !important;
+  outline: 4px solid #fef08a !important;
+  outline-offset: 4px !important;
+  border-radius: 28px !important;
+  box-shadow: 0 0 0 6px rgba(254, 240, 138, 0.45), 0 20px 50px rgba(0, 0, 0, 0.8) !important;
+  animation: spotlightPulse 1.8s infinite ease-in-out !important;
+  transition: outline 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+@keyframes spotlightPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 6px rgba(254, 240, 138, 0.45), 0 20px 50px rgba(0, 0, 0, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 0 14px rgba(254, 240, 138, 0.18), 0 24px 60px rgba(0, 0, 0, 0.9);
+  }
+}
+
+.spotlight-guide-card {
+  position: absolute;
+  background: linear-gradient(180deg, rgba(6, 56, 44, 0.98) 0%, rgba(2, 34, 26, 0.99) 100%);
+  border-radius: 28px;
+  border: 2px solid rgba(254, 240, 138, 0.55);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 26px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 90;
+  pointer-events: auto;
+}
+
+.spotlight-guide-card.pos-left {
+  left: 488px;
+  top: 120px;
+  width: 580px;
+  animation: tourCardIn 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.spotlight-guide-card.pos-right {
+  right: 488px;
+  top: 120px;
+  width: 580px;
+  animation: tourCardIn 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.spotlight-guide-card.pos-top {
+  left: 50%;
+  top: 104px;
+  transform: translateX(-50%);
+  width: 620px;
+  animation: tourCardInTop 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.spotlight-guide-card.pos-bottom {
+  left: 50%;
+  bottom: 270px;
+  transform: translateX(-50%);
+  width: 620px;
+  animation: tourCardInBottom 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes tourCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tourCardInTop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@keyframes tourCardInBottom {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+.sgc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sgc-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-fun);
+  font-size: 24px;
+  font-weight: 700;
+  color: #a7f3d0;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.sgc-step-pill {
+  font-family: var(--font-fun);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--gold);
+  background: rgba(245, 163, 11, 0.2);
+  padding: 4px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(254, 240, 138, 0.35);
+  white-space: nowrap;
+}
+
+.sgc-title {
+  font-family: var(--font-fun);
+  font-size: 28px;
+  font-weight: 800;
+  color: #fef08a;
+  line-height: 1.25;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.sgc-body {
+  font-family: var(--font-body);
+  font-size: 25px;
+  line-height: 1.45;
+  color: #f0fdf4;
+  margin: 0;
+}
+
+.sgc-body b {
+  color: #fef08a;
+}
+
+.sgc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 6px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sgc-skip-btn {
+  font-family: var(--font-fun);
+  font-size: 25px;
+  font-weight: 700;
+  color: #94a3b8;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px 18px;
+  border-radius: 14px;
+  min-height: 56px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.sgc-skip-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sgc-skip-btn:active {
+  transform: scale(0.96);
+}
+
+.sgc-next-btn {
+  min-height: 58px;
+  font-size: 25px;
+  padding: 10px 28px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ============================================================
+   ECO-EXPLORER — PROFIL PENGEMBANG & MEDIA (#scr-about)
+   Desain Bersih, Elegan, Lapang (Standar IFP >= 24px, Zero-Slop)
+   ============================================================ */
+
+.about-screen-wrap {
+  position: absolute;
+  inset: 0;
+  width: 1920px;
+  height: 1080px;
+  padding: 28px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px;
+  background: radial-gradient(circle at 50% 25%, #084c3b 0%, var(--panel) 65%, var(--panel-deep) 100%);
+  z-index: 5;
+}
+
+.about-header-bar {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border-radius: 20px;
+  background: rgba(2, 44, 34, 0.95);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  flex: none;
+}
+
+.about-back-btn {
+  height: 54px;
+  font-size: 25px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-fun);
+  font-weight: 700;
+  border-radius: 16px;
+}
+
+.about-header-title {
+  display: flex;
+  align-items: center;
+}
+
+.about-title-text {
+  font-family: var(--font-fun);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.about-header-right {
+  display: flex;
+  align-items: center;
+}
+
+#about-snd {
+  min-width: 54px;
+  height: 54px;
+  border-radius: 16px;
+}
+
+.about-showcase {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 32px;
+  align-items: stretch;
+}
+
+/* Kolom Kiri: Kartu Profil Peneliti */
+.about-profile-card {
+  width: 440px;
+  flex: none;
+  background: rgba(3, 34, 26, 0.9);
+  border-radius: 28px;
+  border: 1px solid rgba(254, 240, 138, 0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 28px;
+}
+
+.about-photo-frame {
+  width: 250px;
+  height: 320px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid rgba(254, 240, 138, 0.55);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  background: #022c22;
+  flex: none;
+}
+
+.about-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+}
+
+.about-profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.about-dev-name {
+  font-family: var(--font-fun);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1.25;
+  margin: 0;
+}
+
+.about-affil-text {
+  font-family: var(--font-body);
+  font-size: 24px;
+  line-height: 1.45;
+  color: #d1fae5;
+  margin: 0;
+}
+
+/* Kolom Kanan: Teks Naskah Murni Tanpa Badges */
+.about-details-card {
+  flex: 1;
+  min-width: 0;
+  background: rgba(3, 34, 26, 0.9);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  padding: 36px 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.about-text-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.about-game-title {
+  font-family: var(--font-fun);
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.about-game-subtitle {
+  font-family: var(--font-fun);
+  font-size: 24px;
+  color: var(--mint);
+  margin: 0;
+}
+
+.about-body-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+}
+
+.about-p {
+  font-family: var(--font-body);
+  font-size: 24px;
+  line-height: 1.48;
+  color: #f0fdf4;
+  margin: 0;
+  font-weight: 400;
+  text-align: justify;
+}
+
+.about-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 14px;
+  flex: none;
+}
+
+.about-cta-btn {
+  flex: 1;
+  min-height: 58px;
+  font-size: 25px;
+  font-family: var(--font-fun);
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 

@@ -90,6 +90,15 @@ function init(){
     go('teacher');
   };
 
+  const btnAbout = el('#btn-about');
+  if (btnAbout) {
+    btnAbout.onclick = () => {
+      sfx.click();
+      if (typeof buildAbout === 'function') buildAbout();
+      go('about');
+    };
+  }
+
   // Proteksi debounce multi-click untuk layar sentuh IFP
   el('#t-snd').onclick = toggleSound;
 
@@ -153,7 +162,7 @@ function init(){
     } catch(e) {}
   });
 
-  // Preloader & Penyiapan Aset Cerdas dengan Animasi Zoom-Out Logo UM
+  // Preloader & Penyiapan Aset Cerdas dengan Animasi Zoom-Out Logo UM (Strict Asset Readiness)
   function runPreloader(onDone) {
     const overlay = el('#preloader-overlay');
     if (!overlay) {
@@ -166,6 +175,7 @@ function init(){
     const pctEl = el('#preloader-pct');
     let progress = 12;
     let finished = false;
+    let assetsReady = false;
     const startTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
     const minDuration = 2000; // 2.0s agar animasi zoom-out logo UM dinikmati optimal
 
@@ -181,7 +191,7 @@ function init(){
     function finishPreload() {
       if (finished) return;
       finished = true;
-      setProgress(100, 'Siap Berpetualang!');
+      setProgress(100, 'Semua Aset Siap! Siap Berpetualang...');
       setTimeout(() => {
         overlay.classList.add('fade-out');
         setTimeout(() => {
@@ -191,58 +201,83 @@ function init(){
       }, 320);
     }
 
-    // Interaksi sentuh/klik untuk langsung lewati & aktifkan audio Web Audio
+    // Interaksi sentuh/klik: Hanya membuka kunci audio Web Audio.
+    // TIDAK BISA melewati (skip) proses loading sebelum seluruh aset benar-benar siap!
     overlay.addEventListener('pointerdown', () => {
       unlockAudio();
-      finishPreload();
-    }, { once: true });
+      if (assetsReady) {
+        finishPreload();
+      }
+    });
 
-    // Preload aset riil secara paralel
+    // Helper pemuatan gambar statis
+    function preloadImg(src) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve({ src, ok: true });
+        img.onerror = () => resolve({ src, ok: false });
+        img.src = src;
+      });
+    }
+
+    // Preload aset riil secara paralel (Strict Asset Readiness Gatekeeper)
     const tasks = [];
 
-    // 1. Font antarmuka
+    // 1. Font antarmuka & tipografi IFP
     if (document.fonts && document.fonts.ready) {
       tasks.push(
         document.fonts.ready
-          .then(() => setProgress(35, 'Memuat font & antarmuka petualangan...'))
+          .then(() => setProgress(30, 'Memuat font & tipografi IFP...'))
           .catch(() => {})
       );
     }
 
-    // 2. Preload sequence WebP Gita
+    // 2. Citra Statis (Foto Profil Peneliti & Lambang Resmi UM)
+    const staticImages = ['assets/Foto pas agita.webp', 'assets/Lambang-UM.webp'];
+    const imgTasks = Promise.all(staticImages.map(preloadImg)).then(() => {
+      setProgress(48, 'Memuat citra profil & lambang almamater...');
+    });
+    tasks.push(imgTasks);
+
+    // 3. Preload sequence WebP Gita (168 Frame: Thinking, Talking, Worried)
     if (typeof GitaSeq !== 'undefined' && GitaSeq.preload) {
       const g1 = GitaSeq.preload({ folder: 'gita-thinking', prefix: 'g', pad: 3, ext: '.webp', frames: 48, fps: 12 })
-        .then(() => setProgress(55, 'Menyiapkan animasi karakter Gita...'))
+        .then(() => setProgress(65, 'Menyiapkan animasi karakter Gita...'))
         .catch(() => {});
       const g2 = GitaSeq.preload({ folder: 'talking_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 })
-        .then(() => setProgress(75, 'Memuat dialog ekspresi panduan...'))
+        .then(() => setProgress(82, 'Memuat dialog ekspresi panduan...'))
         .catch(() => {});
       const g3 = GitaSeq.preload({ folder: 'worried_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 })
-        .then(() => setProgress(90, 'Menginisialisasi simulasi 4 ekosistem...'))
+        .then(() => setProgress(94, 'Menginisialisasi simulasi 4 ekosistem...'))
         .catch(() => {});
       tasks.push(Promise.all([g1, g2, g3]));
     }
 
+    // Menunggu seluruh aset 100% selesai dimuat sebelum memulai game
     Promise.all(tasks).then(() => {
+      assetsReady = true;
       const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
       const elapsed = now - startTime;
       const remain = Math.max(0, minDuration - elapsed);
-      setProgress(95, 'Menyiapkan arena petualangan...');
+      setProgress(98, 'Memverifikasi kesiapan arena petualangan...');
       setTimeout(() => {
         finishPreload();
       }, remain);
     }).catch(() => {
+      assetsReady = true;
       finishPreload();
     });
 
-    // Failsafe timeout 3800ms
+    // Failsafe timeout 15 detik (hanya untuk kondisi ekstrim jika jaringan sekolah terputus)
     setTimeout(() => {
-      if (!finished) finishPreload();
-    }, 3800);
+      if (!finished) {
+        assetsReady = true;
+        finishPreload();
+      }
+    }, 15000);
   }
 
   const navigateToInitialScreen = () => {
-    titleBubble();
     const p = new URLSearchParams(location.search).get('screen');
     if (p === 'tutorial') {
       buildTutorial();

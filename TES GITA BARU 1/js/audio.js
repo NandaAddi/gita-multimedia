@@ -2,6 +2,7 @@
    ECO-EXPLORER — js/audio.js
    Web Audio API Synthesizer, Sound Effects, & TTS speak()
    100% Offline & Pure Synthesis (Pop-Free & Zero BGM Clash)
+   Upgraded: Exclusive Monophonic VO Channel & Auto-Ducking BGM
    ============================================================ */
 
 let AC = null, audioReady = false, soundOn = true, acResuming = false;
@@ -69,62 +70,95 @@ function noiseHit(d, vol, fc) {
   } catch (e) {}
 }
 
-let lastSfxTime = 0;
-function allowSfx(cooldown = 280) {
+// Global SFX Cooldown & Throttle Engine (Anti-Double / Anti-Stack Sound)
+const _sfxCooldowns = {
+  click: 140,
+  back: 160,
+  pop: 80,
+  chime: 220,
+  success: 350,
+  wrong: 250,
+  star: 200,
+  deny: 150,
+  whoosh: 160,
+  grow: 300,
+  flee: 300,
+  wither: 300,
+  spray: 250
+};
+const _lastSfxTimestamps = {};
+
+function allowSfxType(type, customCooldown) {
+  const cd = customCooldown !== undefined ? customCooldown : (_sfxCooldowns[type] || 120);
   const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-  if (now - lastSfxTime < cooldown) return false;
-  lastSfxTime = now;
+  const last = _lastSfxTimestamps[type] || 0;
+  if (now - last < cd) return false;
+  _lastSfxTimestamps[type] = now;
   return true;
+}
+
+function allowSfx(cooldown = 280) {
+  return allowSfxType('click', cooldown);
 }
 
 const sfx = {
   click() {
-    if (!allowSfx(280)) return;
+    if (!allowSfxType('click')) return;
     tone(560, 0.06, 'triangle', 0.08);
   },
   back() {
-    if (!allowSfx(280)) return;
+    if (!allowSfxType('back')) return;
     tone(420, 0.07, 'triangle', 0.08);
   },
   pop() {
+    if (!allowSfxType('pop')) return;
     tone(560, 0.06, 'sine', 0.1);
   },
   chime() {
+    if (!allowSfxType('chime')) return;
     tone(880, 0.45, 'sine', 0.1);
     tone(1318, 0.6, 'sine', 0.05, 0.07);
   },
   success() {
+    if (!allowSfxType('success')) return;
     [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.2, 'triangle', 0.09, i * 0.09));
   },
   wrong() {
+    if (!allowSfxType('wrong')) return;
     tone(300, 0.18, 'sawtooth', 0.05);
     tone(220, 0.24, 'sawtooth', 0.05, 0.12);
   },
   star() {
+    if (!allowSfxType('star')) return;
     tone(1568, 0.22, 'triangle', 0.08);
     tone(2093, 0.28, 'triangle', 0.05, 0.08);
   },
   deny() {
+    if (!allowSfxType('deny')) return;
     tone(180, 0.12, 'square', 0.06);
   },
   whoosh() {
-    if (!allowSfx(200)) return;
+    if (!allowSfxType('whoosh')) return;
     tone(460, 0.09, 'sine', 0.08);
   },
   grow() {
+    if (!allowSfxType('grow')) return;
     [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.25, 'sine', 0.05, i * 0.08));
   },
   flee() {
+    if (!allowSfxType('flee')) return;
     tone(700, 0.08, 'triangle', 0.04);
     tone(850, 0.08, 'triangle', 0.04, 0.07);
     tone(1000, 0.1, 'triangle', 0.03, 0.14);
   },
   wither() {
+    if (!allowSfxType('wither')) return;
     tone(440, 0.3, 'sawtooth', 0.03);
     tone(370, 0.35, 'sawtooth', 0.03, 0.1);
     tone(293, 0.4, 'sine', 0.04, 0.22);
   },
   spray() {
+    if (!allowSfxType('spray')) return;
     if (!soundOn || !audioReady || !AC || AC.state !== 'running') return;
     try {
       const a = AC;
@@ -156,9 +190,11 @@ const sfx = {
   }
 };
 
-// BGM Engine
+// BGM Engine & Auto-Ducking System
 let bgmAudio = null;
 let bgmInitialized = false;
+let _bgmDuckInterval = null;
+let _isDucked = false;
 
 function initBGM() {
   if (!bgmInitialized && typeof window !== 'undefined') {
@@ -166,9 +202,46 @@ function initBGM() {
     try {
       bgmAudio = new Audio('backsound/bg-music.mp3');
       bgmAudio.loop = true;
-      bgmAudio.volume = typeof G !== 'undefined' && G.bgmVol !== undefined ? G.bgmVol : 0.5;
+      const baseVol = typeof G !== 'undefined' && G.bgmVol !== undefined ? G.bgmVol : 0.5;
+      bgmAudio.volume = baseVol;
     } catch(e) {}
   }
+}
+
+function duckBGM(duck) {
+  if (!bgmAudio || typeof window === 'undefined') return;
+  const baseVol = typeof G !== 'undefined' && G.bgmVol !== undefined ? G.bgmVol : 0.5;
+  if (baseVol <= 0) {
+    try { bgmAudio.volume = 0; } catch (e) {}
+    return;
+  }
+  _isDucked = !!duck;
+  const targetVol = _isDucked ? Math.max(0.02, baseVol * 0.20) : baseVol;
+  
+  if (_bgmDuckInterval) {
+    clearInterval(_bgmDuckInterval);
+    _bgmDuckInterval = null;
+  }
+
+  const stepTime = 25;
+  const duration = duck ? 150 : 300;
+  const steps = Math.max(1, Math.round(duration / stepTime));
+  let curStep = 0;
+  const startVol = bgmAudio.volume;
+  const diff = targetVol - startVol;
+
+  _bgmDuckInterval = setInterval(() => {
+    curStep++;
+    const progress = Math.min(1, curStep / steps);
+    const newVol = startVol + diff * progress;
+    try {
+      bgmAudio.volume = Math.max(0, Math.min(1, newVol));
+    } catch (e) {}
+    if (progress >= 1) {
+      clearInterval(_bgmDuckInterval);
+      _bgmDuckInterval = null;
+    }
+  }, stepTime);
 }
 
 function bgmStart() {
@@ -188,72 +261,68 @@ function setBgmVolume(val) {
     G.bgmVol = Math.max(0, Math.min(1, val));
     if(typeof saveG === 'function') saveG();
   }
-  if (bgmAudio) bgmAudio.volume = G.bgmVol;
+  if (bgmAudio) {
+    if (_bgmDuckInterval) { clearInterval(_bgmDuckInterval); _bgmDuckInterval = null; }
+    bgmAudio.volume = _isDucked ? G.bgmVol * 0.20 : G.bgmVol;
+  }
 }
 
 /* ================= VOICE-OVER (VO) PLAYER ENGINE =================
-   Smart VO Queue & Priority System
-   - HIGH  : Musyawarah & Akhir Misi (interupsi langsung, reset antrian)
-   - NORMAL: Target tercapai & Bridging (antri setelah audio saat ini selesai)
-   - LOW   : Feedback umum (diabaikan jika antrian tidak kosong)
-   Jeda natural 400ms antar audio agar tidak bertumpuk.
-   Pop-Free & Non-Intrusive: hening tanpa error jika file belum ada.
-*/
-
-const VO_PRIORITY = {
-  HIGH:   3,
-  NORMAL: 2,
-  LOW:    1
-};
-
-// Kunci yang termasuk HIGH priority
-const VO_HIGH_KEYS = new Set([
-  'vo_sim_vote_call', 'vo_sim_vote_done',
-  'vo_sim_all_targets',
-  'vo_sim_fail_time', 'vo_sim_fail_health'
-]);
-
-// Kunci yang termasuk NORMAL priority
-const VO_NORMAL_KEYS = new Set([
-  'vo_sim_target_ok'
-]);
-
-function getVOPriority(key) {
-  if (VO_HIGH_KEYS.has(key)) return VO_PRIORITY.HIGH;
-  // Semua kunci bridging (vo_bridge_*) = NORMAL
-  if (VO_NORMAL_KEYS.has(key) || (typeof key === 'string' && key.startsWith('vo_bridge_'))) return VO_PRIORITY.NORMAL;
-  return VO_PRIORITY.LOW;
-}
+   Saluran Eksklusif Monofonik & Auto-Ducking BGM
+   - Tepat 1 rekaman vokal aktif di seluruh game (Zero Overlap / Anti-Stack).
+   - Setiap pemanggilan playVO() baru atau stopVO() seketika menghentikan suara aktif terdahulu.
+   - Proteksi Race-Condition asynchronous Audio.play() Promise via _voToken.
+   - BGM otomatis ducking ke 20% saat vokal berbunyi, dan pulih mulus saat vokal tuntas.
+   - 100% Pop-Free, Offline-Ready, dan Non-Intrusive.
+================================================================== */
 
 let currentVO = null;
-let _voQueue   = []; // [{key, onEnd, priority}]
+let _voToken = 0;
 let _voPlaying = false;
-let _voGapTimer = null;
+const VO_POOL = new Map();
 
 function stopVO() {
-  // Bersihkan antrian
-  _voQueue = [];
+  _voToken++; // Batalkan token in-flight untuk playback terdahulu
   _voPlaying = false;
-  if (_voGapTimer) { clearTimeout(_voGapTimer); _voGapTimer = null; }
+
+  // Kembalikan volume BGM seketika
+  duckBGM(false);
+
+  // Hentikan dan reset audio primer aktif
   if (currentVO) {
     try {
       currentVO.onended = null;
+      currentVO.onerror = null;
       currentVO.pause();
       currentVO.currentTime = 0;
     } catch (e) {}
     currentVO = null;
   }
-}
 
-const VO_POOL = new Map();
+  // Jaminan 100% bebas kebocoran: pastikan semua elemen di VO_POOL dalam status jeda
+  VO_POOL.forEach((audio) => {
+    if (audio && typeof audio.pause === 'function') {
+      try {
+        if (!audio.paused) {
+          audio.pause();
+          audio.currentTime = 0;
+          audio.onended = null;
+          audio.onerror = null;
+        }
+      } catch (e) {}
+    }
+  });
+}
 
 function _getVOAudio(key) {
   let audio = VO_POOL.get(key);
   if (!audio) {
-    if (VO_POOL.size >= 40) {
+    if (VO_POOL.size >= 45) {
       const oldestKey = VO_POOL.keys().next().value;
       const oldAudio = VO_POOL.get(oldestKey);
-      if (oldAudio && typeof oldAudio.pause === 'function') { try { oldAudio.pause(); } catch(e){} }
+      if (oldAudio && typeof oldAudio.pause === 'function') {
+        try { oldAudio.pause(); } catch(e){}
+      }
       VO_POOL.delete(oldestKey);
     }
     audio = new Audio('voice-over/' + key + '.mp3');
@@ -262,73 +331,78 @@ function _getVOAudio(key) {
   return audio;
 }
 
-function _playNextInQueue() {
-  if (!soundOn || _voQueue.length === 0) {
-    _voPlaying = false;
-    return;
+function _getVOFallback(key) {
+  const fbKey = 'fb_' + key;
+  let fallback = VO_POOL.get(fbKey);
+  if (!fallback) {
+    fallback = new Audio('assets/audio/vo/' + key + '.mp3');
+    VO_POOL.set(fbKey, fallback);
   }
-  _voPlaying = true;
-  const { key, onEnd } = _voQueue.shift();
-  const audio = _getVOAudio(key);
-  currentVO = audio;
-  try { audio.currentTime = 0; } catch (e) {}
-
-  const _afterEnd = () => {
-    if (currentVO === audio) currentVO = null;
-    if (typeof onEnd === 'function') { try { onEnd(); } catch(e){} }
-    // Jeda natural 400ms sebelum audio berikutnya
-    _voGapTimer = setTimeout(_playNextInQueue, 400);
-  };
-
-  audio.onended = _afterEnd;
-  audio.play().catch(() => {
-    // Fallback path
-    const fbKey = 'fb_' + key;
-    let fallback = VO_POOL.get(fbKey);
-    if (!fallback) {
-      fallback = new Audio('assets/audio/vo/' + key + '.mp3');
-      VO_POOL.set(fbKey, fallback);
-    }
-    currentVO = fallback;
-    try { fallback.currentTime = 0; } catch (e) {}
-    fallback.onended = _afterEnd;
-    fallback.play().catch(() => {
-      if (currentVO === fallback) currentVO = null;
-      if (typeof onEnd === 'function') { try { onEnd(); } catch(e){} }
-      _voGapTimer = setTimeout(_playNextInQueue, 400);
-    });
-  });
+  return fallback;
 }
 
-function playVO(key, onEnd, priority) {
-  if (!soundOn || typeof window === 'undefined') return;
-  const p = (priority !== undefined) ? priority : getVOPriority(key);
+function playVO(key, onEnd) {
+  if (!soundOn || typeof window === 'undefined' || !key) return;
 
-  if (p >= VO_PRIORITY.HIGH) {
-    // HIGH: potong semua, langsung putar
-    stopVO();
-    _voQueue.push({ key, onEnd, priority: p });
-    _playNextInQueue();
-    return;
-  }
+  // 1. Matikan suara yang sedang aktif seketika (Monofonik Eksklusif)
+  stopVO();
 
-  if (p === VO_PRIORITY.NORMAL) {
-    // NORMAL: antri di belakang antrian yang ada
-    _voQueue.push({ key, onEnd, priority: p });
-    if (!_voPlaying) _playNextInQueue();
-    return;
-  }
+  // 2. Buat token unik generasi playback ini
+  const token = ++_voToken;
+  _voPlaying = true;
 
-  // LOW: hanya putar jika benar-benar idle
-  if (!_voPlaying && _voQueue.length === 0) {
-    _voQueue.push({ key, onEnd, priority: p });
-    _playNextInQueue();
+  // 3. Redupkan BGM secara halus (Auto-Ducking)
+  duckBGM(true);
+
+  // 4. Ambil audio instance primer
+  const audio = _getVOAudio(key);
+  currentVO = audio;
+
+  const handleEnded = () => {
+    if (_voToken !== token) return; // Sudah dibatalkan / digantikan oleh VO baru
+    _voPlaying = false;
+    currentVO = null;
+    duckBGM(false);
+    if (typeof onEnd === 'function') {
+      try { onEnd(); } catch(e) {}
+    }
+  };
+
+  try { audio.currentTime = 0; } catch (e) {}
+  audio.onended = handleEnded;
+  audio.onerror = null;
+
+  const playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(() => {
+      // Jika token sudah berubah saat promise resolve, abaikan
+      if (_voToken !== token) return;
+
+      // Jalur fallback sekunder: assets/audio/vo/
+      const fallback = _getVOFallback(key);
+      currentVO = fallback;
+      try { fallback.currentTime = 0; } catch (e) {}
+      fallback.onended = handleEnded;
+      fallback.onerror = null;
+
+      const fbPromise = fallback.play();
+      if (fbPromise !== undefined) {
+        fbPromise.catch(() => {
+          if (_voToken !== token) return;
+          // Silent fallback tanpa pesan error jika audio belum ada di storage
+          _voPlaying = false;
+          currentVO = null;
+          duckBGM(false);
+          if (typeof onEnd === 'function') {
+            try { onEnd(); } catch(e) {}
+          }
+        });
+      }
+    });
   }
-  // Jika ada audio/antrian aktif, LOW priority diabaikan
 }
 
 function speak(txt) {
-  // Fallback opsional jika TTS diperlukan secara eksplisit
   if (!soundOn || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
   try {
     speechSynthesis.cancel();

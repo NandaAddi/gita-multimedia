@@ -22,7 +22,9 @@ function startQuiz(m,simStars,days){QUIZ={m,simStars,days,ok:false,answered:fals
  const qVoKey = 'vo_quiz_' + m.id.replace('-', '');
  if(typeof playVO === 'function') {
    playVO('vo_quiz_intro', () => {
-     playVO(qVoKey);
+     if (CUR === 'quiz' && QUIZ && !QUIZ.answered) {
+       playVO(qVoKey);
+     }
    });
  }
  const qTextEl = el('#scr-quiz .qtext');
@@ -35,7 +37,9 @@ function startQuiz(m,simStars,days){QUIZ={m,simStars,days,ok:false,answered:fals
    };
  }
  els('#q-opts .opt').forEach(o=>o.onclick=()=>{
-  if(QUIZ.answered)return;QUIZ.answered=true;const i=+o.dataset.i,ok=i===m.quiz.correct;QUIZ.ok=ok;
+  if(QUIZ.answered)return;QUIZ.answered=true;
+  if(typeof stopVO === 'function') stopVO(); // Hentikan seketika pembacaan soal jika siswa langsung memilih jawaban
+  const i=+o.dataset.i,ok=i===m.quiz.correct;QUIZ.ok=ok;
   els('#q-opts .opt').forEach(x=>x.classList.add('off'));
   if(ok){o.classList.add('right');sfx.success();if(typeof playVO === 'function') playVO('vo_quiz_correct');}
   else{o.classList.add('wrong');sfx.wrong();if(typeof playVO === 'function') playVO('vo_quiz_wrong');setTimeout(()=>{els('#q-opts .opt')[m.quiz.correct].classList.add('right');sfx.chime();},450);}

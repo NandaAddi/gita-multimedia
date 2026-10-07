@@ -347,7 +347,7 @@ const MISSIONS = [
       return Math.round(100 * (0.35 * c01(S.prod / 40) + 0.35 * c01(1 - S.api / 70) + 0.15 * c01(S.herb / 18) + 0.15 * c01(S.pred / 3.5)));
     },
     actions: [
-      { id: 'padam', label: 'Padamkan Titik Api', role: 'Semprot air padamkan bara api', ic: 'drop', quota: 4, fx: S => S.api = cl(S.api - 32, 0, 100) },
+      { id: 'padam', label: 'Padamkan Titik Api', role: 'Hujan lebat padamkan bara api rimba', ic: 'cloudRain', quota: 4, fx: S => S.api = cl(S.api - 32, 0, 100) },
       { id: 'sekat', label: 'Buat Sekat Bakar Basah', role: 'Parit basah cegah rambatan api', ic: 'tree', quota: 3, fx: S => { S.api = cl(S.api - 20, 0, 100); S.prod = cl(S.prod + 8); } },
       { id: 'satwa', label: 'Evakuasi & Rawat Satwa', role: 'Beri minum dan selamatkan rusa', ic: 'paw', quota: 4, fx: S => { S.herb = cl(S.herb + 6); S.pred = cl(S.pred + 1); } }
     ],

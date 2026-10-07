@@ -332,8 +332,17 @@ function drawSawahMountains(c, t) {
   texRidge(c, [[0, 380], [340, 250], [720, 380]], '#8fb996', 51);
   texRidge(c, [[520, 380], [960, 210], [1400, 380]], '#7fae7c', 63);
   texRidge(c, [[0, 380], [500, 300], [1000, 380], [1500, 310], [1920, 380]], '#5e8f63', 77);
-  c.fillStyle = 'rgba(255,255,255,.10)';
-  c.fillRect(0, 230, 1920, 150);
+
+  // Kabut lembah atmosferik halus (gradasi vertikal mulus, meredup saat malam agar langit tidak terpotong garis)
+  const st = typeof getSkyState === 'function' ? getSkyState(t) : { nightFade: 0 };
+  const mistAlpha = 0.12 * (1.0 - (st.nightFade || 0) * 0.85);
+  if (mistAlpha > 0.005) {
+    const mist = c.createLinearGradient(0, 220, 0, 380);
+    mist.addColorStop(0, 'rgba(255, 255, 255, 0)');
+    mist.addColorStop(1, `rgba(255, 255, 255, ${mistAlpha.toFixed(3)})`);
+    c.fillStyle = mist;
+    c.fillRect(0, 220, 1920, 160);
+  }
 }
 
 // Capung Sawah Lincah (Dragonfly hovering & darting)
@@ -408,7 +417,7 @@ function sceneSawah(c,t,S){
   // 2. Latar Belakang & Langit Dinamis
   c.fillStyle = '#5c8a58';
   c.fillRect(0, 0, 1920, 1080);
-  drawDynamicSky(c, 370, t, 1620);
+  drawDynamicSky(c, 420, t, 1620);
   drawSawahMountains(c, t);
   drawSawahBirds(c, t);
 
@@ -439,6 +448,7 @@ function sceneSawah(c,t,S){
 
   // 4. Lapisan Tanah, Pematang 3D, Retakan Poligonal, & Pintu Air Tulakan
   texSoilSawah(c, t, S);
+  if (S._irrigationFlowTimer > 0) drawSawahIrrigationSurge(c, t, S);
 
   // 5. Rerumputan & Vegetasi Tepi Lereng Sawah
   for (let k = 0; k < 12; k++) {
@@ -591,14 +601,268 @@ function sceneSawah(c,t,S){
   for(let i=0;i<3;i++)butterfly(c,300+pr(i*23)*1300+Math.sin(t/700+i*2)*60,320+pr(i*29)*160+Math.cos(t/900+i)*40,t,i);
   if(S.poison>15){c.fillStyle='rgba(96,60,130,'+(c01(S.poison/150)*.5).toFixed(3)+')';c.fillRect(0,360,1920,720);}}
 
+
+/* ============================================================
+   ANIMASI INTERAKTIF DINAMIS AKSI 4 BIOMA (60 FPS Procedural)
+   - Mata Air Hutan: Glistening Spring Cascade & Moist Soil Sheen
+   - Pemadam Api Hutan: Steam Cloud & Asap Putih Meredam Bara
+   - Irigasi Sawah: Semburan Air Berbusa Tulakan & Riak Terasering
+   - Pintu Air Sungai: Gelombang Arus Hulu Menderu & Buih Jernih
+   - Naungan Terumbu Karang: Tirai Pelindung Permukaan & Gelembung Sejuk
+   ============================================================ */
+
+function drawForestSpringCascade(c, t, S) {
+  const active = S._springFlowTimer !== undefined && S._springFlowTimer > 0;
+  const flowAlpha = active ? Math.min(1.0, 0.45 + (S._springFlowTimer / 160) * 0.55) : 0.55;
+  c.save();
+  // 1. Grotto Mata Air Alami di Sisi Lereng Bukit (X: 380, Y: 300)
+  c.fillStyle = '#264e36';
+  c.beginPath();
+  c.arc(380, 310, 38, 0, Math.PI * 2);
+  c.fill();
+  
+  // 2. Pancaran Air Utama Berkelok Menuruni Lereng Rimba
+  const numSteps = 28;
+  const pts = [];
+  for (let i = 0; i <= numSteps; i++) {
+    const prog = i / numSteps;
+    const px = 380 + prog * 440 + Math.sin(prog * Math.PI * 2.8 + t * 0.006) * 32;
+    const py = 310 + prog * 460 + Math.cos(prog * Math.PI * 2 + t * 0.005) * 14;
+    pts.push({ x: px, y: py, prog });
+  }
+
+  // Lapisan Dasar Air (Toska Sejuk)
+  c.beginPath();
+  pts.forEach((p, idx) => {
+    if (idx === 0) c.moveTo(p.x, p.y);
+    else c.lineTo(p.x, p.y);
+  });
+  c.strokeStyle = 'rgba(14, 165, 233, ' + (flowAlpha * 0.75).toFixed(3) + ')';
+  c.lineWidth = 28;
+  c.lineCap = 'round';
+  c.stroke();
+
+  // Lapisan Inti Air Jernih Berarus Sinusoidal
+  c.beginPath();
+  pts.forEach((p, idx) => {
+    if (idx === 0) c.moveTo(p.x, p.y);
+    else c.lineTo(p.x, p.y);
+  });
+  c.strokeStyle = 'rgba(186, 230, 253, ' + (flowAlpha * 0.9).toFixed(3) + ')';
+  c.lineWidth = 14;
+  c.stroke();
+
+  // Riak Buih & Gelombang Putih Menjalar ke Bawah
+  c.strokeStyle = 'rgba(255, 255, 255, ' + (flowAlpha * 0.95).toFixed(3) + ')';
+  c.lineWidth = 4;
+  for (let i = 2; i < pts.length - 2; i += 3) {
+    const p = pts[i];
+    const waveOffset = Math.sin(t * 0.01 + p.prog * 18) * 12;
+    c.beginPath();
+    c.arc(p.x + waveOffset, p.y, 4 + p.prog * 6, 0, Math.PI * 2);
+    c.stroke();
+  }
+
+  // 3. Kolam Resapan Alami di Lantai Rimba (X: 820, Y: 770)
+  c.fillStyle = 'rgba(56, 189, 248, ' + (flowAlpha * 0.6).toFixed(3) + ')';
+  c.beginPath();
+  c.ellipse(820, 770, 95, 36, -0.08, 0, Math.PI * 2);
+  c.fill();
+  
+  c.strokeStyle = 'rgba(255, 255, 255, ' + (flowAlpha * 0.7).toFixed(3) + ')';
+  c.lineWidth = 2;
+  const ripR = (t * 0.04) % 60;
+  c.beginPath();
+  c.ellipse(820, 770, 40 + ripR, 16 + ripR * 0.4, -0.08, 0, Math.PI * 2);
+  c.stroke();
+
+  // 4. Kilau Air Sejuk (Sparkles)
+  for (let s = 0; s < 5; s++) {
+    const sx = 400 + pr(s * 19) * 400 + Math.sin(t * 0.004 + s) * 20;
+    const sy = 330 + pr(s * 23) * 400;
+    const spAlpha = Math.max(0, Math.sin(t * 0.008 + s * 2));
+    c.fillStyle = 'rgba(254, 240, 138, ' + (spAlpha * flowAlpha).toFixed(3) + ')';
+    c.beginPath();
+    c.arc(sx, sy, 3 + s * 0.8, 0, Math.PI * 2);
+    c.fill();
+  }
+  c.restore();
+}
+
+function drawForestRainStorm(c, t, S) {
+  if (!S._fireExtinguishTimer || S._fireExtinguishTimer <= 0) return;
+  const timer = S._fireExtinguishTimer;
+  const maxTimer = 180;
+  const prog = 1 - (timer / maxTimer);
+  const env = prog < 0.15
+    ? (prog / 0.15)
+    : prog > 0.82
+    ? ((1 - prog) / 0.18)
+    : 1.0;
+  const alpha = Math.max(0, Math.min(1.0, env));
+
+  c.save();
+
+  // 1. Atmosfer Langit Rimba Meredup Sejuk (Moody Rainstorm Dimming & Upper Rain Mist)
+  c.fillStyle = 'rgba(15, 38, 52, ' + (alpha * 0.38).toFixed(3) + ')';
+  c.fillRect(0, 0, 1920, 1080);
+
+  const rainMist = c.createLinearGradient(0, 0, 0, 650);
+  rainMist.addColorStop(0, 'rgba(186, 230, 253, ' + (alpha * 0.35).toFixed(3) + ')');
+  rainMist.addColorStop(0.6, 'rgba(203, 213, 225, ' + (alpha * 0.18).toFixed(3) + ')');
+  rainMist.addColorStop(1, 'rgba(203, 213, 225, 0)');
+  c.fillStyle = rainMist;
+  c.fillRect(0, 0, 1920, 650);
+
+  // 2. Tirai Rintik Hujan Prosedural 60 FPS (Angled Rain Streaks)
+  c.strokeStyle = 'rgba(224, 242, 254, ' + (alpha * 0.65).toFixed(3) + ')';
+  c.lineWidth = 2.2;
+  c.lineCap = 'round';
+  c.beginPath();
+
+  const numDrops = 85;
+  const speed = 1.35;
+  const slant = 0.26;
+
+  for (let i = 0; i < numDrops; i++) {
+    const seed = i * 29.3;
+    const dropX = ((seed * 137.5 + t * 0.18) % 2100) - 90;
+    const dropY = ((seed * 93.7 + t * speed) % 1200) - 60;
+    const len = 38 + (i % 5) * 8;
+
+    c.moveTo(dropX, dropY);
+    c.lineTo(dropX - len * slant, dropY + len);
+  }
+  c.stroke();
+
+  // Lapisan rintik hujan lebih tebal di latar depan
+  c.strokeStyle = 'rgba(255, 255, 255, ' + (alpha * 0.85).toFixed(3) + ')';
+  c.lineWidth = 3.0;
+  c.beginPath();
+  for (let j = 0; j < 28; j++) {
+    const seedF = j * 47.9;
+    const fx = ((seedF * 191.3 + t * 0.22) % 2050) - 65;
+    const fy = ((seedF * 117.1 + t * (speed * 1.25)) % 1250) - 80;
+    const lenF = 55 + (j % 4) * 10;
+    c.moveTo(fx, fy);
+    c.lineTo(fx - lenF * slant, fy + lenF);
+  }
+  c.stroke();
+
+  // 3. Cipratan Air di Lantai Rimba (Ground Splash Rings / Rain Splatters)
+  for (let k = 0; k < 16; k++) {
+    const kx = 180 + ((k * 149.7) % 1580);
+    const ky = 680 + ((k * 83.3) % 290);
+    const splashProg = (t * 0.045 + k * 17) % 30;
+    const splashR = 5 + splashProg * 1.2;
+    const splashAlpha = Math.max(0, 1 - splashProg / 30);
+    c.strokeStyle = 'rgba(255, 255, 255, ' + (alpha * splashAlpha * 0.8).toFixed(3) + ')';
+    c.lineWidth = 1.8;
+    c.beginPath();
+    c.ellipse(kx, ky, splashR, splashR * 0.32, 0, 0, Math.PI * 2);
+    c.stroke();
+  }
+
+  c.restore();
+
+  // 4. Uap Putih Meredam Bara Api
+  drawFireExtinguishSteam(c, t, S);
+}
+
+function drawFireExtinguishSteam(c, t, S) {
+  if (!S._fireExtinguishTimer || S._fireExtinguishTimer <= 0) return;
+  const prog = 1 - (S._fireExtinguishTimer / 160);
+  c.save();
+  for (let i = 0; i < 6; i++) {
+    const bx = 300 + (i * 260) % 1300;
+    const by = 680 + (i * 90) % 240 - prog * 110;
+    const r = 35 + prog * 55 + Math.sin(t * 0.005 + i) * 12;
+    const alpha = Math.max(0, (1 - prog) * 0.65);
+    c.fillStyle = 'rgba(240, 249, 255, ' + alpha.toFixed(3) + ')';
+    c.beginPath();
+    c.arc(bx + Math.sin(prog * 4 + i) * 35, by, r, 0, Math.PI * 2);
+    c.fill();
+  }
+  c.restore();
+}
+
+function drawSawahIrrigationSurge(c, t, S) {
+  if (!S._irrigationFlowTimer || S._irrigationFlowTimer <= 0) return;
+  const alpha = Math.min(1.0, (S._irrigationFlowTimer / 180) * 1.2);
+  c.save();
+  c.fillStyle = 'rgba(186, 230, 253, ' + (alpha * 0.8).toFixed(3) + ')';
+  c.beginPath();
+  c.arc(280, 440, 24 + Math.sin(t * 0.015) * 6, 0, Math.PI * 2);
+  c.fill();
+
+  c.strokeStyle = 'rgba(255, 255, 255, ' + (alpha * 0.65).toFixed(3) + ')';
+  c.lineWidth = 3;
+  for (let i = 0; i < 4; i++) {
+    const rx = 450 + i * 280;
+    const ry = 520 + (i % 3) * 140;
+    const rip = (t * 0.035 + i * 25) % 80;
+    c.beginPath();
+    c.ellipse(rx, ry, 25 + rip, 8 + rip * 0.35, 0, 0, Math.PI * 2);
+    c.stroke();
+  }
+  c.restore();
+}
+
+function drawRiverSluiceSurge(c, t, S) {
+  if (!S._sluiceSurgeTimer || S._sluiceSurgeTimer <= 0) return;
+  const alpha = Math.min(1.0, (S._sluiceSurgeTimer / 160) * 1.2);
+  c.save();
+  c.strokeStyle = 'rgba(255, 255, 255, ' + (alpha * 0.75).toFixed(3) + ')';
+  c.lineWidth = 4;
+  for (let i = 0; i < 6; i++) {
+    const sx = ((t * 0.45 + i * 320) % 2100) - 100;
+    const sy = 560 + Math.sin(sx * 0.003 + t * 0.004) * 45;
+    c.beginPath();
+    c.moveTo(sx, sy);
+    c.quadraticCurveTo(sx + 80, sy + 15, sx + 160, sy - 10);
+    c.stroke();
+  }
+  c.restore();
+}
+
+function drawReefShadeCanopy(c, t, S) {
+  if (!S._reefShadeTimer || S._reefShadeTimer <= 0) return;
+  const alpha = Math.min(1.0, (S._reefShadeTimer / 160) * 1.1);
+  c.save();
+  c.fillStyle = 'rgba(12, 74, 96, ' + (alpha * 0.45).toFixed(3) + ')';
+  c.fillRect(180, 220, 1560, 48);
+  c.fillStyle = 'rgba(224, 242, 254, ' + (alpha * 0.75).toFixed(3) + ')';
+  for (let i = 0; i < 14; i++) {
+    const bx = 220 + (i * 120) + Math.sin(t * 0.003 + i) * 20;
+    const by = 260 + ((t * 0.08 + i * 45) % 650);
+    c.beginPath();
+    c.arc(bx, by, 3 + (i % 4) * 1.5, 0, Math.PI * 2);
+    c.fill();
+  }
+  c.restore();
+}
+
 function sceneHutan(c,t,S){
- c.fillStyle='#5e8f63';c.fillRect(0,0,1920,1080);
- drawDynamicSky(c, 380, t, 300);
+  S = S || {};
+  if (S._springFlowTimer !== undefined && S._springFlowTimer > 0) S._springFlowTimer--;
+  if (S._fireExtinguishTimer !== undefined && S._fireExtinguishTimer > 0) S._fireExtinguishTimer--;
+  c.fillStyle='#5e8f63';c.fillRect(0,0,1920,1080);
+ drawDynamicSky(c, 440, t, 300);
  texRidge(c,[[0,380],[340,250],[720,380]],'#8fb996',51);
  texRidge(c,[[520,380],[960,210],[1400,380]],'#79a87f',63);
  texRidge(c,[[0,380],[500,300],[1000,380],[1500,310],[1920,380]],'#5e8f63',77);
- c.fillStyle='rgba(255,255,255,.10)';c.fillRect(0,230,1920,150);
+ const stH = typeof getSkyState === 'function' ? getSkyState(t) : { nightFade: 0 };
+ const mistAlphaH = 0.12 * (1.0 - (stH.nightFade || 0) * 0.85);
+ if (mistAlphaH > 0.005) {
+   const mistH = c.createLinearGradient(0, 220, 0, 380);
+   mistH.addColorStop(0, 'rgba(255, 255, 255, 0)');
+   mistH.addColorStop(1, `rgba(255, 255, 255, ${mistAlphaH.toFixed(3)})`);
+   c.fillStyle = mistH;
+   c.fillRect(0, 220, 1920, 160);
+ }
  texSoilHutan(c, t, S);
+  if (S._springFlowTimer > 0 || (S.water !== undefined && S.water >= 45)) drawForestSpringCascade(c, t, S);
+  if (S._fireExtinguishTimer > 0) drawForestRainStorm(c, t, S);
  for(let k=0;k<8;k++){const f=k/7,ly=1080+(470-1080)*f,s=.5+f*.9;
   spGrass(c,0+(300-0)*f-40-pr(97+k*1.7)*60,ly,s,97+k,t);
   spGrass(c,1920+(1650-1920)*f+40+pr(137+k*1.7)*60,ly,s,137+k,t);}
@@ -681,6 +945,8 @@ function sceneHutan(c,t,S){
    c.beginPath();c.moveTo(x-16,y-12);c.lineTo(x+16,y+12);c.moveTo(x+16,y-12);c.lineTo(x-16,y+12);c.stroke();}}
  if(S.trap>15){c.fillStyle='rgba(30,26,18,'+(c01(S.trap/160)*.45).toFixed(3)+')';c.fillRect(0,0,1920,1080);}}
 function sceneSungai(c, t, S) {
+  S = S || {};
+  if (S._sluiceSurgeTimer !== undefined && S._sluiceSurgeTimer > 0) S._sluiceSurgeTimer--;
   // 1. LANGIT & PERBUKITAN TROPIS BERLAPIS (Layered Tropical Hills & Atmospheric Fog)
   drawDynamicSky(c, 340, t, 1500);
 
@@ -786,6 +1052,8 @@ function sceneSungai(c, t, S) {
     }
     c.stroke();
   });
+
+  if (S._sluiceSurgeTimer > 0) drawRiverSluiceSurge(c, t, S);
 
   // 6. KILAU CAHAYA MATAHARI TROPIS DI PERMUKAAN AIR (Specular Sun Glints)
   c.fillStyle = '#ffffff';
@@ -912,24 +1180,27 @@ function sceneSungai(c, t, S) {
   });
 }
 function sceneLaut(c,t,S){
- c.fillStyle=mixc('#1f7fae','#66c7dd',c01(hdisp(S)/100));c.fillRect(0,0,1920,1080);
- {const lg=c.createLinearGradient(0,0,0,900);
-  lg.addColorStop(0,'rgba(255,255,255,.14)');lg.addColorStop(1,'rgba(8,40,70,.28)');
-  c.fillStyle=lg;c.fillRect(0,0,1920,900);}
- // gelombang permukaan berlapis
- c.lineCap='round';
- for(let i=0;i<3;i++){const wy=260+i*130;
-  c.strokeStyle='rgba(255,255,255,'+(.10-i*.02).toFixed(3)+')';c.lineWidth=4-i;
-  c.beginPath();c.moveTo(-20,wy);
-  for(let x=0;x<=1920;x+=320)c.quadraticCurveTo(x+80,wy+Math.sin(t/(900+i*200)+x/220+i*2)*16,x+160,wy);
-  c.stroke();}
- for(let i=0;i<4;i++){const x=300+i*440+Math.sin(t/2600+i)*60;
-  F(c,[[x,0],[x+140,0],[x+320,1080],[x+40,1080]],'rgba(255,255,255,.07)');}
- c.fillStyle='#fff';
- for(let i=0;i<8;i++){const x=(pr(i*17)*1920+t/18)%1920;
-  c.globalAlpha=.2+.25*Math.abs(Math.sin(t/450+i));
-  c.beginPath();c.arc(x,60+pr(i*5)*200,1.5+Math.abs(Math.sin(t/450+i))*2.2,0,7);c.fill();}
- c.globalAlpha=1;
+  S = S || {};
+  if (S._reefShadeTimer !== undefined && S._reefShadeTimer > 0) S._reefShadeTimer--;
+  c.fillStyle=mixc('#1f7fae','#66c7dd',c01(hdisp(S)/100));c.fillRect(0,0,1920,1080);
+  {const lg=c.createLinearGradient(0,0,0,900);
+   lg.addColorStop(0,'rgba(255,255,255,.14)');lg.addColorStop(1,'rgba(8,40,70,.28)');
+   c.fillStyle=lg;c.fillRect(0,0,1920,900);}
+  // gelombang permukaan berlapis
+  c.lineCap='round';
+  for(let i=0;i<3;i++){const wy=260+i*130;
+   c.strokeStyle='rgba(255,255,255,'+(.10-i*.02).toFixed(3)+')';c.lineWidth=4-i;
+   c.beginPath();c.moveTo(-20,wy);
+   for(let x=0;x<=1920;x+=320)c.quadraticCurveTo(x+80,wy+Math.sin(t/(900+i*200)+x/220+i*2)*16,x+160,wy);
+   c.stroke();}
+  for(let i=0;i<4;i++){const x=300+i*440+Math.sin(t/2600+i)*60;
+   F(c,[[x,0],[x+140,0],[x+320,1080],[x+40,1080]],'rgba(255,255,255,.07)');}
+  c.fillStyle='#fff';
+  for(let i=0;i<8;i++){const x=(pr(i*17)*1920+t/18)%1920;
+   c.globalAlpha=.2+.25*Math.abs(Math.sin(t/450+i));
+   c.beginPath();c.arc(x,60+pr(i*5)*200,1.5+Math.abs(Math.sin(t/450+i))*2.2,0,7);c.fill();}
+  c.globalAlpha=1;
+  if (S._reefShadeTimer > 0) drawReefShadeCanopy(c, t, S);
  F(c,[[0,1080],[0,950],[400,905],[900,940],[1400,900],[1920,945],[1920,1080]],'#c9b98a');
  F(c,[[0,1080],[0,990],[500,955],[1100,985],[1700,950],[1920,980],[1920,1080]],'#b8a678');
  c.strokeStyle='rgba(255,255,255,.16)';c.lineWidth=3;

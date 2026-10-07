@@ -23,6 +23,7 @@ function buildTeacher() {
           <div class="teacher-title-sub">Model Pembelajaran Alessi &amp; Trollip &bull; Pendekatan Kolaboratif CSCL Kelas 5A</div>
         </div>
         <div class="teacher-header-right">
+          <button class="teacher-school-badge" id="teacher-to-about" style="height:58px;font-size:24px;border:none">Tentang Pengembang</button>
           <button class="btn tb-btn snd-btn" id="teacher-snd"></button>
         </div>
       </div>
@@ -61,6 +62,16 @@ function buildTeacher() {
       if (e) { e.preventDefault(); e.stopPropagation(); }
       sfx.back();
       go('title');
+    };
+  }
+
+  // Bind To About Button
+  const toAboutBtn = el('#teacher-to-about');
+  if (toAboutBtn) {
+    toAboutBtn.onclick = () => {
+      sfx.click();
+      if (typeof buildAbout === 'function') buildAbout();
+      go('about');
     };
   }
 
@@ -140,15 +151,15 @@ function teacherSlides(curStars){
     { title: '2. SINTAKS KELAS &amp; CSCL', badge: 'Model Jigsaw',
       body: `
         <div class="tcard">
-          <div class="tcard-h">Diferensiasi Peran Siswa (25 Siswa Kelas 5A)</div>
+          <div class="tcard-h">Diferensiasi Peran Siswa (28 Siswa Kelas 5A)</div>
           <div class="t-roles-grid">
             <div class="t-role-card">
-              <div class="t-role-tag">5 Petugas Layar IFP</div>
-              <p class="tcard-p">Perwakilan tim bergantian mengeksekusi kartu aksi di layar sentuh interaktif sesuai keputusan kelompok.</p>
+              <div class="t-role-tag">7 Petugas Layar IFP</div>
+              <p class="tcard-p">Kelompok aktif (7 siswa) bergantian mengeksekusi kartu aksi di layar sentuh interaktif sesuai keputusan tim.</p>
             </div>
             <div class="t-role-card">
-              <div class="t-role-tag">20 Penasihat Meja</div>
-              <p class="tcard-p">Berdiskusi aktif di meja kelompok, memegang Buku Catatan Detektif (LKPD Fisik), dan mengangkat kartu voting.</p>
+              <div class="t-role-tag">21 Penasihat Meja</div>
+              <p class="tcard-p">3 kelompok mitra (21 siswa) berdiskusi aktif di meja, memegang Buku Catatan Detektif (LKPD Fisik), dan mengangkat kartu voting.</p>
             </div>
           </div>
         </div>

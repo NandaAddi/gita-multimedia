@@ -215,9 +215,9 @@ function renderTeam(dir) {
     saveG();
     sfx.success();
     toast('Kelompokmu bertugas sebagai ' + t.name + '! Menuju Markas Misi...');
-    if (typeof playVO === 'function') playVO('vo_team_' + t.id);
     if (typeof buildMissionMenu === 'function') buildMissionMenu();
     go('mission');
+    if (typeof playVO === 'function') playVO('vo_team_' + t.id);
   };
 }
 

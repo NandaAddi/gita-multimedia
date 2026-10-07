@@ -91,13 +91,13 @@ function buildMissionMenu(biomeKey) {
           <div class="mtask" style="color:#9fd8c3;background:rgba(0,0,0,0.3);padding:16px;border-radius:16px;border-left:6px solid ${badgeColor};text-align:left;line-height:1.4;"><b>Tugas:</b> ${m.task}</div>
         </div>
 
-        <div class="mcard-action" style="margin-top:auto;">
+        <div class="mcard-action" style="margin-top:auto;padding-top:14px;margin-bottom:6px;">
           ${un
-            ? `<button class="btn btn-gold go" style="width:100%;font-size:26px;padding:20px;border-radius:20px;box-shadow:0 8px 16px rgba(0,0,0,0.4);" data-id="${m.id}">
-                 ${st ? 'Ulangi Kasus Ini' : 'Mulai Investigasi!'} 🚀
+            ? `<button class="btn btn-gold go btn-mission-cta" data-id="${m.id}">
+                 <span>${st ? 'Ulangi Kasus Ini' : 'Mulai Investigasi!'}</span> <span class="btn-emoji" style="-webkit-text-stroke:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));">🚀</span>
                </button>`
-            : `<button class="btn go" disabled style="width:100%;font-size:24px;padding:20px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);border:2px dashed rgba(255,255,255,0.2);">
-                 ${ic('lock', 24)} Selesaikan Kasus 0${subIdx} (Min. 1⭐)
+            : `<button class="btn go btn-mission-cta" disabled>
+                 ${ic('lock', 26)} <span>Selesaikan Kasus 0${subIdx} (Min. 1⭐)</span>
                </button>`
           }
         </div>
