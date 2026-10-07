@@ -24,7 +24,9 @@ const mainJs = fs.readFileSync(path.join(__dirname, '..', 'js/main.js'), 'utf8')
 if (!mainJs.includes('runPreloader')) throw new Error('Missing runPreloader function in js/main.js');
 if (!mainJs.includes('preloader-overlay')) throw new Error('js/main.js does not target preloader-overlay');
 if (!mainJs.includes('unlockAudio')) throw new Error('js/main.js should unlock audio on preloader tap');
-console.log('OK: js/main.js contains runPreloader logic with asset preloading');
+if (!mainJs.includes('assetsReady')) throw new Error('js/main.js should gate start behind assetsReady');
+if (!mainJs.includes('assets/Foto pas agita.webp')) throw new Error('js/main.js should preload Foto pas agita.webp');
+console.log('OK: js/main.js implements strict asset readiness gatekeeper (no premature skip before 100% ready)');
 
 // 4. Verify sw.js precache
 const sw = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');

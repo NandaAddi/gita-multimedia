@@ -74,7 +74,7 @@
 - Tambahkan catatan instruksional posisi LKPD sebagai instrumen proses (*formative process investigation*) yang menjembatani Pretest (sebelum media) dan Posttest (setelah media).
 
 #### 4. [MODIFY] `docs/ROADMAP.md`
-- Pada Pekan 3 (Metodologi & Kisi-Kisi Instrumen) dan Pekan 11–12 (Uji Coba Lapangan), tambahkan kejelasan administrasi Pretest dan Posttest 20 butir soal pada 25 siswa kelas 5A SDN Percobaan 2 Malang.
+- Pada Pekan 3 (Metodologi & Kisi-Kisi Instrumen) dan Pekan 11–12 (Uji Coba Lapangan), tambahkan kejelasan administrasi Pretest dan Posttest 20 butir soal pada 28 siswa kelas 5A SDN Percobaan 2 Malang.
 
 ---
 

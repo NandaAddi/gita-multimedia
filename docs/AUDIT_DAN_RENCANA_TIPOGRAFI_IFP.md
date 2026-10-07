@@ -2,7 +2,7 @@
 
 > **Proyek:** *Eco-Explorer: Penjaga Keseimbangan Ekosistem* (Skripsi R&D Alessi & Trollip)  
 > **Target Perangkat:** Layar Sentuh *Interactive Flat Panel* (IFP) 65–86 Inci (1920 $\times$ 1080 Landscape)  
-> **Subjek Pengguna:** 25 Siswa Kelas 5A SDN Percobaan 2 Malang (Jarak Pandang: 1–5 Meter)  
+> **Subjek Pengguna:** 28 Siswa Kelas 5A SDN Percobaan 2 Malang (Jarak Pandang: 1–5 Meter)  
 > **Keputusan Grill-Me:**  
 > 1. Standar Ultra-Besar: Teks terkecil $\ge 24$px, Tombol $30 - 34$px, Judul $44 - 56$px.  
 > 2. Penanganan Teks: Perbesar dimensi container & ringkas copywriting agar muat 2–3 baris rapi.  

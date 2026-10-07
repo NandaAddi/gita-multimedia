@@ -2969,23 +2969,23 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 }
 
 .sim-cinematic-banner {
-  position: fixed;
-  top: 96px;
+  position: absolute;
+  top: 104px;
   left: 50%;
-  transform: translate(-50%, -24px) scale(0.85);
+  transform: translate(-50%, -24px) scale(0.9);
   opacity: 0;
   z-index: 9999;
   pointer-events: none;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
   background: linear-gradient(180deg, rgba(6, 56, 44, 0.96) 0%, rgba(2, 34, 26, 0.98) 100%);
-  border: none;
+  border: 1px solid rgba(254, 240, 138, 0.25);
   outline: none;
-  border-radius: 28px;
-  padding: 18px 32px;
-  max-width: 920px;
-  min-width: 460px;
+  border-radius: 24px;
+  padding: 14px 28px;
+  max-width: 840px;
+  min-width: 420px;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -3004,8 +3004,8 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 }
 
 .sim-cinematic-banner .scb-icon {
-  width: 76px;
-  height: 76px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   background: rgba(2, 28, 20, 0.85);
   border: none;

@@ -160,7 +160,7 @@
 
 - [x] **Step 1: Sinkronkan `docs/PRD_GAME_SKRIPSI.md`**
   - Perbarui Ringkasan Produk: 4 Kelompok Detektif Ekosistem, 16 Misi Total.
-  - Perbarui Sub-bab 4.1: Orkestrasi Kelas 25 Siswa terbagi dalam 4 Kelompok Ahli (Jigsaw Model).
+  - Perbarui Sub-bab 4.1: Orkestrasi Kelas 28 Siswa terbagi dalam 4 Kelompok Ahli (Jigsaw Model).
   - Perbarui Bab 5: Dokumentasi lengkap matriks 16 Skenario Misi.
 
 - [x] **Step 2: Sinkronkan `docs/LKPD_DETEKTIF_SAWAH.md`**

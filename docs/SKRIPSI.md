@@ -6,7 +6,7 @@
 
 1\. Jumlah siswa dalam satu kelas?
 
-* Jumlah siswa dalam satu kelas adalah 25 siswa.
+* Jumlah siswa dalam satu kelas adalah 28 siswa.
 
 2\. Sekolah menggunakan kurikulum apa?
 
@@ -137,7 +137,7 @@ Mengadopsi prinsip desain motivasional Alessi & Trollip (2001) serta teori motiv
 * **Progression Lock 2 Jalur Paralel:** Pada menu misi masing-masing kelompok, Misi 1 Alam dan Misi 1 Manusia terbuka sejak awal secara berdampingan (Grid 2x2). Misi 2 pada masing-masing jalur akan terbuka setelah Misi 1 jalur terkait tuntas. Mekanisme ini memberikan otonomi eksplorasi tanpa menimbulkan kebingungan navigasi (*cognitive load reduction*).
 
 ### 4. Ergonomi & Sosiopedagogis Interaksi Kelas (CSCL & IFP)
-* **Model Kolaborasi Jigsaw 4 Kelompok Ahli:** 25 Siswa kelas 5A dibagi ke dalam 4 Kelompok Detektif (🌾 Sawah, 🌲 Hutan, 🌊 Sungai, 🪸 Laut) dengan 6–7 siswa per kelompok. Setiap kelompok bergantian maju sebagai *Petugas Layar* di depan Interactive Flat Panel (IFP), sementara siswa kelompok lain di meja bertindak aktif sebagai *Penasihat Meja* menggunakan 3 Kartu Voting Warna fisik.
+* **Model Kolaborasi Jigsaw 4 Kelompok Ahli:** 28 Siswa kelas 5A dibagi ke dalam 4 Kelompok Detektif (🌾 Sawah, 🌲 Hutan, 🌊 Sungai, 🪸 Laut) dengan tepat 7 siswa per kelompok. Setiap kelompok bergantian maju sebagai *Petugas Layar* di depan Interactive Flat Panel (IFP), sementara siswa kelompok lain di meja bertindak aktif sebagai *Penasihat Meja* menggunakan 3 Kartu Voting Warna fisik.
 * **Akses Langsung Tanpa Hambatan (*Direct Biome Access*):** Setiap kelompok langsung diarahkan ke bioma spesialisasinya melalui Layar Pemilihan Kelompok, mengeliminasi tahapan navigasi redundan dan memaksimalkan waktu belajar efektif pada jam pelajaran IFP.
 * **Ergonomi Layar Sentuh IFP:** Kuadran kontrol diletakkan pada lower-third (ketinggian jangkau siswa kelas 5 SD), tombol berukuran besar (80×80 px), dengan sistem *anti-spam cooldown* (1,2 detik) untuk mendorong pertimbangan reflektif sebelum bertindak.
 

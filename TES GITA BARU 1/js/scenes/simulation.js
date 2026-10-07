@@ -667,7 +667,8 @@ function showActionCinematicBanner(action, mission) {
     + '<div class="scb-desc">' + action.role + '</div>'
     + '</div>';
 
-  document.body.appendChild(banner);
+  const host = document.querySelector('#scr-sim') || document.querySelector('#stage') || document.body;
+  host.appendChild(banner);
 
   requestAnimationFrame(() => {
     banner.classList.add('show');

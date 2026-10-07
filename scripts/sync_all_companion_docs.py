@@ -26,23 +26,23 @@ def update_prd():
     sec4_pattern = r'### 4\.1 Penyelesaian Masalah Kebosanan & Efek Mencontek.*?(?=---\r?\n\r?\n## 5\.)'
     new_sec4 = """### 4.1 Penyelesaian Masalah Kebosanan & Efek Mencontek (*The Bored Kids & Anti-Copycat Solutions*)
 Jika semua kelompok memainkan misi yang sama berulang kali, siswa di meja akan bosan dan tim berikutnya hanya akan mereplikasi jawaban tanpa berpikir kritis (C2). Untuk mengatasinya:
-1. **Model Kelompok Ahli Ekosistem (*Jigsaw Ecosystem Specialists*):** 25 Siswa dibagi ke dalam 4 Kelompok Ahli (6–7 siswa per kelompok) di mana setiap kelompok bertindak sebagai detektif spesialis satu ekosistem Nusantara:
+1. **Model Kelompok Ahli Ekosistem (*Jigsaw Ecosystem Specialists*):** 28 Siswa dibagi ke dalam 4 Kelompok Ahli (tepat 7 siswa per kelompok) di mana setiap kelompok bertindak sebagai detektif spesialis satu ekosistem Nusantara:
    * 🌾 **Kelompok 1 (Detektif Sawah):** Menyelidiki 4 Misi Sawah (2 Faktor Alam: Kemarau & Hama Wereng; 2 Faktor Manusia: Racun Pestisida & Perburuan Ular).
    * 🌲 **Kelompok 2 (Detektif Hutan):** Menyelidiki 4 Misi Hutan Tropis (2 Faktor Alam: Kemarau Mata Air & Titik Api Ranting; 2 Faktor Manusia: Pembalakan Liar & Jerat Pemburu).
    * 🌊 **Kelompok 3 (Detektif Sungai):** Menyelidiki 4 Misi Sungai Tawar (2 Faktor Alam: Air Surut & Erosi Lumpur; 2 Faktor Manusia: Limbah Detergen & Setrum Listrik).
    * 🪸 **Kelompok 4 (Detektif Laut):** Menyelidiki 4 Misi Laut Karang (2 Faktor Alam: Pemanasan Karang & Gelombang Badai; 2 Faktor Manusia: Bom Ikan & Sampah Plastik).
 2. **Akses Langsung Tanpa Hambatan (*Direct Biome Access*):** Memilih kelompok di panggung `#scr-team` langsung membuka Menu 4 Misi bioma tersebut (`#scr-mission`) dalam format Grid Komparatif 2x2. Tombol `👥 Ganti Kelompok` di pojok atas mempermudah rotasi kelompok di IFP.
 3. **Progression Lock 2 Jalur Paralel:** Siswa bebas memilih memulai dari tantangan alam (Kolom Kiri) atau tantangan manusia (Kolom Kanan). Misi kedua di tiap jalur terbuka setelah misi pertama jalur tersebut diselesaikan ($\ge 1$ bintang).
-4. **Peran Penasihat Meja & Kartu Voting CSCL:** Saat satu kelompok maju mengoperasikan layar sentuh IFP (6–7 siswa), kelompok lain di meja bertindak sebagai **Penasihat Meja** yang memegang Buku Catatan Detektif (LKPD Fisik), menganalisis prediksi hipotesis, dan serempak mengangkat kartu voting fisik 3 warna saat tombol `📢 TANYA TEMAN` ditekan.
+4. **Peran Penasihat Meja & Kartu Voting CSCL:** Saat satu kelompok maju mengoperasikan layar sentuh IFP (7 siswa), kelompok lain di meja bertindak sebagai **Penasihat Meja** yang memegang Buku Catatan Detektif (LKPD Fisik), menganalisis prediksi hipotesis, dan serempak mengangkat kartu voting fisik 3 warna saat tombol `📢 TANYA TEMAN` ditekan.
 
 ```
                     [1. PEMBAGIAN 4 KELOMPOK JIGSAW KELAS 5A]
-        25 Siswa dibagi menjadi 4 Kelompok Ahli Ekosistem (6–7 Siswa/Kelompok):
+        28 Siswa dibagi menjadi 4 Kelompok Ahli Ekosistem (tepat 7 Siswa/Kelompok):
          🌾 Detektif Sawah | 🌲 Detektif Hutan | 🌊 Detektif Sungai | 🪸 Detektif Laut
                                        │
                                        ▼
                    [2. ROTASI KELOMPOK & PREDIKSI AWAL (PREDICT)]
-        - Kelompok Aktif (6-7 Siswa) maju ke depan layar sentuh IFP 65–86"
+        - Kelompok Aktif (7 Siswa) maju ke depan layar sentuh IFP 65–86"
         - Memilih kelompok di Layar Pahlawan -> Terbuka Menu 4 Misi Bioma Spesialis
         - Siswa di meja memegang LKPD Buku Catatan Detektif sesuai bioma aktif
         - Mencatat kondisi awal krisis dan merumuskan prediksi hipotesis (C2)
@@ -420,7 +420,7 @@ Mengadopsi prinsip desain motivasional Alessi & Trollip (2001) serta teori motiv
     # Update D.4: Jigsaw 4 Kelompok Ahli
     old_d4 = r'### 4\. Ergonomi & Sosiopedagogis Interaksi Kelas \(CSCL & IFP\).*?(?=### 5\. Diagram Kausalitas)'
     new_d4 = """### 4. Ergonomi & Sosiopedagogis Interaksi Kelas (CSCL & IFP)
-* **Model Kolaborasi Jigsaw 4 Kelompok Ahli:** 25 Siswa kelas 5A dibagi ke dalam 4 Kelompok Detektif (🌾 Sawah, 🌲 Hutan, 🌊 Sungai, 🪸 Laut) dengan 6–7 siswa per kelompok. Setiap kelompok bergantian maju sebagai *Petugas Layar* di depan Interactive Flat Panel (IFP), sementara siswa kelompok lain di meja bertindak aktif sebagai *Penasihat Meja* menggunakan 3 Kartu Voting Warna fisik.
+* **Model Kolaborasi Jigsaw 4 Kelompok Ahli:** 28 Siswa kelas 5A dibagi ke dalam 4 Kelompok Detektif (🌾 Sawah, 🌲 Hutan, 🌊 Sungai, 🪸 Laut) dengan tepat 7 siswa per kelompok. Setiap kelompok bergantian maju sebagai *Petugas Layar* di depan Interactive Flat Panel (IFP), sementara siswa kelompok lain di meja bertindak aktif sebagai *Penasihat Meja* menggunakan 3 Kartu Voting Warna fisik.
 * **Akses Langsung Tanpa Hambatan (*Direct Biome Access*):** Setiap kelompok langsung diarahkan ke bioma spesialisasinya melalui Layar Pemilihan Kelompok, mengeliminasi tahapan navigasi redundan dan memaksimalkan waktu belajar efektif pada jam pelajaran IFP.
 * **Ergonomi Layar Sentuh IFP:** Kuadran kontrol diletakkan pada lower-third (ketinggian jangkau siswa kelas 5 SD), tombol berukuran besar (80×80 px), dengan sistem *anti-spam cooldown* (1,2 detik) untuk mendorong pertimbangan reflektif sebelum bertindak.
 

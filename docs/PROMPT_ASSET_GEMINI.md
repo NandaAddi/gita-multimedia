@@ -126,11 +126,11 @@ Clean 2D digital anime chibi vector art illustration of a cute young Muslim girl
 ---
 
 ### D. FORMAT ANIMASI LOOPING IMAGE SEQUENCE (UNTUK PLAYER GitaSeq DI DIALOG BOX)
-*(Dijalankan via engine `GitaSeq.play()`: 24–48 frame @12fps WebP/PNG loop di dalam `#bridge-gita-box`)*
+*(Dijalankan via engine `GitaSeq.play()`: 60 frame @12fps format WebP RGBA loop di dalam `#bridge-gita-box` — dioptimasi 94% dari 24.5 MB PNG ke ~1.47 MB WebP)*
 
 #### 1.9.1 Prompt Motion Image-to-Video: Looping Bicara & Memandu (*Talking Loop*)
 * **Input Image:** Avatar PNG statis Gita hasil prompt 1.8.1
-* **Target Output:** Video 3–4 detik seamless loop -> Ekstrak ke `g000.png` ... `g023.png`
+* **Spesifikasi Produksi Aktif:** Folder `talking_loop/` berisi 60 frame WebP (`Comp 1_00000.webp` ... `Comp 1_00059.webp`), 300x300 RGBA, 12fps (durasi loop 5,0 detik, total ~650 KB). Cadangan PNG asli disimpan di `talking_loop_backup_png/`.
 * **Prompt Google VideoFX / Veo / Runway / Kling:**
 ```text
 Seamless looping 2D animated chibi illustration, stationary bust portrait of the character. The cute young girl is talking enthusiastically and explaining, gentle opening and closing mouth movements, friendly speech expressions, soft natural eye blinking twice, subtle rhythmic breathing motion of shoulders, slight cute head tilt and nodding. Locked camera, perfectly static solid white background, high consistency with source image, no camera movement, no perspective shift, zero morphing, perfectly seamless beginning and end frame loop.
@@ -139,7 +139,7 @@ Seamless looping 2D animated chibi illustration, stationary bust portrait of the
 #### 1.9.2 Prompt Motion Image-to-Video: Looping Khawatir / Krisis (*Worried Loop*)
 * **Input Image:** Avatar PNG statis Gita hasil prompt 1.8.2
 * **Konteks Game:** Dialog Langkah 1 Krisis Alam Sawah
-* **Target Output:** Video 3–4 detik seamless loop -> Ekstrak ke `g000.png` ... `g023.png`
+* **Spesifikasi Produksi Aktif:** Folder `worried_loop/` berisi 60 frame WebP (`Comp 1_00000.webp` ... `Comp 1_00059.webp`), 300x300 RGBA, 12fps (durasi loop 5,0 detik, total ~886 KB). Cadangan PNG asli disimpan di `worried_loop_backup_png/`.
 * **Prompt Google VideoFX / Veo / Runway / Kling:**
 ```text
 Seamless looping 2D animated chibi illustration, stationary close-up bust portrait of the character. Mildly worried and caring expression, gentle subtle breathing motion, soft empathetic eye blinking, small anxious lip movement murmuring concerned words, gentle head sway with worried empathy, hands gesturing gently near upper chest. Locked static camera, pure solid white background, zero camera drift, no background warping, perfectly seamless loop from start to finish.

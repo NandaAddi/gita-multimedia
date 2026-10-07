@@ -215,3 +215,35 @@ Seluruh 72 berkas rekaman suara telah disiapkan dan terintegrasi aktif ke dalam 
 - [x] **Sesi 6: Mekanika Simulasi & Selebrasi (No. 45–52, 69–72)** — ✅ **TERPASANG (12/12)**
 
 *Hasil Uji Otomatis:* 72/72 Berkas MP3 vokal terverifikasi 1-to-1 match dengan engine `playVO(key)`.
+
+---
+
+## 6. PEMBARUAN ARSITEKTUR: SMART VO QUEUE & PRIORITY ENGINE (v2.0)
+
+**Tanggal Implementasi:** Oktober 2026
+**File yang Dimodifikasi:** `js/audio.js`, `js/scenes/simulation.js`
+
+### Masalah yang Diselesaikan
+Sebelumnya `playVO()` menggunakan pola "override" — setiap panggilan baru langsung `stopVO()` + `play()`, menyebabkan:
+- Audio `vo_sim_vote_call` terpotong oleh `vo_sim_target_ok` yang dipicu bersamaan oleh `simTick`.
+- Audio `vo_sim_vote_done` bertabrakan dengan `vo_sim_all_targets` jika semua target tercapai saat musyawarah berakhir.
+- `simTick` terus berjalan selama modal musyawarah, memicu event audio secara bersamaan.
+
+### Solusi Implementasi
+
+#### A. Priority-Based Queue (`js/audio.js`)
+
+| Level | Konstanta | Kunci VO | Perilaku |
+| :---: | :--- | :--- | :--- |
+| **3 – HIGH** | `VO_PRIORITY.HIGH` | `vo_sim_vote_call`, `vo_sim_vote_done`, `vo_sim_all_targets`, `vo_sim_fail_*` | Potong semua audio + antrian, langsung putar |
+| **2 – NORMAL** | `VO_PRIORITY.NORMAL` | `vo_sim_target_ok`, `vo_bridge_*` | Antri di belakang audio saat ini |
+| **1 – LOW** | `VO_PRIORITY.LOW` | Semua kunci lainnya | Diabaikan jika antrian tidak kosong |
+
+- **Jeda natural 400ms** antar audio (via `setTimeout` dalam `_afterEnd`) agar tidak terdengar bertumpuk.
+- `stopVO()` kini juga membersihkan antrian (`_voQueue = []`) dan timer jeda.
+
+#### B. Pause Simulasi saat Musyawarah (`js/scenes/simulation.js`)
+- `showVote()` kini menetapkan `SIM.paused = true` dan `clearInterval(SIM.timer)` sebelum modal terbuka.
+- Fungsi `closeModal` yang di-override kini memulai kembali `SIM.timer` dan `SIM.paused = false` setelah modal ditutup (baik via pilih kartu maupun via dim/backdrop).
+- `vo_sim_vote_done` ditunda 200ms (`setTimeout`) agar toast dapat render lebih dahulu.
+- `vo_sim_all_targets` ditunda 300ms agar tidak tumpang tindih dengan `vo_sim_target_ok` yang sedang diputar saat itu.

@@ -327,22 +327,11 @@ function updateOrganismPool(S, dt = 16.7) {
 
 /* ================= LANSKAP SAWAH TERASERING NUSANTARA ================= */
 
-// Pegunungan Suasana Hutan Tropis (texRidge berlapis dengan vegetasi & kabut lembah persis seperti sceneHutan)
+// Pegunungan Suasana Hutan Tropis (texRidge berlapis dengan vegetasi alami)
 function drawSawahMountains(c, t) {
   texRidge(c, [[0, 380], [340, 250], [720, 380]], '#8fb996', 51);
   texRidge(c, [[520, 380], [960, 210], [1400, 380]], '#7fae7c', 63);
   texRidge(c, [[0, 380], [500, 300], [1000, 380], [1500, 310], [1920, 380]], '#5e8f63', 77);
-
-  // Kabut lembah atmosferik halus (gradasi vertikal mulus, meredup saat malam agar langit tidak terpotong garis)
-  const st = typeof getSkyState === 'function' ? getSkyState(t) : { nightFade: 0 };
-  const mistAlpha = 0.12 * (1.0 - (st.nightFade || 0) * 0.85);
-  if (mistAlpha > 0.005) {
-    const mist = c.createLinearGradient(0, 220, 0, 380);
-    mist.addColorStop(0, 'rgba(255, 255, 255, 0)');
-    mist.addColorStop(1, `rgba(255, 255, 255, ${mistAlpha.toFixed(3)})`);
-    c.fillStyle = mist;
-    c.fillRect(0, 220, 1920, 160);
-  }
 }
 
 // Capung Sawah Lincah (Dragonfly hovering & darting)
@@ -417,7 +406,7 @@ function sceneSawah(c,t,S){
   // 2. Latar Belakang & Langit Dinamis
   c.fillStyle = '#5c8a58';
   c.fillRect(0, 0, 1920, 1080);
-  drawDynamicSky(c, 420, t, 1620);
+  drawDynamicSky(c, 370, t, 1620);
   drawSawahMountains(c, t);
   drawSawahBirds(c, t);
 
@@ -847,20 +836,11 @@ function sceneHutan(c,t,S){
   if (S._springFlowTimer !== undefined && S._springFlowTimer > 0) S._springFlowTimer--;
   if (S._fireExtinguishTimer !== undefined && S._fireExtinguishTimer > 0) S._fireExtinguishTimer--;
   c.fillStyle='#5e8f63';c.fillRect(0,0,1920,1080);
- drawDynamicSky(c, 440, t, 300);
- texRidge(c,[[0,380],[340,250],[720,380]],'#8fb996',51);
- texRidge(c,[[520,380],[960,210],[1400,380]],'#79a87f',63);
- texRidge(c,[[0,380],[500,300],[1000,380],[1500,310],[1920,380]],'#5e8f63',77);
- const stH = typeof getSkyState === 'function' ? getSkyState(t) : { nightFade: 0 };
- const mistAlphaH = 0.12 * (1.0 - (stH.nightFade || 0) * 0.85);
- if (mistAlphaH > 0.005) {
-   const mistH = c.createLinearGradient(0, 220, 0, 380);
-   mistH.addColorStop(0, 'rgba(255, 255, 255, 0)');
-   mistH.addColorStop(1, `rgba(255, 255, 255, ${mistAlphaH.toFixed(3)})`);
-   c.fillStyle = mistH;
-   c.fillRect(0, 220, 1920, 160);
- }
- texSoilHutan(c, t, S);
+  drawDynamicSky(c, 380, t, 300);
+  texRidge(c,[[0,380],[340,250],[720,380]],'#8fb996',51);
+  texRidge(c,[[520,380],[960,210],[1400,380]],'#79a87f',63);
+  texRidge(c,[[0,380],[500,300],[1000,380],[1500,310],[1920,380]],'#5e8f63',77);
+  texSoilHutan(c, t, S);
   if (S._springFlowTimer > 0 || (S.water !== undefined && S.water >= 45)) drawForestSpringCascade(c, t, S);
   if (S._fireExtinguishTimer > 0) drawForestRainStorm(c, t, S);
  for(let k=0;k<8;k++){const f=k/7,ly=1080+(470-1080)*f,s=.5+f*.9;

@@ -13,7 +13,7 @@
   * *Game-Based Learning (GBL) & Learning Mechanics - Game Mechanics (LM-GM)* (Arnab et al., 2015)
   * Taksonomi Bloom Revisi (Anderson & Krathwohl, 2001) – Level C2 (*Understanding, Inferring, Explaining*)
   * Capaian Pembelajaran (CP) Kurikulum Merdeka – IPAS Fase C (Kelas V)
-* **Subjek Uji Coba:** 25 Siswa Kelas 5A SDN Percobaan 2 Malang (Terbagi dalam 4 Kelompok Ahli Jigsaw, 6–7 Siswa per Kelompok) & Guru Kelas
+* **Subjek Uji Coba:** 28 Siswa Kelas 5A SDN Percobaan 2 Malang (Terbagi dalam 4 Kelompok Ahli Jigsaw, tepat 7 Siswa per Kelompok) & Guru Kelas
 * **Target Perangkat:** Layar Sentuh *Interactive Flat Panel* (IFP 65–86 Inch, 1920 $\times$ 1080 Landscape, Multi-Touch)
 * **Teknologi:** Web HTML5 Offline (Phaser 3 Game Engine v3.87+, Canvas/WebGL, Web Audio API, LocalStorage Progress)
 
@@ -48,7 +48,7 @@ Sebagai produk skripsi teknologi pendidikan berjenis *Process & Situational Simu
 2. **Underlying System Model (Model Kausalitas):** Logika matematis transfer energi trofik pada 4 bioma (Produsen $\rightarrow$ Herbivora $\rightarrow$ Predator $\rightarrow$ Dekomposer).
 3. **User Interface (Hardware-Aware UI):** Antarmuka ramah jari anak kelas 5 pada layar IFP (*Lower-Third Zone*, tombol $\ge 80\times 80$ px).
 4. **Learner Roles:** Siswa bertindak sebagai *"Detektif Cilik Penjaga Ekosistem"* yang menguji hipotesis melalui aksi nyata di lapangan.
-5. **Feedback & Scaffolding:** Maskot Gita memberikan bimbingan audio-visual ramah anak, Bar Kesehatan Ekosistem, tombol bantuan 💡, dan peringatan emosi alam (*😱 Bahaya, 😐 Hati-hati, 😊 Sehat*).
+5. **Feedback & Scaffolding:** Maskot Gita memberikan bimbingan audio-visual ramah anak, Bar Keseimbangan Ekosistem, tombol bantuan 💡, dan peringatan emosi alam (*😱 Bahaya, 😐 Hati-hati, 😊 Sehat*).
 6. **Debriefing / Transfer:** Buku Catatan Detektif untuk memecahkan teka-teki sebab-akibat pasca-simulasi dan refleksi bersama guru kelas.
 
 ### 1.4 Spesifikasi & Kisi-Kisi Instrumen Evaluasi Pretest & Posttest (20 Butir Soal C2)
@@ -222,32 +222,41 @@ gba(0,0,0,.35) hingga .55), serta kilau tepi atas halus (inset 0 1px 0 rgba(255,
 7. **Mode Penguji / Dosen & Modal Konfirmasi Sentuh IFP (Hardware Touch Dialog & Examiner Gesture):**
    * **In-Engine Touch Modal:** Meniadakan ketergantungan pada dialog sistem peramban (`window.confirm`) yang tidak ergonomis di layar IFP (sering kali muncul kecil di pojok atas tak terjangkau tangan siswa/guru). Seluruh konfirmasi aksi penting (seperti reset progres) digantikan modal in-engine Phaser (`showConfirmModal`) berlatar gelap transparan (Alpha 0.8) dengan tombol sentuh berukuran besar ramah jemari (`✅ Ya, Reset` & `❌ Batal`).
    * **Gesture Rahasia Penguji (*Examiner Mode*):** Pada `BiomeSelectScene.js`, ketukan 5 kali berturut-turut pada lencana tim dalam durasi 3 detik memicu fungsi `progressManager.unlockAllForExaminer()`, membuka instan seluruh 4 bioma, 16 misi, dan perolehan 48/48 bintang prestasi untuk memfasilitasi kebutuhan demonstrasi simulasi saat validasi ahli materi/media, seminar proposal, maupun sidang skripsi.
+8. **Status Terbuka Default Panel HUD & Tur Onboarding Spotlight 4-Langkah (Saran Praktisi Guru & Mayer CTML):**
+   * **Status Terbuka Default (*Expanded HUD by Default*):** Mengakomodasi masukan kritis guru kelas 5A, panel **Target Misi** (`.hud-left` / `.targets-card`) dan panel **Kondisi Ekosistem** (`.hud-right`) langsung dimunculkan secara utuh saat simulasi dimulai (`SIM.ui.left = true, SIM.ui.right = true`). Siswa tidak lagi perlu membuka tab tepi yang tersembunyi, sehingga tujuan pembelajaran dan indikator lingkungan terpantau sejak detik pertama.
+   * **Tur Onboarding Sorotan Emas 4-Langkah (*Interactive Spotlight Tour*):** Pada misi pertama setiap bioma (`-1`), sistem secara otomatis menjalankan tur orientasi terarah sebelum simulasi hari pertama bergulir:
+     1. *Langkah 1 (Target Misi & Panduan Gita):* Sorotan emas (`#fef08a`) pada panel kiri, menjelaskan fungsi target sasaran dan peringatan darurat Gita.
+     2. *Langkah 2 (Kondisi Ekosistem):* Sorotan pada panel kanan, memperkenalkan grafik populasi, ambang batas bahaya, dan interaksi sentuh baris kondisi.
+     3. *Langkah 3 (Keseimbangan Alam & Hari):* Sorotan pada Health Pod dan batas hari di bilah atas, menegaskan aturan batas waktu dan syarat 3 bintang.
+     4. *Langkah 4 (Dermaga Kartu Aksi):* Sorotan pada dermaga kartu aksi di kuadran bawah, mengedukasi batas kuota dan masa istirahat (*cooldown*).
+   * **Prinsip Pensinyalan Mayer (*Signaling / Cueing Principle*):** Mengarahkan atensi kognitif siswa ke instrumen antarmuka yang relevan secara berurutan melalui *dimmed backdrop* (`rgba(0, 8, 5, 0.76)`) dan denyut pendar emas (*pulsing spotlight*), mencegah kelebihan beban kognitif (*cognitive overload*) pada siswa kelas 5 SD.
+   * **Ergonomi Sentuh IFP & Tipografi $\ge 24$ px:** Kartu panduan Gita melayang pada kuadran yang tidak menutupi panel target (`pos-left`, `pos-right`, `pos-top`, `pos-bottom`), seluruh teks berukuran $\ge 24$ px, dilengkapi tombol aksi besar (`Lanjut ❯`, `Lewati Tur`, serta `🔍 Putar Tur Panel` di modal Tips Misi untuk pemutaran ulang kapan saja).
 
 ---
 
-## 4. CORE GAMEPLAY LOOP & ORKESTRASI KELAS (25 SISWA)
+## 4. CORE GAMEPLAY LOOP & ORKESTRASI KELAS (28 SISWA)
 
 Model pembelajaran memanfaatkan sintaks kooperatif **Jigsaw (Elliot Aronson)** yang dipadukan dengan siklus **POE (*Predict - Observe - Explain*)** dan didampingi instrumen cetak `LKPD_DETEKTIF_SAWAH.md`:
 
 ### 4.1 Penyelesaian Masalah Kebosanan & Efek Mencontek (*The Bored Kids & Anti-Copycat Solutions*)
 Jika semua kelompok memainkan misi yang sama berulang kali, siswa di meja akan bosan dan tim berikutnya hanya akan mereplikasi jawaban tanpa berpikir kritis (C2). Untuk mengatasinya:
-1. **Model Kelompok Ahli Ekosistem (*Jigsaw Ecosystem Specialists*):** 25 Siswa dibagi ke dalam 4 Kelompok Ahli (6–7 siswa per kelompok) di mana setiap kelompok bertindak sebagai detektif spesialis satu ekosistem Nusantara:
+1. **Model Kelompok Ahli Ekosistem (*Jigsaw Ecosystem Specialists*):** 28 Siswa dibagi ke dalam 4 Kelompok Ahli (tepat 7 siswa per kelompok) di mana setiap kelompok bertindak sebagai detektif spesialis satu ekosistem Nusantara:
    * 🌾 **Kelompok 1 (Detektif Sawah):** Menyelidiki 4 Misi Sawah (2 Faktor Alam: Kemarau & Hama Wereng; 2 Faktor Manusia: Racun Pestisida & Perburuan Ular).
    * 🌲 **Kelompok 2 (Detektif Hutan):** Menyelidiki 4 Misi Hutan Tropis (2 Faktor Alam: Kemarau Mata Air & Titik Api Ranting; 2 Faktor Manusia: Pembalakan Liar & Jerat Pemburu).
    * 🌊 **Kelompok 3 (Detektif Sungai):** Menyelidiki 4 Misi Sungai Tawar (2 Faktor Alam: Air Surut & Erosi Lumpur; 2 Faktor Manusia: Limbah Detergen & Setrum Listrik).
    * 🪸 **Kelompok 4 (Detektif Laut):** Menyelidiki 4 Misi Laut Karang (2 Faktor Alam: Pemanasan Karang & Gelombang Badai; 2 Faktor Manusia: Bom Ikan & Sampah Plastik).
 2. **Akses Langsung Tanpa Hambatan (*Direct Biome Access*):** Memilih kelompok di panggung `#scr-team` langsung membuka Menu 4 Misi bioma tersebut (`#scr-mission`) dalam format Grid Komparatif 2x2. Tombol `👥 Ganti Kelompok` di pojok atas mempermudah rotasi kelompok di IFP.
 3. **Progression Lock 2 Jalur Paralel:** Siswa bebas memilih memulai dari tantangan alam (Kolom Kiri) atau tantangan manusia (Kolom Kanan). Misi kedua di tiap jalur terbuka setelah misi pertama jalur tersebut diselesaikan ($\ge 1$ bintang).
-4. **Peran Penasihat Meja & Kartu Voting CSCL:** Saat satu kelompok maju mengoperasikan layar sentuh IFP (6–7 siswa), kelompok lain di meja bertindak sebagai **Penasihat Meja** yang memegang Buku Catatan Detektif (LKPD Fisik), menganalisis prediksi hipotesis, dan serempak mengangkat kartu voting fisik 3 warna saat tombol `📢 TANYA TEMAN` ditekan.
+4. **Peran Penasihat Meja & Kartu Voting CSCL:** Saat satu kelompok maju mengoperasikan layar sentuh IFP (7 siswa), kelompok lain di meja (21 siswa) bertindak sebagai **Penasihat Meja** yang memegang Buku Catatan Detektif (LKPD Fisik), menganalisis prediksi hipotesis, dan serempak mengangkat kartu voting fisik 3 warna saat tombol `📢 TANYA TEMAN` ditekan.
 
 ```
                     [1. PEMBAGIAN 4 KELOMPOK JIGSAW KELAS 5A]
-        25 Siswa dibagi menjadi 4 Kelompok Ahli Ekosistem (6–7 Siswa/Kelompok):
+        28 Siswa dibagi menjadi 4 Kelompok Ahli Ekosistem (tepat 7 Siswa/Kelompok):
          🌾 Detektif Sawah | 🌲 Detektif Hutan | 🌊 Detektif Sungai | 🪸 Detektif Laut
                                        │
                                        ▼
                    [2. ROTASI KELOMPOK & PREDIKSI AWAL (PREDICT)]
-        - Kelompok Aktif (6-7 Siswa) maju ke depan layar sentuh IFP 65–86"
+        - Kelompok Aktif (7 Siswa) maju ke depan layar sentuh IFP 65–86"
         - Memilih kelompok di Layar Pahlawan -> Terbuka Menu 4 Misi Bioma Spesialis
         - Siswa di meja memegang LKPD Buku Catatan Detektif sesuai bioma aktif
         - Mencatat kondisi awal krisis dan merumuskan prediksi hipotesis (C2)
@@ -382,13 +391,13 @@ Setiap misi memberikan penghargaan hingga 3 Bintang Prestasi Detektif:
 
 ---
 
-## 7. SISTEM KESEHATAN EKOSISTEM & EMOSI ALAM
+## 7. SISTEM KESEIMBANGAN EKOSISTEM & EMOSI ALAM
 
-### 7.1 Empat Kondisi Kesehatan Ekosistem
-* **😱 BAHAYA (Kesehatan $< 45\%$):** Bar merah berdenyut, border *vignette* krisis berkedip, Gita memberi peringatan bahaya.
-* **⚠️ KURANG SEIMBANG (Kesehatan $45\% - 59\%$):** Bar kuning, sebagian organisme mulai merespons perbaikan.
-* **😊 CUKUP SEIMBANG (Kesehatan $60\% - 74\%$):** Bar kuning-hijau, populasi mendekati batas aman.
-* **🌟 SANGAT SEIMBANG (Kesehatan $\ge 75\%$):** Bar hijau zamrud berkilau, Gita mengacungkan jempol (*gita_thumbsup*), tombol "CEK HASIL" berdenyut emas.
+### 7.1 Empat Kondisi Keseimbangan Ekosistem
+* **😱 BAHAYA (Keseimbangan $< 45\%$):** Bar merah berdenyut, border *vignette* krisis berkedip, Gita memberi peringatan bahaya.
+* **⚠️ KURANG SEIMBANG (Keseimbangan $45\% - 59\%$):** Bar kuning, sebagian organisme mulai merespons perbaikan.
+* **😊 CUKUP SEIMBANG (Keseimbangan $60\% - 74\%$):** Bar kuning-hijau, populasi mendekati batas aman.
+* **🌟 SANGAT SEIMBANG (Keseimbangan $\ge 75\%$):** Bar hijau zamrud berkilau, Gita mengacungkan jempol (*gita_thumbsup*), tombol "CEK HASIL" berdenyut emas.
 
 ### 7.2 Semangat Belajar Positif (*Tanpa Game Over*)
 Jika waktu habis, layar **tidak pernah** menampilkan tulisan *"Game Over"*. Sebaliknya, muncul layar ramah: **"Buku Catatan Detektif Gita"**:
@@ -476,7 +485,7 @@ Jika waktu habis, layar **tidak pernah** menampilkan tulisan *"Game Over"*. Seba
   8. `QuizScene.js` – **Buku Catatan Detektif C2 Data-Driven:** Menguji pemahaman sebab-akibat berdasarkan stimulus krisis misi aktif dengan pelacakan *first attempt* untuk bintang ke-3.
   9. `VictoryScene.js` – **Layar Selebrasi Prestasi:** Perhitungan 1-3 bintang, penyimpanan progres via `ProgressManager`, banner pembukaan misi/bioma baru, dan navigasi estafet.
 * **Alur Navigasi Permainan Lengkap:**
-  `BootScene` ➡️ `TitleScene` ➡️ (`TutorialScene` atau `TeamSelectScene`) ➡️ `BiomeSelectScene` ➡️ `MissionMenuScene` ➡️ `SimulationScene` ➡️ `QuizScene` ➡️ `VictoryScene` ➡️ (`MissionMenuScene` atau `BiomeSelectScene`).
+  `Splash / Preloader (Animasi Zoom-Out Lambang UM)` ➡️ `BootScene` / `TitleScene` ➡️ (`TutorialScene` atau `TeamSelectScene`) ➡️ `BiomeSelectScene` ➡️ `MissionMenuScene` ➡️ `SimulationScene` ➡️ `QuizScene` ➡️ `VictoryScene` ➡️ (`MissionMenuScene` atau `BiomeSelectScene`).
 * **Headless Automated Test Suites (Regresi Logika Sains & Progresi):**
   * `WEBSITE/tests/test_simulation_logic.js`: Memvalidasi matematis transfer energi trofik, siklus predasi tiap 3 detik, konsumsi produsen, dan penambahan populasi pada 4 bioma secara mandiri tanpa browser (headless Node.js).
   * `WEBSITE/tests/test_progress_manager.js`: Memvalidasi kalkulasi bintang (0-24), serialisasi LocalStorage, pembukaan kunci gembok bertahap, dan verifikasi integritas Mode Penguji / Dosen (Unlock All).
@@ -508,10 +517,22 @@ Jika waktu habis, layar **tidak pernah** menampilkan tulisan *"Game Over"*. Seba
   * **Sintesis Audio Web Audio API (`sfx.spray()`):** Simulasi desis semprotan bertekanan menggunakan filter bandpass sweeping 2.8kHz $\rightarrow$ 1.1kHz dan attenuating tone.
   * **Visualisasi & Reaksi Kausalitas Hama Wereng (`spWereng`):** Populasi hama wereng cokelat (*Nilaparvata lugens*) tampak nyata berkerumun di rumpun padi, dan seketika berputar pusing (*tumble rotation*) lalu jatuh berguguran ke lumpur sawah saat disemprot, memperjelas kausalitas intervensi manusia terhadap dinamika hama secara konkret bagi siswa kelas 5 SD.
 
-* **Arsitektur Audio Voice-Over (VO) Vokal Mandiri (`playVO`, `stopVO`):**
-  * **Prinsip Suara Manusiawi (Mayer's Voice Principle):** Menggantikan suara sintetis TTS robotik dengan rekaman vokal manusia asli peneliti sebagai "Kakak Gita" (`assets/audio/vo/*.mp3`), mencakup 72 naskah rekaman vokal terstruktur (sistem umum, bridging krisis 16 misi, musyawarah CSCL, hingga pembacaan soal kuis C2).
-  * **Lifecycle Audio Bersih & Pop-Free:** Dilengkapi fungsi `stopVO()` pada transisi antar-layar (`go(screenId)`) dan jeda dialog untuk mencegah kebocoran suara.
-  * **Failsafe Non-Intrusif:** Jika berkas MP3 tertentu belum selesai direkam, pemutar audio menangani pemutaran secara hening (*silent fallback*) tanpa menampilkan pesan eror merah pada konsol peramban IFP.
+* **Sistem Interaksi Kausalitas Dinamis Aksi 4 Bioma (`showTactileActionFX`, `showActionCinematicBanner`, `dock-cinematic-locked`):**
+  * **Animasi Lingkungan Prosedural Canvas 2D (60 FPS):** Setiap eksekusi aksi intervensi memicu reaksi visual lingkungan langsung pada kanvas alam:
+    * **Hutan Rimba (`drawForestSpringCascade` & `drawFireExtinguishSteam`):** Aksi *"Alirkan Mata Air Rimba"* memicu pancaran air pegunungan alami berkelok menuruni lereng grotto bukit dengan riak buih jernih dan kolam resapan lantai rimba (`_springFlowTimer = 180`), sedangkan aksi *"Padamkan Titik Api"* memicu guyuran hujan lebat tropis di seluruh kanvas (`drawForestRainStorm`, `_fireExtinguishTimer = 180`) dengan tirai 85 rintik air miring 60 FPS, atmosfer langit rimba meredup sejuk, cipratan air di lantai rimba, dan kepulan uap putih saat air hujan memadamkan bara api rimba.
+    * **Sawah Organik (`drawSawahIrrigationSurge`):** Aksi *"Alirkan Air Irigasi"* memicu semburan air tulakan berbuih putih segar yang mengalir deras menuruni terasering (`_irrigationFlowTimer = 180`).
+    * **Sungai Tropis (`drawRiverSluiceSurge`):** Aksi *"Buka Pintu Air Hulu"* memicu gelombang arus air menderu dan riak ombak sinusoidal di badan air (`_sluiceSurgeTimer = 180`).
+    * **Laut & Terumbu Karang (`drawReefShadeCanopy`):** Aksi *"Pasang Naungan Karang"* membentangkan tirai peneduh permukaan air laut dan hujan gelembung sejuk yang meredakan pemutihan karang (*coral bleaching*) (`_reefShadeTimer = 180`).
+  * **Umpan Balik Sentuhan Taktil (`showTactileActionFX`):** Titik sentuh jari siswa di layar IFP memancarkan sepasang cincin gelombang taktil konsentris ganda (2.6x & 3.2x), lencana ikon memantul di tengah, dan semburan 12 partikel tematik radial (tetesan air untuk hidrologi, dedaunan untuk flora, jejak cakar untuk fauna, perisai untuk penegakan hukum/krisis).
+  * **Floating Cinematic Emerald Glass Banner (`showActionCinematicBanner`):** Plakat kaca zamrud berkilau (`linear-gradient`, border emas 4px, shadow 3D) mengambang di kuadran atas layar selama 2.0 detik, menampilkan lencana ikon aksi, *kicker* peran bioma, judul aksi (30px), dan penjelasan kausalitas C2 (`action.role`, 24px) sebelum melayang naik dan memudar halus pada detik ke-2.4.
+  * **Jeda Observasi Kelas 2.4 Detik (`dock-cinematic-locked`):** Mencegah *button-mashing* dan memberi jeda berharga bagi 28 siswa kelas 5A SDN Percobaan 2 Malang untuk mengamati hubungan sebab-akibat (C2) antara aksi intervensi dan perubahan ekosistem di layar IFP sebelum kartu berikutnya dapat dieksekusi.
+
+* **Arsitektur Audio Voice-Over (VO) Vokal Mandiri & Auto-Ducking BGM (`playVO`, `stopVO`, `duckBGM`):**
+  * **Prinsip Suara Manusiawi (Mayer's Voice Principle):** Menggantikan suara sintetis TTS robotik dengan rekaman vokal manusia asli peneliti sebagai "Kakak Gita" (`voice-over/*.mp3` & `assets/audio/vo/*.mp3`), mencakup 72 naskah rekaman vokal terstruktur (sistem umum, bridging krisis 16 misi, musyawarah CSCL, hingga pembacaan soal kuis C2).
+  * **Saluran Monofonik Eksklusif (Zero Audio Overlap):** Menerapkan kanal audio tunggal eksklusif yang diproteksi token generasi generasi playback (`_voToken`). Setiap pemanggilan narasi vokal baru atau perpindahan layar (`go(screenId)`) seketika menghentikan dan mereset seluruh elemen audio aktif (`VO_POOL`) dengan 0ms jeda, mengeliminasi tuntas bug suara ganda (*overlapping/double voice*).
+  * **Auto-Ducking BGM Cerdas:** Saat Kakak Gita mulai berbicara, volume musik latar (BGM) otomatis meredup (*ducking*) secara halus dalam 150ms ke level 20% dari volume normal, dan bertransisi naik kembali (*ramp up*) dalam 300ms saat narasi selesai atau dipotong, menjamin vokal terdengar jernih tanpa bentrok dengan instrumen latar.
+  * **Hirarki SFX Cerdas & Global Throttle Cooldown:** Menerapkan pembatasan frekuensi tembakan osilator Web Audio (`allowSfxType`) dengan cooldown 80–350ms, membedakan nada aksi sentuh (`sfx.pop` / `sfx.spray`) dari nada target misi (`sfx.chime`), meredam dobel chime saat target tercapai bersamaan, serta membatasi efek suara pergerakan organisme (`sfx.grow`, `sfx.wither`, `sfx.flee`) maksimal 1 kali per siklus perubahan populasi.
+  * **Lifecycle Audio Bersih & Failsafe Non-Intrusif:** Jika berkas MP3 tertentu belum selesai direkam, pemutar audio menangani pemutaran secara hening (*silent fallback*) tanpa menampilkan pesan eror merah pada konsol peramban IFP.
   * **Dokumentasi Naskah Induk:** Naskah lengkap 72 audio vokal didokumentasikan di [`docs/DOKUMEN_AUDIT_VOICE_OVER.md`](file:///d:/SKRIPSI%20GITA/docs/DOKUMEN_AUDIT_VOICE_OVER.md).
 
 * **Kesiapan Multi-Platform & PWA Android (Progressive Web App & Standalone APK):**
@@ -525,6 +546,8 @@ Jika waktu habis, layar **tidak pernah** menampilkan tulisan *"Game Over"*. Seba
   * **Idempotent Event Delegation (`simulation.js`):** Menggantikan penambahan berulang `addEventListener('click')` pada `#stat-rows` dengan penugasan idempotent `.onclick`, mengeliminasi penggandaan listener (*event multiplication*) saat misi diulang berkali-kali.
   * **Kalibrasi Gerak Dinamis Padi Semilir Alami (`backgrounds.js`):** Menenangkan ayunan padi dengan mereduksi amplitudo ~60% (maksimal 6–11 px), memperlambat tempo hembusan 40% (`t * 0.0013`), serta menerapkan peredaman dinamis (*damped sway*) saat tanaman layu, kekeringan, atau terserang hama wereng.
   * **Standarisasi Tipografi Ultra-Large IFP:** Memverifikasi 0 teks berukuran < 24px di seluruh antarmuka (label audio, target misi, lencana kuis, dan dermaga aksi dinaikkan ke $\ge 24\text{ px}$).
+  * **Optimasi Sequence Animasi Karakter Gita (WebP 60-frame @12fps):** Sequence dialog box (`talking_loop` dan `worried_loop`) dioptimasi dari sequence PNG 120 frame mentah (24,5 MB) menjadi sequence WebP 60 frame beresolusi 300x300 RGBA (total 1,47 MB, efisiensi hemat 94% memori & bandwidth) dengan tetap mempertahankan durasi putar 5,0 detik serta transparansi jernih bebas artefak kompresi.
+  * **Preloader & Asset Preparation Splash Screen (Identitas Akademik UM):** Menerapkan modul preloader mandiri (`#preloader-overlay`) sebelum masuk ke menu utama, menampilkan animasi sinematik zoom-out Lambang Universitas Negeri Malang (`assets/Lambang-UM.webp`) dengan progress bar berkilau, status persiapan aset riil (font, sequence WebP Gita, audio synth), serta transisi fade-out otomatis (minimum display 2,0 detik) guna menjamin seluruh aset siap pakai tanpa stuttering saat siswa mulai berinteraksi di IFP.
 
 ---
 

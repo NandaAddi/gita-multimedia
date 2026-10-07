@@ -5,7 +5,7 @@
 * **Peneliti / Pengembang:** Gito (Teknologi Pendidikan)
 * **Karakter Pemandu Utama:** Gita si Detektif Cilik (Rekan Sebaya / *Peer-Mentor* Usia 10–11 Tahun)
 * **Kurikulum Acuan:** Kurikulum Merdeka — IPAS Fase C (Materi Rantai Makanan & Keseimbangan Ekosistem)
-* **Sasaran Pengguna:** 25 Siswa Kelas 5A (Kolaborasi 5 Kelompok Jigsaw: Petugas Layar di Depan & Penasihat Meja)
+* **Sasaran Pengguna:** 28 Siswa Kelas 5A (Kolaborasi 4 Kelompok Jigsaw: Petugas Layar di Depan & Penasihat Meja)
 * **Target Perangkat:** Layar Sentuh *Interactive Flat Panel* (IFP 65–86 Inch) & Kartu Voting Fisik 3 Warna
 * **Cakupan Wilayah Bioma:** 4 Bioma Nusantara (🌾 Sawah, 🌲 Hutan Tropis, 🏞️ Sungai Air Tawar, 🌊 Laut Terumbu Karang)
 * **Struktur Misi:** 8 Misi Investigasi (Tiap Bioma memiliki Misi 1: Faktor Ulah Alam & Misi 2: Faktor Ulah Manusia)
