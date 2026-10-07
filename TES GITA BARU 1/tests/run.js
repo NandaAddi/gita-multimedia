@@ -234,7 +234,7 @@ ok('tidak ada memory leak dead entity di sawah pool', !hasDeadLeak);
 ok('total entitas sawah terkendali pasca-stress test (<= 60)', totalOrganismsSawah <= 60);
 
 console.log(`\nHasil: ${pass} lolos, ${fail} gagal`);
-process.exitCode = fail ? 1 : 0;
+process.exit(fail ? 1 : 0);
 
 
 

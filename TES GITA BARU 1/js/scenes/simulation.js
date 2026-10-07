@@ -20,8 +20,8 @@ function showBridgeDialog(m, team){
 
   // Preload kedua sequence animasi Gita di latar belakang
   if (typeof GitaSeq !== 'undefined' && GitaSeq.preload) {
-    GitaSeq.preload({ folder: 'worried_loop', prefix: 'Comp 1_', pad: 5, ext: '.png', frames: 120, fps: 24 });
-    GitaSeq.preload({ folder: 'talking_loop', prefix: 'Comp 1_', pad: 5, ext: '.png', frames: 120, fps: 24 });
+    GitaSeq.preload({ folder: 'worried_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 });
+    GitaSeq.preload({ folder: 'talking_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 });
   }
 
   function renderBridgeStep(){
@@ -34,9 +34,9 @@ function showBridgeDialog(m, team){
         folder: seqFolder,
         prefix: 'Comp 1_',
         pad: 5,
-        ext: '.png',
-        frames: 120,
-        fps: 24,
+        ext: '.webp',
+        frames: 60,
+        fps: 12,
         size: 210,
         showLoading: false,
         fallbackSVG: () => gitaSVG(200, expr)
@@ -141,7 +141,7 @@ function buildSimUI(){const m=SIM.m;
  +'<button class="btn tb-btn snd-btn"></button>'
   +'<div class="tb-stars">'+ic('star',24)+' <b>'+totStars()+'/48</b></div>'
   +'<button class="btn tb-btn" id="sim-top-hide" title="Sembunyikan panel atas">▲</button></div>'
- +'<div class="hpod"><div class="r1"><span>Kesehatan Ekosistem</span><span class="st" id="hp-val"></span></div>'
+ +'<div class="hpod"><div class="r1"><span>Keseimbangan Ekosistem</span><span class="st" id="hp-val"></span></div>'
  +'<div class="hbar"><div id="hp-bar"></div></div></div>'
  +'<div class="hud-left">'
  +'<div class="panel-deep gita-card"><div class="gita-plaque">'+gitaSVG(66,'happy')+'<span class="tag">GITA</span></div>'
@@ -234,7 +234,7 @@ function buildSimUI(){const m=SIM.m;
     };
   }
   syncSound();buildHUD();updateHUD();}
-function simTick(){if(!SIM||SIM.paused||SIM.mp>0||SIM.done)return;
+function simTick(){if(!SIM||!Array.isArray(SIM.cool)||SIM.paused||SIM.mp>0||SIM.done)return;
  SIM.cool=SIM.cool.map(x=>Math.max(0,x-1));
  if(SIM.S.day>2&&Math.random()<.16){const ev=pick(EVENTS[SIM.m.biome]);ev.fx(SIM.S);toast('Peristiwa: '+ev.t);}
  SIM.m.tick(SIM.S);SIM.S.day++;simUpdate();}
@@ -354,22 +354,27 @@ function simUpdate(){if(!SIM)return;const m=SIM.m,S=SIM.S;
  if(S.health<=6){simFail(false);return;}
  if(S.day>SIM.limit){simFail(true);return;}
  if(!SIM.done&&SIM.tgt.every(Boolean)){SIM.done=true;sfx.success();
-  toast('Semua target tercapai! Tekan tombol emas untuk menyelesaikan misi.');simExpr('cheer');if(typeof playVO === 'function') playVO('vo_sim_all_targets');}
+  toast('Semua target tercapai! Tekan tombol emas untuk menyelesaikan misi.');simExpr('cheer');
+  // Antri NORMAL dulu supaya tidak tumpang tindih jika ada target_ok sedang diputar
+  if(typeof playVO === 'function') setTimeout(()=>playVO('vo_sim_all_targets'), 300);
+ }
  if(!SIM.done&&SIM.voted<SIM.voteAt.length&&S.day>=SIM.voteAt[SIM.voted]){SIM.voted++;showVote();}
  updateHUD();}
 function showDropEffect(x, y, iconName) {
+  const s = (typeof window !== 'undefined' ? Math.min(window.innerWidth / 1920, window.innerHeight / 1080) : 1) || 1;
   const fx = document.createElement('div');
   fx.innerHTML = ic(iconName, 64);
   fx.style.position = 'fixed';
   fx.style.left = x + 'px';
   fx.style.top = y + 'px';
-  fx.style.transform = 'translate(-50%, -50%)';
+  fx.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+  fx.style.transformOrigin = 'center center';
   fx.style.pointerEvents = 'none';
   fx.style.zIndex = '9999';
   fx.style.transition = 'all 1s ease-out';
   document.body.appendChild(fx);
   requestAnimationFrame(() => {
-    fx.style.transform = 'translate(-50%, -150px) scale(1.5)';
+    fx.style.transform = 'translate(-50%, -' + (150 * s) + 'px) scale(' + (1.5 * s) + ')';
     fx.style.opacity = '0';
   });
   setTimeout(() => fx.remove(), 1000);
@@ -382,9 +387,10 @@ function showDropEffect(x, y, iconName) {
    - Lencana dampak melayang & ekspresi Gita ceria
 */
 function showSprayEffect(x, y, actionId, label) {
+  const s = (typeof window !== 'undefined' ? Math.min(window.innerWidth / 1920, window.innerHeight / 1080) : 1) || 1;
   const container = document.createElement('div');
   container.className = 'spray-fx-container';
-  container.style.cssText = 'position:fixed;left:' + x + 'px;top:' + y + 'px;transform:translate(-50%,-50%);pointer-events:none;z-index:10000';
+  container.style.cssText = 'position:fixed;left:' + x + 'px;top:' + y + 'px;transform:translate(-50%,-50%) scale(' + s + ');transform-origin:center center;pointer-events:none;z-index:10000';
 
   const isMimba = actionId === 'mimba';
   const isFire = actionId === 'padam';
@@ -488,6 +494,11 @@ function doAction(i, dropX, dropY){const m=SIM.m,a=m.actions[i],S=SIM.S;
  }
  simUpdate();}
 function showVote(){const m=SIM.m;
+ // Jeda simulasi selama musyawarah berlangsung
+ if(SIM&&!SIM.done){
+   SIM.paused=true;
+   if(SIM.timer){clearInterval(SIM.timer);SIM.timer=null;}
+ }
  let voteTime=15, voteTimer;
  // BUG FIX #4: Simpan referensi closeModal asli agar timer bisa di-clear saat modal ditutup via dim
  var _origCloseModal = closeModal;
@@ -495,6 +506,12 @@ function showVote(){const m=SIM.m;
    clearInterval(voteTimer);
    _origCloseModal();
    closeModal = _origCloseModal;
+   // Lanjutkan simulasi setelah modal ditutup
+   if(SIM&&!SIM.done){
+     SIM.paused=false;
+     if(SIM.timer)clearInterval(SIM.timer);
+     SIM.timer=setInterval(simTick,1500);
+   }
  };
  const chips = ['🟢 KARTU HIJAU', '🟡 KARTU KUNING', '🔴 KARTU MERAH'];
  const r=modal(
@@ -513,6 +530,7 @@ function showVote(){const m=SIM.m;
    +'<div class="vote-free-tag">⭐ GRATIS &bull; Tanpa Kuota!</div>'
    +'<div class="vote-tap-cue">Ketuk untuk Memilih ❯❯</div>'
    +'</div>').join('')+'</div>');
+ // HIGH priority: potong semua VO lain, langsung putar undangan musyawarah
  if(typeof playVO === 'function') playVO('vo_sim_vote_call');
  const vt = r.querySelector('#vote-timer');
  voteTimer = setInterval(()=>{
@@ -549,13 +567,15 @@ function showVote(){const m=SIM.m;
   }
   a.fx(SIM.S);
   if (a.id === 'air' || a.id === 'irigasi') SIM.S._irrigationFlowTimer = 180;
-  toast('Hasil musyawarah: '+a.label+' (gratis)!');if(typeof playVO === 'function') playVO('vo_sim_vote_done');
+  toast('Hasil musyawarah: '+a.label+' (gratis)!');
+  // Tunda VO selesai sedikit agar toast sempat render, lalu antri via HIGH priority
+  setTimeout(()=>{ if(typeof playVO === 'function') playVO('vo_sim_vote_done'); }, 200);
   closeModal();simUpdate();});}
 function simFail(timeout){if(!SIM)return;clearInterval(SIM.timer);SIM.timer=null;SIM.done=true;sfx.wrong();if(typeof playVO === 'function') playVO(timeout ? 'vo_sim_fail_time' : 'vo_sim_fail_health');
  const m=SIM.m;
    const r=modal('<h2 style="color:#fca5a5">'+ic('clock',34)+' '+(timeout?'Waktu Telah Habis!':'Ekosistem Rusak Berat!')+'</h2>'
   +'<p>'+(timeout?'Hari telah habis, tetapi target misi belum tercapai. Jangan menyerah — ekosistem ini masih membutuhkanmu!'
-   :'Kesehatan ekosistem jatuh ke titik kritis. Renungkan: aksi mana yang seharusnya dilakukan lebih dulu?')+'</p>'
+   :'Keseimbangan ekosistem jatuh ke titik kritis. Renungkan: aksi mana yang seharusnya dilakukan lebih dulu?')+'</p>'
   +'<p style="background:rgba(2,44,34,.6);border-radius:12px;padding:12px 18px">Ingat urutan yang tepat: atasi <b>ancaman terbesar</b> (racun, jerat, bom) sebelum memulihkan penghuninya!</p>'
   +'<div class="mrow"><button class="btn btn-gold" id="fr-retry">'+ic('play',24)+' Ulangi Misi</button>'
   +'<button class="btn btn-secondary" id="fr-quit">'+ic('back',24)+' Kembali ke Peta Misi</button></div>',true);
@@ -626,8 +646,10 @@ function handleCardTapSelect(idx) {
 
 function moveProxy(e) {
   if(!dragProxy) return;
+  const s = (typeof window !== 'undefined' ? Math.min(window.innerWidth / 1920, window.innerHeight / 1080) : 1) || 1;
   dragProxy.style.left = e.clientX + 'px';
-  dragProxy.style.top = (e.clientY - 35) + 'px';
+  dragProxy.style.top = (e.clientY - 35 * s) + 'px';
+  dragProxy.style.transform = 'translate(-50%, -75%) scale(' + s + ')';
 }
 
 function onDragMove(e) {
@@ -654,7 +676,9 @@ function onDragMove(e) {
       dragProxy.style.touchAction = 'none';
       dragProxy.style.userSelect = 'none';
       dragProxy.style.zIndex = '99999';
-      dragProxy.style.transform = 'translate(-50%, -75%)';
+      const s = (typeof window !== 'undefined' ? Math.min(window.innerWidth / 1920, window.innerHeight / 1080) : 1) || 1;
+      dragProxy.style.transformOrigin = 'center center';
+      dragProxy.style.transform = 'translate(-50%, -75%) scale(' + s + ')';
       dragProxy.style.opacity = '0.92';
       dragProxy.style.boxShadow = '0 16px 36px rgba(0,0,0,0.6)';
 

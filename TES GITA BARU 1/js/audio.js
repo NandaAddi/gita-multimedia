@@ -192,14 +192,52 @@ function setBgmVolume(val) {
 }
 
 /* ================= VOICE-OVER (VO) PLAYER ENGINE =================
-   Memutar file audio MP3 rekaman vokal manusia dari assets/audio/vo/
-   Pop-Free & Non-Intrusive: jika file belum ada/belum direkam, hening tanpa error konsol.
+   Smart VO Queue & Priority System
+   - HIGH  : Musyawarah & Akhir Misi (interupsi langsung, reset antrian)
+   - NORMAL: Target tercapai & Bridging (antri setelah audio saat ini selesai)
+   - LOW   : Feedback umum (diabaikan jika antrian tidak kosong)
+   Jeda natural 400ms antar audio agar tidak bertumpuk.
+   Pop-Free & Non-Intrusive: hening tanpa error jika file belum ada.
 */
+
+const VO_PRIORITY = {
+  HIGH:   3,
+  NORMAL: 2,
+  LOW:    1
+};
+
+// Kunci yang termasuk HIGH priority
+const VO_HIGH_KEYS = new Set([
+  'vo_sim_vote_call', 'vo_sim_vote_done',
+  'vo_sim_all_targets',
+  'vo_sim_fail_time', 'vo_sim_fail_health'
+]);
+
+// Kunci yang termasuk NORMAL priority
+const VO_NORMAL_KEYS = new Set([
+  'vo_sim_target_ok'
+]);
+
+function getVOPriority(key) {
+  if (VO_HIGH_KEYS.has(key)) return VO_PRIORITY.HIGH;
+  // Semua kunci bridging (vo_bridge_*) = NORMAL
+  if (VO_NORMAL_KEYS.has(key) || (typeof key === 'string' && key.startsWith('vo_bridge_'))) return VO_PRIORITY.NORMAL;
+  return VO_PRIORITY.LOW;
+}
+
 let currentVO = null;
+let _voQueue   = []; // [{key, onEnd, priority}]
+let _voPlaying = false;
+let _voGapTimer = null;
 
 function stopVO() {
+  // Bersihkan antrian
+  _voQueue = [];
+  _voPlaying = false;
+  if (_voGapTimer) { clearTimeout(_voGapTimer); _voGapTimer = null; }
   if (currentVO) {
     try {
+      currentVO.onended = null;
       currentVO.pause();
       currentVO.currentTime = 0;
     } catch (e) {}
@@ -209,48 +247,84 @@ function stopVO() {
 
 const VO_POOL = new Map();
 
-function playVO(key, onEnd) {
-  if (!soundOn || typeof window === 'undefined') return;
-  stopVO();
-  try {
-    let audio = VO_POOL.get(key);
-    if (!audio) {
-      if (VO_POOL.size >= 40) {
-        const oldestKey = VO_POOL.keys().next().value;
-        const oldAudio = VO_POOL.get(oldestKey);
-        if (oldAudio && typeof oldAudio.pause === 'function') oldAudio.pause();
-        VO_POOL.delete(oldestKey);
-      }
-      audio = new Audio('voice-over/' + key + '.mp3');
-      VO_POOL.set(key, audio);
+function _getVOAudio(key) {
+  let audio = VO_POOL.get(key);
+  if (!audio) {
+    if (VO_POOL.size >= 40) {
+      const oldestKey = VO_POOL.keys().next().value;
+      const oldAudio = VO_POOL.get(oldestKey);
+      if (oldAudio && typeof oldAudio.pause === 'function') { try { oldAudio.pause(); } catch(e){} }
+      VO_POOL.delete(oldestKey);
     }
-    currentVO = audio;
-    try { audio.currentTime = 0; } catch (e) {}
-    audio.onended = () => {
-      if (currentVO === audio) currentVO = null;
-      if (typeof onEnd === 'function') onEnd();
-    };
-    audio.play().catch(() => {
-      // Fallback ke assets/audio/vo/ jika path relatif berbeda
-      let fallback = VO_POOL.get('fb_' + key);
-      if (!fallback) {
-        fallback = new Audio('assets/audio/vo/' + key + '.mp3');
-        VO_POOL.set('fb_' + key, fallback);
-      }
-      currentVO = fallback;
-      try { fallback.currentTime = 0; } catch (e) {}
-      fallback.onended = () => {
-        if (currentVO === fallback) currentVO = null;
-        if (typeof onEnd === 'function') onEnd();
-      };
-      fallback.play().catch(() => {
-        if (currentVO === fallback) currentVO = null;
-        if (typeof onEnd === 'function') onEnd();
-      });
-    });
-  } catch (e) {
-    currentVO = null;
+    audio = new Audio('voice-over/' + key + '.mp3');
+    VO_POOL.set(key, audio);
   }
+  return audio;
+}
+
+function _playNextInQueue() {
+  if (!soundOn || _voQueue.length === 0) {
+    _voPlaying = false;
+    return;
+  }
+  _voPlaying = true;
+  const { key, onEnd } = _voQueue.shift();
+  const audio = _getVOAudio(key);
+  currentVO = audio;
+  try { audio.currentTime = 0; } catch (e) {}
+
+  const _afterEnd = () => {
+    if (currentVO === audio) currentVO = null;
+    if (typeof onEnd === 'function') { try { onEnd(); } catch(e){} }
+    // Jeda natural 400ms sebelum audio berikutnya
+    _voGapTimer = setTimeout(_playNextInQueue, 400);
+  };
+
+  audio.onended = _afterEnd;
+  audio.play().catch(() => {
+    // Fallback path
+    const fbKey = 'fb_' + key;
+    let fallback = VO_POOL.get(fbKey);
+    if (!fallback) {
+      fallback = new Audio('assets/audio/vo/' + key + '.mp3');
+      VO_POOL.set(fbKey, fallback);
+    }
+    currentVO = fallback;
+    try { fallback.currentTime = 0; } catch (e) {}
+    fallback.onended = _afterEnd;
+    fallback.play().catch(() => {
+      if (currentVO === fallback) currentVO = null;
+      if (typeof onEnd === 'function') { try { onEnd(); } catch(e){} }
+      _voGapTimer = setTimeout(_playNextInQueue, 400);
+    });
+  });
+}
+
+function playVO(key, onEnd, priority) {
+  if (!soundOn || typeof window === 'undefined') return;
+  const p = (priority !== undefined) ? priority : getVOPriority(key);
+
+  if (p >= VO_PRIORITY.HIGH) {
+    // HIGH: potong semua, langsung putar
+    stopVO();
+    _voQueue.push({ key, onEnd, priority: p });
+    _playNextInQueue();
+    return;
+  }
+
+  if (p === VO_PRIORITY.NORMAL) {
+    // NORMAL: antri di belakang antrian yang ada
+    _voQueue.push({ key, onEnd, priority: p });
+    if (!_voPlaying) _playNextInQueue();
+    return;
+  }
+
+  // LOW: hanya putar jika benar-benar idle
+  if (!_voPlaying && _voQueue.length === 0) {
+    _voQueue.push({ key, onEnd, priority: p });
+    _playNextInQueue();
+  }
+  // Jika ada audio/antrian aktif, LOW priority diabaikan
 }
 
 function speak(txt) {

@@ -70,7 +70,6 @@ function init(){
     });
   } catch(e) {}
 
-  titleBubble();
   syncSound();
 
   el('#btn-start').onclick = () => {
@@ -154,23 +153,118 @@ function init(){
     } catch(e) {}
   });
 
-  const p = new URLSearchParams(location.search).get('screen');
-  if(p === 'tutorial'){
-    buildTutorial();
-    go('tutorial');
-  } else if(p === 'team'){
-    buildTeam();
-    go('team');
-  } else if(p === 'biome'){
-    buildBiome();
-    go('biome');
-  } else if(p === 'sim'){
-    const misId = new URLSearchParams(location.search).get('mission') || 'sawah-1';
-    const targetMis = MISSIONS.find(m => m.id === misId) || MISSIONS[0];
-    startSim(targetMis);
-  } else {
-    go('title');
+  // Preloader & Penyiapan Aset Cerdas dengan Animasi Zoom-Out Logo UM
+  function runPreloader(onDone) {
+    const overlay = el('#preloader-overlay');
+    if (!overlay) {
+      if (onDone) onDone();
+      return;
+    }
+
+    const fill = el('#preloader-bar-fill');
+    const statusEl = el('#preloader-status');
+    const pctEl = el('#preloader-pct');
+    let progress = 12;
+    let finished = false;
+    const startTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+    const minDuration = 2000; // 2.0s agar animasi zoom-out logo UM dinikmati optimal
+
+    function setProgress(val, text) {
+      if (val > progress) progress = val;
+      if (fill) fill.style.width = Math.min(progress, 100) + '%';
+      if (pctEl) pctEl.textContent = Math.round(Math.min(progress, 100)) + '%';
+      if (text && statusEl) statusEl.textContent = text;
+    }
+
+    setProgress(15, 'Memuat modul pembelajaran IPAS...');
+
+    function finishPreload() {
+      if (finished) return;
+      finished = true;
+      setProgress(100, 'Siap Berpetualang!');
+      setTimeout(() => {
+        overlay.classList.add('fade-out');
+        setTimeout(() => {
+          overlay.style.display = 'none';
+          if (onDone) onDone();
+        }, 550);
+      }, 320);
+    }
+
+    // Interaksi sentuh/klik untuk langsung lewati & aktifkan audio Web Audio
+    overlay.addEventListener('pointerdown', () => {
+      unlockAudio();
+      finishPreload();
+    }, { once: true });
+
+    // Preload aset riil secara paralel
+    const tasks = [];
+
+    // 1. Font antarmuka
+    if (document.fonts && document.fonts.ready) {
+      tasks.push(
+        document.fonts.ready
+          .then(() => setProgress(35, 'Memuat font & antarmuka petualangan...'))
+          .catch(() => {})
+      );
+    }
+
+    // 2. Preload sequence WebP Gita
+    if (typeof GitaSeq !== 'undefined' && GitaSeq.preload) {
+      const g1 = GitaSeq.preload({ folder: 'gita-thinking', prefix: 'g', pad: 3, ext: '.webp', frames: 48, fps: 12 })
+        .then(() => setProgress(55, 'Menyiapkan animasi karakter Gita...'))
+        .catch(() => {});
+      const g2 = GitaSeq.preload({ folder: 'talking_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 })
+        .then(() => setProgress(75, 'Memuat dialog ekspresi panduan...'))
+        .catch(() => {});
+      const g3 = GitaSeq.preload({ folder: 'worried_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 })
+        .then(() => setProgress(90, 'Menginisialisasi simulasi 4 ekosistem...'))
+        .catch(() => {});
+      tasks.push(Promise.all([g1, g2, g3]));
+    }
+
+    Promise.all(tasks).then(() => {
+      const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+      const elapsed = now - startTime;
+      const remain = Math.max(0, minDuration - elapsed);
+      setProgress(95, 'Menyiapkan arena petualangan...');
+      setTimeout(() => {
+        finishPreload();
+      }, remain);
+    }).catch(() => {
+      finishPreload();
+    });
+
+    // Failsafe timeout 3800ms
+    setTimeout(() => {
+      if (!finished) finishPreload();
+    }, 3800);
   }
+
+  const navigateToInitialScreen = () => {
+    titleBubble();
+    const p = new URLSearchParams(location.search).get('screen');
+    if (p === 'tutorial') {
+      buildTutorial();
+      go('tutorial');
+    } else if (p === 'team') {
+      buildTeam();
+      go('team');
+    } else if (p === 'biome') {
+      buildBiome();
+      go('biome');
+    } else if (p === 'sim') {
+      const misId = new URLSearchParams(location.search).get('mission') || 'sawah-1';
+      const targetMis = MISSIONS.find(m => m.id === misId) || MISSIONS[0];
+      startSim(targetMis);
+    } else {
+      go('title');
+    }
+  };
+
+  runPreloader(() => {
+    navigateToInitialScreen();
+  });
 
   requestAnimationFrame(loop);
 }

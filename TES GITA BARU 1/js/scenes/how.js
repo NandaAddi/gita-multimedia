@@ -16,8 +16,8 @@ function howSteps(){
         + '<span class="bento-chip chip-katak">Detektif Sungai</span>'
         + '<span class="bento-chip chip-jamur">Detektif Laut</span></div>',
       illus: 'teams' },
-    { badge: 'Langkah 2 &bull; Eco-Health', title: 'PANTAU KESEHATAN &amp; HARI',
-      desc: 'Perhatikan <b>Bar Kesehatan Ekosistem</b> dan <b>Target Hari</b>. Setiap hari kondisi alam berevolusi dinamis. Selamatkan ekosistem sebelum target hari habis dan capai status <b>SEHAT (&ge; 75%)</b>!',
+    { badge: 'Langkah 2 &bull; Eco-Health', title: 'PANTAU KESEIMBANGAN &amp; HARI',
+      desc: 'Perhatikan <b>Bar Keseimbangan Ekosistem</b> dan <b>Target Hari</b>. Setiap hari kondisi alam berevolusi dinamis. Selamatkan ekosistem sebelum target hari habis dan capai status <b>SEIMBANG (&ge; 75%)</b>!',
       extra: '<div class="bento-zones-row">'
         + '<span class="zone-pill zone-danger">Bahaya (&lt; 45%)</span>'
         + '<span class="zone-pill zone-warn">Waspada (45 - 74%)</span>'

@@ -2,7 +2,7 @@
    ECO-EXPLORER — js/renderers/gita-sequence.js
    Pilot & Dialog: Image-sequence Gita
    - Title: gita-thinking (48 WebP 360px @12fps)
-   - Dialog Box: worried_loop (Step 1) & talking_loop (Step 2) (120 PNG 300px @24fps)
+   - Dialog Box: worried_loop (Step 1) & talking_loop (Step 2) (60 WebP 300px @12fps)
    Multi-cache, rAF loop, poster fallback, auto-pause on hidden tab
    ============================================================ */
 

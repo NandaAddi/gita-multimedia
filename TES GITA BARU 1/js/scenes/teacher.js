@@ -23,10 +23,6 @@ function buildTeacher() {
           <div class="teacher-title-sub">Model Pembelajaran Alessi &amp; Trollip &bull; Pendekatan Kolaboratif CSCL Kelas 5A</div>
         </div>
         <div class="teacher-header-right">
-          <div class="teacher-school-badge" id="teacher-badge" title="Ketuk 5x berturut-turut untuk Mode Penguji (Buka Semua)">
-            <span class="badge-dot"></span>
-            <span>SDN Percobaan 2 Malang &bull; Kelas 5A</span>
-          </div>
           <button class="btn tb-btn snd-btn" id="teacher-snd"></button>
         </div>
       </div>
@@ -77,12 +73,12 @@ function buildTeacher() {
     };
   }
 
-  // Bind Examiner 5-Tap Gesture on School Badge
-  const badgeEl = el('#teacher-badge');
-  if (badgeEl) {
+  // Bind Examiner 5-Tap Gesture on Header Title (Mode Penguji / Dosen)
+  const titleEl = root.querySelector('.teacher-header-title');
+  if (titleEl) {
     let tapCount = 0;
     let tapTimer = null;
-    badgeEl.onclick = () => {
+    titleEl.onclick = () => {
       tapCount++;
       clearTimeout(tapTimer);
       tapTimer = setTimeout(() => { tapCount = 0; }, 3000);
@@ -114,13 +110,13 @@ function teacherSlides(curStars){
   return [
     { title: '1. KURIKULUM &amp; TUJUAN', badge: 'Fase C IPAS',
       body: `
-        <div class="tcard">
+        <div class="tcard tcard-cp">
           <div class="tcard-h">Capaian Pembelajaran (CP) Fase C</div>
           <p class="tcard-p">
             ${cpText}
           </p>
         </div>
-        <div class="tcard">
+        <div class="tcard tcard-tp">
           <div class="tcard-h">4 Tujuan Pembelajaran (TP) IPAS Ekosistem</div>
           <div class="t-tp-grid">
             <div class="t-tp-item">
@@ -140,12 +136,6 @@ function teacherSlides(curStars){
               <span class="t-tp-text">Menganalisis dampak perubahan populasi komponen biotik terhadap keseimbangan ekosistem, serta dampak aktivitas manusia terhadap keseimbangan ekosistem.</span>
             </div>
           </div>
-        </div>
-        <div class="tcard">
-          <div class="tcard-h">Penguatan Penalaran Kognitif C2 &amp; Model Alessi &amp; Trollip</div>
-          <p class="tcard-p">
-            Mengatasi ketimpangan <b>C1 vs C2</b>: Mengalihkan siswa dari sekadar menghafal fakta definisi (C1) menuju pemahaman relasional kausalitas ekologis (Piaget &amp; Mayer) melalui siklus <b>POE (Predict - Observe - Explain)</b> pada 4 Bioma Nusantara.
-          </p>
         </div>` },
     { title: '2. SINTAKS KELAS &amp; CSCL', badge: 'Model Jigsaw',
       body: `
@@ -183,23 +173,25 @@ function teacherSlides(curStars){
         <div class="tcard">
           <div class="tcard-h">Formula 3 Bintang Detektif</div>
           <div class="t-stars-list">
-            <div class="t-star-item"><b>★ Bintang 1:</b> Menjaga Kesehatan Ekosistem &ge; 75% saat target misi tercapai.</div>
+            <div class="t-star-item"><b>★ Bintang 1:</b> Menjaga Keseimbangan Ekosistem &ge; 75% saat target misi tercapai.</div>
             <div class="t-star-item"><b>★★ Bintang 2:</b> Lulus Kuis Sebab-Akibat C2 pada tahap debriefing.</div>
             <div class="t-star-item"><b>★★★ Bintang 3:</b> Menjawab benar kuis C2 pada percobaan pertama (first attempt).</div>
           </div>
         </div>
         <div class="tcard tcard-actions">
           <div class="tcard-h">Bank Instrumen Pretest &amp; Posttest (20 Butir Soal C2)</div>
-          <p class="tcard-p" style="margin-bottom:14px">
-            Instrumen tes terstandar yang dipetakan ke 4 Tujuan Pembelajaran (TP) dan 4 Bioma untuk mengukur <i>Normalized Gain (N-Gain)</i> penalaran kausalitas siswa kelas 5A.
-          </p>
-          <button class="btn btn-gold t-exam-btn" id="t-exam-btn">
-            <span>Buka Bank Soal (20 Butir Evaluasi)</span>
-          </button>
+          <div class="t-action-row">
+            <p class="tcard-p" style="flex:1">
+              Instrumen tes terstandar yang dipetakan ke 4 Tujuan Pembelajaran (TP) dan 4 Bioma untuk mengukur <i>Normalized Gain (N-Gain)</i> penalaran kausalitas siswa kelas 5A.
+            </p>
+            <button class="btn btn-gold t-exam-btn" id="t-exam-btn">
+              <span>Buka Bank Soal (20 Butir Evaluasi)</span>
+            </button>
+          </div>
         </div>
         <div class="tcard tcard-actions">
           <div class="tcard-h">Pusat Kendali Data Progres Kelas</div>
-          <div class="t-reset-row">
+          <div class="t-action-row">
             <div class="tcard-p" style="flex:1">
               Progres bintang kelas (<b>${curStars}/48 Bintang</b>) tersimpan otomatis di perangkat. Gunakan tombol reset saat memulai sesi penelitian atau kelas baru.
             </div>

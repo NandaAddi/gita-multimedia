@@ -20,6 +20,25 @@
 </head>
 <body>
 <div id="stage">
+  <!-- PRELOADER & PENYIAPAN ASET (LOGO UM ZOOM-OUT) -->
+  <div id="preloader-overlay" class="preloader-overlay" title="Sentuh untuk langsung mulai">
+    <div class="preloader-halo"></div>
+    <div class="preloader-content">
+      <div class="preloader-logo-wrap">
+        <img id="preloader-logo" class="preloader-logo" src="assets/Lambang-UM.webp" alt="Lambang Universitas Negeri Malang">
+      </div>
+      <div class="preloader-box">
+        <div class="preloader-bar-track">
+          <div id="preloader-bar-fill" class="preloader-bar-fill"></div>
+        </div>
+        <div class="preloader-row">
+          <span id="preloader-status" class="preloader-status">Menyiapkan modul pembelajaran IPAS...</span>
+          <span id="preloader-pct" class="preloader-pct">0%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <canvas class="cv" id="cv-title" width="1920" height="1080"></canvas>
   <section class="screen" id="scr-title">
     <div class="ui title-ui">

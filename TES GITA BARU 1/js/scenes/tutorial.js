@@ -7,7 +7,7 @@
 const TUT=[
  {h:'Selamat Datang, Detektif Alam!',p:'Di Nusantara ada 4 ekosistem dalam bahaya: <b>sawah</b>, <b>hutan tropis</b>, <b>sungai</b>, dan <b>laut karang</b>. Tugasmu: memulihkan keseimbangannya sebelum semuanya rusak! Aku, Gita, akan menemanimu memberi petunjuk.',
   chain:BIOMES.sawah.chain},
- {h:'Kesehatan & Hari',p:'Perhatikan <b>Kesehatan Ekosistem</b> di atas dan <b>jumlah Hari</b>. Setiap hari kondisi ekosistem berubah sendiri: air menyusut, hama berkembang, racun menyebar. Jika kesehatan jatuh, ekosistem hancur. Selesaikan 3 target misi sebelum waktu habis!',chain:null},
+ {h:'Keseimbangan & Hari',p:'Perhatikan <b>Keseimbangan Ekosistem</b> di atas dan <b>jumlah Hari</b>. Setiap hari kondisi ekosistem berubah sendiri: air menyusut, hama berkembang, racun menyebar. Jika keseimbangan jatuh, ekosistem hancur. Selesaikan 3 target misi sebelum waktu habis!',chain:null},
  {h:'Kartu Aksi',p:'Di bawah layar ada <b>3 kartu aksi</b>. Setiap aksi punya <b>kuota</b> (jumlah pemakaian) dan <b>masa istirahat</b> (cooldown) antar pemakaian — gunakan dengan strategis! Tim pilihanmu punya <b>keahlian khusus</b>: aksi andalannya dapat bonus kuota dan cooldown lebih singkat.',chain:null},
  {h:'Musyawarah & Kamus',p:'Di hari tertentu kita berhenti sejenak untuk <b>musyawarah kelas</b>: pilih satu aksi gratis bersama-sama! Jangan lupa buka <b>Kamus Alam</b> untuk belajar istilah baru. Jawab kuis di akhir misi untuk bintang ekstra. Selamat berjuang, Detektif!',chain:null}];
 function buildTutorial(){tutIdx=0;renderTut();}

@@ -117,7 +117,7 @@ function buildMissionMenu(biomeKey) {
       </div>
 
       <!-- MAIN CAROUSEL -->
-      <div class="mmenu" style="display:flex;align-items:center;justify-content:center;height:calc(100vh - 180px);margin-top:140px;position:relative;flex-direction:column;width:100%;">
+      <div class="mmenu" style="position:absolute;top:120px;bottom:30px;left:0;right:0;display:flex;align-items:center;justify-content:center;flex-direction:column;">
         
         <div style="display:flex;align-items:center;justify-content:center;width:100%;gap:40px;">
           <button class="btn btn-gold" id="car-prev" style="width:90px;height:90px;border-radius:50%;font-size:36px;padding:0;z-index:20;flex-shrink:0;">◀</button>

@@ -77,11 +77,19 @@ let toastT1 = null, toastT2 = null;
 function toast(msg, ms = 2800) {
   const r = el('#toast-root');
   if (!r) return;
-  r.innerHTML = '<div class="toast">' + msg + '</div>';
+  r.innerHTML = '<div class="toast" title="Ketuk untuk menutup">' + msg + '</div>';
   clearTimeout(toastT1);
   clearTimeout(toastT2);
+  const t = r.firstChild;
+  if (t) {
+    t.onclick = () => {
+      t.style.opacity = '0';
+      clearTimeout(toastT1);
+      clearTimeout(toastT2);
+      toastT2 = setTimeout(() => { r.innerHTML = ''; }, 200);
+    };
+  }
   toastT1 = setTimeout(() => {
-    const t = r.firstChild;
     if (t) t.style.opacity = '0';
   }, ms);
   toastT2 = setTimeout(() => {
