@@ -65,38 +65,48 @@ function buildMissionMenu(biomeKey) {
   function renderCard(m, list, subIdx, colLabel, globalIdx) {
     const st = G.stars[m.id] || 0;
     const un = isUnlocked(m, list, subIdx);
-    const badgeColor = m.type === 'alam' ? '#047857' : '#b45309';
     const badgeIcon = m.type === 'alam' ? '🍃' : '⚠️';
     const badgeText = m.type === 'alam' ? 'TANTANGAN ALAM' : 'TANTANGAN MANUSIA';
-    const glowColor = m.type === 'alam' ? 'rgba(4, 120, 87, 0.6)' : 'rgba(180, 83, 9, 0.6)';
 
     return `
-      <div class="mcard carousel-slide ${un ? '' : 'locked'}" id="mcard-${globalIdx}" style="display:${globalIdx === 0 ? 'flex' : 'none'};flex-direction:column;width:100%;height:auto;padding:32px;border-radius:24px;background:rgba(15, 35, 25, 0.85);backdrop-filter:blur(16px);border:3px solid ${badgeColor};box-shadow:0 16px 40px ${glowColor}, inset 0 0 20px ${glowColor};transform:translateY(-10px);transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
-        <div class="mcard-badge" style="margin-top:-54px;background:${badgeColor};color:#fff;padding:8px 24px;border-radius:20px;font-family:var(--font-fun);align-self:center;margin-bottom:16px;font-size:24px;box-shadow:0 6px 12px rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.2);">
-           ${badgeIcon} ${badgeText}
+      <div class="mcard carousel-slide ${un ? '' : 'locked'} biome-${m.biome}" id="mcard-${globalIdx}" style="display:${globalIdx === 0 ? 'flex' : 'none'};">
+        <!-- 4 CORNER BRACKETS -->
+        <div class="mcard-corner mc-tl"></div>
+        <div class="mcard-corner mc-tr"></div>
+        <div class="mcard-corner mc-bl"></div>
+        <div class="mcard-corner mc-br"></div>
+
+        <!-- BADGE KATEGORI KASUS -->
+        <div class="mcard-badge ${m.type}">
+           ${badgeIcon} <span>${badgeText}</span>
         </div>
-        <div class="mcard-header" style="flex-direction:column;text-align:center;gap:8px;margin-bottom:16px;">
-          <div class="micon ${m.type}" style="width:90px;height:90px;margin:0 auto;font-size:48px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);border:2px solid ${badgeColor};">${ic(m.type === 'manusia' ? 'users' : BICON[m.biome], 48)}</div>
-          <div class="mtype-wrap" style="align-items:center;">
-            <div class="mcard-subnum" style="font-size:24px;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:1px;text-transform:uppercase;margin-top:12px;">${colLabel} • KASUS 0${subIdx + 1}</div>
-            <div class="mtitle" style="font-size:38px;margin-top:6px;text-shadow:0 2px 4px rgba(0,0,0,0.5);">${m.title}</div>
+
+        <div class="mcard-header">
+          <div class="micon ${m.type}">
+            ${ic(m.type === 'manusia' ? 'users' : BICON[m.biome], 46)}
           </div>
-          <div class="mstars" style="font-size:40px;justify-content:center;margin-top:12px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));">
+          <div class="mtype-wrap">
+            <div class="mcard-subnum">${colLabel} • KASUS 0${subIdx + 1}</div>
+            <div class="mtitle">${m.title}</div>
+          </div>
+          <div class="mstars">
             ${[0, 1, 2].map(k => `<span class="${k < st ? '' : 'off'}">★</span>`).join('')}
           </div>
         </div>
 
-        <div class="mbody" style="text-align:center;font-size:24px;margin-bottom:24px;flex:1;">
-          <div class="mhead" style="margin-bottom:16px;color:#fff;line-height:1.4;">${m.headline}</div>
-          <div class="mtask" style="color:#9fd8c3;background:rgba(0,0,0,0.3);padding:16px;border-radius:16px;border-left:6px solid ${badgeColor};text-align:left;line-height:1.4;"><b>Tugas:</b> ${m.task}</div>
+        <div class="mbody">
+          <div class="mhead">${m.headline}</div>
+          <div class="mtask">
+            <span class="mtask-lbl">Tugas Investigasi:</span> ${m.task}
+          </div>
         </div>
 
-        <div class="mcard-action" style="margin-top:auto;padding-top:14px;margin-bottom:6px;">
+        <div class="mcard-action">
           ${un
             ? `<button class="btn btn-gold go btn-mission-cta" data-id="${m.id}">
                  <span>${st ? 'Ulangi Kasus Ini' : 'Mulai Investigasi!'}</span> <span class="btn-emoji" style="-webkit-text-stroke:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));">🚀</span>
                </button>`
-            : `<button class="btn go btn-mission-cta" disabled>
+            : `<button class="btn go btn-mission-cta btn-locked" disabled>
                  ${ic('lock', 26)} <span>Selesaikan Kasus 0${subIdx} (Min. 1⭐)</span>
                </button>`
           }

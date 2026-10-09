@@ -31,7 +31,7 @@ function howSteps(){
       illus: 'actions' },
     { badge: 'Langkah 4 &bull; 48 Bintang', title: 'MUSYAWARAH &amp; KUIS C2',
       desc: 'Di hari musyawarah, simulasi dijeda untuk <b>voting kelas</b> menggunakan kartu fisik 3 warna! Manfaatkan <b>Kamus Alam</b> dan selesaikan <b>kuis sebab-akibat C2</b> di akhir misi untuk mengumpulkan total <b>48 Bintang Prestasi</b> (12 bintang per kelompok).',
-      extra: '<div class="bento-stars-row"><span class="star-chip">★ Kesehatan &ge; 75%</span>'
+      extra: '<div class="bento-stars-row"><span class="star-chip">★ Keseimbangan &ge; 75%</span>'
         + '<span class="star-chip">★★ Lulus Kuis C2</span>'
         + '<span class="star-chip">★★★ Percobaan Pertama</span></div>',
       illus: 'vote' }

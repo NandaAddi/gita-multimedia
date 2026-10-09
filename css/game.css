@@ -91,6 +91,10 @@
   /* Status */ --good:#2ec98b; --warn:#f5c445; --danger:#ff5c4d; --danger-deep:#b03a3a;
   /* Identitas tim (diredam alami) */ --team-ular:#c2410c; --team-ular-deep:#7c2d12;
   --team-elang:#0369a1; --team-elang-deep:#0c4a6e; --team-katak:#0e7490; --team-katak-deep:#134e4a;
+
+  /* ===== CUSTOM THEMED CURSORS (DETEKTIF PETUALANG) ===== */
+  --cur-default: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMicgaGVpZ2h0PSczMicgdmlld0JveD0nMCAwIDMyIDMyJz4KICA8IS0tIERhcmsgc2hhZG93IHVuZGVyLWxheWVyIC0tPgogIDxwYXRoIGQ9J00xNSAxNyBDMTggMTMgMjUgMTMgMjcgMTkgQzI0IDI1IDE3IDI0IDE1IDE3IFonIGZpbGw9JyMwMjJjMjInLz4KICA8cGF0aCBkPSdNMyAzIEwxMyAyOCBMMTcgMTggTDI3IDE0IFonIGZpbGw9JyMxYzBhMDAnLz4KICA8IS0tIExlYWYgLS0+CiAgPHBhdGggZD0nTTE0IDE2IEMxNyAxMiAyNCAxMiAyNiAxOCBDMjMgMjQgMTYgMjMgMTQgMTYgWicgZmlsbD0nIzEwYjk4MScgc3Ryb2tlPScjMDQ3ODU3JyBzdHJva2Utd2lkdGg9JzEnLz4KICA8cGF0aCBkPSdNMTUgMTYgUTIwIDE4IDI1IDE4JyBzdHJva2U9JyNhN2YzZDAnIHN0cm9rZS13aWR0aD0nMScgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBmaWxsPSdub25lJy8+CiAgPCEtLSBBcnJvdyBIZWFkIC0tPgogIDxwYXRoIGQ9J00yIDIgTDEyIDI2IEwxNiAxNiBMMjYgMTIgWicgZmlsbD0nI2Y1OWUwYicgc3Ryb2tlPScjNzgzNTBmJyBzdHJva2Utd2lkdGg9JzEuNScgc3Ryb2tlLWxpbmVqb2luPSdyb3VuZCcvPgogIDwhLS0gSW5uZXIgSGlnaGxpZ2h0IC0tPgogIDxwYXRoIGQ9J000IDUgTDExIDIyIEwxNCAxNSBMMjIgMTIgWicgZmlsbD0nI2ZiYmYyNCcvPgogIDxwYXRoIGQ9J000IDUgTDEwIDE0IEwxNCAxNSBaJyBmaWxsPScjZmVmMDhhJy8+CiAgPCEtLSBSZWQgUnVieSBDb21wYXNzIEpld2VsIC0tPgogIDxjaXJjbGUgY3g9JzEwJyBjeT0nMTEnIHI9JzIuNScgZmlsbD0nI2VmNDQ0NCcgc3Ryb2tlPScjZmZmZmZmJyBzdHJva2Utd2lkdGg9JzAuOCcvPgo8L3N2Zz4=") 2 2, auto;
+  --cur-pointer: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMicgaGVpZ2h0PSczMicgdmlld0JveD0nMCAwIDMyIDMyJz4KICA8IS0tIERhcmsgU2hhZG93IC0tPgogIDxwYXRoIGQ9J005IDIgQzcuNSAyIDYgMy41IDYgNSBMNiAxNCBMNC41IDE0IEMyLjUgMTQgMSAxNS41IDEgMTcuNSBDMSAyMyA1IDI4IDExIDI4IEMxNi41IDI4IDIxIDI0IDIxIDE5IEwyMSAxMyBDMjEgMTEuNSAxOS41IDEwIDE4IDEwIEMxNy43IDEwIDE3LjMgMTAuMSAxNyAxMC4yIEMxNi43IDguOSAxNS41IDggMTQgOCBDMTMuNyA4IDEzLjMgOC4xIDEzIDguMiBDMTIuNyA2LjkgMTEuNSA2IDEwIDYgTDEwIDUgQzEwIDMuNSA5LjUgMiA5IDIgWicgZmlsbD0nIzFjMGEwMCcvPgogIDwhLS0gUG9pbnRpbmcgSGFuZCBCb2R5IC0tPgogIDxwYXRoIGQ9J004IDEgQzYuNSAxIDUgMi41IDUgNCBMNSAxMyBMMy41IDEzIEMxLjUgMTMgMCAxNC41IDAgMTYuNSBDMCAyMiA0IDI3IDEwIDI3IEMxNS41IDI3IDIwIDIzIDIwIDE4IEwyMCAxMiBDMjAgMTAuNSAxOC41IDkgMTcgOSBDMTYuNyA5IDE2LjMgOS4xIDE2IDkuMiBDMTUuNyA3LjkgMTQuNSA3IDEzIDcgQzEyLjcgNyAxMi4zIDcuMSAxMiA3LjIgQzExLjcgNS45IDEwLjUgNSA5IDUgTDkgNCBDOSAyLjUgOC41IDEgOCAxIFonIGZpbGw9JyNmNTllMGInIHN0cm9rZT0nIzc4MzUwZicgc3Ryb2tlLXdpZHRoPScxLjUnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnLz4KICA8IS0tIEZpbmdlciBjcmVhc2VzIC0tPgogIDxwYXRoIGQ9J005IDExIEw5IDE4JyBzdHJva2U9JyM3ODM1MGYnIHN0cm9rZS13aWR0aD0nMS4yJyBzdHJva2UtbGluZWNhcD0ncm91bmQnLz4KICA8cGF0aCBkPSdNMTMgMTIgTDEzIDE4JyBzdHJva2U9JyM3ODM1MGYnIHN0cm9rZS13aWR0aD0nMS4yJyBzdHJva2UtbGluZWNhcD0ncm91bmQnLz4KICA8cGF0aCBkPSdNMTYgMTMgTDE2IDE4JyBzdHJva2U9JyM3ODM1MGYnIHN0cm9rZS13aWR0aD0nMS4yJyBzdHJva2UtbGluZWNhcD0ncm91bmQnLz4KICA8IS0tIEluZGV4IGhpZ2hsaWdodCAtLT4KICA8cGF0aCBkPSdNNy41IDMgTDcuNSAxMCcgc3Ryb2tlPScjZmVmMDhhJyBzdHJva2Utd2lkdGg9JzEnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPgogIDwhLS0gRXhwbG9yZXIgR3JlZW4gQ3VmZiAtLT4KICA8cmVjdCB4PSc0JyB5PScyMicgd2lkdGg9JzEzJyBoZWlnaHQ9JzUnIHJ4PScxLjUnIGZpbGw9JyMwNDc4NTcnIHN0cm9rZT0nIzAyMmMyMicgc3Ryb2tlLXdpZHRoPScxJy8+CiAgPHJlY3QgeD0nOC41JyB5PScyMycgd2lkdGg9JzQnIGhlaWdodD0nMycgcng9JzAuOCcgZmlsbD0nI2ZlZjA4YScvPgo8L3N2Zz4=") 8 1, pointer;
 }
 
 /* ECO-EXPLORER — IFP CSS STYLES (STANDAR >= 24px) */
@@ -100,7 +104,20 @@
 button:focus:not(:focus-visible),[role="button"]:focus:not(:focus-visible){outline:none}
 button:focus-visible,[role="button"]:focus-visible{outline:2px solid rgba(255,255,255,.6);outline-offset:2px}
 .modal p,.modal ul,.modal li,.kdetail,.gita-bubble{user-select:text;-webkit-user-select:text}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--panel-deep);font-family:var(--font-body);touch-action:manipulation}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--panel-deep);font-family:var(--font-body);touch-action:manipulation;cursor:var(--cur-default)}
+
+/* DETEKTIF PETUALANG INTERACTIVE POINTER HAND (SARUNG TANGAN KUNING-EMAS DENGAN MANSET ZAMRUD) */
+button, a, select, input, label,
+.btn, .btn-hero-pick, .stage-close-x, .arcade-arrow, .cdot, .ktab, .tab, .mcard,
+.qopt, .vote-card, .btn-act, .btn-wood, .btn-green, .btn-gold, .btn-outline,
+.hero-dock-item, .dock-card, .qtext, [role="button"], [style*="cursor: pointer"], [style*="cursor:pointer"],
+.clickable, [onclick] {
+  cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMicgaGVpZ2h0PSczMicgdmlld0JveD0nMCAwIDMyIDMyJz4KICA8IS0tIERhcmsgU2hhZG93IC0tPgogIDxwYXRoIGQ9J005IDIgQzcuNSAyIDYgMy41IDYgNSBMNiAxNCBMNC41IDE0IEMyLjUgMTQgMSAxNS41IDEgMTcuNSBDMSAyMyA1IDI4IDExIDI4IEMxNi41IDI4IDIxIDI0IDIxIDE5IEwyMSAxMyBDMjEgMTEuNSAxOS41IDEwIDE4IDEwIEMxNy43IDEwIDE3LjMgMTAuMSAxNyAxMC4yIEMxNi43IDguOSAxNS41IDggMTQgOCBDMTMuNyA4IDEzLjMgOC4xIDEzIDguMiBDMTIuNyA2LjkgMTEuNSA2IDEwIDYgTDEwIDUgQzEwIDMuNSA5LjUgMiA5IDIgWicgZmlsbD0nIzFjMGEwMCcvPgogIDwhLS0gUG9pbnRpbmcgSGFuZCBCb2R5IC0tPgogIDxwYXRoIGQ9J004IDEgQzYuNSAxIDUgMi41IDUgNCBMNSAxMyBMMy41IDEzIEMxLjUgMTMgMCAxNC41IDAgMTYuNSBDMCAyMiA0IDI3IDEwIDI3IEMxNS41IDI3IDIwIDIzIDIwIDE4IEwyMCAxMiBDMjAgMTAuNSAxOC41IDkgMTcgOSBDMTYuNyA5IDE2LjMgOS4xIDE2IDkuMiBDMTUuNyA3LjkgMTQuNSA3IDEzIDcgQzEyLjcgNyAxMi4zIDcuMSAxMiA3LjIgQzExLjcgNS45IDEwLjUgNSA5IDUgTDkgNCBDOSAyLjUgOC41IDEgOCAxIFonIGZpbGw9JyNmNTllMGInIHN0cm9rZT0nIzc4MzUwZicgc3Ryb2tlLXdpZHRoPScxLjUnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnLz4KICA8IS0tIEZpbmdlciBjcmVhc2VzIC0tPgogIDxwYXRoIGQ9J005IDExIEw5IDE4JyBzdHJva2U9JyM3ODM1MGYnIHN0cm9rZS13aWR0aD0nMS4yJyBzdHJva2UtbGluZWNhcD0ncm91bmQnLz4KICA8cGF0aCBkPSdNMTMgMTIgTDEzIDE4JyBzdHJva2U9JyM3ODM1MGYnIHN0cm9rZS13aWR0aD0nMS4yJyBzdHJva2UtbGluZWNhcD0ncm91bmQnLz4KICA8cGF0aCBkPSdNMTYgMTMgTDE2IDE4JyBzdHJva2U9JyM3ODM1MGYnIHN0cm9rZS13aWR0aD0nMS4yJyBzdHJva2UtbGluZWNhcD0ncm91bmQnLz4KICA8IS0tIEluZGV4IGhpZ2hsaWdodCAtLT4KICA8cGF0aCBkPSdNNy41IDMgTDcuNSAxMCcgc3Ryb2tlPScjZmVmMDhhJyBzdHJva2Utd2lkdGg9JzEnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPgogIDwhLS0gRXhwbG9yZXIgR3JlZW4gQ3VmZiAtLT4KICA8cmVjdCB4PSc0JyB5PScyMicgd2lkdGg9JzEzJyBoZWlnaHQ9JzUnIHJ4PScxLjUnIGZpbGw9JyMwNDc4NTcnIHN0cm9rZT0nIzAyMmMyMicgc3Ryb2tlLXdpZHRoPScxJy8+CiAgPHJlY3QgeD0nOC41JyB5PScyMycgd2lkdGg9JzQnIGhlaWdodD0nMycgcng9JzAuOCcgZmlsbD0nI2ZlZjA4YScvPgo8L3N2Zz4=") 8 1, pointer !important;
+}
+
+.dock-card:active {
+  cursor: grabbing !important;
+}
 #stage{
   position:absolute;left:50%;top:50%;width:1920px;height:1080px;
   transform:translate(-50%,-50%) scale(1);
@@ -401,41 +418,180 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
   position: absolute;
   left: 140px;
   right: 140px;
-  top: 180px;
-  height: 640px;
-  padding: 36px 54px;
+  top: 175px;
+  height: 650px;
+  padding: 38px 54px 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(6,56,44,.98) 0%, rgba(2,34,26,.99) 100%);
-  border-radius: 36px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, .65), inset 0 2px 0 rgba(255, 255, 255, .12);
+  background: linear-gradient(180deg, #fbf2d5 0%, #f6e2b0 100%) !important;
+  border: 14px solid #f59e0b;
+  border-radius: 46px;
+  outline: 6px solid #4a2810;
+  outline-offset: -14px;
+  box-shadow: 
+    0 24px 64px rgba(0, 0, 0, 0.7),
+    0 10px 0 #b45309,
+    0 10px 0 6px #3b1d08,
+    inset 0 4px 0 rgba(255, 255, 255, 0.65),
+    inset 0 0 0 16px #6b3917,
+    inset 0 0 0 20px #3e1b08,
+    inset 0 12px 24px rgba(62, 27, 8, 0.35);
   touch-action: pan-y;
   user-select: none;
+  overflow: visible;
 }
 
-/* ARCADE 3D NAV BUTTONS (CASUAL JELLY) */
+/* Jahitan Benang Kulit Di Bagian Dalam */
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 2.5px dashed rgba(245, 158, 11, 0.7);
+  border-radius: 30px;
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: 0 0 2px rgba(62, 27, 8, 0.4);
+}
+
+/* 4 Sudut Brass/Emas Dekoratif (Corner Brackets) */
+.stage-corner {
+  position: absolute;
+  width: 58px;
+  height: 58px;
+  pointer-events: none;
+  z-index: 12;
+  border-color: #fde047;
+  border-style: solid;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.stage-corner::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f59e0b;
+  border: 1.5px solid #78350f;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.8);
+}
+
+.stage-corner.sc-tl {
+  top: -10px;
+  left: -10px;
+  border-width: 12px 0 0 12px;
+  border-top-left-radius: 46px;
+}
+.stage-corner.sc-tl::after {
+  top: 6px;
+  left: 6px;
+}
+
+.stage-corner.sc-tr {
+  top: -10px;
+  right: -10px;
+  border-width: 12px 12px 0 0;
+  border-top-right-radius: 46px;
+}
+.stage-corner.sc-tr::after {
+  top: 6px;
+  right: 6px;
+}
+
+.stage-corner.sc-bl {
+  bottom: -10px;
+  left: -10px;
+  border-width: 0 0 12px 12px;
+  border-bottom-left-radius: 46px;
+}
+.stage-corner.sc-bl::after {
+  bottom: 6px;
+  left: 6px;
+}
+
+.stage-corner.sc-br {
+  bottom: -10px;
+  right: -10px;
+  border-width: 0 12px 12px 0;
+  border-bottom-right-radius: 46px;
+}
+.stage-corner.sc-br::after {
+  bottom: 6px;
+  right: 6px;
+}
+
+/* Tombol Merah X (Close) di Sudut Kanan Atas */
+.stage-close-x {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #f87171 0%, #dc2626 55%, #991b1b 100%);
+  border: 4px solid #fef2f2;
+  color: #ffffff;
+  font-family: var(--font-fun);
+  font-weight: 900;
+  font-size: 26px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 25;
+  box-shadow: 
+    0 8px 18px rgba(0, 0, 0, 0.5),
+    0 4px 0 #7f1d1d,
+    0 4px 0 2px #450a0a,
+    inset 0 3px 0 rgba(255, 255, 255, 0.6);
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.1s cubic-bezier(0.4, 0, 0.2, 1), filter 0.15s;
+}
+
+.stage-close-x:hover {
+  filter: brightness(1.1);
+}
+
+.stage-close-x:active {
+  transform: translateY(4px);
+  box-shadow: 
+    0 4px 10px rgba(0, 0, 0, 0.5),
+    0 1px 0 #7f1d1d,
+    0 1px 0 2px #450a0a,
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+
+/* ARCADE 3D NAV BUTTONS (CIRCULAR 3D JELLY) */
 .arcade-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 78px;
-  height: 114px;
+  width: 90px;
+  height: 90px;
   border: 4px solid #4a3018;
-  border-radius: 24px;
+  border-radius: 50%;
   background: linear-gradient(180deg, #fde047 0%, #f59e0b 100%);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: var(--font-fun);
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  padding: 0;
   cursor: pointer;
-  z-index: 10;
+  z-index: 20;
+  -webkit-text-stroke: 2px #4a3018;
+  paint-order: stroke fill;
   box-shadow: inset 0 8px 0 rgba(255,255,255,0.45), inset 0 -8px 0 rgba(0,0,0,0.15), 0 10px 0 #b45309, 0 10px 0 4px #4a3018, 0 20px 24px rgba(0,0,0,0.4);
-  transition: transform .1s cubic-bezier(0.4, 0, 0.2, 1), box-shadow .1s cubic-bezier(0.4, 0, 0.2, 1), background .25s ease;
+  transition: transform .1s cubic-bezier(0.4, 0, 0.2, 1), box-shadow .1s cubic-bezier(0.4, 0, 0.2, 1), filter .15s;
 }
 
-.arcade-arrow svg {
-  filter: drop-shadow(0px 3px 0px rgba(74,48,24,0.8));
+.arcade-arrow:hover {
+  filter: brightness(1.08);
 }
 
 .arcade-arrow:active {
@@ -444,11 +600,11 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 }
 
 .arcade-arrow.prev {
-  left: -39px;
+  left: -45px;
 }
 
 .arcade-arrow.next {
-  right: -39px;
+  right: -45px;
 }
 
 /* SLIDING HERO WRAPPER */
@@ -532,17 +688,19 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 }
 
 .hero-name-plate {
-  background: rgba(2, 44, 34, .95);
+  background: linear-gradient(180deg, #064e3b 0%, #022c22 100%);
+  border: 3.5px solid #d97706;
   padding: 10px 44px;
   border-radius: 999px;
   font-family: var(--font-fun);
-  font-weight: 700;
+  font-weight: 800;
   font-size: 38px;
-  color: var(--gold);
-  text-shadow: 0 3px 0 rgba(0, 0, 0, .4);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, .35);
+  color: #fef08a;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), 0 4px 0 #78350f, inset 0 2px 0 rgba(255, 255, 255, 0.25);
   text-align: center;
   white-space: nowrap;
+  z-index: 4;
 }
 
 /* HERO RIGHT (DOSSIER & PERKS) */
@@ -557,44 +715,50 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 .hero-motto {
   font-family: var(--font-fun);
   font-style: italic;
-  font-size: 27px;
-  color: var(--sky);
-  text-shadow: 0 2px 6px rgba(0, 0, 0, .35);
+  font-weight: 800;
+  font-size: 28px;
+  color: #78350f;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
   line-height: 1.35;
+  z-index: 4;
 }
 
 .hero-dossier {
-  background: rgba(2, 44, 34, .85);
+  background: linear-gradient(180deg, rgba(6, 78, 59, 0.96) 0%, rgba(2, 44, 34, 0.98) 100%);
+  border: 3.5px solid #d97706;
   border-radius: 24px;
-  padding: 24px 32px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .08);
+  padding: 22px 30px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), 0 4px 0 #78350f, inset 0 2px 0 rgba(255, 255, 255, 0.15);
+  z-index: 4;
 }
 
 .doss-role {
   font-family: var(--font-fun);
-  font-weight: 700;
+  font-weight: 800;
   font-size: 30px;
-  color: var(--gold);
+  color: #fde047;
   margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .doss-desc {
   font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 25px;
-  line-height: 1.6;
-  color: #e6fcf0;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.55;
+  color: #ffffff;
 }
 
 .hero-spec {
   display: flex;
   align-items: center;
   gap: 16px;
-  background: rgba(58, 44, 7, .92);
+  background: linear-gradient(180deg, #78350f 0%, #451a03 100%);
+  border: 3px solid #f59e0b;
   border-radius: 20px;
-  border: none;
-  padding: 14px 28px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .08);
+  padding: 12px 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 3px 0 #3e1b08, inset 0 2px 0 rgba(255, 255, 255, 0.25);
+  z-index: 4;
 }
 
 .spec-ic {
@@ -607,9 +771,9 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 
 .spec-txt {
   font-family: var(--font-fun);
-  font-weight: 600;
-  font-size: 25px;
-  color: var(--gold);
+  font-weight: 800;
+  font-size: 23px;
+  color: #fef08a;
   line-height: 1.4;
 }
 
@@ -3495,6 +3659,223 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ============================================================
+   MISSION CARD (MCARD) — ADVENTURE WOODEN PARCHMENT BOX THEME
+   Sesuai Gaya Kotak Berkas Petualang Detektif Nusantara
+   ============================================================ */
+.mcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  min-height: 540px;
+  padding: 34px 44px 30px;
+  border-radius: 38px;
+  background: linear-gradient(180deg, #fbf2d5 0%, #f6e2b0 100%) !important;
+  border: 11px solid #f59e0b;
+  outline: 5px solid #4a2810;
+  outline-offset: -11px;
+  box-shadow: 
+    0 24px 54px rgba(0, 0, 0, 0.7),
+    0 8px 0 #b45309,
+    0 8px 0 5px #3b1d08,
+    inset 0 3px 0 rgba(255, 255, 255, 0.7),
+    inset 0 0 0 13px #6b3917,
+    inset 0 0 0 16px #3e1b08,
+    inset 0 10px 22px rgba(62, 27, 8, 0.28);
+  transform: translateY(-8px);
+  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: visible;
+  user-select: none;
+}
+
+/* Jahitan Benang Kulit Di Bagian Dalam Card */
+.mcard::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 2px dashed rgba(180, 83, 9, 0.65);
+  border-radius: 26px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 4 Sudut Brass/Emas Dekoratif pada Card */
+.mcard-corner {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  pointer-events: none;
+  z-index: 12;
+  border-color: #fde047;
+  border-style: solid;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.45));
+}
+.mcard-corner::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+  border: 1.5px solid #78350f;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.8);
+}
+.mcard-corner.mc-tl { top: -8px; left: -8px; border-width: 9px 0 0 9px; border-top-left-radius: 36px; }
+.mcard-corner.mc-tl::after { top: 5px; left: 5px; }
+.mcard-corner.mc-tr { top: -8px; right: -8px; border-width: 9px 9px 0 0; border-top-right-radius: 36px; }
+.mcard-corner.mc-tr::after { top: 5px; right: 5px; }
+.mcard-corner.mc-bl { bottom: -8px; left: -8px; border-width: 0 0 9px 9px; border-bottom-left-radius: 36px; }
+.mcard-corner.mc-bl::after { bottom: 5px; left: 5px; }
+.mcard-corner.mc-br { bottom: -8px; right: -8px; border-width: 0 9px 9px 0; border-bottom-right-radius: 36px; }
+.mcard-corner.mc-br::after { bottom: 5px; right: 5px; }
+
+/* Badge Kategori */
+.mcard-badge {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 28px;
+  border-radius: 20px;
+  font-family: var(--font-fun);
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  z-index: 15;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.45), 0 3px 0 rgba(0,0,0,0.3);
+  border: 2.5px solid #fef08a;
+  letter-spacing: 1px;
+}
+.mcard-badge.alam {
+  background: linear-gradient(180deg, #059669 0%, #047857 100%);
+}
+.mcard-badge.manusia {
+  background: linear-gradient(180deg, #d97706 0%, #b45309 100%);
+}
+
+.mcard-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  z-index: 3;
+}
+
+.micon {
+  width: 78px;
+  height: 78px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #fef08a 0%, #f59e0b 100%);
+  border: 3.5px solid #78350f;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25), inset 0 2px 0 rgba(255,255,255,0.7);
+  color: #78350f;
+}
+
+.mcard-subnum {
+  font-family: var(--font-fun);
+  font-size: 22px;
+  font-weight: 800;
+  color: #78350f;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.mtitle {
+  font-family: var(--font-fun);
+  font-size: 36px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-top: 4px;
+  line-height: 1.25;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.mstars {
+  display: flex;
+  gap: 8px;
+  font-size: 38px;
+  color: #f59e0b;
+  justify-content: center;
+  margin-top: 4px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+}
+.mstars .off {
+  color: rgba(180, 83, 9, 0.25);
+  filter: none;
+}
+
+.mbody {
+  text-align: center;
+  margin-bottom: 16px;
+  flex: 1;
+  z-index: 3;
+}
+
+.mhead {
+  font-family: var(--font-body);
+  font-size: 24px;
+  font-weight: 700;
+  color: #451a03;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.mtask {
+  background: linear-gradient(180deg, #064e3b 0%, #022c22 100%);
+  border: 3px solid #d97706;
+  border-radius: 18px;
+  padding: 14px 22px;
+  font-family: var(--font-body);
+  font-size: 23px;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: left;
+  line-height: 1.45;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25), inset 0 2px 0 rgba(255,255,255,0.15);
+}
+.mtask-lbl {
+  font-family: var(--font-fun);
+  font-weight: 800;
+  color: #fde047;
+  display: inline;
+}
+
+.mcard-action {
+  margin-top: auto;
+  padding-top: 6px;
+  text-align: center;
+  z-index: 3;
+}
+
+.btn-mission-cta {
+  min-width: 380px;
+  font-size: 25px;
+  padding: 14px 34px;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}
+.btn-locked {
+  background: #64748b !important;
+  border-color: #334155 !important;
+  color: #cbd5e1 !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
 }
 
 

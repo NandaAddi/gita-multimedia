@@ -44,18 +44,24 @@ function buildTeam() {
         <button class="btn tb-btn" id="t-back">${ic('back', 24)} Judul</button>
         <div class="plaque">Pilih Kelompok Detektifmu</div>
         <div class="spacer"></div>
+        <button class="btn tb-btn snd-btn" id="t-snd"></button>
         <div class="tb-stars">${ic('star', 24)} <b>${totStars()}/48</b></div>
       </div>
 
-      <!-- MAIN HERO SHOWCASE STAGE -->
+      <!-- MAIN HERO SHOWCASE STAGE (PARCHMENT LEATHER GOLD BOX) -->
       <div class="stage panel-deep" id="team-stage">
-        <!-- ARCADE 3D NAV BUTTONS -->
-        <button class="arrow prev arcade-arrow" id="t-prev" aria-label="Kelompok Sebelumnya">
-          ${ic('back', 44)}
-        </button>
-        <button class="arrow next arcade-arrow" id="t-next" aria-label="Kelompok Berikutnya">
-          ${ic('arrowR', 44)}
-        </button>
+        <!-- 4 GOLDEN CORNER BRACKETS -->
+        <div class="stage-corner sc-tl"></div>
+        <div class="stage-corner sc-tr"></div>
+        <div class="stage-corner sc-bl"></div>
+        <div class="stage-corner sc-br"></div>
+
+        <!-- TOP RIGHT RED CLOSE BUTTON -->
+        <button class="stage-close-x" id="t-close-x" title="Kembali ke Judul" aria-label="Tutup / Kembali">✕</button>
+
+        <!-- ARCADE 3D NAV BUTTONS (CIRCULAR 3D JELLY) -->
+        <button class="arrow prev arcade-arrow btn btn-gold" id="t-prev" aria-label="Kelompok Sebelumnya">◀</button>
+        <button class="arrow next arcade-arrow btn btn-gold" id="t-next" aria-label="Kelompok Berikutnya">▶</button>
 
         <!-- SLIDING HERO CARD INNER -->
         <div class="hero-inner-wrap" id="hero-wrap">
@@ -89,20 +95,26 @@ function buildTeam() {
   `;
 
   // Navigation handlers
+  const onBackToTitle = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    sfx.back();
+    go('title');
+  };
+
   const tBackBtn = el('#t-back');
-  if (tBackBtn) {
-    tBackBtn.onclick = (e) => {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      sfx.back();
-      go('title');
-    };
-  }
+  if (tBackBtn) tBackBtn.onclick = onBackToTitle;
+
+  const tCloseX = el('#t-close-x');
+  if (tCloseX) tCloseX.onclick = onBackToTitle;
 
   el('#t-prev').onclick = () => navigateTeam(-1);
   el('#t-next').onclick = () => navigateTeam(1);
+  const tSndBtn = el('#t-snd');
+  if (tSndBtn) tSndBtn.onclick = toggleSound;
+  if (typeof syncSound === 'function') syncSound();
 
   // Swipe gesture handlers for IFP Touchscreen (Pointer Lock & Gesture Isolation)
   const stage = el('#team-stage');
