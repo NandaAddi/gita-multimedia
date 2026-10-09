@@ -65,7 +65,7 @@ Sistem audio game telah diprogram otomatis mengenali 72 kode file vokal berikut.
 | :---: | :--- | :--- | :--- | :--- |
 | **3** | `vo_how_intro.mp3` | Masuk Menu Cara Bermain / Klik Banner Gita | *"Halo Detektif Alam! Ekosistem Nusantara sedang dalam bahaya. Pelajari empat langkah rahasia ini agar kamu dan timmu sukses memulihkan keseimbangan alam!"* | Semangat, membimbing |
 | **4** | `vo_how_step1.mp3` | Langkah 1: Pilih Tim | *"Langkah pertama: Pilih Kelompok Detektif! Pilih salah satu dari empat kelompok penjaga ekosistem: Sawah, Hutan, Sungai, atau Laut. Setiap kelompok bertanggung jawab menyelidiki satu ekosistem secara tuntas!"* | Jelas, artikulatif |
-| **5** | `vo_how_step2.mp3` | Langkah 2: Kesehatan & Hari | *"Langkah kedua: Pantau Bar Kesehatan Ekosistem dan target hari. Setiap hari kondisi alam berubah. Selamatkan ekosistem sebelum hari habis dan raih status sehat di atas tujuh puluh lima persen!"* | Fokus, mengingatkan |
+| **5** | `vo_how_step2.mp3` | Langkah 2: Keseimbangan & Hari | *"Langkah kedua: Pantau Bar Keseimbangan Ekosistem dan target hari. Setiap hari kondisi alam berubah. Selamatkan ekosistem sebelum hari habis dan raih status sehat di atas tujuh puluh lima persen!"* | Fokus, mengingatkan |
 | **6** | `vo_how_step3.mp3` | Langkah 3: Strategi Aksi | *"Langkah ketiga: Gunakan strategi kartu aksi di bawah layar! Ingat urutan terbaiknya: atasi ancaman terbesar lebih dulu, baru pulihkan tanaman dan hewan penghuninya!"* | Taktis, memberi tips penting |
 | **7** | `vo_how_step4.mp3` | Langkah 4: Musyawarah & Kuis | *"Langkah keempat: Di hari musyawarah, simulasi dijeda untuk voting kelas menggunakan kartu fisik tiga warna! Jawab juga kuis sebab-akibat di akhir misi untuk mengumpulkan empat puluh delapan bintang prestasi!"* | Ceria, apresiatif |
 
@@ -138,7 +138,7 @@ Sistem audio game telah diprogram otomatis mengenali 72 kode file vokal berikut.
 ### 🎮 KELOMPOK 5: MEKANIKA SIMULASI, CSCL MUSYAWARAH & EVENT (7 AUDIO TRACKS)
 | No | Kode File MP3 | Pemicu di Layar | Naskah Rekaman Vokal Gita | Nada / Emosi |
 | :---: | :--- | :--- | :--- | :--- |
-| **45** | `vo_sim_vote_call.mp3` | Modal Musyawarah Terbuka (Hari 6/14/22) | *"Hari musyawarah telah tiba! Berdiskusilah dengan Penasihat Meja selama lima belas detik: angkat kartu voting fisik hijau, kuning, atau merah untuk menentukan aksi gratis kita!"* | Lantang, memandu kelas |
+| **45** | `vo_sim_vote_call.mp3` | Modal Musyawarah Terbuka (Hari 12/24/36) | *"Hari musyawarah telah tiba! Berdiskusilah dengan Penasihat Meja selama lima belas detik: angkat kartu voting fisik hijau, kuning, atau merah untuk menentukan aksi gratis kita!"* | Lantang, memandu kelas |
 | **46** | `vo_sim_vote_done.mp3` | Pemain Memilih Kartu Voting | *"Hasil musyawarah kelas telah disepakati! Ayo segera eksekusi tindakan gratis ini bersama-sama!"* | Gembira, mendukung hasil |
 | **47** | `vo_sim_target_ok.mp3` | Salah Satu Target Misi Centang (✓) | *"Target tercapai! Hebat sekali, lanjutkan penyelidikanmu!"* | Bersorak kecil, ceria |
 | **48** | `vo_sim_all_targets.mp3` | Semua 3 Target Misi Tercapai | *"Semua target misi telah tercapai! Tekan tombol emas di bawah untuk menyelesaikan misi!"* | Kemenangan antusias |

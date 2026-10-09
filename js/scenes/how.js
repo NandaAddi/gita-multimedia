@@ -16,7 +16,7 @@ function howSteps(){
         + '<span class="bento-chip chip-katak">Detektif Sungai</span>'
         + '<span class="bento-chip chip-jamur">Detektif Laut</span></div>',
       illus: 'teams' },
-    { badge: 'Langkah 2 &bull; Eco-Health', title: 'PANTAU KESEIMBANGAN &amp; HARI',
+    { badge: 'Langkah 2 &bull; Keseimbangan', title: 'PANTAU KESEIMBANGAN &amp; HARI',
       desc: 'Perhatikan <b>Bar Keseimbangan Ekosistem</b> dan <b>Target Hari</b>. Setiap hari kondisi alam berevolusi dinamis. Selamatkan ekosistem sebelum target hari habis dan capai status <b>SEIMBANG (&ge; 75%)</b>!',
       extra: '<div class="bento-zones-row">'
         + '<span class="zone-pill zone-danger">Bahaya (&lt; 45%)</span>'
@@ -45,7 +45,7 @@ function howIllusHTML(kind){
   }
   if(kind === 'health'){
     return '<div class="mock-health"><div class="mock-day">Hari <b>12</b><span>/40</span></div>'
-      + '<div class="mock-hp"><div class="mock-hp-top"><span>Kesehatan</span><b>82%</b></div>'
+      + '<div class="mock-hp"><div class="mock-hp-top"><span>Keseimbangan</span><b>82%</b></div>'
       + '<div class="mock-hpbar"><i style="width:82%"></i></div></div>'
       + '<div class="mock-hint">Bar hijau = aman!</div></div>';
   }
@@ -156,7 +156,7 @@ function buildHow() {
       <div class="how-stepper">
         <div class="how-steps-bar">
           <button class="how-step-tab" data-s="0"><b>1</b><span>Pilih Tim</span></button>
-          <button class="how-step-tab" data-s="1"><b>2</b><span>Kesehatan</span></button>
+          <button class="how-step-tab" data-s="1"><b>2</b><span>Keseimbangan</span></button>
           <button class="how-step-tab" data-s="2"><b>3</b><span>Kartu Aksi</span></button>
           <button class="how-step-tab" data-s="3"><b>4</b><span>Kuis</span></button>
         </div>

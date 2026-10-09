@@ -88,10 +88,10 @@ ok('Render program studi S1 Teknologi Pendidikan', html.includes('S1 Teknologi P
 ok('Render Universitas Negeri Malang', html.includes('Universitas Negeri Malang'));
 ok('Render path foto profil Foto pas agita.webp', html.includes('assets/Foto pas agita.webp'));
 ok('Render judul media ECO-EXPLORER', html.includes('ECO-EXPLORER'));
-ok('Render sapaan Halo Sahabat Detektif Alam', html.includes('Halo Sahabat Detektif Alam!'));
-ok('Render teks Harmoni dalam Ekosistem (IPAS Fase C)', html.includes('Harmoni dalam Ekosistem (IPAS Fase C)'));
-ok('Render kemampuan pemahaman kausalitas C2 (tanpa tag bold acak)', html.includes('kemampuan kognitif tingkat pemahaman C2') && !html.includes('<b>C2</b>'));
-ok('Render model POE dan Jigsaw (tanpa tag bold)', html.includes('POE (Predict-Observe-Explain)') && html.includes('Jigsaw') && !html.includes('<b>POE'));
+ok('Render sapaan Halo!', html.includes('Halo!'));
+ok('Render teks Media pembelajaran game simulasi', html.includes('Media pembelajaran game simulasi'));
+ok('Render peserta didik kelas V (Fase C)', html.includes('peserta didik kelas V (Fase C)'));
+ok('Render fitur pembelajaran simulasi dan kartu aksi', html.includes('simulasi ekosistem, kartu aksi pemulihan ekosistem, musyawarah kelas'));
 ok('Bebas dari tag bold acak (tidak ada tag <b>)', !html.includes('<b>') && !html.includes('</b>'));
 ok('Bebas dari emoji slop', !/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u.test(html));
 ok('Bebas dari pill badge dan bento item berlebih', !html.includes('about-role-pill') && !html.includes('about-meta-grid') && !html.includes('about-card-badge'));

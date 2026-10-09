@@ -85,7 +85,7 @@ Guna mengukur efektivitas media simulasi *Eco-Explorer* dalam mengatasi kesenjan
 | Komponen | Spesifikasi Teknis | Landasan Ilmiah / Alasan Desain |
 | :--- | :--- | :--- |
 | **Judul Game** | *Eco-Explorer: Penjaga Keseimbangan Ekosistem* | Menumbuhkan empati lingkungan dan rasa ingin tahu sains multi-ekosistem. |
-| **Genre** | *Ecological Strategy & Collaborative Edu-Sim RPG* | Menggabungkan simulasi sains hidup dengan tantangan misi penyelamatan. |
+| **Genre / Format** | *Ecological Strategy & Collaborative Edu-Sim RPG* (Media Pembelajaran Game Simulasi IPAS) | Menggabungkan simulasi sains hidup dengan tantangan misi penyelamatan interaktif. |
 | **Kelompok Belajar** | **4 Kelompok Detektif Ekosistem (1 Kelompok = 1 Bioma):**<br>• Kelompok 1: Detektif Sawah<br>• Kelompok 2: Detektif Hutan<br>• Kelompok 3: Detektif Sungai<br>• Kelompok 4: Detektif Laut | Mendukung model pembelajaran kooperatif *Jigsaw* (Elliot Aronson), di mana setiap kelompok menjadi ahli di ekosistemnya sebelum berbagi temuan. |
 | **Cakupan Ekosistem** | **4 Bioma Nusantara:** Sawah, Hutan Tropis, Sungai Air Tawar, Laut Terumbu Karang | Memenuhi CP IPAS Fase C tentang keragaman ekosistem darat dan perairan Nusantara. |
 | **Struktur Misi** | **4 Misi per Bioma (Total 16 Misi):**<br>• 2 Misi Faktor Ulah Alam (Kemarau, Wereng, Badai, Lumpur Erosi)<br>• 2 Misi Faktor Ulah Manusia (Racun Kimia, Penebangan Liar, Bom Ikan, Limbah) | Memfasilitasi pemahaman komparatif mendalam antara dinamika alamiah vs ulah perusakan manusia. |
@@ -213,7 +213,7 @@ gba(0,0,0,.35) hingga .55), serta kilau tepi atas halus (inset 0 1px 0 rgba(255,
      - **Isolasi Kedalaman Layer Modal Anti-Tumpuk (Z-Index Isolation):** Seluruh jendela pop-up briefing kasus dan modal voting kelas dibungkus dalam *container* khusus berkedalaman tinggi (`setDepth(201)` dan *dimmer backdrop* `setDepth(200)`), menjamin kartu menu di latar belakang tidak lagi menembus ke depan modal saat disentuh siswa.
      - **Aktivasi 100% Aset Visual Nyata:**
        - **8 Kartu Ensiklopedia & Kamus Sawah:** Pop-up interaktif berbasis Piaget Concrete Operational (`kamus_pematang`, `kamus_wereng`, `kamus_irigasi`, `kamus_pengurai`, `kamus_pemangsa`, `kamus_hama`, `kamus_gulma`, `kamus_limbah`) dengan tampilan dua tingkat (kisi 4x2 dan tampilan detail sains lengkap serta relevansi SDN Percobaan 2).
-       - **3 Kartu Voting CSCL Fisik & Modal Musyawarah Kelas:** Tiga kartu voting digital mengadopsi gaya visual taktil 3D berkontur enamel solid (*Zero Outline/Stroke*) yang dipadukan dengan chip penanda kartu fisik (`🟢 KARTU HIJAU`, `🟡 KARTU KUNING`, `🔴 KARTU MERAH`), lingkaran ikon aksi timbul (`ic(a.ic, 44)`), judul tebal Playful Kids (`Fredoka`), badge gratis emas, serta animasi melesak 6px saat disentuh. Modal dilengkapi *kicker* peran CSCL (`🤝 CSCL • KOLABORASI KELAS 5A • PENASIHAT MEJA & PETUGAS LAYAR`) dan kapsul timer hitung mundur 15 detik dinamis (`.vote-timer-pill`) yang berdenyut peringatan pada 5 detik terakhir serta beralih ke plakat penanda waktu habis saat diskusi berakhir.
+       - **3 Kartu Voting CSCL Fisik & Modal Musyawarah Kelas:** Tiga kartu voting digital mengadopsi gaya visual taktil 3D berkontur enamel solid (*Zero Outline/Stroke*) yang dipadukan dengan chip penanda kartu fisik (`🟢 KARTU HIJAU`, `🟡 KARTU KUNING`, `🔴 KARTU MERAH`), lingkaran ikon aksi timbul (`ic(a.ic, 44)`), judul tebal Playful Kids (`Fredoka`), badge gratis emas, serta animasi melesak 6px saat disentuh. Modal dilengkapi *kicker* peran CSCL (`🤝 CSCL • KOLABORASI KELAS 5A • PENASIHAT MEJA & PETUGAS LAYAR`) dan kapsul timer hitung mundur 15 detik dinamis (`.vote-timer-pill`) yang berdenyut peringatan pada 5 detik terakhir serta beralih ke plakat penanda waktu habis saat diskusi berakhir. Jadwal kemunculan otomatis diselaraskan secara proporsional ke fase krisis pertengahan (Hari 12, 24, dan 36) agar siswa memiliki ruang eksplorasi mandiri selama ~18 detik awal sebelum intervensi musyawarah kelas pertama terjadi.
        - **Embodiment Maskot Gita Dinamis:** Sprite ekspresi wajah Gita berganti secara reaktif (`gita_talk` saat bersuara, `gita_think` saat bahaya/berpikir, `gita_thumbsup` saat sawah sehat, dan `gita_cheer` saat menang di layar evaluasi).
        - **Ikon Organisme Kontekstual & HUD Bar Skin:** Tombol aksi bawah menampilkan sprite visual asli (`ular`, `padi_subur`, `katak`, `jamur`, `icon_pestisida`, `icon_kemarau`, dsb.) serta frame visual `hud_cooldown_bar`.
       - **Mascot Speech Bar:** Dialog pemandu Gita si Detektif Cilik diformat sebagai bilah panel zamrud berbingkai emas dengan avatar Gita *close-up* berbingkai lingkaran, tag identitas kapsul emas hangat, teks sapaan kontras tinggi, dan tombol audio `🔊 DENGARKAN`.
@@ -459,7 +459,7 @@ Jika waktu habis, layar **tidak pernah** menampilkan tulisan *"Game Over"*. Seba
 | 15 | Laut   | M3  | Butuh berapa lama karang pulih dari satu    | C. Puluhan tahun (20-30 tahun)     | Pertumbuhan karang sangat lambat (1-2 cm/th)|
 |    |        |     | ledakan bom ikan penghancur?                |    karena tumbuh sangat lambat.    | Satu detik bom merusak warisan puluhan tahun!|
 +----+--------+-----+---------------------------------------------+------------------------------------+---------------------------------------------+
-| 16 | Laut   | M4  | Mengapa sampah plastik transparan di laut   | B. Plastik mirip ubur-ubur makanan | Penyu mengira plastik adalah ubur-ubur lalu |
+| 16 | Laut   | M4  | Mengapa sampah plastik transparan di laut   | A. Plastik mirip ubur-ubur makanan | Penyu mengira plastik adalah ubur-ubur lalu |
 |    |        |     | sangat mematikan bagi penyu hijau?          |    penyu, menyumbat pencernaan.    | menelannya hingga saluran pencernaan buntu! |
 +----+--------+-----+---------------------------------------------+------------------------------------+---------------------------------------------+
 ```
@@ -476,7 +476,7 @@ Jika waktu habis, layar **tidak pernah** menampilkan tulisan *"Game Over"*. Seba
   * `js/phaser-game/managers/ProgressManager.js`: State manager kemajuan pemain, pelacak bintang (0-24), status unlock misi/bioma, serta persistensi *LocalStorage*.
 * **Struktur Alur & Scene Game (9 Modul Mandiri):**
   1. `BootScene.js` – Memuat seluruh aset gambar vektor 4 bioma, organisme, audio, dan kamus lokal (Zero CORS).
-  2. `TitleScene.js` – Layar Utama Homescreen (Mulai Main, Cara Bermain, Profil & Panduan Guru).
+  2. `TitleScene.js` – Layar Utama Homescreen (Mulai Main, Cara Bermain, Profil & Panduan Guru, Banner Kicker: *"MEDIA PEMBELAJARAN GAME SIMULASI IPAS • FASE C • KELAS 5"*).
   3. `TutorialScene.js` – Panduan Interaktif 4 Slide (Rantai Makanan, Peran Tim, dan Kartu Voting CSCL).
   4. `TeamSelectScene.js` – Pemilihan 5 Kelompok Giliran Kelas 5A (Tim Elang, Ular, Katak, Padi, Jamur).
   5. `BiomeSelectScene.js` – **Panggung Peta 4 Ekosistem Nusantara (Stage Showcase Slider):** Layar pemilihan Sawah, Hutan Tropis, Sungai, dan Laut dalam format carousel slider panggung sinematik dengan crossfade background 1080p dinamis, hero plaque, navigasi panah samping, dan thumbnail dock bawah.

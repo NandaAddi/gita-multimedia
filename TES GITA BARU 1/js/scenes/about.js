@@ -50,19 +50,16 @@ function buildAbout() {
 
           <div class="about-body-text">
             <p class="about-p">
-              Halo Sahabat Detektif Alam!
+              Halo!
             </p>
             <p class="about-p">
-              ECO-EXPLORER (Penjaga Keseimbangan Ekosistem Nusantara) dikembangkan oleh Agita Khairunnisa sebagai produk penelitian dan pengembangan (R&amp;D) skripsi di Program Studi S1 Teknologi Pendidikan, Universitas Negeri Malang.
+              ECO-EXPLORER (Penjaga Keseimbangan Ekosistem Nusantara) dikembangkan oleh Agita Khairunnisa sebagai produk penelitian dan pengembangan (R&amp;D) skripsi. Media pembelajaran game simulasi ini dirancang untuk membantu peserta didik kelas V (Fase C) Sekolah Dasar memahami hingga menganalisis konsep harmoni dalam ekosistem dengan cara yang menarik dan mudah dipahami.
             </p>
             <p class="about-p">
-              Media pembelajaran interaktif berbasis layar sentuh interaktif (Interactive Flat Panel / IFP) ini dirancang khusus untuk membantu siswa kelas V Sekolah Dasar memahami konsep Harmoni dalam Ekosistem (IPAS Fase C), khususnya dalam menjembatani pemahaman hubungan sebab-akibat atau kausalitas ekosistem (kemampuan kognitif tingkat pemahaman C2).
+              Melalui tampilan visual yang interaktif dan fitur pembelajaran seperti simulasi ekosistem, kartu aksi pemulihan ekosistem, musyawarah kelas, dan kuis interaktif, ECO-EXPLORER mendorong peserta didik untuk belajar aktif, memahami hubungan sebab-akibat hingga menganalisis dalam ekosistem, serta mengambil keputusan ekologis secara bijak.
             </p>
             <p class="about-p">
-              Melalui pendekatan simulasi berbasis model POE (Predict-Observe-Explain) dan kolaborasi kelas Jigsaw, ECO-EXPLORER menghadirkan petualangan eksplorasi di 4 bioma Nusantara (Sawah, Hutan, Sungai, dan Laut). Dilengkapi fitur interaktif seperti Simulasi Kaskade Trofik Nyata, Dermaga Kartu Aksi Pemulihan Lingkungan, Musyawarah Kelas CSCL dengan Kartu Voting, Kamus Sains Alam Ramah Anak, serta Kuis Kausalitas Berantai, media ini mendorong siswa aktif berdiskusi dan mengambil keputusan ekologis secara bijak.
-            </p>
-            <p class="about-p">
-              Dengan hadirnya media ini, diharapkan tercipta pengalaman belajar yang menyenangkan, bermakna, dan mampu meningkatkan hasil belajar pemahaman konsep IPAS siswa sekolah dasar.
+              Dengan demikian, media ini diharapkan dapat meningkatkan pemahaman hingga analisis konsep Ilmu Pengetahuan Alam dan Sosial peserta didik sekolah dasar serta menciptakan pengalaman belajar yang menyenangkan dan bermakna.
             </p>
           </div>
 

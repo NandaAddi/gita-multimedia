@@ -290,7 +290,7 @@ function startSim(m){
  SIM={m,team,S:Object.assign({day:0},m.init),tgt:m.targets.map(()=>false),
   quota:m.actions.map(a=>a.quota+(team.perk.ids.includes(a.id)?1:0)),
   cdi:m.actions.map(a=>team.perk.ids.includes(a.id)?2:3),
-  cool:m.actions.map(()=>0),paused:true,mp:0,done:false,voted:0,voteAt:[6,14,22],limit:m.par+18,
+  cool:m.actions.map(()=>0),paused:true,mp:0,done:false,voted:0,voteAt:[12,24,36],limit:m.par+18,
    ui:{left:true,right:true,top:true,leftDot:false},bridging:true,_cinematicLock:false};
  SIM.S.health=m.health(SIM.S);
  buildSimUI();go('sim');updateHUD();

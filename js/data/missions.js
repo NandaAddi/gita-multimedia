@@ -154,11 +154,11 @@ const MISSIONS = [
     quiz: {
       q: 'Mengapa membasmi wereng dengan predator alami (katak) lebih baik daripada racun kimia keras?',
       opts: [
-        'Katak memangsa wereng secara alami tanpa merusak tanah dan air sawah.',
         'Katak membuat bulir beras berubah menjadi warna keemasan.',
-        'Racun kimia membuat wereng berkembang biak lebih cepat di sawah.'
+        'Racun kimia membuat wereng berkembang biak lebih cepat di sawah.',
+        'Katak memangsa wereng secara alami tanpa merusak tanah dan air sawah.'
       ],
-      correct: 0,
+      correct: 2,
       explain: 'Predator alami seperti katak memangsa wereng secara hayati tanpa meninggalkan residu beracun yang dapat mematikan cacing penyubur tanah dan mencemari air.'
     },
     chain: ['Cuaca lembap ekstrem', 'Wereng melonjak banyak', 'Batang padi mengering', 'Katak menyeimbangkan sawah']
@@ -208,11 +208,11 @@ const MISSIONS = [
     quiz: {
       q: 'Petani menyemprot racun kimia berlebihan ke petak sawah. Mengapa katak dan cacing ikut mati?',
       opts: [
-        'Racun kimia terserap ke dalam air dan tanah yang menjadi tempat hidup mereka.',
         'Cacing tanah pergi ke kota karena tidak suka bau racun.',
+        'Racun kimia terserap ke dalam air dan tanah yang menjadi tempat hidup mereka.',
         'Katak meminum racun kimia karena mengira itu adalah sari madu.'
       ],
-      correct: 0,
+      correct: 1,
       explain: 'Racun kimia bersifat racun umum: cairan meresap ke dalam pori-pori tanah dan air sawah, mematikan mikroorganisme tanah, cacing, dan amfibi berkulit basah seperti katak.'
     },
     chain: ['Racun kimia berlebih', 'Katak & cacing mati', 'Tanah sawah mengeras', 'Keseimbangan hayati rusak']
@@ -370,11 +370,11 @@ const MISSIONS = [
     quiz: {
       q: 'Ketika api membakar pohon rimba, mengapa satwa seperti burung dan monyet paling cepat menghilang?',
       opts: [
-        'Pohon tempat bersarang dan mencari buah telah hangus terbakar.',
         'Burung dan monyet berubah menjadi hewan malam.',
-        'Burung lebih suka tinggal di dekat asap tebal.'
+        'Burung lebih suka tinggal di dekat asap tebal.',
+        'Pohon tempat bersarang dan mencari buah telah hangus terbakar.'
       ],
-      correct: 0,
+      correct: 2,
       explain: 'Pohon rimba adalah habitat tajuk utama bagi burung dan monyet. Saat dahan dan sarang terbakar, sumber makanan (biji dan buah) musnah sehingga satwa terpaksa mengungsi mencari hutan lain.'
     },
     chain: ['Gesekan ranting kering', 'Titik api rimba muncul', 'Pohon sarang satwa terbakar', 'Hutan butuh sekat bakar']
@@ -477,11 +477,11 @@ const MISSIONS = [
     quiz: {
       q: 'Jika Harimau Sumatera punah karena diburu, apa dampaknya bagi pohon-pohon di hutan?',
       opts: [
-        'Rusa bertambah sangat banyak dan memakan habis tunas pohon muda.',
         'Pohon akan tumbuh dua kali lebih cepat tanpa adanya harimau.',
-        'Hutan menjadi padang rumput yang berbunga setiap hari.'
+        'Hutan menjadi padang rumput yang berbunga setiap hari.',
+        'Rusa bertambah sangat banyak dan memakan habis tunas pohon muda.'
       ],
-      correct: 0,
+      correct: 2,
       explain: 'Harimau berfungsi mengendalikan populasi herbivora seperti rusa dan babi hutan. Tanpa harimau, herbivora membludak dan memakan habis tunas muda, sehingga regenerasi pohon hutan terhenti.'
     },
     chain: ['Harimau diburu jerat', 'Pemangsa puncak hilang', 'Rusa membludak banyak', 'Tunas pohon habis dimakan']
@@ -532,11 +532,11 @@ const MISSIONS = [
     quiz: {
       q: 'Permukaan air sungai tertutup rapat oleh eceng gondok. Mengapa ikan-ikan lemas dan mati?',
       opts: [
-        'Sinar matahari dan udara terhalang masuk sehingga oksigen terlarut habis.',
         'Eceng gondok menggigit sirip ikan di malam hari.',
+        'Sinar matahari dan udara terhalang masuk sehingga oksigen terlarut habis.',
         'Ikan sungai tidak menyukai warna bunga eceng gondok.'
       ],
-      correct: 0,
+      correct: 1,
       explain: 'Tumbuhan gulma yang menutup rapat permukaan menghalangi pertukaran oksigen udara dan cahaya matahari. Tanaman bawah air mati dan bakteri pengurai menghabiskan oksigen terlarut.'
     },
     chain: ['Eceng gondok menutup air', 'Sinar matahari terhalang', 'Oksigen air berkurang', 'Ikan lemas & mati']
@@ -640,11 +640,11 @@ const MISSIONS = [
     quiz: {
       q: 'Bagaimana racun limbah detergen pabrik bisa membuat burung bangau di puncak rantai makanan ikut mati?',
       opts: [
-        'Racun terserap ikan kecil, lalu bangau memakan banyak ikan beracun tersebut.',
         'Bangau mandi di sungai lalu bulunya rontok terbawa angin.',
+        'Racun terserap ikan kecil, lalu bangau memakan banyak ikan beracun tersebut.',
         'Racun detergen membuat bangau lupa cara bersarang di pohon.'
       ],
-      correct: 0,
+      correct: 1,
       explain: 'Inilah peristiwa biomagnifikasi: racun diserap tumbuhan dan ikan kecil. Ketika bangau memakan puluhan ikan beracun, konsentrasi racun berlipat ganda di dalam tubuh bangau hingga mematikan.'
     },
     chain: ['Limbah pabrik dibuang', 'Racun diserap ikan kecil', 'Ikan beracun dimakan bangau', 'Pemangsa puncak mati']
@@ -693,11 +693,11 @@ const MISSIONS = [
     quiz: {
       q: 'Mengapa menangkap ikan dengan setrum listrik dilarang keras oleh hukum dan merusak ekosistem?',
       opts: [
-        'Setrum listrik membunuh seluruh benih ikan kecil dan merusak telur ikan.',
         'Ikan yang tersetrum menjadi terlalu asin saat dimasak.',
-        'Setrum listrik membuat air sungai berubah menjadi es batu.'
+        'Setrum listrik membuat air sungai berubah menjadi es batu.',
+        'Setrum listrik membunuh seluruh benih ikan kecil dan merusak telur ikan.'
       ],
-      correct: 0,
+      correct: 2,
       explain: 'Alat setrum listrik membunuh secara massal tanpa pilih-pilih: induk ikan, telur, benih kecil, hingga mikroorganisme air ikut mati tersengat sehingga memutus rantai regenerasi ikan.'
     },
     chain: ['Setrum listrik dipakai', 'Benih ikan mati massal', 'Generasi ikan musnah', 'Sungai kehilangan satwa']
@@ -747,11 +747,11 @@ const MISSIONS = [
     quiz: {
       q: 'Suhu air laut memanas dan karang menjadi putih pucat. Mengapa ikan karang ikut menghilang?',
       opts: [
-        'Karang yang memutih mati, sehingga ikan kehilangan rumah dan tempat berlindung.',
         'Ikan karang takut melihat warna putih pada terumbu.',
+        'Karang yang memutih mati, sehingga ikan kehilangan rumah dan tempat berlindung.',
         'Ikan karang pergi ke daratan untuk mencari udara dingin.'
       ],
-      correct: 0,
+      correct: 1,
       explain: 'Terumbu karang adalah habitat dan tempat mencari makan utama. Jika karang memutih dan mati, struktur terumbu runtuh sehingga ikan karang tidak memiliki tempat berlindung dari pemangsa.'
     },
     chain: ['Air laut memanas', 'Karang memutih', 'Ikan kehilangan rumah', 'Hiu kehabisan mangsa']
@@ -852,11 +852,11 @@ const MISSIONS = [
     quiz: {
       q: 'Satu ledakan bom ikan membutuhkan waktu berapa lama agar terumbu karang dapat pulih seperti semula?',
       opts: [
-        'Puluhan hingga ratusan tahun karena pertumbuhan karang sangat lambat (1–2 cm per tahun).',
         'Hanya butuh waktu satu minggu setelah ombak tenang.',
-        'Karang langsung tumbuh seketika saat terkena air garam.'
+        'Karang langsung tumbuh seketika saat terkena air garam.',
+        'Puluhan hingga ratusan tahun karena pertumbuhan karang sangat lambat (1–2 cm per tahun).'
       ],
-      correct: 0,
+      correct: 2,
       explain: 'Karang batu hanya tumbuh sekitar 1 hingga 2 cm per tahun. Ledakan bom menghancurkan rangka kapur menjadi serpihan pasir mati yang membutuhkan waktu 30 hingga 100 tahun untuk pulih.'
     },
     chain: ['Bom ikan diledakkan', 'Karang hancur berkeping', 'Ikan kehilangan sarang', 'Laut menjadi kuburan batu']

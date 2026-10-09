@@ -2,7 +2,7 @@
   "id": "eco-explorer-skripsi-gita",
   "name": "Eco-Explorer: Penjaga Keseimbangan Ekosistem",
   "short_name": "Eco-Explorer",
-  "description": "Media pembelajaran interaktif IPAS Fase C Kelas 5 — Penyelamat Ekosistem Nusantara bersama Gita.",
+  "description": "Media Pembelajaran Game Simulasi IPAS Fase C Kelas 5 — Penyelamat Ekosistem Nusantara bersama Gita.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
