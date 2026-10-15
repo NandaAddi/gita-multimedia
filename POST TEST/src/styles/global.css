@@ -49,22 +49,23 @@ body.modal-open {
     padding: 22px 20px 60px;
 }
 
-/* ---------- Tombol Bergaya Duolingo ---------- */
+/* ---------- Tombol Bergaya Duolingo (IFP Touch-Friendly) ---------- */
 .btn {
     border: none;
     cursor: pointer;
-    border-radius: 16px;
+    border-radius: 18px;
     font-weight: 800;
-    font-size: 15px;
+    font-size: clamp(17px, 2vh, 20px);
     letter-spacing: .8px;
     text-transform: uppercase;
-    padding: 15px 26px;
+    padding: clamp(14px, 1.8vh, 18px) 28px;
     transition: transform .06s, box-shadow .06s;
     text-align: center;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
+    min-height: 54px;
 }
 
 .btn:active:not(:disabled) {
@@ -130,20 +131,21 @@ body.modal-open {
 }
 
 .icon-btn {
-    width: 42px;
-    height: 42px;
+    width: 48px;
+    height: 48px;
     border: none;
     background: transparent;
-    border-radius: 12px;
+    border-radius: 14px;
     color: var(--mut);
     display: grid;
     place-items: center;
     cursor: pointer;
-    transition: background .15s;
+    transition: background .15s, color .15s;
 }
 
 .icon-btn:hover {
     background: var(--snow);
+    color: var(--ink);
 }
 
 /* ---------- Animasi Global ---------- */
@@ -185,31 +187,33 @@ body.modal-open {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(60, 60, 60, .45);
+    background: rgba(15, 23, 42, .65);
     z-index: 80;
     display: grid;
     place-items: center;
     padding: 20px;
     animation: fadeIn .2s;
+    backdrop-filter: blur(4px);
 }
 
 .modal {
     background: #fff;
-    border-radius: 24px;
-    padding: 28px 24px 22px;
-    max-width: 400px;
+    border-radius: 28px;
+    padding: 32px 28px 26px;
+    max-width: 440px;
     width: 100%;
     text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     animation: popIn .25s cubic-bezier(.3, 1.4, .6, 1);
 }
 
 .modal-ic {
-    width: 64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    margin: 0 auto 14px;
+    margin: 0 auto 16px;
 }
 
 .modal-ic.green {
@@ -228,16 +232,17 @@ body.modal-open {
 }
 
 .modal h3 {
-    font-size: 21px;
+    font-size: clamp(24px, 3vh, 28px);
     font-weight: 900;
+    color: var(--ink);
 }
 
 .modal p {
-    color: #777;
+    color: #334155;
     font-weight: 700;
-    font-size: 14.5px;
+    font-size: clamp(17px, 2vh, 19px);
     line-height: 1.55;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 .modal-actions {

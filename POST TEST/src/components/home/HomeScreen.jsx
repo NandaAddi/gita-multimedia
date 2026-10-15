@@ -5,11 +5,12 @@ import Modal from '../common/Modal';
 import CheckpointPath from './CheckpointPath';
 import RulesCard from './RulesCard';
 import { useStudent } from '../../context/StudentContext';
+import { useQuiz } from '../../context/QuizContext';
 
 export default function HomeScreen({ onOpenTeacherPin }) {
-  const { siswa, setIsIdModalOpen, dbStatus, resetStore } = useStudent();
+  const { siswa, dbStatus } = useStudent();
+  const { setScreen } = useQuiz();
   const [step, setStep] = useState(0); // 0 = Welcome & Rules, 1 = Checkpoints
-  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
   return (
     <section className="screen active">
@@ -21,13 +22,12 @@ export default function HomeScreen({ onOpenTeacherPin }) {
           {/* SLIDE 1: Sambutan, Judul, Aturan & Identitas */}
           <div className="home-slide home-slide-1">
             <div className="home-slide-inner">
-              <div className="home-top">
-                <Header />
+              <Header>
                 <div className="slide-dots" aria-label="Langkah 1 dari 2">
                   <span className="slide-dot active" />
                   <span className="slide-dot" />
                 </div>
-              </div>
+              </Header>
 
               <div className="hero">
                 <div className="mascot-wrap">
@@ -59,7 +59,8 @@ export default function HomeScreen({ onOpenTeacherPin }) {
                   </span>
                   <button
                     className="change-btn"
-                    onClick={() => setIsIdModalOpen(true)}
+                    onClick={() => setScreen('identity')}
+                    title="Ubah identitas siswa"
                   >
                     Ganti
                   </button>
@@ -71,7 +72,7 @@ export default function HomeScreen({ onOpenTeacherPin }) {
                   <button
                     className="change-btn"
                     style={{ color: '#0284C7', fontWeight: 900 }}
-                    onClick={() => setIsIdModalOpen(true)}
+                    onClick={() => setScreen('identity')}
                   >
                     Isi Nama Sekarang
                   </button>
@@ -123,42 +124,11 @@ export default function HomeScreen({ onOpenTeacherPin }) {
                 >
                   🔑 Panel Guru / Rekap Nilai
                 </button>
-                <button
-                  className="linkish"
-                  onClick={() => setIsResetModalOpen(true)}
-                >
-                  Hapus data skor di perangkat ini
-                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Modal Konfirmasi Hapus Skor */}
-      <Modal
-        isOpen={isResetModalOpen}
-        onClose={() => setIsResetModalOpen(false)}
-        icon="cross"
-        tint="red"
-        title="Hapus semua skor?"
-        text="Data skor posttest & status angket di perangkat ini akan dihapus permanen."
-        actions={[
-          {
-            label: 'HAPUS',
-            kind: 'danger',
-            onClick: () => {
-              resetStore();
-              setIsResetModalOpen(false);
-            }
-          },
-          {
-            label: 'BATAL',
-            kind: 'ghost',
-            onClick: () => setIsResetModalOpen(false)
-          }
-        ]}
-      />
     </section>
   );
 }

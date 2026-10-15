@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Icon from '../common/Icons';
 import Modal from '../common/Modal';
 import { useQuiz } from '../../context/QuizContext';
@@ -19,20 +19,26 @@ export default function QuizScreen() {
   } = useQuiz();
 
   const [isQuitModalOpen, setIsQuitModalOpen] = useState(false);
+  const lastEnterTimeRef = useRef(0);
 
   const currentQ = deck[currentIndex];
   const progressRatio = deck.length > 0 ? (currentIndex + 1) / deck.length : 0;
   const topicIndex = topicOf(currentIndex);
 
-  // Keyboard shortcut listener (1-4 and Enter)
+  // Keyboard shortcut listener (1-4 and Enter) with anti-spam debounce
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (e.repeat) return; // Mencegah held-key spam
       if (e.key >= '1' && e.key <= '4') {
         const optionIndex = Number(e.key) - 1;
         if (currentQ && optionIndex < currentQ.opts.length && !isLocked) {
           pickOption(optionIndex);
         }
       } else if (e.key === 'Enter') {
+        const now = Date.now();
+        if (now - lastEnterTimeRef.current < 250) return; // Debounce 250ms
+        lastEnterTimeRef.current = now;
+
         if (!isLocked && picked !== null) {
           checkAnswer();
         } else if (isLocked) {

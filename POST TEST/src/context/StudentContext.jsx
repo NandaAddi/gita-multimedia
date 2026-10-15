@@ -26,15 +26,7 @@ export function StudentProvider({ children }) {
     }
   });
 
-  const [isIdModalOpen, setIsIdModalOpen] = useState(false);
   const [dbStatus, setDbStatus] = useState(() => (isSupabaseConfigured() ? 'ok' : 'off'));
-
-  useEffect(() => {
-    if (!siswa) {
-      const timer = setTimeout(() => setIsIdModalOpen(true), 300);
-      return () => clearTimeout(timer);
-    }
-  }, [siswa]);
 
   const saveStudent = (info) => {
     const formatted = {
@@ -88,8 +80,6 @@ export function StudentProvider({ children }) {
         store,
         updateStore,
         resetStore,
-        isIdModalOpen,
-        setIsIdModalOpen,
         dbStatus,
         setDbStatus
       }}

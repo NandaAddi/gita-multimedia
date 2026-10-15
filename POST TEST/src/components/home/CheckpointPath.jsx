@@ -10,11 +10,16 @@ export default function CheckpointPath() {
   const { startQuiz } = useQuiz();
 
   const [isLockedModalOpen, setIsLockedModalOpen] = useState(false);
+  const [isPostDoneModalOpen, setIsPostDoneModalOpen] = useState(false);
 
   const hasPost = store.post !== null;
   const isAngketDone = store.angket;
 
   const handlePosttestClick = () => {
+    if (hasPost) {
+      setIsPostDoneModalOpen(true);
+      return;
+    }
     startQuiz();
   };
 
@@ -34,10 +39,10 @@ export default function CheckpointPath() {
         <div className="path-row">
           <div className="path-text">
             <div className="path-title">POSTTEST</div>
-            <div className="path-sub">20 soal · buktikan pemahaman ekosistemmu</div>
+            <div className="path-sub">20 soal · evaluasi pemahaman ekosistem</div>
             {hasPost ? (
-              <span className="done-badge" style={{ background: '#FFF3D6', color: '#9A6C00' }}>
-                Skor terbaik: {store.post}/20
+              <span className="done-badge" style={{ background: '#DCFCE7', color: '#15803D' }}>
+                Skor: {store.post}/20 · Sudah Selesai ✅
               </span>
             ) : (
               <span className="done-badge" style={{ background: '#DCFCE7', color: '#166534' }}>
@@ -48,7 +53,7 @@ export default function CheckpointPath() {
           <button
             className={`node ${hasPost ? 'gold' : 'green'}`}
             onClick={handlePosttestClick}
-            aria-label="Mulai Posttest"
+            aria-label={hasPost ? 'Posttest Selesai' : 'Mulai Posttest'}
           >
             <Icon name={hasPost ? 'check' : 'trophy'} size={40} />
           </button>
@@ -120,6 +125,31 @@ export default function CheckpointPath() {
             label: 'NANTI SAJA',
             kind: 'ghost',
             onClick: () => setIsLockedModalOpen(false)
+          }
+        ]}
+      />
+
+      {/* Modal Peringatan Posttest Sudah Selesai (Tidak Bisa Diulang) */}
+      <Modal
+        isOpen={isPostDoneModalOpen}
+        onClose={() => setIsPostDoneModalOpen(false)}
+        icon="check"
+        tint="green"
+        title="Posttest Sudah Diselesaikan!"
+        text={`Kamu sudah menyelesaikan evaluasi Posttest dengan perolehan skor ${store.post}/20. Evaluasi ini hanya dapat dikerjakan 1 kali. Silakan lanjutkan ke pengisian Angket Respon Siswa!`}
+        actions={[
+          {
+            label: 'ISI ANGKET RESPON 📝',
+            kind: 'primary',
+            onClick: () => {
+              setIsPostDoneModalOpen(false);
+              handleAngketClick();
+            }
+          },
+          {
+            label: 'TUTUP',
+            kind: 'ghost',
+            onClick: () => setIsPostDoneModalOpen(false)
           }
         ]}
       />

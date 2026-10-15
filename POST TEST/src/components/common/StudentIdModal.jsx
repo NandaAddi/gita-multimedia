@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useStudent } from '../../context/StudentContext';
+import { useQuiz } from '../../context/QuizContext';
 
 export default function StudentIdModal() {
   const { siswa, saveStudent, isIdModalOpen, setIsIdModalOpen } = useStudent();
+  const { startQuiz } = useQuiz();
 
   const [nama, setNama] = useState('');
   const [kelas, setKelas] = useState('5A');
@@ -27,10 +29,16 @@ export default function StudentIdModal() {
 
   if (!isIdModalOpen) return null;
 
+  const isEditing = Boolean(siswa && siswa.nama);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!nama.trim() || !absen.trim()) return;
+    const isFirstTime = !siswa || !siswa.nama;
     saveStudent({ nama, kelas, absen });
+    if (isFirstTime) {
+      startQuiz();
+    }
   };
 
   return (
@@ -88,7 +96,7 @@ export default function StudentIdModal() {
             </div>
           </div>
           <button type="submit" className="btn btn-primary id-submit">
-            MULAI KUIS 🚀
+            {isEditing ? 'SIMPAN PERUBAHAN' : 'SIMPAN & MULAI KUIS 🚀'}
           </button>
         </form>
       </div>

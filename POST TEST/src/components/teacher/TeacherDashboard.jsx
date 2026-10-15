@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { fetchAllQuizResults } from '../../services/supabase';
 import { ANGKET_URL, SHEETS_URL } from '../../config/constants';
+import { useStudent } from '../../context/StudentContext';
 
 export default function TeacherDashboard({ isOpen, onClose }) {
+  const { resetStore } = useStudent();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -167,6 +169,18 @@ export default function TeacherDashboard({ isOpen, onClose }) {
             </button>
             <button className="btn btn-ghost" onClick={loadData} disabled={loading}>
               🔄 {loading ? 'Memuat...' : 'Perbarui'}
+            </button>
+            <button
+              className="btn btn-ghost"
+              style={{ color: '#DC2626', background: '#FEF2F2', marginLeft: 'auto' }}
+              onClick={() => {
+                if (window.confirm('Hapus skor posttest & status angket pada perangkat ini? Hanya lakukan ini jika perlu me-reset perangkat untuk siswa baru.')) {
+                  resetStore();
+                  alert('Data evaluasi pada perangkat ini berhasil di-reset.');
+                }
+              }}
+            >
+              🗑️ Reset Perangkat Ini
             </button>
           </div>
 

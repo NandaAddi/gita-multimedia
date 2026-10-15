@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useRef } from 'react';
 import { QUESTIONS } from '../data/questions';
 import { useSound } from './SoundContext';
 import { useStudent } from './StudentContext';
@@ -17,9 +17,11 @@ const OOPSES = ['Belum tepat', 'Hampir benar', 'Coba ingat lagi'];
 
 export function QuizProvider({ children }) {
   const { sfx } = useSound();
-  const { siswa, updateStore, setDbStatus } = useStudent();
+  const { siswa, store, updateStore, setDbStatus } = useStudent();
 
-  const [screen, setScreen] = useState('home'); // 'home' | 'quiz' | 'result'
+  const [screen, setScreen] = useState(() => {
+    return siswa && siswa.nama ? 'home' : 'identity';
+  });
   const [deck, setDeck] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [xp, setXp] = useState(0);
@@ -29,10 +31,11 @@ export function QuizProvider({ children }) {
   const [startTime, setStartTime] = useState(0);
   const [durationSecs, setDurationSecs] = useState(0);
 
-  // Per-question state
+  // Per-question state & sync lock ref
   const [picked, setPicked] = useState(null);
   const [isLocked, setIsLocked] = useState(false);
   const [feedback, setFeedback] = useState(null); // { ok: bool, title: string, body: string, why?: string }
+  const isCheckingRef = useRef(false);
 
   const buildDeck = () => {
     return QUESTIONS.map((q) => {
@@ -51,6 +54,11 @@ export function QuizProvider({ children }) {
   };
 
   const startQuiz = () => {
+    if (store && store.post !== null) {
+      console.warn('Posttest sudah diselesaikan, tidak dapat mengulang.');
+      return;
+    }
+    isCheckingRef.current = false;
     const newDeck = buildDeck();
     setDeck(newDeck);
     setCurrentIndex(0);
@@ -67,13 +75,14 @@ export function QuizProvider({ children }) {
   };
 
   const pickOption = (idx) => {
-    if (isLocked) return;
+    if (isLocked || isCheckingRef.current) return;
     sfx.tap();
     setPicked(idx);
   };
 
   const checkAnswer = () => {
-    if (picked === null || isLocked) return;
+    if (picked === null || isLocked || isCheckingRef.current) return;
+    isCheckingRef.current = true;
     setIsLocked(true);
 
     const currentQ = deck[currentIndex];
@@ -109,6 +118,7 @@ export function QuizProvider({ children }) {
     if (currentIndex + 1 >= deck.length) {
       finishQuiz();
     } else {
+      isCheckingRef.current = false;
       setCurrentIndex((prev) => prev + 1);
       setPicked(null);
       setIsLocked(false);
@@ -118,12 +128,15 @@ export function QuizProvider({ children }) {
   };
 
   const finishQuiz = async () => {
+    isCheckingRef.current = false;
     const elapsed = Math.round((Date.now() - startTime) / 1000);
     setDurationSecs(elapsed);
     sfx.finish();
 
-    // Simpan skor ke store lokal
-    updateStore({ post: correctCount });
+    // Simpan skor terbaik ke store lokal (Math.max)
+    const currentBest = store && store.post !== null ? store.post : 0;
+    const newBest = Math.max(currentBest, correctCount);
+    updateStore({ post: newBest });
     setScreen('result');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
