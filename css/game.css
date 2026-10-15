@@ -361,6 +361,7 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 /* TOPBAR */
 .topbar{position:absolute;left:30px;right:30px;top:20px;height:72px;display:flex;align-items:center;gap:16px;z-index:5}
 .tb-btn{height:60px;font-size:24px;padding:0 24px}
+#btn-about{position:absolute;left:30px;top:26px;z-index:10}
 .sim-topbar .tb-btn{height:60px;min-height:60px;font-size:24px;padding:0 16px;gap:8px;border-radius:20px}
 .tb-stars{
   display:flex;align-items:center;gap:8px;background:rgba(2,44,34,.95);border:none;

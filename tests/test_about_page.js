@@ -97,5 +97,17 @@ ok('Bebas dari emoji slop', !/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{2
 ok('Bebas dari pill badge dan bento item berlebih', !html.includes('about-role-pill') && !html.includes('about-meta-grid') && !html.includes('about-card-badge'));
 ok('Render tombol navigasi Mulai Petualangan dan Panduan Guru', html.includes('about-btn-play') && html.includes('about-btn-teacher'));
 
+// Verifikasi tombol di Home Screen (index.html) dan handler (js/main.js)
+const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+ok('Tombol #btn-about hadir di index.html pada layar judul', indexHtml.includes('id="btn-about"'));
+ok('Tombol #btn-about memiliki teks Tentang Pengembang', indexHtml.includes('Tentang Pengembang'));
+
+const mainJs = fs.readFileSync(path.join(ROOT, 'js/main.js'), 'utf8');
+ok('Handler #btn-about terdaftar di js/main.js', mainJs.includes("el('#btn-about')") && mainJs.includes("buildAbout()") && mainJs.includes("go('about')"));
+ok('Dukungan query param ?screen=about terdaftar di js/main.js', mainJs.includes("p === 'about'"));
+
+const gameCss = fs.readFileSync(path.join(ROOT, 'css/game.css'), 'utf8');
+ok('CSS #btn-about terdaftar di css/game.css', gameCss.includes('#btn-about'));
+
 console.log(`\nHasil: ${pass} lolos, ${fail} gagal\n`);
 if (fail > 0) process.exit(1);

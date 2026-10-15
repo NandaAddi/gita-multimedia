@@ -90,6 +90,15 @@ function init(){
     go('teacher');
   };
 
+  const btnAbout = el('#btn-about');
+  if (btnAbout) {
+    btnAbout.onclick = () => {
+      sfx.click();
+      if (typeof buildAbout === 'function') buildAbout();
+      go('about');
+    };
+  }
+
   // Proteksi debounce multi-click untuk layar sentuh IFP
   el('#t-snd').onclick = toggleSound;
 
@@ -282,6 +291,9 @@ function init(){
     } else if (p === 'biome') {
       buildBiome();
       go('biome', true);
+    } else if (p === 'about') {
+      if (typeof buildAbout === 'function') buildAbout();
+      go('about', true);
     } else if (p === 'sim') {
       const misId = new URLSearchParams(location.search).get('mission') || 'sawah-1';
       const targetMis = MISSIONS.find(m => m.id === misId) || MISSIONS[0];
