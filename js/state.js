@@ -49,29 +49,150 @@ function unlocked(i) {
   return (G.stars[MISSIONS[i - 1].id] || 0) > 0;
 }
 
+const ECO_FACTS = [
+  "Padi adalah produsen utama! Mereka membuat makanannya sendiri melalui fotosintesis dengan bantuan sinar matahari.",
+  "Belalang dan burung pipit adalah konsumen primer pemakan padi. Jika populasinya meledak, tanaman padi bisa habis!",
+  "Katak dan burung hantu adalah sahabat petani karena mereka memangsa serangga hama dan tikus secara alami.",
+  "Ular sawah membantu petani dengan memangsa tikus. Jangan diburu, ya, agar tikus tidak merusak sawah!",
+  "Burung elang berada di puncak rantai makanan sawah dan menjaga keseimbangan seluruh populasi di bawahnya.",
+  "Jamur dan cacing adalah dekomposer (pengurai) yang mengubah sisa makhluk hidup menjadi pupuk alami tanah.",
+  "Penggunaan racun pestisida berlebihan bisa membunuh serangga baik dan mencemari aliran air sawah!",
+  "Air, tanah, dan cahaya matahari adalah komponen abiotik yang sangat penting bagi pertumbuhan padi.",
+  "Keseimbangan ekosistem terjadi jika jumlah produsen selalu lebih banyak dibanding jumlah konsumen.",
+  "Detektif Alam yang cermat selalu mengamati hubungan timbal balik makhluk hidup sebelum bertindak!"
+];
+
+const LOADER_TITLES = [
+  "Memuat Petualangan...",
+  "Memeriksa Ekosistem Sawah...",
+  "Detektif Gita Sedang Bersiap...",
+  "Membuka Catatan Alam...",
+  "Menghubungkan Rantai Makanan..."
+];
+
+const LOADER_DURATION = 3200; // 3.2 detik: waktu nyaman membaca fakta sains bagi siswa SD Kelas 5
 let lastNavTime = 0;
-function go(id) {
-  const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+let isNavigating = false;
+let loaderSwitchTimeout = null;
+let loaderDismissTimeout = null;
+let loaderCleanupTimeout = null;
+
+function dismissLoader() {
+  const overlay = el('#scene-loader-overlay');
+  if (!overlay || !overlay.classList.contains('active')) return;
+
+  clearTimeout(loaderDismissTimeout);
+  clearTimeout(loaderCleanupTimeout);
+
+  const fill = el('#loader-progress-fill');
+  if (fill) fill.style.width = '100%';
+
+  overlay.classList.remove('active');
+
+  loaderCleanupTimeout = setTimeout(() => {
+    if (typeof GitaSeq !== 'undefined' && GitaSeq.stop) {
+      GitaSeq.stop('#loader-gita-box');
+    }
+    isNavigating = false;
+  }, 240);
+}
+
+function applyScreenSwitch(id) {
   const currentSc = el('#scr-' + id);
-  if (CUR === id && currentSc && currentSc.classList.contains('active') && now - lastNavTime < 250) return;
-  lastNavTime = now;
-  if (typeof stopVO === 'function') stopVO();
   els('.screen').forEach(s => s.classList.remove('active'));
   const sc = currentSc || el('#scr-' + id);
   if (sc) sc.classList.add('active');
   CUR = id;
   // Gita image-sequence lifecycle (pilot title): hemat CPU saat pindah screen,
   // replay otomatis saat kembali ke title.
-  try{
-    if(typeof GitaSeq !== 'undefined'){
-      if(id === 'title'){
-        if(typeof titleBubble === 'function') titleBubble();
+  try {
+    if (typeof GitaSeq !== 'undefined') {
+      if (id === 'title') {
+        if (typeof titleBubble === 'function') titleBubble();
       } else {
         GitaSeq.stop('#gita-title');
-        if(id !== 'sim') GitaSeq.stop('#bridge-gita-box');
+        if (id !== 'sim') GitaSeq.stop('#bridge-gita-box');
       }
     }
-  }catch(e){}
+  } catch (e) {}
+}
+
+function go(id, instant = false) {
+  const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+  const currentSc = el('#scr-' + id);
+  if (CUR === id && currentSc && currentSc.classList.contains('active')) return;
+  if (isNavigating && !instant) return; // Proteksi debounce layar sentuh IFP
+
+  lastNavTime = now;
+  if (typeof stopVO === 'function') stopVO();
+
+  const overlay = el('#scene-loader-overlay');
+  if (instant || !overlay) {
+    applyScreenSwitch(id);
+    return;
+  }
+
+  isNavigating = true;
+
+  // Acak teks judul dan fakta edukatif
+  const titleEl = el('#loader-title');
+  const factEl = el('#loader-fact-text');
+  if (titleEl) {
+    titleEl.textContent = LOADER_TITLES[Math.floor(Math.random() * LOADER_TITLES.length)];
+  }
+  if (factEl) {
+    factEl.textContent = ECO_FACTS[Math.floor(Math.random() * ECO_FACTS.length)];
+  }
+
+  // Animasi progress bar membaca (3.2s)
+  const fill = el('#loader-progress-fill');
+  if (fill) {
+    fill.style.transition = 'none';
+    fill.style.width = '0%';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (fill) {
+          fill.style.transition = `width ${LOADER_DURATION}ms linear`;
+          fill.style.width = '100%';
+        }
+      });
+    });
+  }
+
+  // Tampilkan overlay dan mulai animasi sequence Gita
+  overlay.classList.add('active');
+  if (typeof GitaSeq !== 'undefined' && GitaSeq.play) {
+    GitaSeq.play('#loader-gita-box', {
+      folder: 'assets/animations/loading',
+      prefix: 'gita_load_',
+      pad: 3,
+      ext: '.webp',
+      frames: 42,
+      size: 240,
+      fps: 22
+    });
+  }
+
+  // Proteksi: izinkan tap to skip setelah 400ms agar sentuhan awal tidak langsung menutup
+  let canTapToSkip = false;
+  setTimeout(() => { canTapToSkip = true; }, 400);
+  overlay.onclick = () => {
+    if (canTapToSkip) dismissLoader();
+  };
+
+  clearTimeout(loaderSwitchTimeout);
+  clearTimeout(loaderDismissTimeout);
+  clearTimeout(loaderCleanupTimeout);
+
+  // 1. Ganti tampilan DOM di balik layar setelah overlay tertutup penuh (250ms)
+  loaderSwitchTimeout = setTimeout(() => {
+    applyScreenSwitch(id);
+  }, 250);
+
+  // 2. Beri waktu membaca nyaman selama LOADER_DURATION (3.2 detik) lalu tutup otomatis
+  loaderDismissTimeout = setTimeout(() => {
+    dismissLoader();
+  }, LOADER_DURATION);
 }
 
 let toastT1 = null, toastT2 = null;

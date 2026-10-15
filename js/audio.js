@@ -200,7 +200,7 @@ function initBGM() {
   if (!bgmInitialized && typeof window !== 'undefined') {
     bgmInitialized = true;
     try {
-      bgmAudio = new Audio('backsound/bg-music.mp3');
+      bgmAudio = new Audio('assets/audio/backsound/bg-music.mp3');
       bgmAudio.loop = true;
       const baseVol = typeof G !== 'undefined' && G.bgmVol !== undefined ? G.bgmVol : 0.5;
       bgmAudio.volume = baseVol;
@@ -325,7 +325,7 @@ function _getVOAudio(key) {
       }
       VO_POOL.delete(oldestKey);
     }
-    audio = new Audio('voice-over/' + key + '.mp3');
+    audio = new Audio('assets/audio/voice-over/' + key + '.mp3');
     VO_POOL.set(key, audio);
   }
   return audio;
@@ -335,7 +335,7 @@ function _getVOFallback(key) {
   const fbKey = 'fb_' + key;
   let fallback = VO_POOL.get(fbKey);
   if (!fallback) {
-    fallback = new Audio('assets/audio/vo/' + key + '.mp3');
+    fallback = new Audio('assets/audio/voice-over/' + key + '.mp3');
     VO_POOL.set(fbKey, fallback);
   }
   return fallback;

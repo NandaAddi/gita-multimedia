@@ -10,13 +10,13 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Eco-Explorer">
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
   <!-- GOOGLE WEB FONTS (CUTE & PLAYFUL KIDS FONTS) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/game.css?v=1.2.9">
+  <link rel="stylesheet" href="css/game.css?v=1.3.5">
 </head>
 <body>
 <div id="stage">
@@ -25,7 +25,7 @@
     <div class="preloader-halo"></div>
     <div class="preloader-content">
       <div class="preloader-logo-wrap">
-        <img id="preloader-logo" class="preloader-logo" src="assets/Lambang-UM.webp" alt="Lambang Universitas Negeri Malang">
+        <img id="preloader-logo" class="preloader-logo" src="assets/images/Lambang-UM.webp" alt="Lambang Universitas Negeri Malang">
       </div>
       <div class="preloader-box">
         <div class="preloader-bar-track">
@@ -63,9 +63,6 @@
           <span class="mc-t">PANDUAN<br>GURU</span>
         </button>
       </div>
-      <button class="btn tb-btn" id="btn-about" title="Tentang Pengembang" style="position:absolute;left:30px;top:26px;font-size:24px;padding:0 24px">
-        <span>Tentang Pengembang</span>
-      </button>
       <button class="btn tb-btn fs-btn" id="t-fs" title="Layar Penuh" style="position:absolute;right:104px;top:26px">⛶</button>
       <button class="btn tb-btn snd-btn" id="t-snd" style="position:absolute;right:30px;top:26px"></button>
 
@@ -114,38 +111,61 @@
   </section>
   <div id="modal-root"></div>
   <div id="toast-root"></div>
+
+  <!-- SCENE LOADING TRANSITION OVERLAY (ANIMASI GITA & FAKTA SAINS EDISI IFP) -->
+  <div id="scene-loader-overlay" class="scene-loader-overlay" aria-hidden="true" title="Ketuk untuk langsung lanjut">
+    <div class="scene-loader-card">
+      <div id="loader-gita-box" class="loader-gita-box"></div>
+      <div class="loader-info">
+        <div id="loader-title" class="loader-title">Memuat Petualangan...</div>
+        <div class="loader-fact-card">
+          <div class="loader-fact-header">
+            <span class="loader-fact-badge">&#127793; TAHUKAH KAMU?</span>
+            <span class="loader-fact-subtitle">Catatan Detektif Alam</span>
+          </div>
+          <p id="loader-fact-text" class="loader-fact-text">Setiap makhluk hidup di sawah saling terhubung menjaga keseimbangan rantai makanan!</p>
+        </div>
+      </div>
+      <div class="loader-progress-wrap">
+        <div class="loader-progress-track">
+          <div id="loader-progress-fill" class="loader-progress-fill"></div>
+        </div>
+        <div class="loader-skip-hint">&#128070; Sentuh layar untuk langsung lanjut</div>
+      </div>
+    </div>
+  </div>
 </div>
 
   <!-- CORE SCRIPTS & STATE -->
-  <script src="js/config.js?v=1.2.9"></script>
-  <script src="js/state.js?v=1.2.9"></script>
-  <script src="js/audio.js?v=1.2.9"></script>
+  <script src="js/config.js?v=1.3.1"></script>
+  <script src="js/state.js?v=1.3.5"></script>
+  <script src="js/audio.js?v=1.3.1"></script>
 
   <!-- DATA LAYER -->
-  <script src="js/data/ecosystems.js?v=1.2.9"></script>
-  <script src="js/data/missions.js?v=1.2.9"></script>
-  <script src="js/data/assessment.js?v=1.2.9"></script>
+  <script src="js/data/ecosystems.js?v=1.3.1"></script>
+  <script src="js/data/missions.js?v=1.3.1"></script>
+  <script src="js/data/assessment.js?v=1.3.1"></script>
 
   <!-- RENDERERS -->
-  <script src="js/renderers/characters.js?v=1.2.9"></script>
-  <script src="js/renderers/gita-sequence.js?v=1.2.9"></script>
-  <script src="js/renderers/backgrounds.js?v=1.2.9"></script>
+  <script src="js/renderers/characters.js?v=1.3.1"></script>
+  <script src="js/renderers/gita-sequence.js?v=1.3.1"></script>
+  <script src="js/renderers/backgrounds.js?v=1.3.1"></script>
 
   <!-- SCENE CONTROLLERS -->
-  <script src="js/scenes/title.js?v=1.2.9"></script>
-  <script src="js/scenes/tutorial.js?v=1.2.9"></script>
-  <script src="js/scenes/how.js?v=1.2.9"></script>
-  <script src="js/scenes/teacher.js?v=1.2.9"></script>
-  <script src="js/scenes/about.js?v=1.2.9"></script>
-  <script src="js/scenes/team.js?v=1.2.9"></script>
-  <script src="js/scenes/biome.js?v=1.2.9"></script>
-  <script src="js/scenes/mission-menu.js?v=1.2.9"></script>
-  <script src="js/scenes/simulation.js?v=1.2.9"></script>
-  <script src="js/scenes/quiz.js?v=1.2.9"></script>
-  <script src="js/scenes/victory.js?v=1.2.9"></script>
+  <script src="js/scenes/title.js?v=1.3.3"></script>
+  <script src="js/scenes/tutorial.js?v=1.3.3"></script>
+  <script src="js/scenes/how.js?v=1.3.3"></script>
+  <script src="js/scenes/teacher.js?v=1.3.3"></script>
+  <script src="js/scenes/about.js?v=1.3.3"></script>
+  <script src="js/scenes/team.js?v=1.3.3"></script>
+  <script src="js/scenes/biome.js?v=1.3.3"></script>
+  <script src="js/scenes/mission-menu.js?v=1.3.3"></script>
+  <script src="js/scenes/simulation.js?v=1.3.3"></script>
+  <script src="js/scenes/quiz.js?v=1.3.3"></script>
+  <script src="js/scenes/victory.js?v=1.3.3"></script>
 
   <!-- ENTRY POINT -->
-  <script src="js/main.js?v=1.2.9"></script>
+  <script src="js/main.js?v=1.3.4"></script>
 
   <!-- MOBILE / ANDROID LANDSCAPE ROTATE PROMPT -->
   <div id="orient-hint" class="orient-overlay" style="display:none">

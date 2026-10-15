@@ -87,6 +87,16 @@ Clean 2D digital anime chibi illustration character design of Gita, a cheerful a
 Character expression sheet of a cute chibi Indonesian girl named Gita wearing a black hijab, navy blue jacket and red shirt, showing 6 distinct emotion avatars in a 3x2 neat grid: 1. Happy smiling, 2. Excited with starry eyes, 3. Calm and peaceful with closed eyes, 4. Surprised with open round mouth, 5. Thinking with finger on chin, 6. Cheerful winking with a thumbs up. All with rosy blushing cheeks and big expressive anime eyes, clean vector art style, flat pastel colors, isolated on solid pure white background.
 ```
 
+#### 1.8 Sequence Animasi Loading Screen Gita Menari Ceria (`assets/animations/loading/`)
+* **Lokasi Simpan:** `assets/animations/loading/gita_load_000.webp` s/d `gita_load_041.webp` (Total 42 frame WebP)
+* **Sumber Master Raw:** `raw-assets/loading-screen/` (167 frame PNG mentah @300×300 px, total 11,3 MB)
+* **Pipeline Optimasi:** `tools/pipeline/optimize_loading_screen.py` (*Smart decimation sampling* 42 frame, resize 240×240 px, kompresi WebP quality 82%, total ukuran terpangkas drastis menjadi **331,2 KB** atau efisiensi **-88,2%**).
+* **Peran Media:** Memandu transisi antar-layar game (durasi ~750 ms) di layar sentuh IFP kelas 5A SDN Percobaan 2 Malang, dipadukan dengan 10 kutipan fakta edukatif sains ekosistem sawah (Mayer's Pre-training & Signaling Principle).
+* **Prompt Referensi Generator:**
+```text
+Full body 2D digital anime chibi character animation sequence of cute 10-year-old Indonesian Muslim girl Gita, wearing a neat black hijab, dark navy blue open jacket, vibrant red inner shirt, charcoal pants, cute joyful idle swaying dance loop, cheerful smiling expression with soft rosy blushing cheeks, isolated transparent background, smooth 24fps keyframes.
+```
+
 ---
 
 ### C. FORMAT AVATAR DIALOG BOX (2D PNG TRANSPARAN CLOSE-UP BUST PORTRAIT)

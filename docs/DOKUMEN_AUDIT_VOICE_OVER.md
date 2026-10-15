@@ -1,12 +1,12 @@
 # DOKUMEN AUDIT & NASKAH LENGKAP VOICE-OVER (VO) MANDIRI
 ## "Eco-Explorer: Penjaga Keseimbangan Ekosistem Nusantara"
-### Versi Game: TES GITA BARU 1 (4 Ekosistem & 16 Misi Kausalitas)
+### Versi Game: Eco-Explorer Production Release (4 Ekosistem & 16 Misi Kausalitas)
 
 * **Peneliti / Pengembang & Pengisi Suara:** Gita / Gito (Pengembang Mandiri)
 * **Target Subjek:** Siswa Kelas V SDN Percobaan 2 Malang (Fase C IPAS)
 * **Karakter Pemandu Utama:** **Gita si Detektif Cilik** (Persona: Kakak Pemandu / Sahabat Detektif Ceria & Suportif)
 * **Target Perangkat:** Layar Sentuh *Interactive Flat Panel* (IFP 65–86 Inch) di Ruang Kelas 5A
-* **Lokasi Penyimpanan File Audio:** `d:\SKRIPSI GITA\TES GITA BARU 1\assets\audio\vo\`
+* **Lokasi Penyimpanan File Audio:** `d:\SKRIPSI GITA\assets\audio\voice-over\`
 
 ---
 
@@ -37,7 +37,7 @@ Kamu tidak memerlukan studio rekaman mewah untuk menghasilkan suara yang jernih 
 | **Format Berkas** | **MP3** (128 kbps atau 192 kbps, Sample Rate 44.1 kHz atau 48 kHz). |
 | **Normalisasi Volume** | Sekitar **-16 LUFS** (Peak maksimal: -1.0 dBFS) agar terdengar lantang dan seimbang pada speaker terintegrasi IFP sekolah tanpa distorsi. |
 | **Kecepatan Bicara** | Santai dan berartikulasi jelas (110–125 kata per menit). Beri jeda sejenak antar kalimat. |
-| **Folder Tujuan** | Simpan berkas MP3 langsung ke folder:<br>`d:\SKRIPSI GITA\TES GITA BARU 1\assets\audio\vo\`<br>dengan nama file yang **persis sama** dengan tabel di bawah. |
+| **Folder Tujuan** | Simpan berkas MP3 langsung ke folder:<br>`d:\SKRIPSI GITA\assets\audio\voice-over\`<br>dengan nama file yang **persis sama** dengan tabel di bawah. |
 
 ---
 

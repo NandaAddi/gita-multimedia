@@ -90,15 +90,6 @@ function init(){
     go('teacher');
   };
 
-  const btnAbout = el('#btn-about');
-  if (btnAbout) {
-    btnAbout.onclick = () => {
-      sfx.click();
-      if (typeof buildAbout === 'function') buildAbout();
-      go('about');
-    };
-  }
-
   // Proteksi debounce multi-click untuk layar sentuh IFP
   el('#t-snd').onclick = toggleSound;
 
@@ -233,24 +224,27 @@ function init(){
     }
 
     // 2. Citra Statis (Foto Profil Peneliti & Lambang Resmi UM)
-    const staticImages = ['assets/Foto pas agita.webp', 'assets/Lambang-UM.webp'];
+    const staticImages = ['assets/images/Foto pas agita.webp', 'assets/images/Lambang-UM.webp'];
     const imgTasks = Promise.all(staticImages.map(preloadImg)).then(() => {
       setProgress(48, 'Memuat citra profil & lambang almamater...');
     });
     tasks.push(imgTasks);
 
-    // 3. Preload sequence WebP Gita (168 Frame: Thinking, Talking, Worried)
+    // 3. Preload sequence WebP Gita (210 Frame: Thinking, Talking, Worried, Loading)
     if (typeof GitaSeq !== 'undefined' && GitaSeq.preload) {
-      const g1 = GitaSeq.preload({ folder: 'gita-thinking', prefix: 'g', pad: 3, ext: '.webp', frames: 48, fps: 12 })
-        .then(() => setProgress(65, 'Menyiapkan animasi karakter Gita...'))
+      const g1 = GitaSeq.preload({ folder: 'assets/animations/gita-thinking', prefix: 'g', pad: 3, ext: '.webp', frames: 48, fps: 12 })
+        .then(() => setProgress(60, 'Menyiapkan animasi karakter Gita...'))
         .catch(() => {});
-      const g2 = GitaSeq.preload({ folder: 'talking_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 })
-        .then(() => setProgress(82, 'Memuat dialog ekspresi panduan...'))
+      const g2 = GitaSeq.preload({ folder: 'assets/animations/talking_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 })
+        .then(() => setProgress(75, 'Memuat dialog ekspresi panduan...'))
         .catch(() => {});
-      const g3 = GitaSeq.preload({ folder: 'worried_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 })
-        .then(() => setProgress(94, 'Menginisialisasi simulasi 4 ekosistem...'))
+      const g3 = GitaSeq.preload({ folder: 'assets/animations/worried_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 })
+        .then(() => setProgress(88, 'Menginisialisasi simulasi 4 ekosistem...'))
         .catch(() => {});
-      tasks.push(Promise.all([g1, g2, g3]));
+      const g4 = GitaSeq.preload({ folder: 'assets/animations/loading', prefix: 'gita_load_', pad: 3, ext: '.webp', frames: 42, fps: 22 })
+        .then(() => setProgress(96, 'Menyiapkan transisi petualangan...'))
+        .catch(() => {});
+      tasks.push(Promise.all([g1, g2, g3, g4]));
     }
 
     // Menunggu seluruh aset 100% selesai dimuat sebelum memulai game
@@ -281,19 +275,19 @@ function init(){
     const p = new URLSearchParams(location.search).get('screen');
     if (p === 'tutorial') {
       buildTutorial();
-      go('tutorial');
+      go('tutorial', true);
     } else if (p === 'team') {
       buildTeam();
-      go('team');
+      go('team', true);
     } else if (p === 'biome') {
       buildBiome();
-      go('biome');
+      go('biome', true);
     } else if (p === 'sim') {
       const misId = new URLSearchParams(location.search).get('mission') || 'sawah-1';
       const targetMis = MISSIONS.find(m => m.id === misId) || MISSIONS[0];
       startSim(targetMis);
     } else {
-      go('title');
+      go('title', true);
     }
   };
 

@@ -1,0 +1,430 @@
+/* ---------- Beranda (Home) Slider Zero-Scroll ---------- */
+.home-slider-wrap {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+}
+
+.home-slider-track {
+    display: flex;
+    width: 200%;
+    height: 100%;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.home-slide {
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.home-slide-inner {
+    width: 100%;
+    max-width: 540px;
+    height: 100%;
+    margin: 0 auto;
+    padding: clamp(10px, 2vh, 22px) 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+/* Header Slide */
+.home-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11.5px;
+    font-weight: 900;
+    letter-spacing: 1.6px;
+    color: var(--mut);
+}
+
+.brand .ic {
+    color: var(--green);
+}
+
+.slide-dots {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.slide-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 99px;
+    background: var(--line);
+    transition: all 0.3s ease;
+}
+
+.slide-dot.active {
+    width: 20px;
+    background: var(--green);
+}
+
+/* Hero & Mascot */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: clamp(4px, 1.2vh, 12px);
+    flex-shrink: 0;
+}
+
+.mascot-wrap {
+    width: clamp(90px, 15vh, 140px);
+    animation: bob 3.4s ease-in-out infinite;
+    display: flex;
+    justify-content: center;
+}
+
+.mascot-wrap svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+@keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+}
+
+.bubble {
+    position: relative;
+    max-width: 440px;
+    border: 2px solid var(--line);
+    border-radius: 16px;
+    padding: clamp(6px, 1.2vh, 10px) clamp(12px, 2vw, 16px);
+    font-weight: 700;
+    font-size: clamp(12.5px, 1.8vh, 14.5px);
+    color: #777;
+    text-align: center;
+    margin-top: clamp(6px, 1vh, 10px);
+    line-height: 1.45;
+}
+
+.bubble b {
+    color: var(--ink);
+}
+
+.bubble::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    background: #fff;
+    border-left: 2px solid var(--line);
+    border-top: 2px solid var(--line);
+    transform: rotate(45deg);
+}
+
+/* Title */
+.title-group {
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: clamp(4px, 1vh, 10px);
+}
+
+.display {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4.5vh, 44px);
+    line-height: 1;
+    text-align: center;
+}
+
+.display .g {
+    color: var(--green);
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--mut);
+    font-weight: 800;
+    font-size: clamp(11px, 1.6vh, 13px);
+    margin-top: 4px;
+}
+
+/* Peraturan Kuis */
+.rules {
+    margin-top: clamp(6px, 1.4vh, 14px);
+    border: 2px solid var(--line);
+    border-radius: 16px;
+    padding: clamp(8px, 1.4vh, 12px) 14px;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, 1.2vh, 10px);
+    flex-shrink: 0;
+}
+
+.rule {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: clamp(12px, 1.6vh, 13.5px);
+    font-weight: 700;
+    color: #666;
+    line-height: 1.45;
+}
+
+.rule .ic {
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.rule b {
+    color: var(--ink);
+}
+
+/* Tag Siswa */
+.siswa-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green-soft);
+    border-radius: 12px;
+    padding: clamp(6px, 1vh, 8px) 12px;
+    font-size: clamp(11.5px, 1.5vh, 13px);
+    font-weight: 800;
+    color: var(--green-dark);
+    margin-top: clamp(6px, 1.2vh, 12px);
+    flex-shrink: 0;
+}
+
+.siswa-tag .change-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: var(--mut);
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.siswa-tag .change-btn:hover {
+    color: var(--red);
+}
+
+.db-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    padding: 2px 8px;
+    border-radius: 99px;
+}
+
+.db-status.ok { background: var(--green-soft); color: var(--green-dark); }
+.db-status.saving { background: #FFF3D6; color: var(--orange); }
+.db-status.err { background: var(--red-soft); color: var(--red-dark); }
+.db-status.off { background: var(--snow); color: var(--mut); }
+
+/* Tombol Next Slide */
+.btn-slider-next {
+    width: 100%;
+    margin-top: clamp(8px, 1.6vh, 16px);
+    padding: clamp(11px, 1.8vh, 15px);
+    flex-shrink: 0;
+}
+
+/* ---------- Slide 2: Checkpoint Path ---------- */
+.slide2-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.btn-back-clean {
+    background: none;
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--ink);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all .15s ease;
+}
+
+.btn-back-clean:hover {
+    background: var(--snow);
+    border-color: var(--mut);
+}
+
+.ch-header {
+    text-align: center;
+    margin-top: clamp(4px, 1vh, 12px);
+    flex-shrink: 0;
+}
+
+.ch-title {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: clamp(22px, 3.5vh, 28px);
+    font-weight: 800;
+    color: var(--ink);
+}
+
+.ch-sub {
+    font-size: clamp(11.5px, 1.6vh, 13px);
+    font-weight: 700;
+    color: var(--mut);
+    margin-top: 2px;
+}
+
+.path-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(4px, 1.5vh, 16px) 0;
+}
+
+.path {
+    width: 100%;
+}
+
+.path-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.path-text {
+    flex: 1;
+}
+
+.node {
+    width: clamp(74px, 11.5vh, 92px);
+    height: clamp(74px, 11.5vh, 92px);
+    border-radius: 50%;
+    border: none;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform .06s;
+}
+
+.node:active {
+    transform: translateY(4px);
+}
+
+.node.green {
+    background: var(--green);
+    box-shadow: 0 6px 0 var(--green-dark);
+}
+
+.node.gold {
+    background: var(--gold);
+    box-shadow: 0 6px 0 var(--gold-dark);
+}
+
+.node.lock {
+    background: var(--line);
+    box-shadow: 0 6px 0 #C9C9C9;
+    color: #AFAFAF;
+}
+
+.path-title {
+    font-size: clamp(15px, 2.2vh, 18px);
+    font-weight: 900;
+    letter-spacing: .8px;
+}
+
+.path-sub {
+    font-size: clamp(12px, 1.6vh, 13.5px);
+    font-weight: 700;
+    color: var(--mut);
+    margin-top: 2px;
+    line-height: 1.35;
+}
+
+.done-badge {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 3px 10px;
+    border-radius: 99px;
+}
+
+.connector {
+    display: block;
+    width: 100%;
+    height: clamp(34px, 6vh, 52px);
+    margin: 2px 0;
+}
+
+/* Slide 2 Footer Actions */
+.slide2-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+    margin-top: clamp(6px, 1.5vh, 16px);
+}
+
+.guru-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #fff;
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    padding: clamp(8px, 1.4vh, 11px) 16px;
+    color: var(--mut);
+    font-weight: 800;
+    font-size: 12.5px;
+    cursor: pointer;
+    width: 100%;
+    transition: border-color .15s, color .15s;
+}
+
+.guru-link:hover {
+    border-color: var(--green);
+    color: var(--green-dark);
+}
+
+.linkish {
+    display: block;
+    margin: 0 auto;
+    background: none;
+    border: none;
+    color: var(--mut);
+    font-weight: 800;
+    font-size: 11.5px;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 4px;
+}
+
+.linkish:hover {
+    color: var(--red);
+}

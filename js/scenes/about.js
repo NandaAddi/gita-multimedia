@@ -30,7 +30,7 @@ function buildAbout() {
         <!-- Kolom Kiri: Foto Profil & Identitas Ringkas -->
         <div class="about-profile-card">
           <div class="about-photo-frame">
-            <img src="assets/Foto pas agita.webp" alt="Agita Khairunnisa" class="about-photo-img" />
+            <img src="assets/images/Foto pas agita.webp" alt="Agita Khairunnisa" class="about-photo-img" />
           </div>
           <div class="about-profile-info">
             <h2 class="about-dev-name">Agita Khairunnisa</h2>

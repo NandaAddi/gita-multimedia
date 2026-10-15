@@ -1,0 +1,2579 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#58CC02">
+    <title>Kuis Ekosistem — IPAS Kelas V SD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Tidak ada Supabase CDN di frontend — credential aman di Edge Function server-side -->
+    <style>
+        :root {
+            --green: #58CC02;
+            --green-dark: #46A302;
+            --green-soft: #D7FFB8;
+            --green-line: #A5ED6E;
+            --blue: #1CB0F6;
+            --blue-dark: #1899D6;
+            --blue-soft: #DDF4FF;
+            --blue-line: #84D8FF;
+            --red: #FF4B4B;
+            --red-dark: #EA2B2B;
+            --red-soft: #FFDFE0;
+            --red-line: #FFB2B2;
+            --gold: #FFC800;
+            --gold-dark: #E0A600;
+            --orange: #FF9600;
+            --ink: #3C3C3C;
+            --mut: #AFAFAF;
+            --line: #E5E5E5;
+            --snow: #F7F7F7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        button {
+            font-family: inherit;
+            color: inherit
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--ink);
+            background: #fff;
+            -webkit-font-smoothing: antialiased
+        }
+
+        #fx {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 60
+        }
+
+        .ic {
+            display: block
+        }
+
+        /* ---------- layar ---------- */
+        .screen {
+            display: none;
+            min-height: 100vh
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn .35s ease
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .wrap {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 22px 20px 60px
+        }
+
+        /* ---------- tombol ---------- */
+        .btn {
+            border: none;
+            cursor: pointer;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 15px;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            padding: 15px 26px;
+            transition: transform .06s, box-shadow .06s
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(3px)
+        }
+
+        .btn:disabled {
+            cursor: default
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: #fff;
+            box-shadow: 0 4px 0 var(--green-dark)
+        }
+
+        .btn-primary:active:not(:disabled) {
+            box-shadow: 0 1px 0 var(--green-dark)
+        }
+
+        .btn-primary:disabled {
+            background: var(--line);
+            color: var(--mut);
+            box-shadow: 0 4px 0 #D8D8D8
+        }
+
+        .btn-danger {
+            background: var(--red);
+            color: #fff;
+            box-shadow: 0 4px 0 var(--red-dark)
+        }
+
+        .btn-danger:active {
+            box-shadow: 0 1px 0 var(--red-dark)
+        }
+
+        .btn-ghost {
+            background: #fff;
+            color: var(--blue-dark);
+            box-shadow: inset 0 0 0 2px var(--line)
+        }
+
+        .btn-white-g {
+            background: #fff;
+            color: var(--green-dark);
+            box-shadow: 0 3px 0 #9FDD66
+        }
+
+        .btn-white-r {
+            background: #fff;
+            color: var(--red-dark);
+            box-shadow: 0 3px 0 #F2A6A6
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: transparent;
+            border-radius: 12px;
+            color: var(--mut);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            transition: background .15s
+        }
+
+        .icon-btn:hover {
+            background: var(--snow)
+        }
+
+        /* ---------- beranda ---------- */
+        .home-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11.5px;
+            font-weight: 900;
+            letter-spacing: 1.6px;
+            color: var(--mut)
+        }
+
+        .brand .ic {
+            color: var(--green)
+        }
+
+        #btn-sound.off {
+            color: var(--red)
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px
+        }
+
+        .mascot-wrap {
+            width: 190px;
+            animation: bob 3.4s ease-in-out infinite
+        }
+
+        .mascot-wrap svg {
+            width: 100%;
+            height: auto;
+            display: block
+        }
+
+        @keyframes bob {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-9px)
+            }
+        }
+
+        .bubble {
+            position: relative;
+            max-width: 440px;
+            border: 2px solid var(--line);
+            border-radius: 18px;
+            padding: 13px 18px;
+            font-weight: 700;
+            font-size: 15px;
+            color: #777;
+            text-align: center;
+            margin-top: 12px;
+            line-height: 1.5
+        }
+
+        .bubble b {
+            color: var(--ink)
+        }
+
+        .bubble::before {
+            content: "";
+            position: absolute;
+            top: -9px;
+            left: 50%;
+            width: 14px;
+            height: 14px;
+            margin-left: -7px;
+            background: #fff;
+            border-left: 2px solid var(--line);
+            border-top: 2px solid var(--line);
+            transform: rotate(45deg)
+        }
+
+        .display {
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            font-size: clamp(42px, 10vw, 58px);
+            line-height: 1;
+            text-align: center;
+            margin-top: 26px
+        }
+
+        .display .g {
+            color: var(--green)
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--mut);
+            font-weight: 800;
+            font-size: 14px;
+            margin-top: 7px
+        }
+
+        /* peta belajar ala duolingo */
+        .path {
+            margin-top: 34px
+        }
+
+        .path-row {
+            display: flex;
+            align-items: center;
+            gap: 18px
+        }
+
+        .path-text {
+            flex: 1
+        }
+
+        .node {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            border: none;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: transform .06s
+        }
+
+        .node:active {
+            transform: translateY(4px)
+        }
+
+        .node.green {
+            background: var(--green);
+            box-shadow: 0 7px 0 var(--green-dark)
+        }
+
+        .node.gold {
+            background: var(--gold);
+            box-shadow: 0 7px 0 var(--gold-dark)
+        }
+
+        .node.lock {
+            background: var(--line);
+            box-shadow: 0 7px 0 #C9C9C9;
+            color: #AFAFAF
+        }
+
+        .path-title {
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 1px
+        }
+
+        .path-sub {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--mut);
+            margin-top: 3px;
+            line-height: 1.4
+        }
+
+        .done-badge {
+            display: inline-block;
+            margin-top: 8px;
+            background: #FFF3D6;
+            color: #9A6C00;
+            font-size: 12px;
+            font-weight: 900;
+            padding: 4px 12px;
+            border-radius: 99px
+        }
+
+        .connector {
+            display: block;
+            width: 100%;
+            height: 56px;
+            margin: 4px 0
+        }
+
+        .rules {
+            margin-top: 34px;
+            border: 2px solid var(--line);
+            border-radius: 18px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .rule {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            font-size: 14px;
+            font-weight: 700;
+            color: #777;
+            line-height: 1.5
+        }
+
+        .rule .ic {
+            flex-shrink: 0;
+            margin-top: 2px
+        }
+
+        .rule b {
+            color: var(--ink)
+        }
+
+        .linkish {
+            display: block;
+            margin: 24px auto 0;
+            background: none;
+            border: none;
+            color: var(--mut);
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: underline
+        }
+
+        .linkish:hover {
+            color: var(--red)
+        }
+
+        /* ---------- kuis ---------- */
+        .q-header {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            max-width: 640px;
+            margin: 0 auto
+        }
+
+        .progress {
+            flex: 1;
+            height: 16px;
+            background: var(--line);
+            border-radius: 99px;
+            overflow: hidden
+        }
+
+        #progress-fill {
+            height: 100%;
+            width: 0;
+            background: var(--green);
+            border-radius: 99px;
+            transition: width .4s cubic-bezier(.2, .8, .3, 1)
+        }
+
+        .hearts {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--red);
+            font-weight: 900;
+            font-size: 18px
+        }
+
+        .hearts.hurt {
+            animation: shake .4s
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-6px)
+            }
+
+            50% {
+                transform: translateX(6px)
+            }
+
+            75% {
+                transform: translateX(-4px)
+            }
+        }
+
+        .combo {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            background: #FFF3D6;
+            color: var(--orange);
+            font-weight: 900;
+            font-size: 14px;
+            padding: 4px 10px;
+            border-radius: 99px
+        }
+
+        .combo.hidden {
+            display: none
+        }
+
+        .combo.pop {
+            animation: pop .3s
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(.6)
+            }
+
+            60% {
+                transform: scale(1.25)
+            }
+
+            100% {
+                transform: scale(1)
+            }
+        }
+
+        .xp-float {
+            position: absolute;
+            top: 12px;
+            right: 58px;
+            font-weight: 900;
+            color: var(--gold-dark);
+            pointer-events: none;
+            animation: floatUp .95s ease forwards
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(8px) scale(.7)
+            }
+
+            25% {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-22px)
+            }
+        }
+
+        .q-main {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 10px 20px 175px
+        }
+
+        .q-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px
+        }
+
+        .q-meta .num {
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 1.2px;
+            color: var(--mut)
+        }
+
+        .topic {
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .8px;
+            padding: 4px 11px;
+            border-radius: 99px
+        }
+
+        .topic.t0 {
+            background: var(--blue-soft);
+            color: var(--blue-dark)
+        }
+
+        .topic.t1 {
+            background: #FFF3D6;
+            color: #B47B00
+        }
+
+        .topic.t2 {
+            background: var(--green-soft);
+            color: var(--green-dark)
+        }
+
+        #q-text {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.35;
+            margin-bottom: 24px
+        }
+
+        #opts {
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .opt {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            text-align: left;
+            background: #fff;
+            border: 2px solid var(--line);
+            border-bottom-width: 4px;
+            border-radius: 16px;
+            padding: 14px 16px;
+            font-size: 16.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .12s, border-color .12s, color .12s
+        }
+
+        .opt:hover:not(.locked) {
+            background: var(--snow)
+        }
+
+        .opt .key {
+            flex-shrink: 0;
+            width: 26px;
+            height: 26px;
+            border: 2px solid;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            font-size: 13px;
+            font-weight: 900;
+            opacity: .5
+        }
+
+        .opt .txt {
+            flex: 1
+        }
+
+        .opt .mark {
+            display: none
+        }
+
+        .opt.selected {
+            background: var(--blue-soft);
+            border-color: var(--blue-line);
+            color: var(--blue-dark)
+        }
+
+        .opt.selected .key {
+            opacity: 1
+        }
+
+        .opt.right {
+            background: var(--green-soft);
+            border-color: var(--green-line);
+            color: var(--green-dark)
+        }
+
+        .opt.wrongpick {
+            background: var(--red-soft);
+            border-color: var(--red-line);
+            color: var(--red-dark);
+            animation: shake .4s
+        }
+
+        .opt.right .mark,
+        .opt.wrongpick .mark {
+            display: block
+        }
+
+        .opt.dim {
+            opacity: .5
+        }
+
+        .opt.locked {
+            cursor: default
+        }
+
+        .q-footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            border-top: 2px solid var(--line);
+            z-index: 30;
+            transition: background .2s, border-color .2s
+        }
+
+        .q-footer.good {
+            background: var(--green-soft);
+            border-color: transparent
+        }
+
+        .q-footer.bad {
+            background: var(--red-soft);
+            border-color: transparent
+        }
+
+        .q-footer-inner {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px
+        }
+
+        .fb {
+            flex: 1;
+            display: none;
+            gap: 12px;
+            align-items: flex-start;
+            animation: slideUp .3s ease
+        }
+
+        .q-footer.good .fb,
+        .q-footer.bad .fb {
+            display: flex
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .fic {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fff;
+            display: grid;
+            place-items: center
+        }
+
+        .q-footer.good .fic {
+            color: var(--green-dark)
+        }
+
+        .q-footer.bad .fic {
+            color: var(--red-dark)
+        }
+
+        #fb-title {
+            font-size: 19px;
+            font-weight: 900
+        }
+
+        .q-footer.good #fb-title {
+            color: var(--green-dark)
+        }
+
+        .q-footer.bad #fb-title {
+            color: var(--red-dark)
+        }
+
+        #fb-body {
+            font-size: 14.5px;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-top: 2px
+        }
+
+        .q-footer.good #fb-body {
+            color: var(--green-dark)
+        }
+
+        .q-footer.bad #fb-body {
+            color: var(--red-dark)
+        }
+
+        .fb-why {
+            font-weight: 600;
+            opacity: .85;
+            margin-top: 3px
+        }
+
+        #btn-main {
+            flex-shrink: 0;
+            min-width: 160px
+        }
+
+        @media(max-width:560px) {
+            .q-footer-inner {
+                flex-direction: column;
+                align-items: stretch
+            }
+
+            #btn-main {
+                width: 100%
+            }
+
+            #q-text {
+                font-size: 21px
+            }
+        }
+
+        /* ---------- hasil ---------- */
+        #screen-result .wrap {
+            padding-top: 34px;
+            text-align: center
+        }
+
+        .res-mascot {
+            width: 150px;
+            margin: 0 auto
+        }
+
+        .mode-chip {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 1.6px;
+            color: var(--mut)
+        }
+
+        #r-title {
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            font-size: clamp(34px, 8vw, 48px);
+            margin-top: 4px
+        }
+
+        #r-msg {
+            color: #777;
+            font-weight: 700;
+            font-size: 15.5px;
+            max-width: 430px;
+            margin: 8px auto 0;
+            line-height: 1.55
+        }
+
+        .ring {
+            position: relative;
+            width: 170px;
+            height: 170px;
+            margin: 24px auto 0
+        }
+
+        .ring svg {
+            transform: rotate(-90deg)
+        }
+
+        .ring .track {
+            stroke: var(--line)
+        }
+
+        .ring .val {
+            transition: stroke-dashoffset 1.1s cubic-bezier(.2, .8, .3, 1)
+        }
+
+        .ring-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center
+        }
+
+        .ring-center .big {
+            font-size: 38px;
+            font-weight: 900;
+            line-height: 1
+        }
+
+        .ring-center .den {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--mut)
+        }
+
+        .ring-center .sub {
+            font-size: 10.5px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: var(--mut);
+            margin-top: 5px
+        }
+
+        .stat-strip {
+            display: flex;
+            border: 2px solid var(--line);
+            border-radius: 18px;
+            margin-top: 24px;
+            overflow: hidden
+        }
+
+        .stat {
+            flex: 1;
+            padding: 14px 6px
+        }
+
+        .stat+.stat {
+            border-left: 2px solid var(--line)
+        }
+
+        .stat .sv {
+            font-size: 21px;
+            font-weight: 900
+        }
+
+        .stat .sl {
+            font-size: 10.5px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: var(--mut);
+            margin-top: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px
+        }
+
+        .c-gold {
+            color: var(--gold-dark)
+        }
+
+        .c-green {
+            color: var(--green-dark)
+        }
+
+        .c-blue {
+            color: var(--blue-dark)
+        }
+
+        .compare {
+            margin-top: 14px;
+            border: 2px solid;
+            border-radius: 16px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 14.5px;
+            text-align: left
+        }
+
+        .compare.up {
+            background: var(--green-soft);
+            border-color: var(--green-line);
+            color: var(--green-dark)
+        }
+
+        .compare.down {
+            background: var(--red-soft);
+            border-color: var(--red-line);
+            color: var(--red-dark)
+        }
+
+        .compare.flat {
+            background: var(--snow);
+            border-color: var(--line);
+            color: #777
+        }
+
+        .review {
+            margin-top: 34px;
+            text-align: left
+        }
+
+        .review h2 {
+            font-size: 19px;
+            font-weight: 900;
+            margin-bottom: 14px
+        }
+
+        .rev {
+            border: 2px solid var(--line);
+            border-radius: 16px;
+            margin-bottom: 10px;
+            background: #fff
+        }
+
+        .rev.wrong {
+            background: #FFF5F5;
+            border-color: #FFCFCF
+        }
+
+        .rev-head {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 13px 15px;
+            cursor: pointer;
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left
+        }
+
+        .rev-ic {
+            flex-shrink: 0;
+            margin-top: 1px
+        }
+
+        .rev.ok .rev-ic {
+            color: var(--green)
+        }
+
+        .rev.wrong .rev-ic {
+            color: var(--red)
+        }
+
+        .rev-q {
+            flex: 1;
+            font-size: 14.5px;
+            font-weight: 800;
+            line-height: 1.4
+        }
+
+        .chev {
+            flex-shrink: 0;
+            color: var(--mut);
+            transition: transform .2s;
+            margin-top: 1px
+        }
+
+        .rev.open .chev {
+            transform: rotate(180deg)
+        }
+
+        .rev-body {
+            display: none;
+            padding: 0 15px 14px 49px;
+            font-size: 13.5px;
+            font-weight: 700;
+            line-height: 1.7
+        }
+
+        .rev.open .rev-body {
+            display: block
+        }
+
+        .lbl {
+            color: var(--mut);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1px
+        }
+
+        .ra-w {
+            color: var(--red-dark)
+        }
+
+        .ra-r {
+            color: var(--green-dark)
+        }
+
+        .rev-why {
+            color: #777;
+            font-weight: 600;
+            margin-top: 4px
+        }
+
+        .result-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px
+        }
+
+        .result-actions .btn {
+            width: 100%
+        }
+
+        /* ---------- modal ---------- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(60, 60, 60, .45);
+            z-index: 80;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            animation: fadeIn .2s
+        }
+
+        .modal-overlay.closing {
+            animation: fadeOut .15s forwards
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0
+            }
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 24px;
+            padding: 28px 24px 22px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: popIn .25s cubic-bezier(.3, 1.4, .6, 1)
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(.85);
+                opacity: 0
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        .modal-ic {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 14px
+        }
+
+        .modal-ic.green {
+            background: var(--green-soft);
+            color: var(--green-dark)
+        }
+
+        .modal-ic.red {
+            background: var(--red-soft);
+            color: var(--red)
+        }
+
+        .modal-ic.gold {
+            background: #FFF3D6;
+            color: var(--orange)
+        }
+
+        .modal h3 {
+            font-size: 21px;
+            font-weight: 900
+        }
+
+        .modal p {
+            color: #777;
+            font-weight: 700;
+            font-size: 14.5px;
+            line-height: 1.55;
+            margin-top: 8px
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 22px
+        }
+
+        .modal-actions .btn {
+            width: 100%
+        }
+
+        body.modal-open {
+            overflow: hidden
+        }
+
+        /* ========== MODAL IDENTITAS SISWA ========== */
+        .id-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #58CC02 0%, #1CB0F6 100%);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn .4s ease
+        }
+        .id-overlay.closing {
+            animation: fadeOut .3s ease forwards
+        }
+        .id-card {
+            background: #fff;
+            border-radius: 28px;
+            padding: 32px 28px 28px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,.25);
+            animation: popIn .4s cubic-bezier(.3,1.4,.6,1)
+        }
+        .id-avatar {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, #D7FFB8, #DDF4FF);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 44px
+        }
+        .id-title {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--ink);
+            line-height: 1.1
+        }
+        .id-sub {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--mut);
+            margin-top: 6px;
+            line-height: 1.5
+        }
+        .id-form {
+            margin-top: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            text-align: left
+        }
+        .id-field label {
+            display: block;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1.2px;
+            color: var(--mut);
+            margin-bottom: 6px
+        }
+        .id-field input, .id-field select {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid var(--line);
+            border-radius: 14px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+            background: #fff;
+            outline: none;
+            transition: border-color .15s
+        }
+        .id-field input:focus, .id-field select:focus {
+            border-color: var(--green)
+        }
+        .id-field input::placeholder {
+            color: #CCC;
+            font-weight: 600
+        }
+        .id-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+        .id-submit {
+            width: 100%;
+            margin-top: 8px;
+            padding: 16px;
+            font-size: 16px;
+            letter-spacing: 1px
+        }
+        .id-note {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--mut);
+            margin-top: 12px
+        }
+
+        /* ========== TEACHER DASHBOARD ========== */
+        .dash-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(20,20,20,.7);
+            z-index: 300;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+            animation: fadeIn .25s
+        }
+        .dash-overlay.closing {
+            animation: fadeOut .2s forwards
+        }
+        .dash-card {
+            background: #fff;
+            border-radius: 24px;
+            max-width: 720px;
+            width: 100%;
+            overflow: hidden;
+            animation: popIn .3s cubic-bezier(.3,1.2,.6,1);
+            margin: auto
+        }
+        .dash-head {
+            background: linear-gradient(135deg, #1a3a1a, #2d7a0f);
+            padding: 22px 26px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #fff
+        }
+        .dash-head h2 {
+            font-size: 20px;
+            font-weight: 900
+        }
+        .dash-head p {
+            font-size: 12px;
+            opacity: .75;
+            font-weight: 700;
+            margin-top: 2px
+        }
+        .dash-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255,255,255,.15);
+            color: #fff;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            transition: background .15s
+        }
+        .dash-close:hover { background: rgba(255,255,255,.28) }
+        .dash-body { padding: 20px 24px 28px }
+        .dash-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px,1fr));
+            gap: 12px;
+            margin-bottom: 20px
+        }
+        .dash-stat {
+            background: var(--snow);
+            border-radius: 14px;
+            padding: 14px 10px;
+            text-align: center
+        }
+        .dash-stat .dsv {
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--ink)
+        }
+        .dash-stat .dsl {
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: var(--mut);
+            margin-top: 3px
+        }
+        .dash-toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px
+        }
+        .dash-toolbar .btn {
+            font-size: 13px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            letter-spacing: .5px
+        }
+        .btn-teal {
+            background: #0d9488;
+            color: #fff;
+            box-shadow: 0 3px 0 #0a7a70
+        }
+        .btn-teal:active { box-shadow: 0 1px 0 #0a7a70 }
+        .dash-table-wrap {
+            overflow-x: auto;
+            border: 2px solid var(--line);
+            border-radius: 14px
+        }
+        table.dash-tbl {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+            font-weight: 700
+        }
+        .dash-tbl th {
+            background: var(--snow);
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: var(--mut);
+            border-bottom: 2px solid var(--line)
+        }
+        .dash-tbl td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--line)
+        }
+        .dash-tbl tr:last-child td { border-bottom: none }
+        .dash-tbl tr:hover td { background: var(--snow) }
+        .badge-pre { background:#DDF4FF; color:#1899D6; padding:2px 8px; border-radius:99px; font-size:11px }
+        .badge-post { background:#D7FFB8; color:#46A302; padding:2px 8px; border-radius:99px; font-size:11px }
+        .dash-empty {
+            padding: 40px;
+            text-align: center;
+            color: var(--mut);
+            font-weight: 700
+        }
+        /* PIN entry */
+        .pin-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(20,20,20,.75);
+            z-index: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn .2s
+        }
+        .pin-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 32px 28px;
+            max-width: 340px;
+            width: 100%;
+            text-align: center;
+            animation: popIn .3s cubic-bezier(.3,1.4,.6,1)
+        }
+        .pin-card h3 { font-size: 20px; font-weight: 900; margin-bottom: 8px }
+        .pin-card p { font-size: 13.5px; font-weight: 700; color: var(--mut); margin-bottom: 20px; line-height:1.5 }
+        .pin-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 6px;
+            text-align: center;
+            border: 2px solid var(--line);
+            border-radius: 14px;
+            font-family: 'Nunito', sans-serif;
+            outline: none;
+            margin-bottom: 14px;
+            transition: border-color .15s
+        }
+        .pin-input:focus { border-color: var(--green) }
+        .pin-err { color: var(--red); font-size: 12.5px; font-weight: 800; min-height: 18px; margin-bottom: 12px }
+        .pin-submit { width: 100%; padding: 14px; font-size: 15px }
+        /* guru link at bottom of home */
+        .guru-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 18px;
+            background: none;
+            border: 2px solid var(--line);
+            border-radius: 12px;
+            padding: 10px 20px;
+            color: var(--mut);
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            width: 100%;
+            transition: border-color .15s, color .15s
+        }
+        .guru-link:hover { border-color: var(--green); color: var(--green-dark) }
+        /* student name tag on home */
+        .siswa-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--green-soft);
+            border-radius: 12px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--green-dark);
+            margin-top: 14px
+        }
+        .siswa-tag .change-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--mut);
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0
+        }
+        .siswa-tag .change-btn:hover { color: var(--red) }
+        /* Supabase status indicator */
+        .db-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .5px;
+            padding: 3px 10px;
+            border-radius: 99px;
+            margin-top: 6px
+        }
+        .db-status.ok { background: var(--green-soft); color: var(--green-dark) }
+        .db-status.err { background: var(--red-soft); color: var(--red-dark) }
+        .db-status.off { background: var(--snow); color: var(--mut) }
+
+        /* ---------- maskot ---------- */
+        .mascot .eye {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: blink 4.8s infinite
+        }
+
+        @keyframes blink {
+
+            0%,
+            93.5%,
+            100% {
+                transform: scaleY(1)
+            }
+
+            96.5% {
+                transform: scaleY(.06)
+            }
+        }
+
+        .mascot .pupil {
+            transition: transform .1s linear
+        }
+
+        .mascot .hat {
+            display: none
+        }
+
+        .mascot.party .hat {
+            display: block;
+            animation: pop .5s
+        }
+
+        .mascot.cheer {
+            animation: cheer .8s ease
+        }
+
+        @keyframes cheer {
+            0% {
+                transform: scale(1)
+            }
+
+            30% {
+                transform: scale(1.09) rotate(-5deg)
+            }
+
+            60% {
+                transform: scale(1.12) rotate(5deg)
+            }
+
+            100% {
+                transform: scale(1)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="fx"></canvas>
+
+    <!-- ========== MODAL IDENTITAS SISWA ========== -->
+    <div id="id-modal" class="id-overlay" style="display:none">
+        <div class="id-card">
+            <div class="id-avatar">🦉</div>
+            <div class="id-title">Halo, Detektif Ekosistem!</div>
+            <div class="id-sub">Sebelum kuis dimulai, Oli ingin mengenal kamu.<br>Isi data dirimu di bawah ini, ya!</div>
+            <form class="id-form" id="id-form" autocomplete="off">
+                <div class="id-field">
+                    <label for="id-nama">NAMA LENGKAP</label>
+                    <input type="text" id="id-nama" name="nama" placeholder="Tuliskan namamu di sini..." required maxlength="60" autocomplete="off">
+                </div>
+                <div class="id-row">
+                    <div class="id-field">
+                        <label for="id-kelas">KELAS</label>
+                        <select id="id-kelas" name="kelas" required>
+                            <option value="5A" selected>5A</option>
+                            <option value="5B">5B</option>
+                            <option value="5C">5C</option>
+                            <option value="5D">5D</option>
+                            <option value="5E">5E</option>
+                        </select>
+                    </div>
+                    <div class="id-field">
+                        <label for="id-absen">NO. ABSEN</label>
+                        <input type="number" id="id-absen" name="absen" placeholder="01" min="1" max="40" required autocomplete="off">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary id-submit" id="id-submit">MULAI KUIS 🚀</button>
+            </form>
+            <p class="id-note">Data ini hanya digunakan untuk keperluan penelitian skripsi.<br>Tidak dibagikan ke pihak lain.</p>
+        </div>
+    </div>
+
+    <!-- ========== PANEL GURU ========== -->
+    <div id="pin-overlay" class="pin-overlay" style="display:none">
+        <div class="pin-card">
+            <h3>🔐 Akses Panel Guru</h3>
+            <p>Masukkan PIN untuk melihat rekap nilai siswa dan mengunduh data.</p>
+            <input type="password" class="pin-input" id="pin-input" placeholder="••••" maxlength="6" inputmode="numeric">
+            <div class="pin-err" id="pin-err"></div>
+            <button class="btn btn-primary pin-submit" id="pin-submit">MASUK</button>
+        </div>
+    </div>
+
+    <div id="dash-overlay" class="dash-overlay" style="display:none">
+        <div class="dash-card">
+            <div class="dash-head">
+                <div>
+                    <h2>📊 Panel Guru — Rekap Nilai</h2>
+                    <p id="dash-updated">Memuat data...</p>
+                </div>
+                <button class="dash-close" id="dash-close">✕</button>
+            </div>
+            <div class="dash-body">
+                <div class="dash-summary" id="dash-summary"></div>
+                <div class="dash-toolbar">
+                    <button class="btn btn-teal" id="dash-csv">⬇ Unduh CSV</button>
+                    <button class="btn btn-ghost" id="dash-angket" style="color:#0369a1;background:#E0F2FE">📝 Buka Angket (Google Form)</button>
+                    <button class="btn btn-ghost" id="dash-sheets" style="color:var(--green-dark)">📤 Buka Google Sheets</button>
+                    <button class="btn btn-ghost" id="dash-refresh">🔄 Perbarui</button>
+                </div>
+                <div class="dash-table-wrap">
+                    <table class="dash-tbl">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>NAMA</th>
+                                <th>KELAS</th>
+                                <th>ABSEN</th>
+                                <th>JENIS</th>
+                                <th>SKOR</th>
+                                <th>AKURASI</th>
+                                <th>WAKTU</th>
+                                <th>TANGGAL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dash-tbody"></tbody>
+                    </table>
+                    <div class="dash-empty" id="dash-empty" style="display:none">Belum ada data nilai tersimpan di database.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= BERANDA ================= -->
+    <section id="screen-home" class="screen active">
+        <div class="wrap">
+            <div class="home-top">
+                <div class="brand" id="brand"></div>
+                <button id="btn-sound" class="icon-btn" aria-label="Suara"></button>
+            </div>
+
+            <div class="hero">
+                <div class="mascot-wrap" id="slot-home"></div>
+                <div class="bubble">Halo, sahabat alam! Aku <b>Oli</b>, burung hantu penjaga sawah. Ayo bantu aku
+                    menjaga keseimbangan ekosistem dengan menyelesaikan kuis ini!</div>
+            </div>
+
+            <h1 class="display">EKO<span class="g">SISTEM</span></h1>
+            <p class="subtitle">Ilmu Pengetahuan Alam &amp; Sosial · Kelas V SD · Fase C</p>
+
+            <div class="path">
+                <div class="path-row">
+                    <div class="path-text">
+                        <div class="path-title">POSTTEST</div>
+                        <div class="path-sub">20 soal · buktikan pemahaman ekosistemmu</div>
+                        <div id="post-badge"></div>
+                    </div>
+                    <button class="node green" id="node-post" aria-label="Mulai posttest"></button>
+                </div>
+                <svg class="connector" viewBox="0 0 100 60" preserveAspectRatio="none">
+                    <path d="M78 2 C78 34 22 26 22 58" fill="none" stroke="#D8D8D8" stroke-width="4.5"
+                        stroke-linecap="round" stroke-dasharray="0.5 11" vector-effect="non-scaling-stroke" />
+                </svg>
+                <div class="path-row">
+                    <button class="node lock" id="node-angket" aria-label="Buka angket respon"></button>
+                    <div class="path-text">
+                        <div class="path-title">ANGKET RESPON</div>
+                        <div class="path-sub">Beri tanggapanmu tentang petualangan ini</div>
+                        <div id="angket-badge"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tag identitas siswa -->
+            <div class="siswa-tag" id="siswa-tag" style="display:none">
+                <span>👤</span>
+                <span id="siswa-label">-</span>
+                <span id="db-status" class="db-status off">⬤ offline</span>
+                <button class="change-btn" id="btn-change-id">Ganti</button>
+            </div>
+
+            <div class="rules">
+                <div class="rule"><span id="rule-ic1"></span><span>Kerjakan <b>20 soal evaluasi</b> dengan fokus dan teliti untuk menguji pemahaman ekosistemmu.</span></div>
+                <div class="rule"><span id="rule-ic2"></span><span>Jawaban benar bernilai <b>+10 XP</b> dan menaikkan
+                        combo-mu.</span></div>
+                <div class="rule"><span id="rule-ic3"></span><span>Combo <b>x3</b> ke atas memunculkan api semangat di
+                        pojok kanan atas. Jangan sampai padam!</span></div>
+            </div>
+
+            <button id="btn-reset" class="linkish">Hapus data skor di perangkat ini</button>
+            <button id="btn-guru" class="guru-link" title="Akses Panel Guru">🔑 Panel Guru / Rekap Nilai</button>
+        </div>
+    </section>
+
+    <!-- ================= KUIS ================= -->
+    <section id="screen-quiz" class="screen">
+        <header class="q-header">
+            <button id="btn-quit" class="icon-btn" aria-label="Keluar kuis"></button>
+            <div class="progress">
+                <div id="progress-fill"></div>
+            </div>
+            <div id="combo-chip" class="combo hidden"><span id="combo-ic"></span><b id="combo-num"></b></div>
+        </header>
+        <main class="q-main">
+            <div class="q-meta">
+                <span class="num" id="q-meta-num"></span>
+                <span class="topic t0" id="q-topic"></span>
+            </div>
+            <h1 id="q-text"></h1>
+            <div id="opts"></div>
+        </main>
+        <footer class="q-footer" id="footer">
+            <div class="q-footer-inner">
+                <div class="fb">
+                    <div class="fic" id="fb-ic"></div>
+                    <div>
+                        <div id="fb-title"></div>
+                        <div id="fb-body"></div>
+                    </div>
+                </div>
+                <button id="btn-main" class="btn btn-primary" disabled>PERIKSA</button>
+            </div>
+        </footer>
+    </section>
+
+    <!-- ================= HASIL ================= -->
+    <section id="screen-result" class="screen">
+        <div class="wrap">
+            <div class="mascot-wrap res-mascot" id="slot-result"></div>
+            <div class="mode-chip" id="r-mode"></div>
+            <h1 id="r-title"></h1>
+            <p id="r-msg"></p>
+
+            <div class="ring">
+                <svg width="170" height="170" viewBox="0 0 170 170">
+                    <circle class="track" cx="85" cy="85" r="70" fill="none" stroke-width="12" />
+                    <circle class="val" id="ring-val" cx="85" cy="85" r="70" fill="none" stroke="#58CC02"
+                        stroke-width="12" stroke-linecap="round" stroke-dasharray="439.82" stroke-dashoffset="439.82" />
+                </svg>
+                <div class="ring-center">
+                    <div class="big"><span id="r-num">0</span><span class="den" id="r-den">/20</span></div>
+                    <div class="sub">JAWABAN BENAR</div>
+                </div>
+            </div>
+
+            <div class="stat-strip">
+                <div class="stat">
+                    <div class="sv c-gold" id="s-xp">0</div>
+                    <div class="sl" id="sl-xp">XP</div>
+                </div>
+                <div class="stat">
+                    <div class="sv c-green" id="s-acc">0%</div>
+                    <div class="sl" id="sl-acc">AKURASI</div>
+                </div>
+                <div class="stat">
+                    <div class="sv c-blue" id="s-time">0:00</div>
+                    <div class="sl" id="sl-time">WAKTU</div>
+                </div>
+            </div>
+
+            <div id="r-compare"></div>
+
+            <div class="review">
+                <h2>Tinjau Jawabanmu</h2>
+                <div id="review-list"></div>
+            </div>
+
+            <div class="result-actions">
+                <button id="btn-next-mode" class="btn btn-primary" style="display:none"></button>
+                <button id="btn-retry" class="btn btn-ghost">Ulangi Posttest</button>
+                <button id="btn-home" class="btn btn-ghost">Kembali ke Beranda</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="modal-root"></div>
+
+    <script>
+        /* =============== KONFIGURASI SUPABASE DATABASE =============== */
+        const SUPABASE_URL  = "https://sgtssxlxuqktusianjsa.supabase.co";
+        const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNndHNzeGx4dXFrdHVzaWFuanNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNDMzMTYsImV4cCI6MjEwNzYxOTMxNn0.XWp3Fm6S8ak8LVAVLPjqWbozeoh1n52OG5hrcKJ9Jtk";
+        const TEACHER_PIN   = "1234"; // PIN Guru untuk Panel Rekap Nilai
+        const SHEETS_URL    = "";     // (Opsional) Tautan Google Sheets
+        const ANGKET_URL    = "https://docs.google.com/forms/d/e/1FAIpQLSe0tewupWn30RPz7jldQklepJd9pYuQjfrTaymSwVhSrgxQHQ/viewform";
+
+        // Cek apakah database Supabase siap
+        const apiReady = () => Boolean(SUPABASE_URL && SUPABASE_ANON && SUPABASE_URL.startsWith("https://"));
+
+        /* =============== IKON (SVG inline, tanpa emoji) =============== */
+        const I = {
+            check: '<polyline points="20 6 9 17 4 12" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>',
+            cross: '<path d="M18 6 6 18M6 6l12 12" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/>',
+            heart: '<path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>',
+            star: '<path fill="currentColor" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>',
+            flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3 1.072-.424 2.133-1.566 2.5-3 .833 1.5 3.5 3.765 3.5 6.5A4.5 4.5 0 0 1 6 12.5c0-1.035.61-2.28 1.5-3 .5 1 .5 2 1 2z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
+            lock: '<rect x="4.5" y="10.5" width="15" height="10" rx="2.5" fill="currentColor"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.6"/>',
+            vol: '<path d="M11 5 6 9H3v6h3l5 4V5z" fill="currentColor"/><path d="M15.5 8.7a4.5 4.5 0 0 1 0 6.6M18.2 6.2a8 8 0 0 1 0 11.6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>',
+            volOff: '<path d="M11 5 6 9H3v6h3l5 4V5z" fill="currentColor"/><path d="M22 9l-6 6M16 9l6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>',
+            trophy: '<path d="M8 21h8M12 17v4M7 3h10v6a5 5 0 0 1-10 0V3zM7 5H4v1.5A3.5 3.5 0 0 0 7.5 10M17 5h3v1.5A3.5 3.5 0 0 1 16.5 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
+            clock: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 7.2V12l3.2 1.9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>',
+            target: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2.4"/>',
+            chev: '<path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>',
+            chart: '<path d="M5 20v-6M12 20V5M19 20v-9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>',
+            leaf: '<path d="M20 4C10.5 4.5 5 9.5 5 16a5 5 0 0 0 5 5C16.5 21 20.5 14 20 4z" fill="currentColor"/><path d="M6.5 19.5C9 14 13 10 18.5 6.5" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.8" stroke-linecap="round"/>',
+            form: '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v0zm0 6h6m-6 4h4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'
+        };
+        const ic = (n, s = 24, cls = '') => `<svg class="ic ${cls}" width="${s}" height="${s}" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
+
+        /* =============== MASKOT "OLI" =============== */
+        const MASCOT = `
+<svg class="mascot" viewBox="0 0 240 232" aria-label="Oli si burung hantu">
+  <path d="M120 40 C120 26 129 17 144 15 C144 30 135 39 120 40 Z" fill="#58CC02"/>
+  <path d="M120 40 C120 28 112 20 99 18 C99 31 107 39 120 40 Z" fill="#46A302"/>
+  <rect x="116.5" y="32" width="7" height="20" rx="3.5" fill="#46A302"/>
+  <path d="M55 74 L38 34 L86 52 Z" fill="#58CC02"/>
+  <path d="M185 74 L202 34 L154 52 Z" fill="#58CC02"/>
+  <ellipse cx="97" cy="220" rx="15" ry="8" fill="#FF9600"/>
+  <ellipse cx="143" cy="220" rx="15" ry="8" fill="#FF9600"/>
+  <ellipse cx="120" cy="136" rx="88" ry="86" fill="#58CC02"/>
+  <path d="M36 128 C22 150 28 176 48 188 C56 168 60 148 58 132 Z" fill="#46A302"/>
+  <path d="M204 128 C218 150 212 176 192 188 C184 168 180 148 182 132 Z" fill="#46A302"/>
+  <ellipse cx="120" cy="158" rx="54" ry="54" fill="#89E219"/>
+  <g class="eye"><circle cx="90" cy="104" r="31" fill="#fff"/>
+    <g class="pupil"><circle cx="90" cy="104" r="11.5" fill="#3C3C3C"/><circle cx="94.5" cy="99" r="4" fill="#fff"/></g></g>
+  <g class="eye"><circle cx="150" cy="104" r="31" fill="#fff"/>
+    <g class="pupil"><circle cx="150" cy="104" r="11.5" fill="#3C3C3C"/><circle cx="154.5" cy="99" r="4" fill="#fff"/></g></g>
+  <path d="M105 134 C105 128 135 128 135 134 C135 144 127 154 120 154 C113 154 105 144 105 134 Z" fill="#FF9600"/>
+  <g class="hat" transform="rotate(-8 116 44)">
+    <path d="M90 56 L116 6 L142 52 Z" fill="#FF4B4B"/>
+    <circle cx="116" cy="8" r="7" fill="#1CB0F6"/>
+    <path d="M99 38 L136 45" stroke="#FFC800" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>`;
+
+        /* =============== BANK SOAL (mudah diedit) =============== */
+        /* a = indeks jawaban benar pada array opts */
+        const QUESTIONS = [
+            {
+                q: "Berikut yang termasuk komponen abiotik dalam ekosistem sawah adalah ....",
+                opts: ["Padi", "Air", "Burung pipit", "Tikus"], a: 1,
+                why: "Komponen abiotik adalah benda tak hidup seperti air, tanah, udara, dan cahaya matahari. Padi, burung pipit, dan tikus adalah makhluk hidup (biotik)."
+            },
+            {
+                q: "Makhluk hidup yang berperan sebagai pengurai dalam ekosistem adalah ....",
+                opts: ["Tumbuhan", "Bakteri dan jamur", "Burung", "Matahari"], a: 1,
+                why: "Pengurai (decomposer) seperti bakteri dan jamur menguraikan sisa makhluk hidup menjadi zat hara."
+            },
+            {
+                q: "Komponen abiotik yang paling berpengaruh terhadap proses fotosintesis tumbuhan adalah ....",
+                opts: ["Cahaya matahari", "Suhu", "Tanah", "Udara"], a: 0,
+                why: "Fotosintesis membutuhkan cahaya matahari sebagai sumber energi untuk membuat makanan."
+            },
+            {
+                q: "Dalam ekosistem laut, contoh komponen biotik adalah ....",
+                opts: ["Air laut", "Garam", "Ikan", "Suhu air"], a: 2,
+                why: "Ikan adalah makhluk hidup sehingga termasuk komponen biotik. Air laut, garam, dan suhu air tidak hidup (abiotik)."
+            },
+            {
+                q: "Pada ekosistem laut, plankton berperan sebagai ....",
+                opts: ["Konsumen tingkat tinggi", "Produsen", "Pengurai", "Predator utama"], a: 1,
+                why: "Fitoplankton mampu membuat makanannya sendiri melalui fotosintesis, sehingga berperan sebagai produsen."
+            },
+            {
+                q: "Urutan rantai makanan yang tepat pada ekosistem sawah adalah ....",
+                opts: ["padi → ular → tikus → elang", "elang → ular → tikus → padi", "elang → tikus → ular → padi", "padi → tikus → ular → elang"], a: 3,
+                why: "Rantai makanan selalu dimulai dari produsen (padi), lalu konsumen I (tikus), konsumen II (ular), dan konsumen III (elang)."
+            },
+            {
+                q: "Fungsi utama komponen abiotik seperti air dan udara bagi makhluk hidup adalah ....",
+                opts: ["Sebagai makanan", "Sebagai tempat tinggal", "Mendukung keberlangsungan hidup", "Sebagai predator"], a: 2,
+                why: "Air dan udara adalah kebutuhan pokok semua makhluk hidup untuk bertahan hidup."
+            },
+            {
+                q: "Dalam ekosistem hutan tropis, rusa yang memakan tumbuhan termasuk dalam kelompok ....",
+                opts: ["Konsumen tingkat I", "Konsumen tingkat III", "Pengurai", "Produsen"], a: 0,
+                why: "Rusa memakan tumbuhan (produsen), sehingga berperan sebagai konsumen tingkat I (herbivora)."
+            },
+            {
+                q: "Singa yang memakan rusa berperan sebagai ....",
+                opts: ["Konsumen tingkat I", "Konsumen tingkat II", "Pengurai", "Predator utama"], a: 1,
+                why: "Singa memakan konsumen tingkat I (rusa), sehingga singa berperan sebagai konsumen tingkat II (karnivora)."
+            },
+            {
+                q: "Jaring-jaring makanan terbentuk karena ....",
+                opts: ["Beberapa rantai makanan saling berhubungan", "Hanya ada satu jenis makanan", "Tidak ada produsen", "Semua hewan adalah karnivora"], a: 0,
+                why: "Jika beberapa rantai makanan bertemu dan saling berhubungan, terbentuklah jaring-jaring makanan."
+            },
+            {
+                q: "Urutan rantai makanan yang tepat pada ekosistem sawah adalah ....",
+                opts: ["Padi → ular → tikus → elang", "Elang → ular → tikus → padi", "Padi → tikus → ular → elang", "Elang → tikus → ular → padi"], a: 2,
+                why: "Rantai makanan dimulai dari produsen (padi), lalu konsumen I (tikus), konsumen II (ular), dan konsumen III (elang)."
+            },
+            {
+                q: "Contoh rantai makanan yang tepat pada ekosistem sungai adalah ....",
+                opts: ["Ikan besar → ikan kecil → fitoplankton", "Fitoplankton → ikan kecil → ikan besar", "Ikan kecil → fitoplankton → ikan besar", "Fitoplankton → ikan besar → ikan kecil"], a: 1,
+                why: "Rantai makanan dimulai dari produsen (fitoplankton), lalu ikan kecil, dan diakhiri ikan besar sebagai predator."
+            },
+            {
+                q: "Di ekosistem hutan tropis terdapat tumbuhan, belalang, katak, dan ular. Urutan rantai makanan yang tepat adalah ....",
+                opts: ["Ular → katak → belalang → tumbuhan", "Belalang → tumbuhan → ular → katak", "Tumbuhan → belalang → katak → ular", "Katak → belalang → tumbuhan → ular"], a: 2,
+                why: "Tumbuhan sebagai produsen dimakan belalang, belalang dimakan katak, dan katak dimakan ular."
+            },
+            {
+                q: "Di ekosistem sawah, tikus memakan padi dan juga dimakan oleh ular serta burung hantu. Kondisi ini menunjukkan bahwa tikus ....",
+                opts: ["Menjadi penghubung dalam jaring-jaring makanan", "Hanya menjadi bagian dari satu rantai makanan", "Berperan sebagai produsen", "Tidak memiliki predator alami"], a: 0,
+                why: "Tikus menghubungkan lebih dari satu rantai makanan, sehingga terciptalah jaring-jaring makanan."
+            },
+            {
+                q: "Upaya yang tepat untuk menjaga keseimbangan ekosistem sawah adalah ....",
+                opts: ["Membasmi semua hama tanpa terkecuali", "Menjaga kelestarian predator alami seperti ular dan burung", "Menebang pohon di sekitar sawah", "Membuang sampah ke sungai dekat sawah"], a: 1,
+                why: "Predator alami seperti ular dan burung membantu mengendalikan populasi hama secara alami."
+            },
+            {
+                q: "Jika populasi ular di sawah berkurang drastis, kemungkinan yang terjadi adalah ....",
+                opts: ["Populasi tikus meningkat", "Populasi padi meningkat", "Elang punah", "Tidak ada perubahan"], a: 0,
+                why: "Tanpa predator (ular), populasi tikus meningkat tidak terkendali dan padi banyak dimakan."
+            },
+            {
+                q: "Penebangan hutan secara liar dapat menyebabkan ....",
+                opts: ["Meningkatnya jumlah produsen", "Populasi hewan semakin stabil", "Populasi hewan semakin banyak", "Terganggunya keseimbangan ekosistem"], a: 3,
+                why: "Penebangan liar menghancurkan habitat sehingga banyak populasi terganggu dan ekosistem menjadi tidak seimbang."
+            },
+            {
+                q: "Jika terjadi pencemaran air sungai, dampak yang mungkin terjadi adalah ....",
+                opts: ["Ikan semakin banyak", "Tumbuhan air tumbuh subur", "Ikan dan tumbuhan air mati", "Tidak terjadi dampak apa pun"], a: 2,
+                why: "Air yang tercemar beracun bagi makhluk hidup di dalamnya, sehingga ikan dan tumbuhan air dapat mati."
+            },
+            {
+                q: "Perburuan liar terhadap predator seperti elang dapat menyebabkan ....",
+                opts: ["Populasi mangsa (tikus) menurun", "Populasi mangsa (tikus) meningkat pesat", "Keseimbangan ekosistem semakin membaik", "Ekosistem tidak mengalami perubahan"], a: 1,
+                why: "Jika predator diburu habis, mangsanya kehilangan kendali alami dan populasinya meningkat pesat."
+            },
+            {
+                q: "Di ekosistem laut, jika populasi ikan besar menurun karena penangkapan berlebihan, dampak yang paling mungkin terjadi terhadap jaring-jaring makanan adalah ....",
+                opts: ["Populasi plankton langsung menurun", "Populasi ikan kecil menurun", "Populasi ikan kecil meningkat karena predatornya berkurang", "Tidak ada dampak karena ekosistem laut sangat luas"], a: 2,
+                why: "Ikan besar adalah predator ikan kecil. Jika ikan besar berkurang, populasi ikan kecil akan meningkat."
+            }
+        ];
+        const TOPICS = ["Komponen Ekosistem", "Rantai & Jaring Makanan", "Keseimbangan Ekosistem"];
+        const topicOf = i => i < 7 ? 0 : (i < 14 ? 1 : 2);
+        const modeLabel = { post: "POSTTEST" };
+
+        /* =============== SESI SISWA =============== */
+        const ID_KEY = "kuis-siswa-id-v1";
+        let siswa = { nama: "", kelas: "5A", absen: "" };
+        function loadSiswa() {
+            try { const s = JSON.parse(localStorage.getItem(ID_KEY)); if (s && s.nama) return s; } catch(e) {}
+            return null;
+        }
+        function saveSiswa(s) { siswa = s; try { localStorage.setItem(ID_KEY, JSON.stringify(s)); } catch(e){} }
+        function clearSiswa() { siswa = { nama:"", kelas:"5A", absen:"" }; try { localStorage.removeItem(ID_KEY); } catch(e){} }
+
+        /* =============== PENYIMPANAN =============== */
+        const KEY = "kuis-ekosistem-v1";
+        function loadStore() {
+            try { return Object.assign({ post: null, angket: false, sound: true }, JSON.parse(localStorage.getItem(KEY) || "{}")); }
+            catch (e) { return { post: null, angket: false, sound: true }; }
+        }
+        let store = loadStore();
+        function saveStore() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) { } }
+
+        /* =============== SUARA (disintesis, tanpa file) =============== */
+        let actx = null;
+        function ac() {
+            if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { } }
+            if (actx && actx.state === "suspended") actx.resume();
+            return actx;
+        }
+        function tone(f, start, dur, type = "sine", vol = .2, glideTo = null) {
+            const c = ac(); if (!c || !store.sound) return;
+            const t = c.currentTime + start;
+            const o = c.createOscillator(), g = c.createGain();
+            o.type = type; o.frequency.setValueAtTime(f, t);
+            if (glideTo) o.frequency.exponentialRampToValueAtTime(glideTo, t + dur);
+            g.gain.setValueAtTime(.0001, t);
+            g.gain.exponentialRampToValueAtTime(vol, t + .015);
+            g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+            o.connect(g).connect(c.destination); o.start(t); o.stop(t + dur + .05);
+        }
+        const sfx = {
+            tap() { tone(520, 0, .06, "sine", .08); },
+            correct() { tone(523.25, 0, .12, "sine", .22); tone(659.25, .1, .12, "sine", .22); tone(783.99, .2, .26, "sine", .22); },
+            wrong() { tone(200, 0, .28, "sawtooth", .1, 120); tone(150, .05, .3, "square", .05, 90); },
+            finish() { [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, i * .13, i === 3 ? .5 : .14, "sine", .2)); }
+        };
+        document.addEventListener("pointerdown", () => ac(), { once: true });
+
+        /* =============== CONFETTI =============== */
+        const fx = document.getElementById("fx"), fctx = fx.getContext("2d");
+        let parts = [], fxRun = false;
+        function sizeFx() { fx.width = innerWidth; fx.height = innerHeight; }
+        addEventListener("resize", sizeFx); sizeFx();
+        const CPAL = ["#58CC02", "#1CB0F6", "#FFC800", "#FF4B4B", "#FF9600", "#CE82FF", "#89E219"];
+        function burst(n) {
+            for (let i = 0; i < n; i++) parts.push({
+                x: Math.random() * fx.width, y: -20 - Math.random() * fx.height * .4,
+                vx: (Math.random() - .5) * 1.6, vy: 2.2 + Math.random() * 3.2,
+                s: 5 + Math.random() * 7, c: CPAL[i % CPAL.length],
+                r: Math.random() * 6.28, vr: (Math.random() - .5) * .25,
+                sw: Math.random() * 6.28, circ: Math.random() < .35
+            });
+            if (!fxRun) { fxRun = true; fxLoop(); }
+        }
+        function fxLoop() {
+            fctx.clearRect(0, 0, fx.width, fx.height);
+            parts = parts.filter(p => p.y < fx.height + 30);
+            if (!parts.length) { fxRun = false; return; }
+            parts.forEach(p => {
+                p.y += p.vy; p.x += p.vx + Math.sin((p.y + p.sw * 40) / 28) * .7; p.r += p.vr;
+                fctx.save(); fctx.translate(p.x, p.y); fctx.rotate(p.r); fctx.fillStyle = p.c;
+                if (p.circ) { fctx.beginPath(); fctx.arc(0, 0, p.s / 2.4, 0, 6.28); fctx.fill(); }
+                else fctx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * .62);
+                fctx.restore();
+            });
+            requestAnimationFrame(fxLoop);
+        }
+
+        /* =============== UTIL =============== */
+        const $ = s => document.querySelector(s);
+        function show(name) {
+            document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+            $("#screen-" + name).classList.add("active");
+            window.scrollTo(0, 0);
+        }
+        function modal({ icon, tint, title, text, actions }) {
+            const root = $("#modal-root");
+            root.innerHTML = `<div class="modal-overlay"><div class="modal">
+    <div class="modal-ic ${tint}">${ic(icon, 30)}</div><h3>${title}</h3><p>${text}</p>
+    <div class="modal-actions"></div></div></div>`;
+            document.body.classList.add("modal-open");
+            const wrap = root.querySelector(".modal-actions");
+            actions.forEach(a => {
+                const b = document.createElement("button");
+                b.className = "btn " + (a.kind === "primary" ? "btn-primary" : a.kind === "danger" ? "btn-danger" : "btn-ghost");
+                b.textContent = a.label;
+                b.onclick = () => { closeModal(); a.fn && a.fn(); };
+                wrap.append(b);
+            });
+        }
+        function closeModal() {
+            const m = $(".modal-overlay");
+            if (m) { m.classList.add("closing"); setTimeout(() => m.remove(), 150); }
+            document.body.classList.remove("modal-open");
+        }
+
+        /* =============== KUIS =============== */
+        let S = null, praise = ["Bagus sekali!", "Hebat!", "Mantap!", "Keren!", "Tepat sekali!", "Kamu jago!"];
+        let cheers = ["Konsepnya sudah kamu kuasai!", "Terus semangat, ya!", "Kamu makin paham ekosistem!", "Nilai plus dari Oli!"];
+        let oopses = ["Belum tepat", "Hampir benar", "Coba ingat lagi"];
+
+        function buildDeck() {
+            return QUESTIONS.map(q => {
+                const idx = q.opts.map((_, i) => i);
+                for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[idx[i], idx[j]] = [idx[j], idx[i]]; }
+                return { q: q.q, why: q.why, opts: idx.map(i => q.opts[i]), a: idx.indexOf(q.a) };
+            });
+        }
+        function startQuiz(mode) {
+            S = {
+                mode, deck: buildDeck(), idx: 0, xp: 0, combo: 0, maxCombo: 0,
+                correct: 0, records: [], t0: Date.now(), locked: false, picked: null
+            };
+            renderCombo(); resetFooter(); show("quiz"); renderQ();
+        }
+        function setProgress(p) { $("#progress-fill").style.width = (p * 100) + "%"; }
+
+        function renderQ() {
+            const d = S.deck[S.idx];
+            S.locked = false; S.picked = null;
+            $("#q-meta-num").textContent = `${modeLabel[S.mode]} · SOAL ${S.idx + 1} DARI ${S.deck.length}`;
+            const t = topicOf(S.idx);
+            $("#q-topic").textContent = TOPICS[t];
+            $("#q-topic").className = "topic t" + t;
+            $("#q-text").textContent = d.q;
+            const box = $("#opts"); box.innerHTML = "";
+            d.opts.forEach((txt, i) => {
+                const b = document.createElement("button");
+                b.className = "opt";
+                b.innerHTML = `<span class="key">${i + 1}</span><span class="txt">${txt}</span><span class="mark"></span>`;
+                b.onclick = () => pick(i, b);
+                box.append(b);
+            });
+            setProgress(S.idx / S.deck.length);
+        }
+        function pick(i, btn) {
+            if (S.locked) return;
+            sfx.tap();
+            [...$("#opts").children].forEach(o => o.classList.remove("selected"));
+            btn.classList.add("selected");
+            S.picked = i;
+            $("#btn-main").disabled = false;
+        }
+        function resetFooter() {
+            $("#footer").className = "q-footer";
+            $("#fb-title").textContent = ""; $("#fb-body").innerHTML = "";
+            const b = $("#btn-main");
+            b.textContent = "PERIKSA"; b.disabled = true; b.className = "btn btn-primary";
+        }
+        function renderHearts(hurt) {}
+        function renderCombo(popped) {
+            const c = $("#combo-chip");
+            if (S.combo >= 3) {
+                c.classList.remove("hidden");
+                $("#combo-num").textContent = "x" + S.combo;
+                if (popped) { c.classList.remove("pop"); void c.offsetWidth; c.classList.add("pop"); }
+            } else c.classList.add("hidden");
+        }
+        function floatXP() {
+            const s = document.createElement("span");
+            s.className = "xp-float"; s.textContent = "+10 XP";
+            $(".q-header").appendChild(s);
+            setTimeout(() => s.remove(), 950);
+        }
+        function check() {
+            S.locked = true;
+            const d = S.deck[S.idx], ok = S.picked === d.a;
+            [...$("#opts").children].forEach((o, i) => {
+                o.classList.add("locked"); o.classList.remove("selected");
+                if (i === d.a) { o.classList.add("right"); o.querySelector(".mark").innerHTML = ic("check", 20); }
+                else if (i === S.picked) { o.classList.add("wrongpick"); o.querySelector(".mark").innerHTML = ic("cross", 20); }
+                else o.classList.add("dim");
+            });
+            $("#fb-ic").innerHTML = ic(ok ? "check" : "cross", 20);
+            if (ok) {
+                S.correct++; S.combo++; S.xp += 10;
+                S.records.push({ picked: S.picked, ok: true });
+                sfx.correct();
+                $("#footer").className = "q-footer good";
+                $("#fb-title").textContent = praise[Math.floor(Math.random() * praise.length)];
+                $("#fb-body").textContent = cheers[Math.floor(Math.random() * cheers.length)];
+                floatXP(); setProgress((S.idx + 1) / S.deck.length); renderCombo(true);
+            } else {
+                S.combo = 0;
+                S.records.push({ picked: S.picked, ok: false });
+                sfx.wrong(); renderCombo();
+                $("#footer").className = "q-footer bad";
+                $("#fb-title").textContent = oopses[Math.floor(Math.random() * oopses.length)];
+                $("#fb-body").innerHTML = `Jawaban benar: <b>${d.opts[d.a]}</b><div class="fb-why">${d.why}</div>`;
+            }
+            const b = $("#btn-main");
+            b.textContent = "LANJUTKAN"; b.disabled = false;
+            b.className = "btn " + (ok ? "btn-white-g" : "btn-white-r");
+        }
+        function next() {
+            S.idx++;
+            resetFooter();
+            if (S.idx >= S.deck.length) finish();
+            else { renderQ(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+        }
+        function showRefill() {
+            modal({
+                icon: "heart", tint: "red", title: "Nyawamu habis!",
+                text: "Jangan menyerah — Oli masih percaya kamu bisa! Lanjutkan dengan nyawa penuh.",
+                actions: [
+                    { label: "ISI ULANG NYAWA", kind: "primary", fn: () => { S.hearts = 5; renderHearts(); } },
+                    { label: "MULAI ULANG", kind: "ghost", fn: () => startQuiz(S.mode) }
+                ]
+            });
+        }
+
+        /* =============== SINKRONISASI KE SUPABASE =============== */
+        async function syncToSupabase(mode, correct, total, secs) {
+            const statusEl = document.getElementById("db-status");
+            if (!apiReady()) {
+                if (statusEl) { statusEl.className = "db-status off"; statusEl.textContent = "⬤ offline"; }
+                return;
+            }
+            if (!siswa.nama) return;
+            const pct = Math.round(correct / total * 100);
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/kuis_siswa`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": SUPABASE_ANON,
+                        "Authorization": `Bearer ${SUPABASE_ANON}`,
+                        "Prefer": "return=minimal"
+                    },
+                    body: JSON.stringify({
+                        nama:         siswa.nama,
+                        kelas:        siswa.kelas,
+                        no_absen:     parseInt(siswa.absen) || 0,
+                        jenis_kuis:   mode === "pre" ? "Pretest" : "Posttest",
+                        skor:         correct,
+                        total_soal:   total,
+                        akurasi_pct:  pct,
+                        durasi_detik: secs,
+                        device_ts:    new Date().toISOString()
+                    })
+                });
+                if (!res.ok) {
+                    const err = await res.text();
+                    throw new Error(err || res.statusText);
+                }
+                if (statusEl) { statusEl.className = "db-status ok"; statusEl.textContent = "⬤ tersimpan"; }
+            } catch(e) {
+                console.warn("Gagal sync Supabase:", e);
+                if (statusEl) { statusEl.className = "db-status err"; statusEl.textContent = "⬤ gagal simpan"; }
+            }
+        }
+
+        /* =============== HASIL =============== */
+        function finish() {
+            const total = S.deck.length;
+            const pct = Math.round(S.correct / total * 100);
+            const secs = Math.round((Date.now() - S.t0) / 1000);
+            store[S.mode] = Math.max(store[S.mode] || 0, S.correct);
+            saveStore();
+
+            show("result");
+            $("#r-mode").textContent = modeLabel[S.mode] + " · EKOSISTEM";
+            const tier = pct >= 90 ? ["Luar biasa!", "Kamu benar-benar master ekosistem! Oli sampai menari-nari karena bangga padamu."]
+                : pct >= 70 ? ["Kerja bagus!", "Pemahamanmu tentang ekosistem sudah kuat. Cek lagi bagian yang salah biar makin sempurna!"]
+                    : pct >= 50 ? ["Tidak buruk!", "Fondasimu sudah ada. Baca ulang penjelasan di bawah ini, lalu coba lagi ya!"]
+                        : ["Terus semangat!", "Belajar dari kesalahan itu bagian dari petualangan. Baca penjelasannya, lalu coba lagi — Oli temanimu!"];
+            $("#r-title").textContent = tier[0];
+            $("#r-msg").textContent = tier[1];
+
+            // cincin skor
+            const ring = $("#ring-val"), C = 439.82;
+            ring.style.stroke = pct >= 70 ? "#58CC02" : pct >= 40 ? "#FFC800" : "#FF4B4B";
+            ring.style.strokeDashoffset = C;
+            $("#r-num").textContent = S.correct;
+            $("#r-den").textContent = "/" + total;
+            requestAnimationFrame(() => requestAnimationFrame(() => { ring.style.strokeDashoffset = C * (1 - S.correct / total); }));
+
+            // statistik
+            $("#s-xp").textContent = S.xp;
+            $("#s-acc").textContent = pct + "%";
+            $("#s-time").textContent = Math.floor(secs / 60) + ":" + String(secs % 60).padStart(2, "0");
+            $("#sl-xp").innerHTML = ic("star", 13) + "XP";
+            $("#sl-acc").innerHTML = ic("target", 13) + "AKURASI";
+            $("#sl-time").innerHTML = ic("clock", 13) + "WAKTU";
+
+            // maskot merayakan
+            const slot = $("#slot-result");
+            slot.innerHTML = MASCOT;
+            const svg = slot.querySelector("svg");
+            if (pct >= 70) svg.classList.add("party");
+            setTimeout(() => svg.classList.add("cheer"), 250);
+
+            // tinjauan jawaban
+            const list = $("#review-list"); list.innerHTML = "";
+            S.records.forEach((rec, i) => {
+                const d = S.deck[i], wrong = !rec.ok;
+                const row = document.createElement("div");
+                row.className = "rev " + (wrong ? "wrong open" : "ok");
+                row.innerHTML = `
+      <button class="rev-head">
+        <span class="rev-ic">${ic(wrong ? "cross" : "check", 20)}</span>
+        <span class="rev-q">${i + 1}. ${d.q}</span>
+        <span class="chev">${ic("chev", 18)}</span>
+      </button>
+      <div class="rev-body">
+        <div><span class="lbl">JAWABANMU · </span><span class="${wrong ? "ra-w" : "ra-r"}">${d.opts[rec.picked]}</span></div>
+        ${wrong ? `<div><span class="lbl">JAWABAN BENAR · </span><span class="ra-r">${d.opts[d.a]}</span></div>
+                   <div class="rev-why">${d.why}</div>` : ""}
+      </div>`;
+                row.querySelector(".rev-head").onclick = () => row.classList.toggle("open");
+                list.append(row);
+            });
+
+            // Callout ke Angket Respon Siswa
+            const cmp = $("#r-compare"); cmp.innerHTML = "";
+            cmp.innerHTML = `
+                <div class="compare up" style="cursor:pointer;background:#F0FDF4;color:#15803D;border-color:#BBF7D0;" id="callout-angket">
+                    ${ic("form", 22)}
+                    <span><b>Langkah Terakhir!</b> · Klik untuk Isi Angket Respon Siswa 📝</span>
+                </div>`;
+            cmp.querySelector("#callout-angket").onclick = () => bukaAngket();
+
+            // tombol lanjutan
+            const nb = $("#btn-next-mode");
+            nb.style.display = "block";
+            nb.textContent = "Lanjut Isi Angket Respon 📝";
+            nb.onclick = () => bukaAngket();
+
+            sfx.finish();
+            burst(pct >= 50 ? 150 : 60);
+            if (pct >= 90) setTimeout(() => burst(100), 900);
+
+            // Sync ke Supabase (tidak-blokir UI)
+            syncToSupabase("post", S.correct, total, secs);
+        }
+
+        /* =============== BUKA ANGKET =============== */
+        function bukaAngket() {
+            window.open(ANGKET_URL, "_blank");
+            store.angket = true;
+            saveStore();
+            renderHome();
+        }
+
+        /* =============== BERANDA =============== */
+        function renderHome() {
+            $("#btn-sound").innerHTML = ic(store.sound ? "vol" : "volOff", 22);
+            const post = $("#node-post"), angket = $("#node-angket");
+
+            // Checkpoint 1: Posttest
+            const hasPost = store.post !== null;
+            post.className = "node " + (hasPost ? "gold" : "green");
+            post.innerHTML = ic(hasPost ? "check" : "trophy", 40);
+            $("#post-badge").innerHTML = hasPost
+                ? `<span class="done-badge">Skor terbaik: ${store.post}/20</span>`
+                : `<span class="done-badge" style="background:#DCFCE7;color:#166534">Siap dikerjakan ✨</span>`;
+
+            // Checkpoint 2: Angket Respon Peserta Didik
+            const locked = !hasPost;
+            if (locked) {
+                angket.className = "node lock";
+                angket.innerHTML = ic("lock", 38);
+                $("#angket-badge").innerHTML = `<span class="done-badge" style="background:var(--snow);color:var(--mut)">Selesaikan posttest dulu</span>`;
+            } else if (store.angket) {
+                angket.className = "node gold";
+                angket.innerHTML = ic("check", 40);
+                $("#angket-badge").innerHTML = `<span class="done-badge" style="background:#FEF9C3;color:#854D0E">Sudah Mengisi ✨</span>`;
+            } else {
+                angket.className = "node green";
+                angket.innerHTML = ic("form", 38);
+                $("#angket-badge").innerHTML = `<span class="done-badge" style="background:#E0F2FE;color:#0369A1">Siap diisi 📝</span>`;
+            }
+
+            // tampilkan tag siswa
+            const tag = $("#siswa-tag");
+            if (siswa.nama) {
+                tag.style.display = "flex";
+                $("#siswa-label").textContent = `${siswa.nama} · ${siswa.kelas} · No. ${siswa.absen}`;
+                const st = $("#db-status");
+                if (apiReady()) { st.className = "db-status ok"; st.textContent = "⬤ terhubung"; }
+                else { st.className = "db-status off"; st.textContent = "⬤ offline"; }
+            } else { tag.style.display = "none"; }
+        }
+
+        /* =============== MODAL IDENTITAS =============== */
+        function showIdModal(onDone) {
+            const overlay = $("#id-modal");
+            overlay.style.display = "flex";
+            document.body.classList.add("modal-open");
+            // prefill jika ada
+            if (siswa.nama) { $("#id-nama").value = siswa.nama; $("#id-kelas").value = siswa.kelas; $("#id-absen").value = siswa.absen; }
+            const form = $("#id-form");
+            form.onsubmit = e => {
+                e.preventDefault();
+                const nama = $("#id-nama").value.trim();
+                const kelas = $("#id-kelas").value;
+                const absen = $("#id-absen").value;
+                if (!nama || !absen) return;
+                saveSiswa({ nama, kelas, absen });
+                overlay.classList.add("closing");
+                setTimeout(() => {
+                    overlay.style.display = "none";
+                    overlay.classList.remove("closing");
+                    document.body.classList.remove("modal-open");
+                    renderHome();
+                    if (onDone) onDone();
+                }, 300);
+            };
+        }
+
+        /* =============== PANEL GURU =============== */
+        let dashData = [];
+        let dashPin  = ""; // PIN disimpan di memori sesi saja (bukan localStorage)
+
+        function openPinModal() {
+            $("#pin-overlay").style.display = "flex";
+            $("#pin-input").value = "";
+            $("#pin-err").textContent = "";
+            setTimeout(() => $("#pin-input").focus(), 100);
+        }
+        function closePinModal() {
+            $("#pin-overlay").style.display = "none";
+        }
+        async function openDashboard(pin) {
+            dashPin = pin; // simpan untuk refresh
+            $("#dash-overlay").style.display = "flex";
+            await loadDashData(pin);
+        }
+        function closeDashboard() {
+            const el = $("#dash-overlay");
+            el.classList.add("closing");
+            setTimeout(() => { el.style.display = "none"; el.classList.remove("closing"); }, 200);
+        }
+        async function loadDashData() {
+            $("#dash-updated").textContent = "Memuat data...";
+            if (!apiReady()) {
+                $("#dash-updated").textContent = "Supabase belum terhubung.";
+                $("#dash-tbody").innerHTML = "";
+                $("#dash-empty").style.display = "block";
+                $("#dash-summary").innerHTML = renderDashSummary([]);
+                return;
+            }
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/kuis_siswa?select=*&order=device_ts.desc`, {
+                    headers: {
+                        "apikey": SUPABASE_ANON,
+                        "Authorization": `Bearer ${SUPABASE_ANON}`
+                    }
+                });
+                if (!res.ok) {
+                    const err = await res.text();
+                    throw new Error(err || res.statusText);
+                }
+                dashData = await res.json();
+                renderDashTable(dashData);
+                $("#dash-updated").textContent = `${dashData.length} rekaman · ${new Date().toLocaleString("id-ID")}`;
+            } catch(e) {
+                $("#dash-updated").textContent = "Gagal memuat: " + (e.message || e);
+            }
+        }
+        function renderDashSummary(data) {
+            const siswaSet = new Set(data.map(r => r.nama + r.kelas + r.no_absen));
+            const post = data.filter(r => r.jenis_kuis === "Posttest");
+            const targetData = post.length ? post : data;
+            const avg = targetData.length ? Math.round(targetData.reduce((s,r) => s + r.skor, 0) / targetData.length) : 0;
+            const maxScore = targetData.length ? Math.max(...targetData.map(r => r.skor)) : 0;
+            const tuntasCount = targetData.filter(r => (r.skor / (r.total_soal || 20)) >= 0.75).length;
+            const tuntasPct = targetData.length ? Math.round((tuntasCount / targetData.length) * 100) : 0;
+            return `
+                <div class="dash-stat"><div class="dsv">${siswaSet.size}</div><div class="dsl">SISWA</div></div>
+                <div class="dash-stat"><div class="dsv">${post.length}</div><div class="dsl">POSTTEST</div></div>
+                <div class="dash-stat"><div class="dsv">${avg}/20</div><div class="dsl">RATA SKOR</div></div>
+                <div class="dash-stat"><div class="dsv">${maxScore}/20</div><div class="dsl">TERTINGGI</div></div>
+                <div class="dash-stat"><div class="dsv">${tuntasPct}%</div><div class="dsl">TUNTAS (≥75%)</div></div>`;
+        }
+        function renderDashTable(data) {
+            $("#dash-summary").innerHTML = renderDashSummary(data);
+            const tbody = $("#dash-tbody");
+            tbody.innerHTML = "";
+            if (!data.length) { $("#dash-empty").style.display = "block"; return; }
+            $("#dash-empty").style.display = "none";
+            data.forEach((r, i) => {
+                const dt = new Date(r.device_ts).toLocaleString("id-ID", {dateStyle:"short", timeStyle:"short"});
+                const mn = Math.floor(r.durasi_detik/60), sc = r.durasi_detik%60;
+                const badge = r.jenis_kuis === "Pretest" ? `<span class="badge-pre">PRE</span>` : `<span class="badge-post">POST</span>`;
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${i+1}</td><td>${r.nama}</td><td>${r.kelas}</td><td>${r.no_absen}</td><td>${badge}</td>
+                    <td><b>${r.skor}/${r.total_soal}</b></td><td>${r.akurasi_pct}%</td>
+                    <td>${mn}:${String(sc).padStart(2,"0")}</td><td>${dt}</td>`;
+                tbody.append(tr);
+            });
+        }
+        function exportCSV() {
+            if (!dashData.length) { alert("Belum ada data untuk diunduh."); return; }
+            const headers = ["Nama","Kelas","No Absen","Jenis Kuis","Skor","Total Soal","Akurasi (%)","Durasi (detik)","Waktu"];
+            const rows = dashData.map(r => [
+                `"${r.nama}"`, r.kelas, r.no_absen, r.jenis_kuis,
+                r.skor, r.total_soal, r.akurasi_pct, r.durasi_detik,
+                `"${new Date(r.device_ts).toLocaleString("id-ID")}"`
+            ].join(","));
+            const csv = [headers.join(","), ...rows].join("\n");
+            const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a"); a.href = url;
+            a.download = `rekap_nilai_ekosistem_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click(); URL.revokeObjectURL(url);
+        }
+
+        /* =============== MATA MASKOT MENGIKUTI KURSOR =============== */
+        document.addEventListener("mousemove", e => {
+            document.querySelectorAll(".screen.active .mascot").forEach(m => {
+                const r = m.getBoundingClientRect();
+                const cx = r.left + r.width / 2, cy = r.top + r.height * .45;
+                let dx = (e.clientX - cx) / r.width, dy = (e.clientY - cy) / r.height;
+                dx = Math.max(-1, Math.min(1, dx)) * 6;
+                dy = Math.max(-1, Math.min(1, dy)) * 6;
+                m.querySelectorAll(".pupil").forEach(p => p.style.transform = `translate(${dx}px, ${dy}px)`);
+            });
+        });
+
+        /* =============== INISIALISASI & EVENT =============== */
+        $("#brand").innerHTML = ic("leaf", 18) + "IPAS · FASE C · KELAS V";
+        $("#slot-home").innerHTML = MASCOT;
+        $("#hearts-ic").innerHTML = ic("heart", 22);
+        $("#combo-ic").innerHTML = ic("flame", 15);
+        $("#btn-quit").innerHTML = ic("cross", 24);
+        $("#rule-ic1").innerHTML = ic("target", 20); $("#rule-ic1").style.color = "var(--blue)";
+        $("#rule-ic2").innerHTML = ic("star", 20); $("#rule-ic2").style.color = "var(--gold-dark)";
+        $("#rule-ic3").innerHTML = ic("flame", 20); $("#rule-ic3").style.color = "var(--orange)";
+        renderHome();
+
+        // Cek apakah identitas siswa sudah ada
+        const savedSiswa = loadSiswa();
+        if (savedSiswa) {
+            saveSiswa(savedSiswa);
+            renderHome();
+        } else {
+            // Tampilkan modal identitas saat halaman pertama dibuka
+            setTimeout(() => showIdModal(null), 400);
+        }
+
+        // Tombol ganti identitas
+        $("#btn-change-id").onclick = () => showIdModal(null);
+
+        $("#btn-sound").onclick = () => { store.sound = !store.sound; saveStore(); renderHome(); if (store.sound) sfx.tap(); };
+        $("#btn-main").onclick = () => { if (!S) return; if (!S.locked) { if (S.picked !== null) check(); } else next(); };
+        $("#btn-quit").onclick = () => modal({
+            icon: "cross", tint: "red", title: "Keluar dari kuis?",
+            text: "Progres kuis ini akan hilang, lho. Masih mau lanjut belajar?",
+            actions: [{ label: "LANJUT BELAJAR", kind: "primary", fn: () => { } },
+            { label: "KELUAR", kind: "ghost", fn: () => { show("home"); renderHome(); } }]
+        });
+        $("#node-post").onclick = () => startQuiz("post");
+        $("#node-angket").onclick = () => {
+            if (store.post === null) {
+                modal({
+                    icon: "lock", tint: "gold", title: "Selesaikan Posttest dulu ya",
+                    text: "Angket respon dapat diisi setelah kamu menyelesaikan evaluasi Posttest. Buktikan kemampuanmu di Posttest terlebih dahulu!",
+                    actions: [
+                        { label: "KERJAKAN POSTTEST", kind: "primary", fn: () => startQuiz("post") },
+                        { label: "NANTI SAJA", kind: "ghost", fn: () => { } }
+                    ]
+                });
+            } else {
+                bukaAngket();
+            }
+        };
+        $("#btn-reset").onclick = () => modal({
+            icon: "cross", tint: "red", title: "Hapus semua skor?",
+            text: "Data skor posttest & status angket di perangkat ini akan dihapus permanen.",
+            actions: [{ label: "HAPUS", kind: "danger", fn: () => { store.post = null; store.angket = false; saveStore(); renderHome(); } },
+            { label: "BATAL", kind: "ghost", fn: () => { } }]
+        });
+        $("#btn-home").onclick = () => { show("home"); renderHome(); };
+        $("#btn-retry").onclick = () => startQuiz("post");
+        $("#btn-next-mode").onclick = () => bukaAngket();
+
+        // Panel Guru
+        $("#btn-guru").onclick = () => openPinModal();
+        $("#pin-submit").onclick = () => {
+            const pin = $("#pin-input").value.trim();
+            if (!pin) return;
+            if (pin !== TEACHER_PIN) {
+                $("#pin-err").textContent = "PIN salah! Masukkan PIN guru yang benar.";
+                $("#pin-input").focus();
+                return;
+            }
+            closePinModal();
+            openDashboard(pin);
+        };
+        $("#pin-input").addEventListener("keydown", e => { if (e.key === "Enter") $("#pin-submit").click(); });
+        $("#dash-close").onclick = () => closeDashboard();
+        $("#dash-csv").onclick = () => exportCSV();
+        $("#dash-refresh").onclick = () => loadDashData();
+        $("#dash-angket").onclick = () => window.open(ANGKET_URL, "_blank");
+        $("#dash-sheets").onclick = () => {
+            if (SHEETS_URL) { window.open(SHEETS_URL, "_blank"); }
+            else { alert("URL Google Sheets belum dikonfigurasi.\nIsi variabel SHEETS_URL di kode HTML, atau lihat PANDUAN_SETUP_SUPABASE.md"); }
+        };
+        // Tutup pin modal jika klik di luar
+        $("#pin-overlay").addEventListener("click", e => { if (e.target === $("#pin-overlay")) closePinModal(); });
+        $("#dash-overlay").addEventListener("click", e => { if (e.target === $("#dash-overlay")) closeDashboard(); });
+
+        // pintasan keyboard: 1-4 pilih jawaban, Enter periksa/lanjut
+        document.addEventListener("keydown", e => {
+            if (!$("#screen-quiz").classList.contains("active") || !S) return;
+            if (e.key >= "1" && e.key <= "4") {
+                const b = [...$("#opts").children][+e.key - 1];
+                if (b && !S.locked) pick(+e.key - 1, b);
+            } else if (e.key === "Enter") {
+                const b = $("#btn-main");
+                if (!b.disabled) b.click();
+            }
+        });
+    </script>
+</body>
+
+</html>

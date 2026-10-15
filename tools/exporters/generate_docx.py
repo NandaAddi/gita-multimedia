@@ -262,7 +262,7 @@ def main():
     if os.path.exists(roadmap_md):
         with open(roadmap_md, "r", encoding="utf-8") as f:
             content = f.read()
-        out_docx = os.path.join(WORKSPACE, "ROADMAP_SKRIPSI_GITO.docx")
+        out_docx = os.path.join(WORKSPACE, "docs", "exports", "ROADMAP_SKRIPSI_GITO.docx")
         markdown_to_docx(content, out_docx, "Roadmap Mingguan Skripsi R&D")
 
     # 2. Convert SKRIPSI.md to Word (.docx)
@@ -270,7 +270,7 @@ def main():
     if os.path.exists(skripsi_md):
         with open(skripsi_md, "r", encoding="utf-8") as f:
             content = f.read()
-        out_docx = os.path.join(WORKSPACE, "INSTRUMEN_DAN_OUTLINE_SKRIPSI.docx")
+        out_docx = os.path.join(WORKSPACE, "docs", "exports", "INSTRUMEN_DAN_OUTLINE_SKRIPSI.docx")
         markdown_to_docx(content, out_docx, "Instrumen Wawancara dan Outline Skripsi")
 
 if __name__ == "__main__":

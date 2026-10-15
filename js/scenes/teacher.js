@@ -23,7 +23,6 @@ function buildTeacher() {
           <div class="teacher-title-sub">Model Pembelajaran Alessi &amp; Trollip &bull; Pendekatan Kolaboratif CSCL Kelas 5A</div>
         </div>
         <div class="teacher-header-right">
-          <button class="teacher-school-badge" id="teacher-to-about" style="height:58px;font-size:24px;border:none">Tentang Pengembang</button>
           <button class="btn tb-btn snd-btn" id="teacher-snd"></button>
         </div>
       </div>
@@ -65,15 +64,6 @@ function buildTeacher() {
     };
   }
 
-  // Bind To About Button
-  const toAboutBtn = el('#teacher-to-about');
-  if (toAboutBtn) {
-    toAboutBtn.onclick = () => {
-      sfx.click();
-      if (typeof buildAbout === 'function') buildAbout();
-      go('about');
-    };
-  }
 
   // Bind Sound Button
   const sndBtn = el('#teacher-snd');

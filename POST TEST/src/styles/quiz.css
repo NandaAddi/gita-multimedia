@@ -1,0 +1,338 @@
+/* ---------- Kuis Zero-Scroll Flex Layout ---------- */
+.quiz-screen-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.q-header {
+    flex-shrink: 0;
+    background: #fff;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: clamp(10px, 1.8vh, 16px) 18px;
+    max-width: 620px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.progress {
+    flex: 1;
+    height: 14px;
+    background: var(--line);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 99px;
+    transition: width .4s cubic-bezier(.2, .8, .3, 1);
+}
+
+.combo {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: #FFF3D6;
+    color: var(--orange);
+    font-weight: 900;
+    font-size: 13.5px;
+    padding: 3px 9px;
+    border-radius: 99px;
+}
+
+.combo.pop {
+    animation: pop .3s;
+}
+
+/* Animasi Pergantian Soal Halus */
+@keyframes questionSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.q-main {
+    flex: 1;
+    max-width: 620px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 2.5vw, 22px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    animation: questionSlideIn 0.32s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.q-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: clamp(6px, 1.2vh, 12px);
+}
+
+.q-meta .num {
+    font-size: clamp(10.5px, 1.4vh, 12px);
+    font-weight: 900;
+    letter-spacing: 1.1px;
+    color: var(--mut);
+}
+
+.topic {
+    font-size: clamp(10px, 1.3vh, 11px);
+    font-weight: 900;
+    letter-spacing: .8px;
+    padding: 3px 10px;
+    border-radius: 99px;
+}
+
+.topic.t0 {
+    background: var(--blue-soft);
+    color: var(--blue-dark);
+}
+
+.topic.t1 {
+    background: #FFF3D6;
+    color: #B47B00;
+}
+
+.topic.t2 {
+    background: var(--green-soft);
+    color: var(--green-dark);
+}
+
+.q-text {
+    font-size: clamp(17px, 2.3vh, 22px);
+    font-weight: 800;
+    line-height: 1.35;
+    margin-bottom: clamp(10px, 1.8vh, 18px);
+    color: var(--ink);
+}
+
+.opts {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(7px, 1.2vh, 11px);
+}
+
+.opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    text-align: left;
+    background: #fff;
+    border: 2px solid var(--line);
+    border-bottom-width: 3.5px;
+    border-radius: 14px;
+    padding: clamp(9px, 1.5vh, 13px) 15px;
+    font-size: clamp(13.5px, 1.7vh, 15.5px);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .12s, border-color .12s, color .12s, transform .08s;
+}
+
+.opt:hover:not(.locked) {
+    background: var(--snow);
+}
+
+.opt:active:not(.locked) {
+    transform: translateY(1.5px);
+}
+
+.opt .key {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border: 2px solid;
+    border-radius: 7px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 900;
+    opacity: .5;
+}
+
+.opt .txt {
+    flex: 1;
+}
+
+.opt .mark {
+    display: none;
+}
+
+.opt.selected {
+    background: var(--blue-soft);
+    border-color: var(--blue-line);
+    color: var(--blue-dark);
+}
+
+.opt.selected .key {
+    opacity: 1;
+}
+
+.opt.right {
+    background: var(--green-soft);
+    border-color: var(--green-line);
+    color: var(--green-dark);
+}
+
+.opt.wrongpick {
+    background: var(--red-soft);
+    border-color: var(--red-line);
+    color: var(--red-dark);
+    animation: shake .4s;
+}
+
+.opt.right .mark,
+.opt.wrongpick .mark {
+    display: block;
+}
+
+.opt.dim {
+    opacity: .5;
+}
+
+.opt.locked {
+    cursor: default;
+}
+
+/* ---------- Sheet Bawah Feedback (Flex Bottom) ---------- */
+.q-footer {
+    flex-shrink: 0;
+    position: relative;
+    background: #fff;
+    border-top: 2px solid var(--line);
+    z-index: 30;
+    transition: background .2s, border-color .2s;
+    width: 100%;
+}
+
+.q-footer.good {
+    background: var(--green-soft);
+    border-color: transparent;
+}
+
+.q-footer.bad {
+    background: var(--red-soft);
+    border-color: transparent;
+}
+
+.q-footer-inner {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: clamp(10px, 1.6vh, 15px) 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-sizing: border-box;
+}
+
+.fb {
+    flex: 1;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    animation: slideUp .25s ease;
+    overflow: hidden;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.fic {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #fff;
+    display: grid;
+    place-items: center;
+}
+
+.q-footer.good .fic {
+    color: var(--green-dark);
+}
+
+.q-footer.bad .fic {
+    color: var(--red-dark);
+}
+
+.fb-title {
+    font-size: clamp(15px, 2vh, 18px);
+    font-weight: 900;
+}
+
+.q-footer.good .fb-title {
+    color: var(--green-dark);
+}
+
+.q-footer.bad .fb-title {
+    color: var(--red-dark);
+}
+
+.fb-body {
+    font-size: clamp(12px, 1.5vh, 13.5px);
+    font-weight: 700;
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+.q-footer.good .fb-body {
+    color: var(--green-dark);
+}
+
+.q-footer.bad .fb-body {
+    color: var(--red-dark);
+}
+
+.fb-why {
+    font-weight: 600;
+    opacity: .88;
+    margin-top: 2px;
+    font-size: clamp(11.5px, 1.4vh, 12.5px);
+}
+
+.btn-main {
+    flex-shrink: 0;
+    min-width: 140px;
+    padding: clamp(10px, 1.6vh, 14px) 22px;
+    font-size: clamp(13px, 1.6vh, 14.5px);
+}
+
+@media (max-width: 560px) {
+    .q-footer-inner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .btn-main {
+        width: 100%;
+    }
+}

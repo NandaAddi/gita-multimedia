@@ -41,10 +41,10 @@ function buildTeam() {
     <div class="ui">
       <!-- TOPBAR -->
       <div class="topbar">
-        <button class="btn tb-btn" id="t-back">${ic('back', 24)} Judul</button>
+        <button class="btn tb-btn" id="team-back">${ic('back', 24)} Judul</button>
         <div class="plaque">Pilih Kelompok Detektifmu</div>
         <div class="spacer"></div>
-        <button class="btn tb-btn snd-btn" id="t-snd"></button>
+        <button class="btn tb-btn snd-btn" id="team-snd"></button>
         <div class="tb-stars">${ic('star', 24)} <b>${totStars()}/48</b></div>
       </div>
 
@@ -56,12 +56,9 @@ function buildTeam() {
         <div class="stage-corner sc-bl"></div>
         <div class="stage-corner sc-br"></div>
 
-        <!-- TOP RIGHT RED CLOSE BUTTON -->
-        <button class="stage-close-x" id="t-close-x" title="Kembali ke Judul" aria-label="Tutup / Kembali">✕</button>
-
         <!-- ARCADE 3D NAV BUTTONS (CIRCULAR 3D JELLY) -->
-        <button class="arrow prev arcade-arrow btn btn-gold" id="t-prev" aria-label="Kelompok Sebelumnya">◀</button>
-        <button class="arrow next arcade-arrow btn btn-gold" id="t-next" aria-label="Kelompok Berikutnya">▶</button>
+        <button class="arrow prev arcade-arrow btn btn-gold" id="team-prev" aria-label="Kelompok Sebelumnya">◀</button>
+        <button class="arrow next arcade-arrow btn btn-gold" id="team-next" aria-label="Kelompok Berikutnya">▶</button>
 
         <!-- SLIDING HERO CARD INNER -->
         <div class="hero-inner-wrap" id="hero-wrap">
@@ -104,15 +101,42 @@ function buildTeam() {
     go('title');
   };
 
-  const tBackBtn = el('#t-back');
+  const tBackBtn = el('#team-back');
   if (tBackBtn) tBackBtn.onclick = onBackToTitle;
 
-  const tCloseX = el('#t-close-x');
-  if (tCloseX) tCloseX.onclick = onBackToTitle;
+  const btnPrev = el('#team-prev');
+  const btnNext = el('#team-next');
 
-  el('#t-prev').onclick = () => navigateTeam(-1);
-  el('#t-next').onclick = () => navigateTeam(1);
-  const tSndBtn = el('#t-snd');
+  const onPrev = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    navigateTeam(-1);
+  };
+  const onNext = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    navigateTeam(1);
+  };
+
+  if (btnPrev) {
+    btnPrev.onclick = onPrev;
+    ['pointerdown', 'pointerup', 'touchstart', 'touchend', 'mousedown'].forEach(evt => {
+      btnPrev.addEventListener(evt, e => e.stopPropagation(), { passive: false });
+    });
+  }
+
+  if (btnNext) {
+    btnNext.onclick = onNext;
+    ['pointerdown', 'pointerup', 'touchstart', 'touchend', 'mousedown'].forEach(evt => {
+      btnNext.addEventListener(evt, e => e.stopPropagation(), { passive: false });
+    });
+  }
+
+  const tSndBtn = el('#team-snd');
   if (tSndBtn) tSndBtn.onclick = toggleSound;
   if (typeof syncSound === 'function') syncSound();
 
@@ -237,7 +261,7 @@ window.animateTeamMascot = function(timeMs) {
   if (CUR !== 'team') return;
   const teamObj = TEAMS[teamIdx];
   if (!teamObj) return;
-  const theme = TEAM_THEMES[teamObj.biome] || TEAM_THEMES.sawah;
+  const theme = TEAM_THEMES[teamObj.id] || TEAM_THEMES.sawah;
   drawPodiumAndMascot(teamObj, theme, timeMs);
 };
 

@@ -10,7 +10,7 @@ var GitaSeq = (function(){
   var CACHES = new Map(); // cacheKey -> { imgs, total, ready, loading, failed, waiters }
   var PLAYERS = new Map(); // containerEl -> state
   var DEFAULTS = {
-    folder: 'gita-thinking',
+    folder: 'assets/animations/gita-thinking',
     prefix: 'g',
     ext: '.webp',
     pad: 3,           // g000.webp ... g047.webp
@@ -21,7 +21,7 @@ var GitaSeq = (function(){
     size: 400,
     alt: 'Gita Detektif Alam',
     showLoading: false,
-    fallbackSVG: null
+    fallbackSVG: function(){ return typeof gitaSVG === 'function' ? gitaSVG(200, 'happy') : null; }
   };
 
   function padN(n, len){ var s = String(n); while(s.length < len) s = '0' + s; return s; }
@@ -117,7 +117,7 @@ var GitaSeq = (function(){
     if(!box) return;
     stop(box);
 
-    var firstSrc = o.poster || (o.folder === 'gita-thinking' ? 'gita-thinking/poster.png' : frameURL(o, 0));
+    var firstSrc = o.poster || (o.folder.includes('gita-thinking') ? o.folder + '/poster.png' : frameURL(o, 0));
 
     // Tampilkan poster instan selagi preload
     box.innerHTML = '<img class="gita-seq" src="' + firstSrc + '" width="' + o.size +

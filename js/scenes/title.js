@@ -10,7 +10,7 @@ function titleBubble(){const n=totStars();
   // gambar 400px meluber ke bawah di belakang kartu.
   try{
     if(typeof GitaSeq !== 'undefined' && GitaSeq.play){
-      GitaSeq.play('#gita-title', { size: 400, fps: 12 });
+      GitaSeq.play('#gita-title', { folder: 'assets/animations/gita-thinking', size: 400, fps: 12 });
     }
   }catch(e){}
  el('#bubble-title').innerHTML=n>0

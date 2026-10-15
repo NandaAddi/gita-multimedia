@@ -8,7 +8,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url('../fonts/fredoka-500-latin.woff2') format('woff2');
+  src: url('../assets/fonts/fredoka-500-latin.woff2') format('woff2');
 }
 
 @font-face {
@@ -16,8 +16,8 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url('../fonts/fredoka_600.woff2') format('woff2'),
-       url('../fonts/fredoka-500-latin.woff2') format('woff2');
+  src: url('../assets/fonts/fredoka_600.woff2') format('woff2'),
+       url('../assets/fonts/fredoka-500-latin.woff2') format('woff2');
 }
 
 @font-face {
@@ -25,8 +25,8 @@
   font-style: normal;
   font-weight: 700 800;
   font-display: swap;
-  src: url('../fonts/fredoka_700.woff2') format('woff2'),
-       url('../fonts/fredoka_600.woff2') format('woff2');
+  src: url('../assets/fonts/fredoka_700.woff2') format('woff2'),
+       url('../assets/fonts/fredoka_600.woff2') format('woff2');
 }
 
 @font-face {
@@ -34,7 +34,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url('../fonts/baloo_2_600.woff2') format('woff2');
+  src: url('../assets/fonts/baloo_2_600.woff2') format('woff2');
 }
 
 @font-face {
@@ -42,7 +42,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('../fonts/baloo_2_700.woff2') format('woff2');
+  src: url('../assets/fonts/baloo_2_700.woff2') format('woff2');
 }
 
 @font-face {
@@ -50,7 +50,7 @@
   font-style: normal;
   font-weight: 800 900;
   font-display: swap;
-  src: url('../fonts/baloo_2_800.woff2') format('woff2');
+  src: url('../assets/fonts/baloo_2_800.woff2') format('woff2');
 }
 
 @font-face {
@@ -58,7 +58,7 @@
   font-style: normal;
   font-weight: 400 600;
   font-display: swap;
-  src: url('../fonts/nunito-latin.woff2') format('woff2');
+  src: url('../assets/fonts/nunito-latin.woff2') format('woff2');
 }
 
 @font-face {
@@ -66,8 +66,8 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('../fonts/nunito_700.woff2') format('woff2'),
-       url('../fonts/nunito-latin.woff2') format('woff2');
+  src: url('../assets/fonts/nunito_700.woff2') format('woff2'),
+       url('../assets/fonts/nunito-latin.woff2') format('woff2');
 }
 
 @font-face {
@@ -75,8 +75,8 @@
   font-style: normal;
   font-weight: 800 900;
   font-display: swap;
-  src: url('../fonts/nunito_800.woff2') format('woff2'),
-       url('../fonts/nunito_900.woff2') format('woff2');
+  src: url('../assets/fonts/nunito_800.woff2') format('woff2'),
+       url('../assets/fonts/nunito_900.woff2') format('woff2');
 }
 
 :root {
@@ -186,13 +186,17 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 
 /* TONAL CONTAINERS (BORDERLESS & GLASSMORPHISM) */
 .panel{
-  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);\n  backdrop-filter: blur(8px);
+  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border:none;
   border-radius:28px;
   box-shadow:0 20px 50px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.1);
 }
 .panel-deep{
-  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);\n  backdrop-filter: blur(8px);
+  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border:none;
   border-radius:28px;
   box-shadow:0 18px 46px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08);
@@ -234,7 +238,9 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 .modal{
   pointer-events:auto;max-width:1560px;max-height:1000px;overflow:auto;padding:48px 56px;color:#fff;
   border-radius:32px;border:none;
-  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);\n  backdrop-filter: blur(8px);
+  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:0 30px 80px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.12);
 }
 .modal h2{color:var(--gold);font-size:44px;margin-bottom:20px;display:flex;gap:16px;align-items:center;text-shadow:0 2px 0 rgba(0,0,0,.4)}
@@ -374,7 +380,9 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 /* TUTORIAL SLIDE SCREEN */
 .tut-slide{
   width:1440px;text-align:center;padding:46px 64px 42px;border-radius:32px;
-  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);\n  backdrop-filter: blur(8px);
+  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:0 30px 80px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.1);
 }
 .tut-badge{
@@ -583,6 +591,7 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
   line-height: 1;
   padding: 0;
   cursor: pointer;
+  pointer-events: auto !important;
   z-index: 20;
   -webkit-text-stroke: 2px #4a3018;
   paint-order: stroke fill;
@@ -1351,7 +1360,9 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 .mcard{
   padding:18px 24px;display:flex;flex-direction:column;justify-content:space-between;
   flex:1;min-height:330px;position:relative;border-radius:24px;border:none;
-  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);\n  backdrop-filter: blur(8px);
+  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:0 10px 28px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08);
   transition:transform .12s ease, box-shadow .12s ease;
 }
@@ -1872,7 +1883,9 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 .vwrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:28px;z-index:5}
 .vcard{
   width:1260px;text-align:center;padding:48px 68px;border-radius:32px;border:none;
-  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);\n  backdrop-filter: blur(8px);
+  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:0 30px 80px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.15);
 }
 .vcard h1{font-size:60px;color:var(--gold);text-shadow:0 4px 0 rgba(0,0,0,.4)}
@@ -1894,7 +1907,9 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .bridge-panel{
   position:relative;width:1620px;min-height:300px;border-radius:32px;border:none;
-  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);\n  backdrop-filter: blur(8px);
+  background:linear-gradient(180deg, rgba(6,56,44,.65) 0%, rgba(2,34,26,.85) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:0 30px 80px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.12);
   padding:26px 42px;display:flex;gap:36px;align-items:center;
 }
@@ -3876,6 +3891,193 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
   color: #cbd5e1 !important;
   box-shadow: none !important;
   cursor: not-allowed !important;
+}
+
+/* ============================================================
+   ECO-EXPLORER — SCENE LOADING TRANSITION OVERLAY
+   Standar Ergonomi IFP (1920x1080 Scaled, Glassmorphism, 60fps)
+   Animasi Gita (42 WebP 240px) + Edukasi Fakta Sains Ekosistem
+   ============================================================ */
+
+.scene-loader-overlay {
+  position: absolute;
+  inset: 0;
+  width: 1920px;
+  height: 1080px;
+  z-index: 9600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 50%, rgba(6, 78, 59, 0.94) 0%, rgba(1, 26, 20, 0.98) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.22s;
+}
+
+.scene-loader-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.scene-loader-card {
+  position: relative;
+  max-width: 820px;
+  width: 90%;
+  background: linear-gradient(180deg, rgba(6, 95, 70, 0.92) 0%, rgba(2, 44, 34, 0.98) 100%);
+  border: 3px solid rgba(254, 240, 138, 0.55);
+  border-radius: 36px;
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), inset 0 0 40px rgba(254, 240, 138, 0.12), 0 0 35px rgba(16, 185, 129, 0.3);
+  text-align: center;
+  transform: translateY(12px) scale(0.96);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scene-loader-overlay.active .scene-loader-card {
+  transform: translateY(0) scale(1);
+}
+
+.loader-gita-box {
+  width: 240px;
+  height: 240px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.5));
+}
+
+.loader-gita-box img.gita-seq {
+  width: 240px;
+  height: 240px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.loader-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.loader-title {
+  font-family: var(--font-fun);
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--gold, #fde047);
+  letter-spacing: 0.5px;
+  line-height: 1.25;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
+  animation: loaderTitlePulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes loaderTitlePulse {
+  0% { transform: scale(0.98); opacity: 0.9; }
+  100% { transform: scale(1.02); opacity: 1; }
+}
+
+.loader-fact-card {
+  width: 100%;
+  max-width: 680px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(254, 240, 138, 0.25);
+  border-radius: 20px;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.loader-fact-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.loader-fact-badge {
+  font-family: var(--font-fun);
+  font-size: 17px;
+  font-weight: 800;
+  color: #fef08a;
+  background: rgba(217, 119, 6, 0.35);
+  border: 1px solid rgba(254, 240, 138, 0.3);
+  padding: 4px 14px;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+}
+
+.loader-fact-subtitle {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 700;
+  color: #a7f3d0;
+  opacity: 0.9;
+}
+
+.loader-fact-text {
+  font-family: var(--font-body);
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.5;
+  margin: 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.loader-progress-wrap {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.loader-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.loader-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #fde047 100%);
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(254, 240, 138, 0.7);
+  transition: width 2.8s linear;
+}
+
+.loader-skip-hint {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 700;
+  color: #a7f3d0;
+  opacity: 0.9;
+  letter-spacing: 0.4px;
+  user-select: none;
+  animation: skipHintPulse 2s infinite ease-in-out alternate;
+}
+
+@keyframes skipHintPulse {
+  0% { opacity: 0.7; transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(-2px); }
 }
 
 

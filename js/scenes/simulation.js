@@ -20,14 +20,14 @@ function showBridgeDialog(m, team){
 
   // Preload kedua sequence animasi Gita di latar belakang
   if (typeof GitaSeq !== 'undefined' && GitaSeq.preload) {
-    GitaSeq.preload({ folder: 'worried_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 });
-    GitaSeq.preload({ folder: 'talking_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 });
+    GitaSeq.preload({ folder: 'assets/animations/worried_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 });
+    GitaSeq.preload({ folder: 'assets/animations/talking_loop', prefix: 'Comp 1_', pad: 5, ext: '.webp', frames: 60, fps: 12 });
   }
 
   function renderBridgeStep(){
     const cur = bridgeStep === 1 ? bdata.step1 : bdata.step2;
     const expr = cur.gitaExpr || (bridgeStep === 1 ? 'worried' : 'talk');
-    const seqFolder = (expr === 'worried') ? 'worried_loop' : 'talking_loop';
+    const seqFolder = (expr === 'worried') ? 'assets/animations/worried_loop' : 'assets/animations/talking_loop';
 
     if (typeof GitaSeq !== 'undefined' && GitaSeq.play) {
       GitaSeq.play('#bridge-gita-box', {

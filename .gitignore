@@ -34,5 +34,6 @@ dist/
 *.psd
 raw-assets/
 ASSET_BACKUP_PNG/
+archive/
 tmp/
 
