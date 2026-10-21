@@ -317,3 +317,12 @@ function drawPodiumAndMascot(teamObj, theme, timeMs = 0) {
   }
   c.restore();
 }
+
+if (typeof SCENE_CLEANUP !== 'undefined') {
+  SCENE_CLEANUP['team'] = function() {
+    const cv = el('#team-mascot-canvas');
+    if (cv) {
+      try { cv.getContext('2d').clearRect(0, 0, 400, 400); } catch(e){}
+    }
+  };
+}

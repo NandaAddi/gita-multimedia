@@ -97,7 +97,21 @@ function dismissLoader() {
   }, 240);
 }
 
+const SCENE_CLEANUP = {};
+try {
+  if (typeof window !== 'undefined') window.SCENE_CLEANUP = SCENE_CLEANUP;
+} catch (e) {}
+
 function applyScreenSwitch(id) {
+  // 1. Eksekusi hook pembersihan scene lama
+  if (CUR && typeof SCENE_CLEANUP[CUR] === 'function') {
+    try {
+      SCENE_CLEANUP[CUR]();
+    } catch (e) {
+      console.warn('[Cleanup][' + CUR + ']', e);
+    }
+  }
+
   const currentSc = el('#scr-' + id);
   els('.screen').forEach(s => s.classList.remove('active'));
   const sc = currentSc || el('#scr-' + id);

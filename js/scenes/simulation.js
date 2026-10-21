@@ -951,6 +951,16 @@ function leaveSim(){if(SIM&&SIM.timer)clearInterval(SIM.timer);SIM=null;
  }
 }
 
+if (typeof SCENE_CLEANUP !== 'undefined') {
+  SCENE_CLEANUP['sim'] = function() {
+    leaveSim();
+    const simUi = el('#sim-ui');
+    if (simUi) simUi.innerHTML = '';
+    const bridge = el('#sim-bridge');
+    if (bridge) bridge.style.display = 'none';
+  };
+}
+
 /* ================== GLOBAL DRAG PROXY & TOUCH MANAGEMENT (IFP DUAL-MODE) ==================
    Proteksi debounce multi-click, single-pointer capture, & anti-double-trigger */
 let dragProxy = null;

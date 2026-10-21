@@ -258,4 +258,10 @@ function openMission(m) {
 function startMission(mOrId) {
   const m = typeof mOrId === 'string' ? (typeof MISSIONS !== 'undefined' ? MISSIONS.find(x => x.id === mOrId) : null) : mOrId;
   if (m) openMission(m);
+}
+
+if (typeof SCENE_CLEANUP !== 'undefined') {
+  SCENE_CLEANUP['mission'] = function() {
+    if (typeof closeModal === 'function') closeModal();
+  };
 }
