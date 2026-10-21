@@ -335,7 +335,15 @@ function _getVOFallback(key) {
   const fbKey = 'fb_' + key;
   let fallback = VO_POOL.get(fbKey);
   if (!fallback) {
-    fallback = new Audio('assets/audio/voice-over/' + key + '.mp3');
+    if (VO_POOL.size >= 45) {
+      const oldestKey = VO_POOL.keys().next().value;
+      const oldAudio = VO_POOL.get(oldestKey);
+      if (oldAudio && typeof oldAudio.pause === 'function') {
+        try { oldAudio.pause(); } catch (e) {}
+      }
+      VO_POOL.delete(oldestKey);
+    }
+    fallback = new Audio('assets/audio/vo/' + key + '.mp3');
     VO_POOL.set(fbKey, fallback);
   }
   return fallback;

@@ -530,6 +530,7 @@ function simUpdate(){if(!SIM)return;const m=SIM.m,S=SIM.S;
   SIM.tgt[i]=ok;
  });
  syncUITabs();
+ if(S.health<40&&!SIM.dangerVOPlayed){SIM.dangerVOPlayed=true;if(typeof playVO==='function')playVO('vo_sim_danger');}
  if(S.health<=6){simFail(false);return;}
  if(S.day>SIM.limit){simFail(true);return;}
  if(!SIM.done&&SIM.tgt.every(Boolean)){
