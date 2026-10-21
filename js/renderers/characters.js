@@ -484,10 +484,7 @@ function treeDraw(c, x, y, h, col, seed = 0, t = 0, isBg = false, wither = 0) {
   c.closePath();
 
   // Gradasi Isi Batang Kayu
-  const trunkGrad = c.createLinearGradient(x - tw, splitY, x + tw, y);
-  trunkGrad.addColorStop(0, trunkMidCol);
-  trunkGrad.addColorStop(0.3, trunkHiCol);
-  trunkGrad.addColorStop(0.8, trunkBaseCol);
+  const trunkGrad = LG3(c, x - tw, splitY, x + tw, y, trunkMidCol, 0.3, trunkHiCol, trunkBaseCol);
   c.fillStyle = trunkGrad;
   c.fill();
 
@@ -685,9 +682,7 @@ function texRidge(c,pts,col,seed){
   const s=2+pr(seed+130+k)*3.5;
   F(c,[[tx-s,ty],[tx+s,ty],[tx,ty-s*1.6]],k%3?veg:lt);}
  // kabut tipis di kaki bukit
- const mg=c.createLinearGradient(0,mxy-46,0,mxy);
- mg.addColorStop(0,'rgba(255,255,255,0)');mg.addColorStop(1,'rgba(255,255,255,.20)');
- c.fillStyle=mg;c.fillRect(mnx,mxy-46,mxx-mnx,46);
+ c.fillStyle=LG(c,0,mxy-46,0,mxy,'rgba(255,255,255,0)','rgba(255,255,255,.20)');c.fillRect(mnx,mxy-46,mxx-mnx,46);
  c.restore();
  // sorotan tepi mengikuti kurva
  c.strokeStyle=lt;c.lineWidth=4;c.lineCap='round';ridgeTop();c.stroke();}
@@ -1044,11 +1039,9 @@ function texSoilSawah(c, t, S) {
       const py = 460 + pr(p * 5.7) * 520;
       const rx = 100 + pr(p * 3.1) * 160;
       const ry = 16 + pr(p * 4.2) * 26;
-      const grad = c.createLinearGradient(0, py - ry, 0, py + ry);
-      grad.addColorStop(0, isPoisoned ? 'rgba(160, 180, 140, 0.6)' : 'rgba(210, 240, 255, 0.85)');
-      grad.addColorStop(0.5, isPoisoned ? 'rgba(90, 110, 100, 0.4)' : 'rgba(120, 195, 230, 0.55)');
-      grad.addColorStop(1, 'rgba(80, 140, 180, 0.15)');
-      c.fillStyle = grad;
+      const grad0 = isPoisoned ? 'rgba(160, 180, 140, 0.6)' : 'rgba(210, 240, 255, 0.85)';
+      const grad1 = isPoisoned ? 'rgba(90, 110, 100, 0.4)' : 'rgba(120, 195, 230, 0.55)';
+      c.fillStyle = LG3(c, 0, py - ry, 0, py + ry, grad0, 0.5, grad1, 'rgba(80, 140, 180, 0.15)');
       c.beginPath();
       c.ellipse(px, py, rx, ry, 0, 0, Math.PI * 2);
       c.fill();
@@ -1107,16 +1100,9 @@ function texSoilHutan(c, t, S) {
   c.save();
 
   // 1. DASAR TANAH HUTAN BERGRADASI ORGANIK
-  const forestFloorGrad = c.createLinearGradient(0, 470, 0, 1080);
-  if (isFire) {
-    forestFloorGrad.addColorStop(0, mixc('#3a4a35', '#26201b', fireSeverity));
-    forestFloorGrad.addColorStop(0.5, mixc('#30442c', '#1c1714', fireSeverity));
-    forestFloorGrad.addColorStop(1, mixc('#243320', '#14100d', fireSeverity));
-  } else {
-    forestFloorGrad.addColorStop(0, '#46724a');
-    forestFloorGrad.addColorStop(0.4, '#385e3a');
-    forestFloorGrad.addColorStop(1, '#254026');
-  }
+  const forestFloorGrad = isFire
+    ? LG3(c, 0, 470, 0, 1080, mixc('#3a4a35', '#26201b', fireSeverity), 0.5, mixc('#30442c', '#1c1714', fireSeverity), mixc('#243320', '#14100d', fireSeverity))
+    : LG3(c, 0, 470, 0, 1080, '#46724a', 0.4, '#385e3a', '#254026');
 
   F(c, [[0, 1080], [300, 470], [1650, 470], [1920, 1080]], forestFloorGrad);
 
@@ -1287,11 +1273,7 @@ function drawRiverBoulder(c, x, y, rx, ry, baseCol, hasMoss, rot) {
   c.fill();
 
   // 2. Badan batu granit berlapis (radial gradient 3D)
-  const bg = c.createRadialGradient(-rx * 0.25, -ry * 0.3, ry * 0.15, 0, 0, rx);
-  bg.addColorStop(0, '#a39c92');
-  bg.addColorStop(0.5, baseCol || '#6b655c');
-  bg.addColorStop(1, '#3e3a34');
-  c.fillStyle = bg;
+  c.fillStyle = RG3(c, -rx * 0.25, -ry * 0.3, ry * 0.15, 0, 0, rx, '#a39c92', 0.5, baseCol || '#6b655c', '#3e3a34');
   c.beginPath();
   c.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
   c.fill();
@@ -1365,11 +1347,7 @@ function texSoilSungaiTop(c, t, S) {
   c.save();
 
   // 1. BANTARAN ATAS ORGANIK (Upper Bank: y = 340 to getRiverBankTop(x))
-  const upGrad = c.createLinearGradient(0, 340, 0, 480);
-  upGrad.addColorStop(0, '#588a4c');
-  upGrad.addColorStop(0.65, '#45733d');
-  upGrad.addColorStop(1, '#34572e');
-  c.fillStyle = upGrad;
+  c.fillStyle = LG3(c, 0, 340, 0, 480, '#588a4c', 0.65, '#45733d', '#34572e');
   c.beginPath();
   c.moveTo(0, 340);
   c.lineTo(1920, 340);
@@ -1473,12 +1451,7 @@ function texSoilSungaiBottom(c, t, S) {
   c.save();
 
   // 1. BANTARAN BAWAH ORGANIK (Lower Bank: getRiverBankBottom(x) to y = 1080)
-  const lowGrad = c.createLinearGradient(0, 800, 0, 1080);
-  lowGrad.addColorStop(0, '#2e4a28');
-  lowGrad.addColorStop(0.15, '#3b6235');
-  lowGrad.addColorStop(0.5, '#4a7542');
-  lowGrad.addColorStop(1, '#365930');
-  c.fillStyle = lowGrad;
+  c.fillStyle = LG4(c, 0, 800, 0, 1080, '#2e4a28', 0.15, '#3b6235', 0.5, '#4a7542', '#365930');
   c.beginPath();
   c.moveTo(0, getRiverBankBottom(0));
   for (let x = 30; x <= 1920; x += 30) {
@@ -1797,14 +1770,14 @@ function mPadi(c, t=0){
  c.strokeStyle='#14532d'; c.lineWidth=14;
  c.beginPath();c.moveTo(-14,66);c.quadraticCurveTo(-46-sway,26,-54-sway*2,-14);c.stroke();
  c.beginPath();c.moveTo(14,66);c.quadraticCurveTo(46-sway,26,54-sway*2,-12);c.stroke();
- const lg = c.createLinearGradient(0, -20, 0, 70); lg.addColorStop(0,'#4ade80'); lg.addColorStop(1,'#166534');
+ const lg = LG(c, 0, -20, 0, 70, '#4ade80', '#166534');
  c.strokeStyle=lg; c.lineWidth=10;
  c.beginPath();c.moveTo(-14,66);c.quadraticCurveTo(-46-sway,26,-54-sway*2,-14);c.stroke();
  c.beginPath();c.moveTo(14,66);c.quadraticCurveTo(46-sway,26,54-sway*2,-12);c.stroke();
  hl(c,-44-sway,18,12,30,Math.PI*1.1,Math.PI*1.4, 3);
  hl(c,44-sway,18,12,30,Math.PI*1.6,Math.PI*1.9, 3);
  c.strokeStyle='#14532d'; c.lineWidth=2; c.beginPath();c.moveTo(-30-sway*.5,40);c.lineTo(-44-sway,34);c.moveTo(30-sway*.5,40);c.lineTo(44-sway,34);c.stroke();
- const goldLg = c.createLinearGradient(0,-60,0,70); goldLg.addColorStop(0,'#fef08a'); goldLg.addColorStop(1,'#b45309');
+ const goldLg = LG(c, 0, -60, 0, 70, '#fef08a', '#b45309');
  c.strokeStyle=goldLg; c.lineWidth=8;
  for(let i=-2;i<=2;i++){
   c.beginPath();c.moveTo(i*5,68);c.quadraticCurveTo(i*15-sway,-6,i*21-sway*1.5,-56+Math.abs(i)*4);c.stroke();
@@ -1825,7 +1798,7 @@ function mSnake(c, t=0){
  c.save(); c.translate(0, Math.sin(t/700)*3); c.lineCap='round';
  c.strokeStyle='#14532d'; c.lineWidth=34;
  c.beginPath();c.moveTo(-30,60);c.quadraticCurveTo(-60,20,-20,-6);c.quadraticCurveTo(20+sway,26+breath,44+sway,-4-breath);c.stroke();
- const lg = c.createLinearGradient(-40,0,50,0); lg.addColorStop(0,'#4ade80'); lg.addColorStop(1,'#16a34a');
+ const lg = LG(c, -40, 0, 50, 0, '#4ade80', '#16a34a');
  c.strokeStyle=lg; c.lineWidth=28;
  c.beginPath();c.moveTo(-30,60);c.quadraticCurveTo(-60,20,-20,-6);c.quadraticCurveTo(20+sway,26+breath,44+sway,-4-breath);c.stroke();
  hl(c,-42,26,10,20,Math.PI*.8,Math.PI*1.2, 5);
@@ -1933,7 +1906,7 @@ function mTurtle(c, t=0){
  fc(c,-8,-36,4,t); fc(c,8,-36,4,t);
  // Shell Back
  O(c,0,16,46,50,'#0f172a'); O(c,0,16,42,46,'#0369a1');
- const lg = c.createRadialGradient(0,0,10,0,16,40); lg.addColorStop(0,'#0284c7'); lg.addColorStop(1,'#0c4a6e');
+ const lg = RGExt(c, 0, 0, 10, 0, 16, 40, '#0284c7', '#0c4a6e');
  O(c,0,16,38,42,lg);
  hl(c,0,-16,26,16,Math.PI*1.1,Math.PI*1.9, 4, 'rgba(255,255,255,.3)');
  c.strokeStyle='#0284c7'; c.lineWidth=4;

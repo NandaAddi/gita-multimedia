@@ -127,16 +127,14 @@ function sunNoise(){if(SUNNOISE)return SUNNOISE;
   SUNNOISE=n;return n;}
 function sunDraw(c,x,y,t){
   // halo luar lembut
-  const hg=c.createRadialGradient(x,y,40,x,y,115);
-  hg.addColorStop(0,'rgba(255,215,110,.5)');hg.addColorStop(1,'rgba(255,215,110,0)');
-  c.fillStyle=hg;c.beginPath();c.arc(x,y,115,0,7);c.fill();
+  c.fillStyle = RGExt(c, x, y, 40, x, y, 115, 'rgba(255,215,110,.5)', 'rgba(255,215,110,0)');
+  c.beginPath();c.arc(x,y,115,0,7);c.fill();
   // sinar putar (dipertahankan dari versi lama)
   c.strokeStyle='rgba(255,215,110,.55)';c.lineWidth=6;
   for(let i=0;i<10;i++){const a=t/2400+i*Math.PI/5;c.beginPath();c.moveTo(x+Math.cos(a)*64,y+Math.sin(a)*64);c.lineTo(x+Math.cos(a)*(82+Math.sin(t/300+i)*7),y+Math.sin(a)*(82+Math.sin(t/300+i)*7));c.stroke();}
   // cakram + limb darkening (terang tengah, oranye ke tepi)
-  const g=c.createRadialGradient(x-10,y-12,5,x,y,50);
-  g.addColorStop(0,'#fff3c4');g.addColorStop(.55,'#ffd76e');g.addColorStop(1,'#ef9a1a');
-  c.fillStyle=g;c.beginPath();c.arc(x,y,50,0,7);c.fill();
+  c.fillStyle = RG3(c, x-10, y-12, 5, x, y, 50, '#fff3c4', 0.55, '#ffd76e', '#ef9a1a');
+  c.beginPath();c.arc(x,y,50,0,7);c.fill();
   // tekstur ter-clip lingkaran
   c.save();c.beginPath();c.arc(x,y,50,0,7);c.clip();
   c.globalAlpha=.32;c.globalCompositeOperation='overlay';
@@ -413,16 +411,9 @@ function sceneSawah(c,t,S){
   // 3. Dasar Petak Terasering Sawah Organik
   const wv = wdisp(S), wf = c01(wv / 75);
   const isDrought = S.water !== undefined && S.water < 32;
-  const wg = c.createLinearGradient(0, 420, 0, 1080);
-  if (isDrought) {
-    wg.addColorStop(0, '#c79d62');
-    wg.addColorStop(0.45, '#997444');
-    wg.addColorStop(1, '#75542e');
-  } else {
-    wg.addColorStop(0, mixc('#876136', '#b5e1ef', wf * 0.85));
-    wg.addColorStop(0.45, mixc('#664422', '#4b98b7', wf * 0.85));
-    wg.addColorStop(1, mixc('#4f3216', '#2b6988', wf * 0.85));
-  }
+  const wg = isDrought
+    ? LG3(c, 0, 420, 0, 1080, '#c79d62', 0.45, '#997444', '#75542e')
+    : LG3(c, 0, 420, 0, 1080, mixc('#876136', '#b5e1ef', wf * 0.85), 0.45, mixc('#664422', '#4b98b7', wf * 0.85), mixc('#4f3216', '#2b6988', wf * 0.85));
 
   c.save();
   c.beginPath();
@@ -696,11 +687,8 @@ function drawForestRainStorm(c, t, S) {
   c.fillStyle = 'rgba(15, 38, 52, ' + (alpha * 0.38).toFixed(3) + ')';
   c.fillRect(0, 0, 1920, 1080);
 
-  const rainMist = c.createLinearGradient(0, 0, 0, 650);
-  rainMist.addColorStop(0, 'rgba(186, 230, 253, ' + (alpha * 0.35).toFixed(3) + ')');
-  rainMist.addColorStop(0.6, 'rgba(203, 213, 225, ' + (alpha * 0.18).toFixed(3) + ')');
-  rainMist.addColorStop(1, 'rgba(203, 213, 225, 0)');
-  c.fillStyle = rainMist;
+  const a0 = (alpha * 0.35).toFixed(2), a1 = (alpha * 0.18).toFixed(2);
+  c.fillStyle = LG3(c, 0, 0, 0, 650, 'rgba(186, 230, 253, ' + a0 + ')', 0.6, 'rgba(203, 213, 225, ' + a1 + ')', 'rgba(203, 213, 225, 0)');
   c.fillRect(0, 0, 1920, 650);
 
   // 2. Tirai Rintik Hujan Prosedural 60 FPS (Angled Rain Streaks)
@@ -932,10 +920,7 @@ function sceneSungai(c, t, S) {
 
   // Bukit jauh berselimut kabut lembah
   texRidge(c, [[-40, 340], [380, 200], [860, 260], [1340, 195], [1780, 250], [1960, 340]], '#527b60', 104);
-  const valleyMist = c.createLinearGradient(0, 200, 0, 340);
-  valleyMist.addColorStop(0, 'rgba(215, 240, 230, 0)');
-  valleyMist.addColorStop(1, 'rgba(215, 240, 230, 0.32)');
-  c.fillStyle = valleyMist;
+  c.fillStyle = LG(c, 0, 200, 0, 340, 'rgba(215, 240, 230, 0)', 'rgba(215, 240, 230, 0.32)');
   c.fillRect(0, 200, 1920, 140);
 
   // Bukit tengah dengan kanopi hutan hujan
@@ -986,12 +971,7 @@ function sceneSungai(c, t, S) {
   }
   c.closePath();
 
-  const sg = c.createLinearGradient(0, 450, 0, 830);
-  sg.addColorStop(0, bankColTop);
-  sg.addColorStop(0.38, deepCol);
-  sg.addColorStop(0.68, deepCol);
-  sg.addColorStop(1, bankColBot);
-  c.fillStyle = sg;
+  c.fillStyle = LG4(c, 0, 450, 0, 830, bankColTop, 0.38, deepCol, 0.68, deepCol, bankColBot);
   c.fill();
 
   // 4. BUIH ALAMI BIBIR SUNGAI (Natural Shoreline Foam)
@@ -1163,9 +1143,8 @@ function sceneLaut(c,t,S){
   S = S || {};
   if (S._reefShadeTimer !== undefined && S._reefShadeTimer > 0) S._reefShadeTimer--;
   c.fillStyle=mixc('#1f7fae','#66c7dd',c01(hdisp(S)/100));c.fillRect(0,0,1920,1080);
-  {const lg=c.createLinearGradient(0,0,0,900);
-   lg.addColorStop(0,'rgba(255,255,255,.14)');lg.addColorStop(1,'rgba(8,40,70,.28)');
-   c.fillStyle=lg;c.fillRect(0,0,1920,900);}
+  c.fillStyle = LG(c, 0, 0, 0, 900, 'rgba(255,255,255,.14)', 'rgba(8,40,70,.28)');
+  c.fillRect(0, 0, 1920, 900);
   // gelombang permukaan berlapis
   c.lineCap='round';
   for(let i=0;i<3;i++){const wy=260+i*130;

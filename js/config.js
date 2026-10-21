@@ -34,8 +34,16 @@ function O(c,x,y,rx,ry,col){c.beginPath();c.ellipse(x,y,rx,ry,0,0,7);c.fillStyle
 function F(c,pts,col){c.beginPath();c.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)c.lineTo(pts[i][0],pts[i][1]);c.closePath();c.fillStyle=col;c.fill();}
 function LG(c,x0,y0,x1,y1,s0,s1){return gradMemo(c,'L'+gq(x0)+','+gq(y0)+','+gq(x1)+','+gq(y1)+'|'+s0+'|'+s1,
  ()=>{const g=c.createLinearGradient(x0,y0,x1,y1);g.addColorStop(0,s0);g.addColorStop(1,s1);return g;});}
+function LG3(c,x0,y0,x1,y1,s0,p1,s1,s2){return gradMemo(c,'L3'+gq(x0)+','+gq(y0)+','+gq(x1)+','+gq(y1)+'|'+s0+'|'+gq(p1)+':'+s1+'|'+s2,
+ ()=>{const g=c.createLinearGradient(x0,y0,x1,y1);g.addColorStop(0,s0);g.addColorStop(p1,s1);g.addColorStop(1,s2);return g;});}
+function LG4(c,x0,y0,x1,y1,s0,p1,s1,p2,s2,s3){return gradMemo(c,'L4'+gq(x0)+','+gq(y0)+','+gq(x1)+','+gq(y1)+'|'+s0+'|'+gq(p1)+':'+s1+'|'+gq(p2)+':'+s2+'|'+s3,
+ ()=>{const g=c.createLinearGradient(x0,y0,x1,y1);g.addColorStop(0,s0);g.addColorStop(p1,s1);g.addColorStop(p2,s2);g.addColorStop(1,s3);return g;});}
 function RG(c,x,y,r,s0,s1){return gradMemo(c,'R'+gq(x)+','+gq(y)+','+gq(r)+'|'+s0+'|'+s1,
  ()=>{const g=c.createRadialGradient(x,y,1,x,y,r);g.addColorStop(0,s0);g.addColorStop(1,s1);return g;});}
+function RGExt(c,x0,y0,r0,x1,y1,r1,s0,s1){return gradMemo(c,'RX'+gq(x0)+','+gq(y0)+','+gq(r0)+','+gq(x1)+','+gq(y1)+','+gq(r1)+'|'+s0+'|'+s1,
+ ()=>{const g=c.createRadialGradient(x0,y0,r0,x1,y1,r1);g.addColorStop(0,s0);g.addColorStop(1,s1);return g;});}
+function RG3(c,x0,y0,r0,x1,y1,r1,s0,p1,s1,s2){return gradMemo(c,'R3'+gq(x0)+','+gq(y0)+','+gq(r0)+','+gq(x1)+','+gq(y1)+','+gq(r1)+'|'+s0+'|'+gq(p1)+':'+s1+'|'+s2,
+ ()=>{const g=c.createRadialGradient(x0,y0,r0,x1,y1,r1);g.addColorStop(0,s0);g.addColorStop(p1,s1);g.addColorStop(1,s2);return g;});}
 const GRADCACHE=new Map();
 function gq(v){return Math.round(v*2)/2;}
 function gradMemo(c,key,mk){let g=GRADCACHE.get(key);if(!g){if(GRADCACHE.size>=300){const oldest=GRADCACHE.keys().next().value;GRADCACHE.delete(oldest);}g=mk();GRADCACHE.set(key,g);}return g;}
