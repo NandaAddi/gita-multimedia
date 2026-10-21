@@ -360,9 +360,11 @@ h1,h2,h3,.fr{font-family:var(--font-fun)}
 
 /* TOPBAR */
 .topbar{position:absolute;left:30px;right:30px;top:20px;height:72px;display:flex;align-items:center;gap:16px;z-index:5}
-.tb-btn{height:60px;font-size:24px;padding:0 24px}
+.tb-btn{height:72px;min-height:72px;font-size:26px;padding:0 24px;position:relative;touch-action:manipulation}
+.tb-btn::after{content:'';position:absolute;inset:-10px;border-radius:inherit}
 #btn-about{position:absolute;left:30px;top:26px;z-index:10}
-.sim-topbar .tb-btn{height:60px;min-height:60px;font-size:24px;padding:0 16px;gap:8px;border-radius:20px}
+.sim-topbar .tb-btn{height:72px;min-height:72px;font-size:26px;padding:0 18px;gap:10px;border-radius:20px;position:relative;touch-action:manipulation}
+.sim-topbar .tb-btn::after{content:'';position:absolute;inset:-8px;border-radius:inherit}
 .tb-stars{
   display:flex;align-items:center;gap:8px;background:rgba(2,44,34,.95);border:none;
   border-radius:20px;height:60px;padding:0 18px;font-family:var(--font-fun);font-size:24px;color:var(--gold);
