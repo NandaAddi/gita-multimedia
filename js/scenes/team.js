@@ -44,6 +44,7 @@ function buildTeam() {
         <button class="btn tb-btn" id="team-back">${ic('back', 24)} Judul</button>
         <div class="plaque">Pilih Kelompok Detektifmu</div>
         <div class="spacer"></div>
+        <button class="btn tb-btn fs-btn" id="team-fs" title="Layar Penuh" aria-label="Layar Penuh"></button>
         <button class="btn tb-btn snd-btn" id="team-snd"></button>
         <div class="tb-stars">${ic('star', 24)} <b>${totStars()}/48</b></div>
       </div>

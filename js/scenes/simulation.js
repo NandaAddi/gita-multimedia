@@ -304,6 +304,7 @@ function buildSimUI(){const m=SIM.m;
  +'<div class="spacer"></div>'
  +'<button class="btn tb-btn" id="sim-help">'+ic('mag',24)+' Tips</button>'
  +'<button class="btn tb-btn" id="sim-kamus">'+ic('book',24)+' Kamus</button>'
+ +'<button class="btn tb-btn fs-btn" id="sim-fs" title="Layar Penuh" aria-label="Layar Penuh"></button>'
  +'<button class="btn tb-btn snd-btn"></button>'
   +'<div class="tb-stars">'+ic('star',24)+' <b>'+totStars()+'/48</b></div>'
   +'<button class="btn tb-btn" id="sim-top-hide" title="Sembunyikan panel atas">▲</button></div>'

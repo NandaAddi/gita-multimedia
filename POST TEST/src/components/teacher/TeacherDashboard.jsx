@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchAllQuizResults } from '../../services/supabase';
 import { ANGKET_URL, SHEETS_URL } from '../../config/constants';
 import { useStudent } from '../../context/StudentContext';
+import FullscreenButton from '../common/FullscreenButton';
 
 export default function TeacherDashboard({ isOpen, onClose }) {
   const { resetStore } = useStudent();
@@ -110,9 +111,12 @@ export default function TeacherDashboard({ isOpen, onClose }) {
                 : `Terakhir diperbarui: ${new Date().toLocaleTimeString('id-ID')}`}
             </p>
           </div>
-          <button className="dash-close" onClick={onClose} aria-label="Tutup Dashboard">
-            ✕
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <FullscreenButton size={20} className="icon-btn" />
+            <button className="dash-close" onClick={onClose} aria-label="Tutup Dashboard">
+              ✕
+            </button>
+          </div>
         </div>
 
         <div className="dash-body">

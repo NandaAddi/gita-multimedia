@@ -123,6 +123,8 @@ function buildMissionMenu(biomeKey) {
         <div class="plaque">${team.name} - Markas 4 Misi</div>
         <div class="spacer"></div>
         <button class="btn tb-btn" id="m-kamus">${ic('book', 24)} Kamus Alam</button>
+        <button class="btn tb-btn fs-btn" id="m-fs" title="Layar Penuh" aria-label="Layar Penuh"></button>
+        <button class="btn tb-btn snd-btn" id="m-snd"></button>
         <div class="tb-stars">${ic('star', 24)} <b>${groupStars}/12 ⭐</b></div>
       </div>
 
@@ -205,6 +207,8 @@ function buildMissionMenu(biomeKey) {
     go('team');
   };
   el('#m-kamus').onclick = () => { sfx.click(); kamusModal(b); };
+  const mSnd = el('#m-snd');
+  if (mSnd) mSnd.onclick = toggleSound;
 
   el('#scr-mission').querySelectorAll('.go').forEach(btn => {
     btn.onclick = () => {

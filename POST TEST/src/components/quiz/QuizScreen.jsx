@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Icon from '../common/Icons';
 import Modal from '../common/Modal';
+import FullscreenButton from '../common/FullscreenButton';
 import { useQuiz } from '../../context/QuizContext';
 import { topicOf, TOPICS } from '../../data/questions';
 
@@ -77,6 +78,8 @@ export default function QuizScreen() {
             <b>x{combo}</b>
           </div>
         )}
+
+        <FullscreenButton size={22} />
       </header>
 
       {/* Main Soal & Opsi */}

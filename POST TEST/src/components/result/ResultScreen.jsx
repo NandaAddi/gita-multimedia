@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import Icon from '../common/Icons';
 import Mascot from '../common/Mascot';
+import FullscreenButton from '../common/FullscreenButton';
 import { useQuiz } from '../../context/QuizContext';
 import { useStudent } from '../../context/StudentContext';
 import { ANGKET_URL } from '../../config/constants';
@@ -73,6 +74,9 @@ export default function ResultScreen() {
   return (
     <section className="screen active result-screen-wrap">
       <div className="result-inner">
+        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', marginBottom: '-8px' }}>
+          <FullscreenButton size={22} />
+        </div>
         <div className="res-hero">
           <div className="mascot-wrap res-mascot">
             <Mascot party={pct >= 70} cheer={pct >= 50} />

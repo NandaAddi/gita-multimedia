@@ -21,6 +21,7 @@ function buildAbout() {
           <div class="about-title-text">Tentang Pengembang</div>
         </div>
         <div class="about-header-right">
+          <button class="btn tb-btn fs-btn" id="about-fs" title="Layar Penuh" aria-label="Layar Penuh"></button>
           <button class="btn tb-btn snd-btn" id="about-snd"></button>
         </div>
       </div>

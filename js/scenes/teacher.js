@@ -23,6 +23,7 @@ function buildTeacher() {
           <div class="teacher-title-sub">Model Pembelajaran Alessi &amp; Trollip &bull; Pendekatan Kolaboratif CSCL Kelas 5A</div>
         </div>
         <div class="teacher-header-right">
+          <button class="btn tb-btn fs-btn" id="teacher-fs" title="Layar Penuh" aria-label="Layar Penuh"></button>
           <button class="btn tb-btn snd-btn" id="teacher-snd"></button>
         </div>
       </div>

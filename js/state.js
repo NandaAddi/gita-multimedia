@@ -128,6 +128,7 @@ function applyScreenSwitch(id) {
         if (id !== 'sim') GitaSeq.stop('#bridge-gita-box');
       }
     }
+    if (typeof syncFullScreen === 'function') syncFullScreen();
   } catch (e) {}
 }
 

@@ -84,7 +84,9 @@ const ICONS = {
   medal: '<circle cx="12" cy="9" r="5"/><path d="M9 13.5 7 21l5-3 5 3-2-7.5"/>',
   target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/>',
   mag: '<circle cx="10" cy="10" r="6"/><path d="M14.5 14.5 21 21"/>',
-  bin: '<path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/><path d="M10 11v6M14 11v6"/>'
+  bin: '<path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/><path d="M10 11v6M14 11v6"/>',
+  fullscreen: '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke-width="2.6"/>',
+  fullscreenExit: '<path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6 7 7M14 4v6m0 0h6m-6 0 7-7M4 10h6m0 0V4m0 6L3 3" stroke-width="2.6"/>'
 };
 
 const ic = (n, s = 26) =>

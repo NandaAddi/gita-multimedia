@@ -71,6 +71,7 @@ function init(){
   } catch(e) {}
 
   syncSound();
+  syncFullScreen();
 
   el('#btn-start').onclick = () => {
     sfx.click();
@@ -105,25 +106,64 @@ function init(){
   addEventListener('resize', fit);
   addEventListener('orientationchange', () => { setTimeout(fit, 200); });
 
-  // Kontrol Layar Penuh (Fullscreen) untuk Android & Desktop
+  // Kontrol & Sinkronisasi Layar Penuh (Fullscreen) untuk Android, IFP, & Desktop
+  function isFullScreenActive() {
+    const doc = document;
+    return !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
+  }
+
+  function syncFullScreen() {
+    const isFS = isFullScreenActive();
+    const iconName = isFS ? 'fullscreenExit' : 'fullscreen';
+    const titleText = isFS ? 'Keluar Layar Penuh' : 'Layar Penuh';
+    els('.fs-btn').forEach(btn => {
+      btn.innerHTML = ic(iconName, 32);
+      btn.setAttribute('title', titleText);
+      btn.setAttribute('aria-label', titleText);
+    });
+  }
+  window.syncFullScreen = syncFullScreen;
+
   function toggleFullScreen() {
+    if (typeof sfx !== 'undefined' && sfx.click) sfx.click();
     const doc = document;
     const docEl = doc.documentElement;
-    const isFS = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
+    const isFS = isFullScreenActive();
     if (!isFS) {
       const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
-      if (req) req.call(docEl).catch(() => {});
+      if (req) {
+        const p = req.call(docEl);
+        if (p && p.then) p.then(() => syncFullScreen()).catch(() => {});
+      }
       if (screen.orientation && screen.orientation.lock) {
         screen.orientation.lock('landscape').catch(() => {});
       }
     } else {
       const ex = doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen;
-      if (ex) ex.call(doc).catch(() => {});
+      if (ex) {
+        const p = ex.call(doc);
+        if (p && p.then) p.then(() => syncFullScreen()).catch(() => {});
+      }
     }
   }
+  window.toggleFullScreen = toggleFullScreen;
 
-  const fsBtn = el('#t-fs');
-  if (fsBtn) fsBtn.onclick = toggleFullScreen;
+  // Global delegated click handler untuk seluruh tombol .fs-btn
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.fs-btn');
+    if (btn) {
+      e.preventDefault();
+      toggleFullScreen();
+    }
+  });
+
+  // Listener perubahan status Fullscreen lintas peramban
+  ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+    document.addEventListener(evt, () => {
+      syncFullScreen();
+      if (typeof fit === 'function') fit();
+    });
+  });
 
   const forceLandscapeBtn = el('#btn-force-landscape');
   if (forceLandscapeBtn) {

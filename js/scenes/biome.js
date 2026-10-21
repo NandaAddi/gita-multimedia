@@ -37,6 +37,8 @@ function buildBiome() {
         <div class="plaque">Pilih Ekosistem Nusantara</div>
         <div class="spacer"></div>
         <button class="btn tb-btn" id="b-kamus">${ic('book', 24)} Kamus Alam</button>
+        <button class="btn tb-btn fs-btn" id="b-fs" title="Layar Penuh" aria-label="Layar Penuh"></button>
+        <button class="btn tb-btn snd-btn" id="b-snd"></button>
         <div class="tb-stars">${ic('star', 24)} <b>${totStars()}/48</b></div>
       </div>
 
@@ -100,6 +102,9 @@ function buildBiome() {
     sfx.click();
     kamusModal(NAV.biome);
   };
+
+  const bSnd = el('#b-snd');
+  if (bSnd) bSnd.onclick = toggleSound;
 
   // Nav Arrows
   el('#b-prev').onclick = () => navigateBiome(-1);

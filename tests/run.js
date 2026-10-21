@@ -62,6 +62,8 @@ load('js/config.js');
 const PAL = grab('PAL'), pr = grab('pr');
 ok('PAL 18 kunci', Object.keys(PAL).length === 18);
 ok('helper pr deterministik', pr(5) === pr(5));
+ok('ICONS.fullscreen terdefinisi', !!grab('ICONS.fullscreen'));
+ok('ICONS.fullscreenExit terdefinisi', !!grab('ICONS.fullscreenExit'));
 
 console.log('[1b] audio.js (sfx presets)');
 load('js/audio.js');
