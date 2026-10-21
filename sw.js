@@ -3,7 +3,12 @@
    Memungkinkan game dimainkan offline di HP/Tablet Android
    ============================================================ */
 
-const CACHE_NAME = 'eco-explorer-v1.3.4';
+const CACHE_NAME = 'eco-explorer-v1.4.0';
+
+const LOADING_FRAMES = [];
+for (let i = 1; i <= 42; i++) {
+  LOADING_FRAMES.push('./assets/animations/loading/gita_load_' + String(i).padStart(3, '0') + '.webp');
+}
 
 const PRECACHE_ASSETS = [
   './',
@@ -36,7 +41,7 @@ const PRECACHE_ASSETS = [
   './assets/icons/apple-touch-icon.png',
   './assets/images/Lambang-UM.webp',
   './assets/images/Foto pas agita.webp'
-];
+].concat(LOADING_FRAMES);
 
 self.addEventListener('install', event => {
   event.waitUntil(
