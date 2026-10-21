@@ -50,7 +50,7 @@ Setiap misi memberikan hingga **3 Bintang Detektif** (Maksimal 12 Bintang per Ke
    * 🟢 **KARTU HIJAU:** Tambah pemangsa alami / pengurai penyubur (Ular / Katak / Harimau / Bangau / Penyu / Jamur).
    * 🟡 **KARTU KUNING:** Berikan aksi sumber daya / produsen (Irigasi Padi / Mata Air Rimba / Pintu Air Sungai / Naungan Karang).
    * 🔴 **KARTU MERAH:** Bersihkan pencemaran & hentikan perusakan (Bersihkan Racun / Padamkan Api / Saring Limbah / Sita Bom Ikan).
-4. Ketika Petugas Layar menyentuh tombol **"📢 TANYA TEMAN"**, waktu simulasi dijeda (*paused*). Diskusikan strategi kelompok selama 15 detik lalu serempak angkat kartu warna pilihan kalian!
+4. Pada **Hari ke-30**, waktu simulasi otomatis terjeda untuk **"Musyawarah Kelas"**. Diskusikan strategi kelompok selama 15 detik bersama Penasihat Meja, lalu serempak angkat kartu voting fisik pilihan kalian (🟢 Hijau, 🟡 Kuning, atau 🔴 Merah) untuk mengeksekusi 1 aksi gratis!
 5. Gunakan tombol **"📖 KAMUS SAINS"** di bilah atas layar untuk menggali informasi ensiklopedia interaktif.
 
 ---

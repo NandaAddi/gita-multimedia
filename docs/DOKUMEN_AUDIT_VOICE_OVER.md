@@ -138,7 +138,7 @@ Sistem audio game telah diprogram otomatis mengenali 72 kode file vokal berikut.
 ### 🎮 KELOMPOK 5: MEKANIKA SIMULASI, CSCL MUSYAWARAH & EVENT (7 AUDIO TRACKS)
 | No | Kode File MP3 | Pemicu di Layar | Naskah Rekaman Vokal Gita | Nada / Emosi |
 | :---: | :--- | :--- | :--- | :--- |
-| **45** | `vo_sim_vote_call.mp3` | Modal Musyawarah Terbuka (Hari 12/24/36) | *"Hari musyawarah telah tiba! Berdiskusilah dengan Penasihat Meja selama lima belas detik: angkat kartu voting fisik hijau, kuning, atau merah untuk menentukan aksi gratis kita!"* | Lantang, memandu kelas |
+| **45** | `vo_sim_vote_call.mp3` | Modal Musyawarah Terbuka (Hari 30) | *"Hari musyawarah telah tiba! Berdiskusilah dengan Penasihat Meja selama lima belas detik: angkat kartu voting fisik hijau, kuning, atau merah untuk menentukan aksi gratis kita!"* | Lantang, memandu kelas |
 | **46** | `vo_sim_vote_done.mp3` | Pemain Memilih Kartu Voting | *"Hasil musyawarah kelas telah disepakati! Ayo segera eksekusi tindakan gratis ini bersama-sama!"* | Gembira, mendukung hasil |
 | **47** | `vo_sim_target_ok.mp3` | Salah Satu Target Misi Centang (✓) | *"Target tercapai! Hebat sekali, lanjutkan penyelidikanmu!"* | Bersorak kecil, ceria |
 | **48** | `vo_sim_all_targets.mp3` | Semua 3 Target Misi Tercapai | *"Semua target misi telah tercapai! Tekan tombol emas di bawah untuk menyelesaikan misi!"* | Kemenangan antusias |

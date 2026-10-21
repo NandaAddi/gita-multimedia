@@ -290,7 +290,7 @@ function startSim(m){
  SIM={m,team,S:Object.assign({day:0},m.init),tgt:m.targets.map(()=>false),
   quota:m.actions.map(a=>a.quota+(team.perk.ids.includes(a.id)?1:0)),
   cdi:m.actions.map(a=>team.perk.ids.includes(a.id)?2:3),
-  cool:m.actions.map(()=>0),paused:true,mp:0,done:false,voted:0,voteAt:[12,24,36],limit:m.par+18,
+  cool:m.actions.map(()=>0),paused:true,mp:0,done:false,voted:0,voteAt:[30],limit:m.par+18,
    ui:{left:true,right:true,top:true,leftDot:false},bridging:true,_cinematicLock:false};
  SIM.S.health=m.health(SIM.S);
  buildSimUI();go('sim');updateHUD();
@@ -856,10 +856,10 @@ function showVote(){const m=SIM.m;
  const r=modal(
    '<div style="text-align:center">'
   +'<div class="vote-kicker">🤝 CSCL &bull; KOLABORASI KELAS 5A &bull; PENASIHAT MEJA &amp; PETUGAS LAYAR</div>'
-  +'<h2 class="vote-header">Musyawarah Kelas! <span id="vote-timer" class="vote-timer-pill">⏱️ 15s</span></h2>'
+  +'<h2 class="vote-header">Hari ke-30: Musyawarah Kelas! <span id="vote-timer" class="vote-timer-pill">⏱️ 15s</span></h2>'
   +'</div>'
   +'<div class="vote-desc-box">'
-  +'<p>Hari musyawarah telah tiba! Berdiskusilah dengan <b>Penasihat Meja</b> selama 15 detik: angkat kartu voting fisik (<b>🟢 Hijau</b>, <b>🟡 Kuning</b>, atau <b>🔴 Merah</b>) untuk menentukan aksi <b>gratis</b> yang akan kita lakukan bersama!</p>'
+  +'<p>Hari ke-30 telah tiba! Saatnya intervensi darurat: berdiskusilah dengan <b>Penasihat Meja</b> selama 15 detik. Angkat kartu voting fisik (<b>🟢 Hijau</b>, <b>🟡 Kuning</b>, atau <b>🔴 Merah</b>) untuk menentukan aksi <b>gratis</b> yang akan kita lakukan bersama!</p>'
   +'</div>'
   +'<div class="vote-bar">'+m.actions.map((a,i)=>'<div class="vote-card vote-'+['hijau','kuning','merah'][i]+'" data-v="'+i+'">'
    +'<div class="vote-chip">'+chips[i]+'</div>'

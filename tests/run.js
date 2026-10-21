@@ -182,7 +182,43 @@ ok('showVote render CSCL kicker & timer pill',
   voteHtmlCaptured.includes('vote-kicker') &&
   voteHtmlCaptured.includes('vote-timer-pill')
 );
+ok('showVote render judul Hari ke-30: Musyawarah Kelas!',
+  voteHtmlCaptured.includes('Hari ke-30: Musyawarah Kelas!')
+);
 if (typeof sandbox.closeModal === 'function') sandbox.closeModal();
+
+// Validasi pemicuan musyawarah di Hari ke-30
+let voteCalls = 0;
+const origShowVote = sandbox.showVote;
+sandbox.showVote = () => { voteCalls++; };
+const testSimState = {
+  done: false,
+  voted: 0,
+  voteAt: [30],
+  limit: 60,
+  m: { health: () => 50, targets: [{ c: () => false, l: 'T1' }] },
+  S: { day: 29, health: 50 },
+  tgt: [false]
+};
+setSIM(testSimState);
+sandbox.syncUITabs = () => {};
+sandbox.updateHUD = () => {};
+
+// Hari 29: belum memicu
+sandbox.simUpdate();
+ok('Hari 29: musyawarah belum dipicu', voteCalls === 0 && getSIM().voted === 0);
+
+// Hari 30: memicu showVote tepat 1 kali
+getSIM().S.day = 30;
+sandbox.simUpdate();
+ok('Hari 30: musyawarah dipicu tepat 1 kali', voteCalls === 1 && getSIM().voted === 1);
+
+// Hari 31: tidak memicu lagi
+getSIM().S.day = 31;
+sandbox.simUpdate();
+ok('Hari 31: musyawarah tidak dipicu ulang', voteCalls === 1 && getSIM().voted === 1);
+
+sandbox.showVote = origShowVote;
 
 console.log('[5] scenes/mission-menu.js (openMission & startMission)');
 let modalBtnClick = null;
