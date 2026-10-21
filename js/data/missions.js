@@ -499,10 +499,12 @@ const MISSIONS = [
     story: 'Detektif! Aliran sungai surut dan eceng gondok tumbuh lebat menutupi seluruh permukaan air. Sinar matahari tak bisa masuk dan ikan-ikan lemas kekurangan oksigen. Buka kembali aliran sungai!',
     init: { prod: 28, herb: 22, pred: 3, water: 32, gulma: 55 },
     tick(S) {
-      S.gulma = cl(S.gulma + 1.6, 0, 100);
-      S.water = cl(S.water - 0.7 - S.gulma * 0.035, 0, 100);
+      const growthRate = S.water > 50 ? 0.6 : (S.gulma < 70 ? 1.4 : 0.4);
+      S.gulma = cl(S.gulma + growthRate - (S.water > 60 ? 0.5 : 0), 0, 100);
+      const waterDelta = (S.gulma <= 22 ? 1.0 : -0.5) - S.gulma * 0.025;
+      S.water = cl(S.water + waterDelta, 0, 100);
       S.prod = cl(S.prod - S.gulma * 0.02 + (S.water > 55 ? 1 : 0));
-      S.herb = cl(S.herb + (S.water > 45 ? 1.2 : -1.8) - S.pred * 0.55);
+      S.herb = cl(S.herb + (S.water > 45 ? 1.2 : -1.5) - S.pred * 0.55);
       S.pred = cl(S.pred + (S.herb > 13 ? 0.3 : -0.4));
     },
     health(S) {
